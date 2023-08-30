@@ -9,20 +9,21 @@ import org.springframework.web.bind.annotation.*;
 @RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler {
 
-    private static final int INTERNAL_EXCEPTION_CODE = 10000;
+    private static final int INTERNAL_ERROR_CODE = 99999;
+    private static final String INTERNAL_ERROR_MESSAGE = "Server internal error!";
+    private static final String BUSINESS_ERROR_MESSAGE_TEMPLATE = "Business Error: [%d] %s";
 
     @ExceptionHandler(BusinessException.class)
     public R<String> businessExceptionHandler(BusinessException e) {
         int code = e.getCode();
         String message = e.getMessage();
-        log.info("BusinessException occurred: [" + code + "] " + message);
+        log.warn(String.format(BUSINESS_ERROR_MESSAGE_TEMPLATE, code, message));
         return R.error(code, message);
     }
 
     @ExceptionHandler(Exception.class)
     public R<String> commonExceptionHandler(Exception e) {
-        String message = e.getMessage();
-        log.error(message);
-        return R.error(INTERNAL_EXCEPTION_CODE, message);
+        log.error(e.toString(), e);
+        return R.error(INTERNAL_ERROR_CODE, INTERNAL_ERROR_MESSAGE);
     }
 }
