@@ -1,8 +1,10 @@
 package com.hzhg.plm.exception;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public enum BusinessExceptionEnum {
 
     ERROR_TEST(90000, "This error is for test!"),
@@ -13,8 +15,4 @@ public enum BusinessExceptionEnum {
     private final int code;
     private final String message;
 
-    BusinessExceptionEnum(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
 }
