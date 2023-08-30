@@ -11,7 +11,7 @@ public class R<T>{
 
     public static <T> R<T> success(T obj) {
         R<T> r = new R<>();
-        r.setCode(0);
+        r.setCode(10000);
         r.setMessage("OK");
         r.setData(obj);
         return r;
