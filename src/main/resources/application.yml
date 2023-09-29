@@ -1,11 +1,15 @@
 spring:
   application:
     name: plm
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
 springdoc:
   swagger-ui:
-    path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
+    enable: false
   api-docs:
     path: /v3/api-docs
   group-configs:
