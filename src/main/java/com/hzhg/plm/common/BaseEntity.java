@@ -24,9 +24,9 @@ public class BaseEntity implements Serializable {
 
     @Schema(name = "创建用户")
     @TableField(fill = FieldFill.INSERT)
-    private Long createBy;
+    private Long createUser;
 
     @Schema(name = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updateBy;
+    private Long updateUser;
 }
