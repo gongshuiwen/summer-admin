@@ -2,10 +2,8 @@ package com.hzhg.plm.entity;
 
 import com.hzhg.plm.common.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
