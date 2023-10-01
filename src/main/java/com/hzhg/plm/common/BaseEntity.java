@@ -14,19 +14,19 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseEntity implements Serializable {
 
-    @Schema(name = "创建时间")
+    @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @Schema(name = "更新时间")
+    @Schema(description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-    @Schema(name = "创建用户")
+    @Schema(description = "创建用户")
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
 
-    @Schema(name = "更新用户")
+    @Schema(description = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 }
