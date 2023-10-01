@@ -1,5 +1,6 @@
 package com.hzhg.plm.common;
 
+import com.hzhg.plm.exception.BusinessExceptionEnum;
 import lombok.Data;
 
 @Data
@@ -21,6 +22,13 @@ public class R<T>{
         R<T> r = new R<>();
         r.setCode(code);
         r.setMessage(message);
+        return r;
+    }
+
+    public static <T> R<T> error(BusinessExceptionEnum businessException) {
+        R<T> r = new R<>();
+        r.setCode(businessException.getCode());
+        r.setMessage(businessException.getMessage());
         return r;
     }
 }
