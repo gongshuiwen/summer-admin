@@ -1,6 +1,7 @@
 package com.hzhg.plm.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzhg.plm.common.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -12,8 +13,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -41,7 +42,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Schema(description = "手机号码")
     private String phone;
 
-    @Schema(description = "用户性别 0=男,1=女,2=未知")
+    @Schema(description = "用户性别 0=未知,1=女,2=男")
     private Integer sex;
 
     @Schema(description = "用户头像")
@@ -54,12 +55,15 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private String loginIp;
 
     @Schema(name = "最后登录时间")
-    private Date loginDate;
+    private LocalDateTime loginTime;
 
+    @TableField(exist = false)
     private List<Role> roles;
 
+    @TableField(exist = false)
     private Long[] roleIds;
 
+    @TableField(exist = false)
     private Long roleId;
 
     public boolean isAdmin() {
