@@ -54,7 +54,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Schema(description = "最后登录IP")
     private String loginIp;
 
-    @Schema(name = "最后登录时间")
+    @Schema(description = "最后登录时间")
     private LocalDateTime loginTime;
 
     @TableField(exist = false)
