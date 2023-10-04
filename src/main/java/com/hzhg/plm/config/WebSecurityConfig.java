@@ -3,12 +3,14 @@ package com.hzhg.plm.config;
 import com.alibaba.fastjson.JSON;
 import com.hzhg.plm.common.R;
 import com.hzhg.plm.exception.BusinessExceptionEnum;
+import com.hzhg.plm.security.CustomUsernamePasswordAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
@@ -22,12 +24,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 
 @Configuration
 public class WebSecurityConfig {
@@ -35,17 +37,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            DaoAuthenticationProvider daoAuthenticationProvider
+            DaoAuthenticationProvider daoAuthenticationProvider,
+            UsernamePasswordAuthenticationFilter filter
         ) throws Exception {
 
         http
                 // Disable CSRF protection for separation architecture
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // Config form login filter
-                .formLogin(configurer -> configurer
-                        .successHandler(new CustomAuthenticationSuccessHandler())
-                        .failureHandler(new CustomAuthenticationFailureHandler()))
+                // Config login filter
+                .formLogin(AbstractHttpConfigurer::disable)
+                .addFilterAt(filter, UsernamePasswordAuthenticationFilter.class)
 
                 // Config logout filter
                 .logout(configurer -> configurer
@@ -65,6 +67,24 @@ public class WebSecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    UsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter(
+            AuthenticationManager authenticationManager
+    ) {
+        UsernamePasswordAuthenticationFilter filter =
+                new CustomUsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+        filter.setAuthenticationManager(authenticationManager);
+        return filter;
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
