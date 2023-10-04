@@ -1,9 +1,6 @@
 package com.hzhg.plm.security;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hzhg.plm.config.WebSecurityConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.MediaType;
@@ -45,4 +42,3 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         private String password;
     }
 }
-
