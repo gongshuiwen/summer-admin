@@ -14,8 +14,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -61,10 +61,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private List<Role> roles;
 
     @TableField(exist = false)
-    private Long[] roleIds;
-
-    @TableField(exist = false)
-    private Long roleId;
+    Set<GrantedAuthority> authorities;
 
     public boolean isAdmin() {
         return isAdmin(this.id);
@@ -94,12 +91,6 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Size(max = 11, message = "手机号码长度不能超过11个字符")
     public String getPhone() {
         return phone;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO: 集成用户权限
-        return null;
     }
 
     @Override
