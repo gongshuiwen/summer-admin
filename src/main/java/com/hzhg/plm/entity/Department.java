@@ -1,5 +1,6 @@
 package com.hzhg.plm.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzhg.plm.common.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Department extends BaseEntity {
     private Long parentId;
 
     @Schema(description = "父部门名称")
+    @TableField(exist = false)
     private String parentName;
 
     @Schema(description = "显示顺序")
@@ -37,6 +39,7 @@ public class Department extends BaseEntity {
     private String status;
 
     @Schema(description = "子部门列表")
+    @TableField(exist = false)
     private List<Department> children = new ArrayList<>();
 
     @NotBlank(message = "部门名称不能为空")
