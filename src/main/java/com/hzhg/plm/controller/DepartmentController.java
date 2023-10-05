@@ -39,8 +39,9 @@ public class DepartmentController {
     }
 
     @Operation(summary = "更新部门信息")
-    @PutMapping
-    public R<Boolean> update(@RequestBody Department departmentDto) {
+    @PutMapping("/{id}")
+    public R<Boolean> update(@PathVariable Long id, @RequestBody Department departmentDto) {
+        departmentDto.setId(id);
         return R.success(departmentService.updateById(departmentDto));
     }
 
