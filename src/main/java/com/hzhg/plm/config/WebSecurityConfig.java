@@ -30,6 +30,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class WebSecurityConfig {
@@ -107,6 +108,7 @@ public class WebSecurityConfig {
 
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             response.getWriter().write(JSON.toJSONString(R.success(userDetails)));
@@ -117,6 +119,7 @@ public class WebSecurityConfig {
 
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
         }
@@ -126,6 +129,7 @@ public class WebSecurityConfig {
 
         @Override
         public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().write(JSON.toJSONString(R.success("Logout Success!")));
         }
@@ -135,6 +139,7 @@ public class WebSecurityConfig {
 
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException{
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
         }
@@ -143,6 +148,7 @@ public class WebSecurityConfig {
     private static class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED)));
         }
