@@ -16,9 +16,6 @@ public class Menu extends TreeBaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "菜单ID")
-    private Long id;
-
     @Schema(description = "显示顺序")
     private Integer orderNum;
 

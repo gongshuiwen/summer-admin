@@ -1,6 +1,5 @@
 package com.hzhg.plm.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzhg.plm.common.TreeBaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -9,8 +8,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,9 +15,6 @@ import java.util.List;
 public class Department extends TreeBaseEntity {
 
     private static final long serialVersionUID = 1L;
-
-    @Schema(description = "部门ID")
-    private Long id;
 
     @Schema(description = "显示顺序")
     private Integer orderNum;
