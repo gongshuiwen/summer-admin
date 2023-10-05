@@ -1,4 +1,4 @@
-package com.hzhg.plm.common;
+package com.hzhg.plm.entity.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
