@@ -13,24 +13,20 @@ import java.util.Set;
 @Getter
 @Setter
 @Schema(description = "角色信息")
-public class Role extends BaseEntity
-{
+public class Role extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "角色ID")
     private Long id;
 
-    @Schema(description = "角色名称")
-    private String name;
-
     @Schema(description = "显示顺序")
     private Integer orderNum;
 
-    @Schema(description = "角色状态 0=正常,1=停用")
+    @Schema(description = "状态 0=正常,1=停用")
     private String status;
 
-    @Schema(description = "角色权限")
-    private String rolePerms;
+    @Schema(description = "角色名称")
+    private String name;
 
     public boolean isAdmin() {
         return isAdmin(this.id);
@@ -49,11 +45,5 @@ public class Role extends BaseEntity
     @NotNull(message = "显示顺序不能为空")
     public Integer getOrderNum() {
         return orderNum;
-    }
-
-    @NotBlank(message = "权限字符不能为空")
-    @Size(max = 100, message = "权限字符长度不能超过100个字符")
-    public String getRolePerms() {
-        return rolePerms;
     }
 }
