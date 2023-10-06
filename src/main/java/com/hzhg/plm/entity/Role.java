@@ -21,7 +21,7 @@ public class Role extends BaseEntity {
     @Schema(description = "显示顺序")
     private Integer orderNum;
 
-    @Schema(description = "状态 0=正常,1=停用")
+    @Schema(description = "状态 1=正常,0=停用")
     private String status;
 
     @Schema(description = "角色名称")

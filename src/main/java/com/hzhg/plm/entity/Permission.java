@@ -22,6 +22,6 @@ public class Permission  extends BaseEntity {
     @Schema(description = "显示顺序")
     private Integer orderNum;
 
-    @Schema(description = "权限状态 0=正常,1=停用")
+    @Schema(description = "状态 1=正常,0=停用")
     private String status;
 }

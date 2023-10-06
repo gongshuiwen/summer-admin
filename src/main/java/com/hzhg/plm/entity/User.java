@@ -48,7 +48,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Schema(description = "用户头像")
     private String avatar;
 
-    @Schema(description = "帐号状态 0=正常,1=停用")
+    @Schema(description = "状态 1=正常,0=停用")
     private Integer status;
 
     @Schema(description = "最后登录IP")
