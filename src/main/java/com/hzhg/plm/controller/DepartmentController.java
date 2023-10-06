@@ -13,39 +13,11 @@ import java.util.List;
 @Tag(name = "部门接口")
 @RestController
 @RequestMapping("/department")
-public class DepartmentController {
-
-    @Autowired
-    DepartmentService departmentService;
+public class DepartmentController extends BaseController<DepartmentService, Department> {
 
     @Operation(summary = "查询部门列表")
     @GetMapping
     public R<List<Department>> list() {
-        return R.success(departmentService.list());
-    }
-
-    @Operation(summary = "获取部门信息")
-    @GetMapping("/{id}")
-    public R<Department> get(@PathVariable Long id) {
-        return R.success(departmentService.getById(id));
-    }
-
-    @Operation(summary = "创建部门信息")
-    @PostMapping
-    public R<Boolean> create(@RequestBody Department departmentDto) {
-        return R.success(departmentService.save(departmentDto));
-    }
-
-    @Operation(summary = "更新部门信息")
-    @PutMapping("/{id}")
-    public R<Boolean> update(@PathVariable Long id, @RequestBody Department departmentDto) {
-        departmentDto.setId(id);
-        return R.success(departmentService.updateById(departmentDto));
-    }
-
-    @Operation(summary = "删除部门信息")
-    @DeleteMapping("/{id}")
-    public R<Boolean> delete(@PathVariable Long id) {
-        return R.success(departmentService.removeById(id));
+        return R.success(service.list());
     }
 }

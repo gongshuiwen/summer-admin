@@ -16,14 +16,11 @@ import java.util.List;
 @Tag(name = "菜单接口")
 @RestController
 @RequestMapping("/menu")
-public class MenuController {
-
-    @Autowired
-    MenuService menuService;
+public class MenuController extends BaseController<MenuService, Menu> {
 
     @Operation(summary = "查询菜单树")
     @GetMapping
     public R<List<Menu>> tree() {
-        return R.success(menuService.getMenusTree());
+        return R.success(service.getMenusTree());
     }
 }
