@@ -8,17 +8,7 @@ import com.hzhg.plm.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department> implements DepartmentService {
-
-    @Override
-    public List<Department> getDepartmentsByParentId(Long parentId) {
-        LambdaQueryWrapper<Department> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Department::getParentId, parentId);
-        queryWrapper.orderByAsc(Department::getOrderNum);
-        return list(queryWrapper);
-    }
 }
