@@ -13,10 +13,8 @@ import javax.validation.constraints.Size;
 @Setter
 @Schema(description = "角色信息")
 public class Role extends BaseEntity {
-    private static final long serialVersionUID = 1L;
 
-    @Schema(description = "角色ID")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Schema(description = "显示顺序")
     private Integer orderNum;
@@ -28,7 +26,7 @@ public class Role extends BaseEntity {
     private String name;
 
     public boolean isAdmin() {
-        return isAdmin(this.id);
+        return isAdmin(this.getId());
     }
 
     public static boolean isAdmin(Long roleId) {

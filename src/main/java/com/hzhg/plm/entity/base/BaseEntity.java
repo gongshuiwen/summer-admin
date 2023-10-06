@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class BaseEntity implements Serializable {
 
+    @Schema(description = "ID")
+    private Long id;
+
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

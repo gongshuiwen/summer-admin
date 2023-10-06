@@ -24,9 +24,6 @@ public class User extends BaseEntity implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "用户ID")
-    private Long id;
-
     @Schema(description = "用户名")
     private String username;
 
@@ -64,7 +61,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     Set<GrantedAuthority> authorities;
 
     public boolean isAdmin() {
-        return isAdmin(this.id);
+        return isAdmin(this.getId());
     }
 
     public static boolean isAdmin(Long userId) {

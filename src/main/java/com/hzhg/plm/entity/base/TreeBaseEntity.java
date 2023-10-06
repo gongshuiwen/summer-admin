@@ -13,9 +13,6 @@ import java.util.List;
 @Setter
 public abstract class TreeBaseEntity extends BaseEntity {
 
-    @Schema(description = "ID")
-    private Long id;
-
     @Schema(description = "父级ID")
     private Long parentId;
 
