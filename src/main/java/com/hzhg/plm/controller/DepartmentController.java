@@ -1,7 +1,5 @@
 package com.hzhg.plm.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hzhg.plm.common.R;
 import com.hzhg.plm.entity.Department;
 import com.hzhg.plm.service.DepartmentService;
@@ -22,8 +20,8 @@ public class DepartmentController {
 
     @Operation(summary = "查询部门列表")
     @GetMapping
-    public R<List<Department>> list(@RequestParam Long parentId) {
-        return R.success(departmentService.getDepartmentsByParentId(parentId));
+    public R<List<Department>> list() {
+        return R.success(departmentService.list());
     }
 
     @Operation(summary = "获取部门信息")
