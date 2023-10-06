@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Schema(description = "部门信息")
-public class Department extends TreeBaseEntity {
+public class Department extends TreeBaseEntity<Department> {
 
     private static final long serialVersionUID = 1L;
 

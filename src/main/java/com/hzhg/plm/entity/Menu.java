@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Schema(description = "菜单信息")
-public class Menu extends TreeBaseEntity {
+public class Menu extends TreeBaseEntity<Menu> {
 
     private static final long serialVersionUID = 1L;
 
