@@ -22,7 +22,7 @@ public class Role extends BaseEntity {
     private Integer orderNum;
 
     @Schema(description = "状态 1=正常,0=停用")
-    private String status;
+    private Integer status;
 
     @Schema(description = "角色名称")
     private String name;
