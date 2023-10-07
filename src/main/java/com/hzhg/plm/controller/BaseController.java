@@ -1,11 +1,24 @@
 package com.hzhg.plm.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzhg.plm.common.R;
 import com.hzhg.plm.entity.base.BaseEntity;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+
 
 public abstract class BaseController<S extends IService<T>, T extends BaseEntity> {
 
@@ -35,5 +48,78 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @DeleteMapping("/{id}")
     public R<Boolean> delete(@PathVariable Long id) {
         return R.success(service.removeById(id));
+    }
+
+    @Operation(summary = "通用分页查询")
+    @PostMapping("/page")
+    public R<IPage<T>> page( @RequestBody Query<T> query ) {
+        IPage<T> page = new Page<>( query.getPageNum(), query.getPageSize());
+        QueryWrapper<T> queryWrapper = query.buildPageQueryWrapper(new QueryWrapper<>());
+        return R.success(service.page(page, queryWrapper));
+    }
+
+    @Operation(summary = "通用计数查询")
+    @PostMapping("/count")
+    public R<Long> count( @RequestBody Query<T> query ) {
+        QueryWrapper<T> queryWrapper = query.buildCountQueryWrapper(new QueryWrapper<>());
+        return R.success(service.count(queryWrapper));
+    }
+
+    @Setter
+    @Getter
+    public static class Query<C> {
+        Long pageSize = 20L;
+        Long pageNum = 1L;
+        List<Domain> domains;
+        String order;
+
+        public QueryWrapper<C> buildPageQueryWrapper(QueryWrapper<C> queryWrapper) {
+            buildDomains(queryWrapper);
+            buildSorts(queryWrapper);
+            return queryWrapper;
+        }
+
+        public QueryWrapper<C> buildCountQueryWrapper(QueryWrapper<C> queryWrapper) {
+            buildDomains(queryWrapper);
+            return queryWrapper;
+        }
+
+        private void buildDomains(QueryWrapper<C> queryWrapper) {
+            // TODO: optimize performance
+            Class<QueryWrapper> clazz = QueryWrapper.class;
+            for (Domain domain : domains) {
+                String op = domain.getOperator();
+                try {
+                    Method method = clazz.getMethod(op, boolean.class, Object.class, Object.class);
+                    method.invoke(queryWrapper, true, domain.getColumn(), domain.getValue());
+                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private void buildSorts(QueryWrapper<C> queryWrapper) {
+            if (getOrder() == null) {
+                return ;
+            }
+
+            for (String s : getOrder().split(",")) {
+                if (s.endsWith(" asc")) {
+                    queryWrapper.orderByAsc(s.substring(0, s.length() - 4));
+                } else if (s.endsWith(" desc")) {
+                    queryWrapper.orderByDesc(s.substring(0, s.length() - 5));
+                } else {
+                    queryWrapper.orderByAsc(s);
+                }
+            }
+        }
+    }
+
+    @Setter
+    @Getter
+    public static class Domain {
+        String column;
+        String operator;
+        Object value;
     }
 }
