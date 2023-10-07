@@ -30,8 +30,8 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Schema(description = "密码")
     private String password;
 
-    @Schema(description = "姓名")
-    private String nickName;
+    @Schema(description = "昵称")
+    private String nickname;
 
     @Schema(description = "邮箱")
     private String email;
@@ -54,6 +54,9 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Schema(description = "最后登录时间")
     private LocalDateTime loginTime;
 
+    @Schema(description = "部门ID")
+    private Long departmentId;
+
     @TableField(exist = false)
     private List<Role> roles;
 
@@ -69,8 +72,8 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     }
 
     @Size(max = 30, message = "用户昵称长度不能超过30个字符")
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     @NotBlank(message = "用户账号不能为空")
