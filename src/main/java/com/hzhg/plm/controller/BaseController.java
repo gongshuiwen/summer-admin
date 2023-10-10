@@ -1,10 +1,10 @@
 package com.hzhg.plm.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzhg.plm.common.R;
 import com.hzhg.plm.entity.base.BaseEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 
 public abstract class BaseController<S extends IService<T>, T extends BaseEntity> {
@@ -63,6 +61,26 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     public R<Long> count( @RequestBody Query<T> query ) {
         QueryWrapper<T> queryWrapper = query.buildCountQueryWrapper(new QueryWrapper<>());
         return R.success(service.count(queryWrapper));
+    }
+
+    @Operation(summary = "批量创建")
+    @PostMapping("/batch")
+    public R<Boolean> createBatch( @RequestBody List<T> roleDtoList ) {
+        return R.success(service.saveBatch(roleDtoList));
+    }
+
+    @Operation(summary = "批量更新")
+    @PutMapping("/batch")
+    public R<Boolean> updateBatch( @RequestParam List<Long> ids, @RequestBody T roleDto ) {
+        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(T::getId, ids);
+        return R.success(service.update(roleDto, updateWrapper));
+    }
+
+    @Operation(summary = "批量删除")
+    @DeleteMapping("/batch")
+    public R<Boolean> deleteBatch( @RequestParam List<Long> ids ) {
+        return R.success(service.removeBatchByIds(ids));
     }
 
     @Setter
