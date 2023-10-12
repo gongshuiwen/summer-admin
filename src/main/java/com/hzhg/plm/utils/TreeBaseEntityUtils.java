@@ -14,7 +14,7 @@ public class TreeBaseEntityUtils {
      * @param entities flat entity list
      * @return roots' list
      */
-    public static <T extends TreeBaseEntity> List<T> buildTree(List<T> entities) {
+    public static <T extends TreeBaseEntity<T>> List<T> buildTree(List<T> entities) {
         Map<Long, T> entityMap = new HashMap<>(entities.size());
         List<T> rootEntities = new ArrayList<>();
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public abstract class TreeBaseEntity<T> extends BaseEntity {
+public abstract class TreeBaseEntity<T extends TreeBaseEntity<?>> extends BaseEntity {
 
     @Schema(description = "父级ID")
     private Long parentId;
