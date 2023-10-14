@@ -1,34 +1,19 @@
 package com.hzhg.plm.core.protocal;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 @Getter
 @Setter
 public class Query<T> {
 
-    private static Method method;
-    static {
-        try {
-            method = AbstractWrapper.class.getDeclaredMethod("addCondition",
-                    boolean.class, Object.class, SqlKeyword.class, Object.class);
-            method.setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private Long pageSize = 20L;
     private Long pageNum = 1L;
     private String sort;
-    private List<Domain> domains;
+    private List<Domain<T>> domains;
 
     private QueryWrapper<T> queryWrapper;
     private Class<T> entityClass;
@@ -47,13 +32,9 @@ public class Query<T> {
     }
 
     private void buildDomains() {
-        for (Domain domain : domains) {
+        for (Domain<T> domain : domains) {
             checkColumn(domain.getColumn());
-            try {
-                method.invoke(queryWrapper, true, domain.getColumn(), domain.getSqlKeyword(), domain.getValue());
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            domain.applyToQueryWrapper(queryWrapper);
         }
     }
 
