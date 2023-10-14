@@ -25,6 +25,11 @@ public class Department extends TreeBaseEntity<Department> {
     @Schema(description = "部门名称")
     private String name;
 
+    @Override
+    public String getDisplayName() {
+        return getName();
+    }
+
     @NotBlank(message = "部门名称不能为空")
     @Size(max = 30, message = "部门名称长度不能超过30个字符")
     public String getName() {

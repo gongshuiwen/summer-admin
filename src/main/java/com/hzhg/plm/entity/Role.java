@@ -43,4 +43,9 @@ public class Role extends BaseEntity {
     public Integer getOrderNum() {
         return orderNum;
     }
+
+    @Override
+    public String getDisplayName() {
+        return getName();
+    }
 }

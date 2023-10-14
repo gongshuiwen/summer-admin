@@ -21,4 +21,9 @@ public class Permission  extends BaseEntity {
 
     @Schema(description = "状态 1=正常,0=停用")
     private Integer status;
+
+    @Override
+    public String getDisplayName() {
+        return getName();
+    }
 }

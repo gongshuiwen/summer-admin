@@ -43,6 +43,11 @@ public class Menu extends TreeBaseEntity<Menu> {
     @Schema(description = "菜单图标")
     private String icon;
 
+    @Override
+    public String getDisplayName() {
+        return getName();
+    }
+
     @NotBlank(message = "菜单名称不能为空")
     @Size(max = 50, message = "菜单名称长度不能超过50个字符")
     public String getName() {

@@ -2,10 +2,14 @@ package com.hzhg.plm.entity;
 
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.mapper.DepartmentMapper;
+import com.hzhg.plm.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -111,6 +115,11 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Override
     public boolean isEnabled() {
         return status == 1;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getNickname();
     }
 }
 
