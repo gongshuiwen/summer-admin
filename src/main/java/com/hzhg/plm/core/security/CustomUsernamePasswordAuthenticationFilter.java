@@ -1,4 +1,4 @@
-package com.hzhg.plm.security;
+package com.hzhg.plm.core.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;

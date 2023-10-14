@@ -1,9 +1,9 @@
-package com.hzhg.plm.config;
+package com.hzhg.plm.core.config;
 
 import com.alibaba.fastjson.JSON;
-import com.hzhg.plm.common.R;
-import com.hzhg.plm.exception.BusinessExceptionEnum;
-import com.hzhg.plm.security.CustomUsernamePasswordAuthenticationFilter;
+import com.hzhg.plm.core.exception.BusinessExceptionEnum;
+import com.hzhg.plm.core.protocal.R;
+import com.hzhg.plm.core.security.CustomUsernamePasswordAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;

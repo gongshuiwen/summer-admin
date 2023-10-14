@@ -1,4 +1,4 @@
-package com.hzhg.plm.entity.base;
+package com.hzhg.plm.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;

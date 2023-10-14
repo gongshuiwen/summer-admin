@@ -1,6 +1,6 @@
-package com.hzhg.plm.common;
+package com.hzhg.plm.core.protocal;
 
-import com.hzhg.plm.exception.BusinessExceptionEnum;
+import com.hzhg.plm.core.exception.BusinessExceptionEnum;
 import lombok.Data;
 
 @Data

@@ -1,4 +1,4 @@
-package com.hzhg.plm.exception;
+package com.hzhg.plm.core.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

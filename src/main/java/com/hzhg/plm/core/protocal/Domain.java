@@ -1,10 +1,9 @@
-package com.hzhg.plm.query;
+package com.hzhg.plm.core.protocal;
 
 import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 

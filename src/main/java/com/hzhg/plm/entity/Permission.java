@@ -1,7 +1,7 @@
 package com.hzhg.plm.entity;
 
 
-import com.hzhg.plm.entity.base.BaseEntity;
+import com.hzhg.plm.core.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

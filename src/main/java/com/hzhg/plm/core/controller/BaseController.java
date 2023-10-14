@@ -1,12 +1,12 @@
-package com.hzhg.plm.controller;
+package com.hzhg.plm.core.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hzhg.plm.common.R;
-import com.hzhg.plm.entity.base.BaseEntity;
-import com.hzhg.plm.query.Query;
+import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.core.protocal.Query;
+import com.hzhg.plm.core.protocal.R;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class BaseController<S extends IService<T>, T extends BaseEntity> {
 
     @Autowired
-    S service;
+    public S service;
 
     @Operation(summary = "获取信息")
     @GetMapping("/{id}")

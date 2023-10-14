@@ -1,6 +1,6 @@
-package com.hzhg.plm.utils;
+package com.hzhg.plm.core.utils;
 
-import com.hzhg.plm.entity.base.TreeBaseEntity;
+import com.hzhg.plm.core.entity.TreeBaseEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

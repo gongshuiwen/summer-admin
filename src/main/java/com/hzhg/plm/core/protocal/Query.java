@@ -1,4 +1,4 @@
-package com.hzhg.plm.query;
+package com.hzhg.plm.core.protocal;
 
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

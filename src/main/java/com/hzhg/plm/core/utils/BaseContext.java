@@ -1,4 +1,4 @@
-package com.hzhg.plm.common;
+package com.hzhg.plm.core.utils;
 
 import com.hzhg.plm.entity.User;
 import org.springframework.security.core.context.SecurityContextHolder;
