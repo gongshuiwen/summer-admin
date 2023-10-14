@@ -27,21 +27,21 @@ public class MyBatisPlusConfig {
 
             private static final String CREATE_TIME_FIELD_NAME = "createTime";
             private static final String UPDATE_TIME_FIELD_NAME = "updateTime";
-            private static final String CREATE_BY_FIELD_NAME = "createUser";
-            private static final String UPDATE_BY_FIELD_NAME = "updateUser";
+            private static final String CREATE_USER_FIELD_NAME = "createUser";
+            private static final String UPDATE_USER_FIELD_NAME = "updateUser";
 
             @Override
             public void insertFill(MetaObject metaObject) {
                 metaObject.setValue(CREATE_TIME_FIELD_NAME, LocalDateTime.now());
                 metaObject.setValue(UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
-                metaObject.setValue(CREATE_BY_FIELD_NAME, BaseContext.getCurrentUserId());
-                metaObject.setValue(UPDATE_BY_FIELD_NAME, BaseContext.getCurrentUserId());
+                metaObject.setValue(CREATE_USER_FIELD_NAME, BaseContext.getCurrentUserId());
+                metaObject.setValue(UPDATE_USER_FIELD_NAME, BaseContext.getCurrentUserId());
             }
 
             @Override
             public void updateFill(MetaObject metaObject) {
                 metaObject.setValue(UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
-                metaObject.setValue(UPDATE_BY_FIELD_NAME, BaseContext.getCurrentUserId());
+                metaObject.setValue(UPDATE_USER_FIELD_NAME, BaseContext.getCurrentUserId());
             }
         };
     }
