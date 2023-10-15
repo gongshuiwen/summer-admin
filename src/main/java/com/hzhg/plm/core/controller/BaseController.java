@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -21,8 +23,10 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @Operation(summary = "获取信息")
     @GetMapping("/{id}")
-    public R<T> get(@PathVariable Long id) {
-        return R.success(service.getById(id));
+    public R<T> get(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
+        T entity = service.getById(id);
+        BaseEntity.fetchNames(Collections.singletonList(entity));
+        return R.success(entity);
     }
 
     @Operation(summary = "创建信息")
@@ -46,9 +50,11 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @Operation(summary = "通用分页查询")
     @PostMapping("/page")
-    public R<IPage<T>> page( @RequestBody Query<T> query ) {
+    public R<IPage<T>> page( @RequestBody Query<T> query ) throws NoSuchFieldException, IllegalAccessException {
         IPage<T> page = new Page<>( query.getPageNum(), query.getPageSize());
-        return R.success(service.page(page, query.buildPageQueryWrapper()));
+        page = service.page(page, query.buildPageQueryWrapper());
+        BaseEntity.fetchNames(page.getRecords());
+        return R.success(page);
     }
 
     @Operation(summary = "通用计数查询")
