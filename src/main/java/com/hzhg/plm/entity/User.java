@@ -62,6 +62,11 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private Long departmentId;
 
     @TableField(exist = false)
+    @Schema(description = "部门名称")
+    @FetchName(idField = "departmentId", mapper = DepartmentMapper.class)
+    private String departmentName;
+
+    @TableField(exist = false)
     private List<Role> roles;
 
     @TableField(exist = false)
