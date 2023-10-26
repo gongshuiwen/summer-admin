@@ -80,4 +80,9 @@ public abstract class BaseEntity implements Serializable {
                 .peek(field -> field.setAccessible(true))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + "@" + getId() + "[" + getDisplayName() + "]";
+    }
 }
