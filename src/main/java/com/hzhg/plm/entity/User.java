@@ -5,11 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.mapper.DepartmentMapper;
-import com.hzhg.plm.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
