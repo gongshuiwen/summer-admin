@@ -1,12 +1,13 @@
+server:
+  servlet:
+    session:
+      timeout: 604800 # 7 days
 spring:
   application:
     name: plm
-mybatis-plus:
-  configuration:
-    map-underscore-to-camel-case: true
-  global-config:
-    db-config:
-      id-type: ASSIGN_ID
+  mvc:
+    servlet:
+      load-on-startup: 1
 springdoc:
   swagger-ui:
     enable: false
@@ -20,3 +21,9 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
