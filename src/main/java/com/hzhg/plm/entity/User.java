@@ -2,6 +2,7 @@ package com.hzhg.plm.entity;
 
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.mapper.DepartmentMapper;
@@ -121,8 +122,8 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getDisplayName() {
         return getNickname();
     }
 }
-
