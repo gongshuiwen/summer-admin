@@ -1,13 +1,11 @@
-server:
-  servlet:
-    session:
-      timeout: 604800 # 7 days
 spring:
   application:
     name: plm
   mvc:
     servlet:
       load-on-startup: 1
+  session:
+    timeout: 604800 # 7 days
 springdoc:
   swagger-ui:
     enable: false
