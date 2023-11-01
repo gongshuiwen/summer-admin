@@ -48,7 +48,8 @@ public class RedisConfig {
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Visibility
-        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         // Activate default typing
         objectMapper.activateDefaultTyping(
