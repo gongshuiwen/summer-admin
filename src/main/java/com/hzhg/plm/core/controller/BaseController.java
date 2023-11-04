@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,8 +30,9 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @Operation(summary = "创建信息")
     @PostMapping
-    public R<Boolean> create(@RequestBody T roleDto) {
-        return R.success(service.save(roleDto));
+    public R<T> create(@RequestBody T roleDto) {
+        service.save(roleDto);
+        return R.success(roleDto);
     }
 
     @Operation(summary = "更新信息")
