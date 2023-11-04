@@ -120,10 +120,15 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     public void testDelete() throws Exception{
+
+        long deleteId = 1;
+        long count = mockService.count();
+        Assertions.assertNotNull(mockService.getById(deleteId));
+
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
-                                .delete(MOCK_PATH + "/1")
+                                .delete(MOCK_PATH + "/" + deleteId)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -133,7 +138,8 @@ public class TestBaseController {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
         ;
 
-        Assertions.assertNull(mockService.getById(1));
+        Assertions.assertEquals(count - 1, mockService.count());
+        Assertions.assertNull(mockService.getById(deleteId));
     }
 
     @Test
