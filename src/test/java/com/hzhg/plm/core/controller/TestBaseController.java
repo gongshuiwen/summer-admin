@@ -47,9 +47,9 @@ public class TestBaseController {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is("mock")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is("mock1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
     }
 
@@ -85,7 +85,7 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     public void testUpdate() throws Exception {
         Mock mock = new Mock();
-        mock.setName("mock1");
+        mock.setName("mock");
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
@@ -101,8 +101,8 @@ public class TestBaseController {
         ;
 
         mock = mockService.getById(1);
-        Assertions.assertEquals("mock1", mock.getName());
-        Assertions.assertEquals(1, mock.getCreateUser());
+        Assertions.assertEquals("mock", mock.getName());
+        Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
     }
 
