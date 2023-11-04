@@ -18,12 +18,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TestBaseController {
 
     static final String MOCK_PATH = "/mock";
+    static final String MOCK_PATH_BATCH = MOCK_PATH + "/batch";
 
     @Autowired
     MockMvc mockMvc;
@@ -126,5 +129,48 @@ public class TestBaseController {
         ;
 
         Assertions.assertNull(mockService.getById(1));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    public void testBatchCreate() throws Exception {
+
+        Assertions.assertEquals(0, mockService.count());
+
+        ArrayList<Mock> mocks = new ArrayList<>();
+        mocks.add(new Mock("mock1"));
+        mocks.add(new Mock("mock2"));
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .post(MOCK_PATH_BATCH)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(mocks)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is("1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is("mock1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].createUser", Is.is("0")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].updateUser", Is.is("0")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is("2")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is("mock2")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].createUser", Is.is("0")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].updateUser", Is.is("0")))
+        ;
+
+        Assertions.assertEquals(2, mockService.count());
+
+        Mock mock1 = mockService.getById(1);
+        Assertions.assertEquals("mock1", mock1.getName());
+        Assertions.assertEquals(0, mock1.getCreateUser());
+        Assertions.assertEquals(0, mock1.getUpdateUser());
+
+        Mock mock2 = mockService.getById(2);
+        Assertions.assertEquals("mock2", mock2.getName());
+        Assertions.assertEquals(0, mock2.getCreateUser());
+        Assertions.assertEquals(0, mock2.getUpdateUser());
     }
 }
