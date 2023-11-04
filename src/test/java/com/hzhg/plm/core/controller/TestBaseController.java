@@ -92,15 +92,17 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     public void testUpdate() throws Exception {
 
+        long updateId = 1;
+        String updateName = "mock";
         long count = mockService.count();
-        Assertions.assertNotEquals("mock", mockService.getById(1).getName());
+        Assertions.assertNotEquals(updateName, mockService.getById(updateId).getName());
 
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
-                                .put(MOCK_PATH + "/1")
+                                .put(MOCK_PATH + "/" + updateId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock("mock"))))
+                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -111,8 +113,8 @@ public class TestBaseController {
 
         Assertions.assertEquals(count, mockService.count());
 
-        Mock mock = mockService.getById(1);
-        Assertions.assertEquals("mock", mock.getName());
+        Mock mock = mockService.getById(updateId);
+        Assertions.assertEquals(updateName, mock.getName());
         Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
     }
