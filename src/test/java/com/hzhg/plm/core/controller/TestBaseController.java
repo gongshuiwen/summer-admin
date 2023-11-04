@@ -91,13 +91,16 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     public void testUpdate() throws Exception {
-        Mock mock = new Mock("mock");
+
+        long count = mockService.count();
+        Assertions.assertNotEquals("mock", mockService.getById(1).getName());
+
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
-                                .put(MOCK_PATH + "/1", mock)
+                                .put(MOCK_PATH + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(mock)))
+                                .content(objectMapper.writeValueAsBytes(new Mock("mock"))))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -106,7 +109,9 @@ public class TestBaseController {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
         ;
 
-        mock = mockService.getById(1);
+        Assertions.assertEquals(count, mockService.count());
+
+        Mock mock = mockService.getById(1);
         Assertions.assertEquals("mock", mock.getName());
         Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
