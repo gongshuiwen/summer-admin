@@ -56,6 +56,9 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     public void testCreate() throws Exception {
+
+        Assertions.assertEquals(0, mockService.count());
+
         Mock mock = new Mock("mock");
         mockMvc
                 .perform(
@@ -73,6 +76,8 @@ public class TestBaseController {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
+
+        Assertions.assertEquals(1, mockService.count());
 
         mock = mockService.getById(1);
         Assertions.assertEquals("mock", mock.getName());
