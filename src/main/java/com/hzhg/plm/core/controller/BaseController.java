@@ -50,8 +50,9 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @Operation(summary = "批量创建")
     @PostMapping("/batch")
-    public R<Boolean> batchCreate( @RequestBody List<T> roleDtoList ) {
-        return R.success(service.saveBatch(roleDtoList));
+    public R<List<T>> batchCreate( @RequestBody List<T> roleDtoList ) {
+        service.saveBatch(roleDtoList);
+        return R.success(roleDtoList);
     }
 
     @Operation(summary = "批量更新")
