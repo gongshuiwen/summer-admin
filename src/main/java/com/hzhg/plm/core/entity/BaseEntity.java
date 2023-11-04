@@ -1,7 +1,9 @@
 package com.hzhg.plm.core.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.utils.SpringContextUtils;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "ID")
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "创建时间")
