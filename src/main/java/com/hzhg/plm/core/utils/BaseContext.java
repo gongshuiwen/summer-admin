@@ -10,6 +10,6 @@ public class BaseContext {
         if (principal instanceof User) {
             return ((User) principal).getId();
         }
-        return null;
+        return 0L;
     }
 }
