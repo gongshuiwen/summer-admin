@@ -60,30 +60,31 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     public void testCreate() throws Exception {
 
+        String name = "mock";
+        long returnId = 1;
         Assertions.assertEquals(0, mockService.count());
 
-        Mock mock = new Mock("mock");
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
                                 .post(MOCK_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(mock)))
+                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is("mock")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(returnId))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(name)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
 
         Assertions.assertEquals(1, mockService.count());
 
-        mock = mockService.getById(1);
-        Assertions.assertEquals("mock", mock.getName());
+        Mock mock = mockService.getById(returnId);
+        Assertions.assertEquals(name, mock.getName());
         Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
     }
