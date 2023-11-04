@@ -6,14 +6,17 @@ import lombok.Data;
 @Data
 public class R<T>{
 
+    public final static int SUCCESS_CODE = 10000;
+    public final static String SUCCESS_MESSAGE = "OK";
+
     private int code;
     private String message;
     private T data;
 
     public static <T> R<T> success(T obj) {
         R<T> r = new R<>();
-        r.setCode(10000);
-        r.setMessage("OK");
+        r.setCode(SUCCESS_CODE);
+        r.setMessage(SUCCESS_MESSAGE);
         r.setData(obj);
         return r;
     }
