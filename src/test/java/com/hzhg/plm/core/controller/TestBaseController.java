@@ -39,18 +39,22 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     public void testGet() throws Exception {
+
+        long getId = 1;
+        String getName = "mock1";
+
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
-                                .get(MOCK_PATH + "/1")
+                                .get(MOCK_PATH + "/" + getId)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is("mock1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(getId))))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(getName)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
