@@ -56,12 +56,11 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     public void testCreate() throws Exception {
-        Mock mock = new Mock();
-        mock.setName("mock");
+        Mock mock = new Mock("mock");
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
-                                .post(MOCK_PATH, mock)
+                                .post(MOCK_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsBytes(mock)))
                 .andDo(MockMvcResultHandlers.print())
@@ -84,8 +83,7 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     public void testUpdate() throws Exception {
-        Mock mock = new Mock();
-        mock.setName("mock");
+        Mock mock = new Mock("mock");
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
