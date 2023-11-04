@@ -25,6 +25,9 @@ public class Role extends BaseEntity {
     @Schema(description = "角色名称")
     private String name;
 
+    @Schema(description = "角色标识")
+    private String code;
+
     public boolean isAdmin() {
         return isAdmin(this.getId());
     }
