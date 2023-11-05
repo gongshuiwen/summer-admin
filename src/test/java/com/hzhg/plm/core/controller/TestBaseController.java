@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.entity.Mock;
+import com.hzhg.plm.core.exception.BusinessExceptionEnum;
 import com.hzhg.plm.core.protocal.R;
 import com.hzhg.plm.core.service.MockService;
 import org.hamcrest.core.Is;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -103,6 +105,42 @@ public class TestBaseController {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(getName)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
+        ;
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser
+    public void testGetNotAuthorized() throws Exception {
+        long getId = 1;
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .get(MOCK_PATH + "/" + getId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithAnonymousUser
+    public void testGetAnonymous() throws Exception {
+        long getId = 1;
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .get(MOCK_PATH + "/" + getId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
         ;
     }
 
