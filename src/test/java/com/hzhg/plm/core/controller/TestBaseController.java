@@ -737,4 +737,42 @@ public class TestBaseController {
         Assertions.assertEquals(count - 2, mockService.count());
         deleteIds.forEach(deleteId -> Assertions.assertNull(mockService.getById(deleteId)));
     }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser
+    public void testBatchDeleteNotAuthorized() throws Exception{
+        List<Long> deleteIds = Arrays.asList(1L, 2L);
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .delete(MOCK_PATH_BATCH)
+                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithAnonymousUser
+    public void testBatchDeleteAnonymous() throws Exception{
+        List<Long> deleteIds = Arrays.asList(1L, 2L);
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .delete(MOCK_PATH_BATCH)
+                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
 }
