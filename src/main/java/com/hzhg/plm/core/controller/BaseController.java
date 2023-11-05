@@ -58,7 +58,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量更新")
     @PutMapping("/batch")
     public R<Boolean> batchUpdate( @RequestParam List<Long> ids, @RequestBody T roleDto ) {
-        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>();
+        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>((Class<T>) roleDto.getClass());
         updateWrapper.in(T::getId, ids);
         return R.success(service.update(roleDto, updateWrapper));
     }
