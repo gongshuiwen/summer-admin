@@ -213,6 +213,43 @@ public class TestBaseController {
     }
 
     @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockUser
+    public void testCreateNotAuthorized() throws Exception {
+        String name = "mock";
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .post(MOCK_PATH)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithAnonymousUser
+    public void testCreateAnonymous() throws Exception {
+        String name = "mock";
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .post(MOCK_PATH)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
+
+    @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(roles = ROLE_ADMIN)
     public void testUpdateAdmin() throws Exception {
