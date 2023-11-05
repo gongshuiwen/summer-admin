@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.hzhg.plm.core.utils.TreeBaseEntityUtils.buildTree;
+import static com.hzhg.plm.core.entity.TreeBaseEntity.buildTree;
 
 @Slf4j
 @Service
