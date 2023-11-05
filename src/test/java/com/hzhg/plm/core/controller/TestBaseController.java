@@ -531,6 +531,48 @@ public class TestBaseController {
     }
 
     @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockUser
+    public void testBatchCreateNotAuthorized() throws Exception {
+        ArrayList<Mock> mocks = new ArrayList<>();
+        mocks.add(new Mock("mock1"));
+        mocks.add(new Mock("mock2"));
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .post(MOCK_PATH_BATCH)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(mocks)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithAnonymousUser
+    public void testBatchCreateAnonymous() throws Exception {
+        ArrayList<Mock> mocks = new ArrayList<>();
+        mocks.add(new Mock("mock1"));
+        mocks.add(new Mock("mock2"));
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .post(MOCK_PATH_BATCH)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(mocks)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
+        ;
+    }
+
+    @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(roles = ROLE_ADMIN)
     public void testBatchUpdateAdmin() throws Exception {
