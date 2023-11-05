@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.hzhg.plm.core.exception.BusinessExceptionEnum.ERROR_ACCESS_DENIED;
+import static com.hzhg.plm.core.exception.BusinessExceptionEnum.ERROR_INTERNAL;
 
 
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler {
 
-    private static final int _INTERNAL_ERROR_CODE = 99999;
-    private static final String _INTERNAL_ERROR_MESSAGE = "Server internal error!";
     private static final String _BUSINESS_ERROR_MESSAGE_TEMPLATE = "Business Error: [%d] %s";
 
     @ExceptionHandler(BusinessException.class)
@@ -32,8 +31,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public R<String> commonExceptionHandler(Exception e) {
+    public R<String> internalExceptionHandler(Exception e) {
         log.error(e.toString(), e);
-        return R.error(_INTERNAL_ERROR_CODE, _INTERNAL_ERROR_MESSAGE);
+        return R.error(ERROR_INTERNAL);
     }
 }

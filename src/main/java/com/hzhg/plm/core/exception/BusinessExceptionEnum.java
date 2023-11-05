@@ -13,6 +13,7 @@ public enum BusinessExceptionEnum {
     ERROR_TEST(90000, "This error is for test!"),
     ERROR_API_NOT_IMPLEMENTED(90001, "API is not implemented!"),
     ERROR_API_DEPRECATED(90002, "API is deprecated!"),
+    ERROR_INTERNAL(99999, "Server internal error!"),
     ;
 
     private final int code;
