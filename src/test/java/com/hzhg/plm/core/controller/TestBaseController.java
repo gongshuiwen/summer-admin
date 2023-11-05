@@ -237,4 +237,30 @@ public class TestBaseController {
             Assertions.assertEquals(0, mock.getUpdateUser());
         }
     }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    public void testBatchDelete() throws Exception{
+
+        List<Long> deleteIds = Arrays.asList(1L, 2L);
+        long count = mockService.count();
+        deleteIds.forEach(deleteId -> Assertions.assertNotNull(mockService.getById(deleteId)));
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .delete(MOCK_PATH_BATCH)
+                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
+        ;
+
+        Assertions.assertEquals(count - 2, mockService.count());
+        deleteIds.forEach(deleteId -> Assertions.assertNull(mockService.getById(deleteId)));
+    }
 }
