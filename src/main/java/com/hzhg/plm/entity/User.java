@@ -4,12 +4,14 @@ package com.hzhg.plm.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hzhg.plm.core.annotations.FetchName;
+import com.hzhg.plm.core.controller.BaseController;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.mapper.DepartmentMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
@@ -19,6 +21,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -26,6 +29,8 @@ import java.util.Set;
 public class User extends BaseEntity implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
+
+    private static final String ROLE_PREFIX = "ROLE_";
 
     @Schema(description = "用户名")
     private String username;
@@ -99,6 +104,16 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Size(max = 11, message = "手机号码长度不能超过11个字符")
     public String getPhone() {
         return phone;
+    }
+
+    @Override
+    public Set<GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> grantedAuthorities =
+                this.roles.stream()
+                        .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getCode()))
+                        .collect(Collectors.toSet());
+        if (this.isAdmin()) grantedAuthorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + BaseController.ROLE_ADMIN));
+        return grantedAuthorities;
     }
 
     @Override
