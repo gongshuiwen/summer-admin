@@ -1,5 +1,8 @@
 package com.hzhg.plm.core.controller;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.entity.Mock;
 import com.hzhg.plm.core.protocal.R;
@@ -19,6 +22,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
@@ -34,7 +40,13 @@ public class TestBaseController {
     @Autowired
     MockService mockService;
 
-    final ObjectMapper objectMapper = new ObjectMapper();
+    final static ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+    }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
@@ -190,5 +202,39 @@ public class TestBaseController {
         Assertions.assertEquals("mock2", mock2.getName());
         Assertions.assertEquals(0, mock2.getCreateUser());
         Assertions.assertEquals(0, mock2.getUpdateUser());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    public void testBatchUpdate() throws Exception {
+
+        List<Long> updateIds = Arrays.asList(1L, 2L);
+        String updateName = "mock";
+        long count = mockService.count();
+        mockService.list().forEach(mock -> Assertions.assertNotEquals(updateName, mock.getName()));
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .put(MOCK_PATH_BATCH)
+                                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(new Mock("mock"))))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
+        ;
+
+        Assertions.assertEquals(count, mockService.count());
+
+        for (Long updateId : updateIds) {
+            Mock mock = mockService.getById(updateId);
+            Assertions.assertEquals(updateName, mock.getName());
+            Assertions.assertEquals(0, mock.getCreateUser());
+            Assertions.assertEquals(0, mock.getUpdateUser());
+        }
     }
 }
