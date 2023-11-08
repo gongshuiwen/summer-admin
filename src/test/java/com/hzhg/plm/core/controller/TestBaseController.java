@@ -358,54 +358,27 @@ public class TestBaseController {
         ;
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testDeleteAdmin() throws Exception{
-
-        long deleteId = 1;
-        long count = mockService.count();
-        Assertions.assertNotNull(mockService.getById(deleteId));
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH + "/" + deleteId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
-
-        Assertions.assertEquals(count - 1, mockService.count());
-        Assertions.assertNull(mockService.getById(deleteId));
+    /**
+     * delete tests
+     */
+    ResultActions doDelete(long deleteId) throws Exception {
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .delete(MOCK_PATH + "/" + deleteId)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
-    public void testDeleteAuthorized() throws Exception{
-
+    void testDeleteAuthorized() throws Exception{
         long deleteId = 1;
         long count = mockService.count();
         Assertions.assertNotNull(mockService.getById(deleteId));
 
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH + "/" + deleteId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
+        ResultActions resultActions = doDelete(deleteId);
 
+        checkResultActionsSuccess(resultActions);
         Assertions.assertEquals(count - 1, mockService.count());
         Assertions.assertNull(mockService.getById(deleteId));
     }
@@ -413,37 +386,23 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
-    public void testDeleteNotAuthorized() throws Exception{
-        long deleteId = 1;
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH + "/" + deleteId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testDeleteNotAuthorized() throws Exception{
+        ResultActions resultActions = doDelete(1);
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testDeleteAdmin() throws Exception{
+        testDeleteAuthorized();
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
-    public void testDeleteAnonymous() throws Exception{
-        long deleteId = 1;
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH + "/" + deleteId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testDeleteAnonymous() throws Exception{
+        testDeleteNotAuthorized();
     }
 
     /**
