@@ -3,6 +3,7 @@ package com.hzhg.plm.core.controller;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.entity.Mock;
 import com.hzhg.plm.core.exception.BusinessExceptionEnum;
@@ -575,68 +576,31 @@ public class TestBaseController {
         ;
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testBatchUpdateAdmin() throws Exception {
-
-        List<Long> updateIds = Arrays.asList(1L, 2L);
-        String updateName = "mock";
-        long count = mockService.count();
-        mockService.list().forEach(mock -> Assertions.assertNotEquals(updateName, mock.getName()));
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH_BATCH)
-                                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
-
-        Assertions.assertEquals(count, mockService.count());
-
-        for (Long updateId : updateIds) {
-            Mock mock = mockService.getById(updateId);
-            Assertions.assertEquals(updateName, mock.getName());
-            Assertions.assertEquals(0, mock.getCreateUser());
-            Assertions.assertEquals(0, mock.getUpdateUser());
-        }
+    /**
+     * batchUpdate tests
+     */
+    ResultActions doBatchUpdate(List<Long> updateIds, String updateName) throws Exception {
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .put(MOCK_PATH_BATCH)
+                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new Mock(updateName))));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_UPDATE)
-    public void testBatchUpdateAuthorized() throws Exception {
-
-        List<Long> updateIds = Arrays.asList(1L, 2L);
-        String updateName = "mock";
+    void testBatchUpdateAuthorized() throws Exception {
         long count = mockService.count();
-        mockService.list().forEach(mock -> Assertions.assertNotEquals(updateName, mock.getName()));
+        String updateName = "mock";
+        List<Long> updateIds = Arrays.asList(1L, 2L);
+        updateIds.forEach(id -> Assertions.assertNotEquals(updateName, mockService.getById(id).getName()));
 
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH_BATCH)
-                                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
+        ResultActions resultActions = doBatchUpdate(updateIds, updateName);
 
+        checkResultActionsSuccess(resultActions);
         Assertions.assertEquals(count, mockService.count());
-
         for (Long updateId : updateIds) {
             Mock mock = mockService.getById(updateId);
             Assertions.assertEquals(updateName, mock.getName());
@@ -648,43 +612,23 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
-    public void testBatchUpdateNotAuthorized() throws Exception {
-        List<Long> updateIds = Arrays.asList(1L, 2L);
-        String updateName = "mock";
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH_BATCH)
-                                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testBatchUpdateNotAuthorized() throws Exception {
+        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L), "mock");
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testBatchUpdateAdmin() throws Exception {
+        testBatchUpdateAuthorized();
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
-    public void testBatchUpdateAnonymous() throws Exception {
-        List<Long> updateIds = Arrays.asList(1L, 2L);
-        String updateName = "mock";
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH_BATCH)
-                                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testBatchUpdateAnonymous() throws Exception {
+        testBatchUpdateNotAuthorized();
     }
 
     /**
@@ -704,7 +648,7 @@ public class TestBaseController {
     void testBatchDeleteAuthorized() throws Exception{
         long count = mockService.count();
         List<Long> deleteIds = Arrays.asList(1L, 2L);
-        deleteIds.forEach(deleteId -> Assertions.assertNotNull(mockService.getById(deleteId)));
+        deleteIds.forEach(id -> Assertions.assertNotNull(mockService.getById(id)));
 
         ResultActions resultActions = doBatchDelete(deleteIds);
 
