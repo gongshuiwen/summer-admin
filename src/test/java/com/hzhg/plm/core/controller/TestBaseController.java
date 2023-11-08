@@ -3,11 +3,8 @@ package com.hzhg.plm.core.controller;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.entity.Mock;
-import com.hzhg.plm.core.exception.BusinessExceptionEnum;
-import com.hzhg.plm.core.protocal.R;
 import com.hzhg.plm.core.service.MockService;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Assertions;
@@ -62,51 +59,29 @@ public class TestBaseController {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testGetAdmin() throws Exception {
-
-        long getId = 1;
-        String getName = "mock1";
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .get(MOCK_PATH + "/" + getId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(getId))))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(getName)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
-        ;
+    /**
+     * get tests
+     */
+    ResultActions doGet(long getId) throws Exception {
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .get(MOCK_PATH + "/" + getId)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_GET)
-    public void testGetAuthorized() throws Exception {
-
+    void testGetAuthorized() throws Exception {
         long getId = 1;
-        String getName = "mock1";
+        Mock mock = mockService.getById(getId);
 
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .get(MOCK_PATH + "/" + getId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
+        ResultActions resultActions = doGet(getId);
+
+        checkResultActionsSuccess(resultActions);
+        resultActions
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(getId))))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(getName)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(mock.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
@@ -115,37 +90,24 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
-    public void testGetNotAuthorized() throws Exception {
-        long getId = 1;
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .get(MOCK_PATH + "/" + getId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testGetNotAuthorized() throws Exception {
+        ResultActions resultActions = doGet(1);
+        checkResultActionsAccessDined(resultActions);
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testGetAdmin() throws Exception {
+        testGetAuthorized();
+    }
+
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
-    public void testGetAnonymous() throws Exception {
-        long getId = 1;
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .get(MOCK_PATH + "/" + getId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testGetAnonymous() throws Exception {
+        testGetNotAuthorized();
     }
 
     /**
