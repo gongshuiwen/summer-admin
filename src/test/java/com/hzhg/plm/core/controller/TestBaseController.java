@@ -446,90 +446,50 @@ public class TestBaseController {
         ;
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testBatchCreateAdmin() throws Exception {
-
-        Assertions.assertEquals(0, mockService.count());
-
-        ArrayList<Mock> mocks = new ArrayList<>();
-        mocks.add(new Mock("mock1"));
-        mocks.add(new Mock("mock2"));
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH_BATCH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(mocks)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is("mock1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].updateUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is("2")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is("mock2")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].updateUser", Is.is("0")))
-        ;
-
-        Assertions.assertEquals(2, mockService.count());
-
-        Mock mock1 = mockService.getById(1);
-        Assertions.assertEquals("mock1", mock1.getName());
-        Assertions.assertEquals(0, mock1.getCreateUser());
-        Assertions.assertEquals(0, mock1.getUpdateUser());
-
-        Mock mock2 = mockService.getById(2);
-        Assertions.assertEquals("mock2", mock2.getName());
-        Assertions.assertEquals(0, mock2.getCreateUser());
-        Assertions.assertEquals(0, mock2.getUpdateUser());
+    /**
+     * batchCreate tests
+     */
+    ResultActions doBatchCreate(List<Mock> mocks) throws Exception{
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .post(MOCK_PATH_BATCH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(mocks)));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_CREATE)
-    public void testBatchCreateAuthorized() throws Exception {
-
+    void testBatchCreateAuthorized() throws Exception {
         Assertions.assertEquals(0, mockService.count());
 
         ArrayList<Mock> mocks = new ArrayList<>();
         mocks.add(new Mock("mock1"));
         mocks.add(new Mock("mock2"));
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH_BATCH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(mocks)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is("mock1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].updateUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is("2")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is("mock2")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].updateUser", Is.is("0")))
+
+        ResultActions resultActions = doBatchCreate(mocks);
+
+        checkResultActionsSuccess(resultActions);
+        resultActions
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is("1")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is(mocks.get(0).getName())))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].createUser", Is.is("0")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].updateUser", Is.is("0")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is("2")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].createUser", Is.is("0")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].updateUser", Is.is("0")))
         ;
 
         Assertions.assertEquals(2, mockService.count());
 
         Mock mock1 = mockService.getById(1);
-        Assertions.assertEquals("mock1", mock1.getName());
+        Assertions.assertEquals(mocks.get(0).getName(), mock1.getName());
         Assertions.assertEquals(0, mock1.getCreateUser());
         Assertions.assertEquals(0, mock1.getUpdateUser());
 
         Mock mock2 = mockService.getById(2);
-        Assertions.assertEquals("mock2", mock2.getName());
+        Assertions.assertEquals(mocks.get(1).getName(), mock2.getName());
         Assertions.assertEquals(0, mock2.getCreateUser());
         Assertions.assertEquals(0, mock2.getUpdateUser());
     }
@@ -537,43 +497,26 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser
-    public void testBatchCreateNotAuthorized() throws Exception {
+    void testBatchCreateNotAuthorized() throws Exception {
         ArrayList<Mock> mocks = new ArrayList<>();
         mocks.add(new Mock("mock1"));
         mocks.add(new Mock("mock2"));
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH_BATCH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(mocks)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+        ResultActions resultActions = doBatchCreate(mocks);
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testBatchCreateAdmin() throws Exception {
+        testBatchCreateAuthorized();
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithAnonymousUser
-    public void testBatchCreateAnonymous() throws Exception {
-        ArrayList<Mock> mocks = new ArrayList<>();
-        mocks.add(new Mock("mock1"));
-        mocks.add(new Mock("mock2"));
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH_BATCH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(mocks)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testBatchCreateAnonymous() throws Exception {
+        testBatchCreateNotAuthorized();
     }
 
     /**
