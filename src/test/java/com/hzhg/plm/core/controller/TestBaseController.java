@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hzhg.plm.core.controller.BaseController.*;
+import static com.hzhg.plm.core.test.ResultCheckUtils.checkResultActionsAccessDined;
+import static com.hzhg.plm.core.test.ResultCheckUtils.checkResultActionsSuccess;
 
 
 @SpringBootTest
@@ -684,95 +687,52 @@ public class TestBaseController {
         ;
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testBatchDeleteAdmin() throws Exception{
-
-        List<Long> deleteIds = Arrays.asList(1L, 2L);
-        long count = mockService.count();
-        deleteIds.forEach(deleteId -> Assertions.assertNotNull(mockService.getById(deleteId)));
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH_BATCH)
-                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
-
-        Assertions.assertEquals(count - 2, mockService.count());
-        deleteIds.forEach(deleteId -> Assertions.assertNull(mockService.getById(deleteId)));
+    /**
+     * batchDelete tests
+     */
+    ResultActions doBatchDelete(List<Long> deleteIds) throws Exception {
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .delete(MOCK_PATH_BATCH)
+                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
-    public void testBatchDeleteAuthorized() throws Exception{
-
-        List<Long> deleteIds = Arrays.asList(1L, 2L);
+    void testBatchDeleteAuthorized() throws Exception{
         long count = mockService.count();
+        List<Long> deleteIds = Arrays.asList(1L, 2L);
         deleteIds.forEach(deleteId -> Assertions.assertNotNull(mockService.getById(deleteId)));
 
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH_BATCH)
-                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
+        ResultActions resultActions = doBatchDelete(deleteIds);
 
-        Assertions.assertEquals(count - 2, mockService.count());
+        checkResultActionsSuccess(resultActions);
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)));
         deleteIds.forEach(deleteId -> Assertions.assertNull(mockService.getById(deleteId)));
+        Assertions.assertEquals(count - deleteIds.size(), mockService.count());
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
-    public void testBatchDeleteNotAuthorized() throws Exception{
-        List<Long> deleteIds = Arrays.asList(1L, 2L);
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH_BATCH)
-                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testBatchDeleteNotAuthorized() throws Exception {
+        ResultActions resultActions = doBatchDelete(Arrays.asList(1L, 2L));
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testBatchDeleteAdmin() throws Exception {
+        testBatchDeleteAuthorized();
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
-    public void testBatchDeleteAnonymous() throws Exception{
-        List<Long> deleteIds = Arrays.asList(1L, 2L);
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .delete(MOCK_PATH_BATCH)
-                                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testBatchDeleteAnonymous() throws Exception{
+        testBatchDeleteNotAuthorized();
     }
 }
