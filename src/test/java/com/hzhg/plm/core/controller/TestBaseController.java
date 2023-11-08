@@ -148,60 +148,29 @@ public class TestBaseController {
         ;
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testCreateAdmin() throws Exception {
-
-        String name = "mock";
-        long returnId = 1;
-        Assertions.assertEquals(0, mockService.count());
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(returnId))))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(name)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
-        ;
-
-        Assertions.assertEquals(1, mockService.count());
-
-        Mock mock = mockService.getById(returnId);
-        Assertions.assertEquals(name, mock.getName());
-        Assertions.assertEquals(0, mock.getCreateUser());
-        Assertions.assertEquals(0, mock.getUpdateUser());
+    /**
+     * create tests
+     */
+    ResultActions doCreate(String name) throws Exception {
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .post(MOCK_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new Mock(name))));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_CREATE)
-    public void testCreateAuthorized() throws Exception {
-
+    void testCreateAuthorized() throws Exception {
         String name = "mock";
         long returnId = 1;
         Assertions.assertEquals(0, mockService.count());
 
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
+        ResultActions resultActions = doCreate(name);
+
+        checkResultActionsSuccess(resultActions);
+        resultActions
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(returnId))))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(name)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
@@ -219,39 +188,23 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser
-    public void testCreateNotAuthorized() throws Exception {
-        String name = "mock";
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testCreateNotAuthorized() throws Exception {
+        ResultActions resultActions = doCreate("mock");
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testCreateAdmin() throws Exception {
+        testCreateAuthorized();
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithAnonymousUser
-    public void testCreateAnonymous() throws Exception {
-        String name = "mock";
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .post(MOCK_PATH)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(name))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testCreateAnonymous() throws Exception {
+        testCreateNotAuthorized();
     }
 
     /**
@@ -268,7 +221,7 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_UPDATE)
-    public void testUpdateAuthorized() throws Exception {
+    void testUpdateAuthorized() throws Exception {
         long updateId = 1;
         String updateName = "mock";
         long count = mockService.count();
