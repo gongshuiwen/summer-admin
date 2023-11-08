@@ -254,62 +254,29 @@ public class TestBaseController {
         ;
     }
 
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
-    public void testUpdateAdmin() throws Exception {
-
-        long updateId = 1;
-        String updateName = "mock";
-        long count = mockService.count();
-        Assertions.assertNotEquals(updateName, mockService.getById(updateId).getName());
-
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH + "/" + updateId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
-
-        Assertions.assertEquals(count, mockService.count());
-
-        Mock mock = mockService.getById(updateId);
-        Assertions.assertEquals(updateName, mock.getName());
-        Assertions.assertEquals(0, mock.getCreateUser());
-        Assertions.assertEquals(0, mock.getUpdateUser());
+    /**
+     * update tests
+     */
+    ResultActions doUpdate(long updateId, String updateName) throws Exception {
+        return mockMvc.perform(
+            MockMvcRequestBuilders
+                .put(MOCK_PATH + "/" + updateId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new Mock(updateName))));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_UPDATE)
     public void testUpdateAuthorized() throws Exception {
-
         long updateId = 1;
         String updateName = "mock";
         long count = mockService.count();
         Assertions.assertNotEquals(updateName, mockService.getById(updateId).getName());
 
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH + "/" + updateId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)))
-        ;
+        ResultActions resultActions = doUpdate(updateId, updateName);
 
+        checkResultActionsSuccess(resultActions);
         Assertions.assertEquals(count, mockService.count());
 
         Mock mock = mockService.getById(updateId);
@@ -321,41 +288,23 @@ public class TestBaseController {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
-    public void testUpdateNotAuthorized() throws Exception {
-        long updateId = 1;
-        String updateName = "mock";
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH + "/" + updateId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testUpdateNotAuthorized() throws Exception {
+        ResultActions resultActions = doUpdate(1, "mock");
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(roles = ROLE_ADMIN)
+    void testUpdateAdmin() throws Exception {
+        testUpdateAuthorized();
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
-    public void testUpdateAnonymous() throws Exception {
-        long updateId = 1;
-        String updateName = "mock";
-        mockMvc
-                .perform(
-                        MockMvcRequestBuilders
-                                .put(MOCK_PATH + "/" + updateId)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(new Mock(updateName))))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())))
-        ;
+    void testUpdateAnonymous() throws Exception {
+        testUpdateNotAuthorized();
     }
 
     /**
@@ -555,7 +504,6 @@ public class TestBaseController {
         ResultActions resultActions = doBatchDelete(deleteIds);
 
         checkResultActionsSuccess(resultActions);
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(true)));
         deleteIds.forEach(deleteId -> Assertions.assertNull(mockService.getById(deleteId)));
         Assertions.assertEquals(count - deleteIds.size(), mockService.count());
     }
