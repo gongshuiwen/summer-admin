@@ -20,9 +20,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +59,10 @@ public class TestBaseController {
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @WithMockUser(roles = ROLE_ADMIN)
+    public @interface WithMockAdmin {}
 
     /**
      * get tests
@@ -97,11 +102,10 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testGetAdmin() throws Exception {
         testGetAuthorized();
     }
-
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
@@ -157,7 +161,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testCreateAdmin() throws Exception {
         testCreateAuthorized();
     }
@@ -210,7 +214,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testUpdateAdmin() throws Exception {
         testUpdateAuthorized();
     }
@@ -257,7 +261,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testDeleteAdmin() throws Exception{
         testDeleteAuthorized();
     }
@@ -330,7 +334,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testBatchCreateAdmin() throws Exception {
         testBatchCreateAuthorized();
     }
@@ -385,7 +389,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testBatchUpdateAdmin() throws Exception {
         testBatchUpdateAuthorized();
     }
@@ -433,7 +437,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(roles = ROLE_ADMIN)
+    @WithMockAdmin
     void testBatchDeleteAdmin() throws Exception {
         testBatchDeleteAuthorized();
     }
