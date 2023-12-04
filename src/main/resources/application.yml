@@ -25,3 +25,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: AUTO
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
