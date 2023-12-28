@@ -7,14 +7,14 @@ spring:
   session:
     timeout: 604800 # 7 days
 springdoc:
-  swagger-ui:
-    enable: false
   api-docs:
     path: /v3/api-docs
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan: com.hzhg.plm
+  swagger-ui:
+    enabled: true
 knife4j:
   enable: true
   setting:
