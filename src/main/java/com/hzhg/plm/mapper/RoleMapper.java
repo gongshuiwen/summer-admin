@@ -6,11 +6,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
-    @Select("SELECT * FROM role LEFT JOIN user_role ON role.id = user_role.role_id " +
-            "WHERE user_role.user_id = #{userId}")
-    List<Role> getRolesByUserId(Long userId);
+
+    Set<Role> getRolesByUserId(Long userId);
 }
