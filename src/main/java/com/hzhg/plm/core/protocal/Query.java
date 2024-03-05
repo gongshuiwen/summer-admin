@@ -1,6 +1,7 @@
 package com.hzhg.plm.core.protocal;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,10 @@ public class Query<T> {
     private String sort;
     private List<Domain<T>> domains;
 
+    @JsonIgnore
     private QueryWrapper<T> queryWrapper;
+
+    @JsonIgnore
     private Class<T> entityClass;
 
     public QueryWrapper<T> buildPageQueryWrapper() {
