@@ -13,6 +13,9 @@ public class Permission  extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "权限标识")
+    private String code;
+
     @Schema(description = "权限名称")
     private String name;
 
