@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -87,5 +88,17 @@ public abstract class BaseEntity implements Serializable {
     @Override
     public String toString() {
         return getClass().getName() + "@" + getId() + "[" + getDisplayName() + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof BaseEntity)) return false;
+        return Objects.equals(this.id, ((BaseEntity) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
     }
 }
