@@ -9,27 +9,20 @@ import com.hzhg.plm.mapper.UserMapper;
 import com.hzhg.plm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    private static final String ROLE_PREFIX = "ROLE_";
-
     @Autowired
     RoleMapper roleMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUsername, username);
         User user = this.getOne(wrapper);
@@ -42,11 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setRoles(roles);
 
         // Set authorities
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role.getName()));
-        }
-        user.setAuthorities(authorities);
+        user.setAuthoritiesWithRoles(roles);
         return user;
     }
 }

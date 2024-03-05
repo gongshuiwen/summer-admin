@@ -4,7 +4,6 @@ package com.hzhg.plm.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hzhg.plm.core.annotations.FetchName;
-import com.hzhg.plm.core.controller.BaseController;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.mapper.DepartmentMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -76,14 +75,6 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @TableField(exist = false)
     Set<GrantedAuthority> authorities;
 
-    public boolean isAdmin() {
-        return isAdmin(this.getId());
-    }
-
-    public static boolean isAdmin(Long userId) {
-        return userId != null && 1L == userId;
-    }
-
     @Size(max = 30, message = "用户昵称长度不能超过30个字符")
     public String getNickname() {
         return nickname;
@@ -106,14 +97,17 @@ public class User extends BaseEntity implements Serializable, UserDetails {
         return phone;
     }
 
-    @Override
-    public Set<GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> grantedAuthorities =
-                this.roles.stream()
+    @JsonIgnore
+    public void setAuthoritiesWithRoles(List<Role> roles) {
+        authorities =
+                roles.stream()
                         .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getCode()))
                         .collect(Collectors.toSet());
-        if (this.isAdmin()) grantedAuthorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + BaseController.ROLE_ADMIN));
-        return grantedAuthorities;
+    }
+
+    @Override
+    public Set<GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 
     @Override
