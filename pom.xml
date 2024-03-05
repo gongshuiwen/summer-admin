@@ -21,6 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <knife4j.version>4.3.0</knife4j.version>
         <lombok.version>1.18.20</lombok.version>
+        <minio.version>8.5.4</minio.version>
         <mysql.version>8.0.33</mysql.version>
         <fastjson.version>2.0.25</fastjson.version>
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
@@ -68,6 +69,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
         </dependency>
 
         <!--[scope provided]-->
