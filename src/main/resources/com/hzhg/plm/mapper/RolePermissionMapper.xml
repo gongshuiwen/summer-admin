@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzhg.plm.mapper.RolePermissionMapper">
+    <insert id="addRolePermissions">
+        INSERT INTO `role_permission`
+        (role_id, perm_id)
+        VALUES
+        <foreach collection="permIds" item="permId" separator=",">
+            (#{roleId}, #{permId})
+        </foreach>
+    </insert>
+
+    <delete id="removeRolePermissions">
+        DELETE FROM `role_permission`
+        WHERE
+            role_id = #{roleId}
+            AND
+            perm_id in
+            <foreach collection="permIds" item="permId" open="(" separator="," close=")" nullable="false">
+                #{permId}
+            </foreach>
+    </delete>
+
+    <delete id="removeRolePermissionsAll">
+        DELETE FROM `role_permission`
+        WHERE role_id = #{roleId}
+    </delete>
+</mapper>
