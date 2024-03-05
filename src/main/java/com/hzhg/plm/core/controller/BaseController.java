@@ -28,7 +28,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     public String entityName;
 
     public static final String ROLE_ADMIN = "ADMIN";
-    public static final String AUTHORITY_GET = "GET";
+    public static final String AUTHORITY_SELECT = "SELECT";
     public static final String AUTHORITY_CREATE = "CREATE";
     public static final String AUTHORITY_UPDATE = "UPDATE";
     public static final String AUTHORITY_DELETE = "DELETE";
@@ -36,7 +36,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     public static final String EXPRESSION_PREFIX = "hasRole('" + ROLE_ADMIN + "') or hasAuthority(#root.getThis().entityName + '" + AUTHORITY_DELIMITER;
     public static final String EXPRESSION_SUFFIX = "')";
 
-    public static final String EXPRESSION_AUTHORITY_GET = EXPRESSION_PREFIX + AUTHORITY_GET + EXPRESSION_SUFFIX;
+    public static final String EXPRESSION_AUTHORITY_GET = EXPRESSION_PREFIX + AUTHORITY_SELECT + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_CREATE = EXPRESSION_PREFIX + AUTHORITY_CREATE + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_UPDATE = EXPRESSION_PREFIX + AUTHORITY_UPDATE + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_DELETE = EXPRESSION_PREFIX + AUTHORITY_DELETE + EXPRESSION_SUFFIX;
@@ -116,6 +116,6 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-        this.entityName = entityClass.getSimpleName();
+        this.entityName = entityClass.getSimpleName().toUpperCase();
     };
 }
