@@ -41,7 +41,7 @@ public class TestBaseController {
     static final String MOCK_PATH = "/mock";
     static final String MOCK_PATH_BATCH = MOCK_PATH + "/batch";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_GET = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_GET;
+    static final String MOCK_AUTHORITY_SELECT = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_SELECT;
     static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_CREATE;
     static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_UPDATE;
     static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_DELETE;
@@ -76,7 +76,7 @@ public class TestBaseController {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(authorities = MOCK_AUTHORITY_GET)
+    @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testGetAuthorized() throws Exception {
         long getId = 1;
         Mock mock = mockService.getById(getId);
