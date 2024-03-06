@@ -28,7 +28,7 @@ public class TestPermissionService {
     @Test
     public void testGetPermissionsByRoleId() {
         Set<String> permissionsExpect = new HashSet<>(
-                Arrays.asList("USER:SELECT", "USER:CREATE", "USER:UPDATE", "USER:DELETE"));
+                Arrays.asList("User:SELECT", "User:CREATE", "User:UPDATE", "User:DELETE"));
         Set<Permission> permissions = permissionService.getPermissionsByRoleId(1L);
         Assertions.assertEquals(permissionsExpect, permissions.stream().map(Permission::getCode).collect(Collectors.toSet()));
     }
@@ -36,7 +36,7 @@ public class TestPermissionService {
     @Test
     public void testGetPermissionsByRoleIds() {
         Set<String> permissionsExpect = new HashSet<>(
-                Arrays.asList("USER:SELECT", "USER:CREATE", "USER:UPDATE", "USER:DELETE"));
+                Arrays.asList("User:SELECT", "User:CREATE", "User:UPDATE", "User:DELETE"));
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(Collections.singleton(1L));
         Assertions.assertEquals(permissionsExpect, permissions.stream().map(Permission::getCode).collect(Collectors.toSet()));
     }
@@ -45,7 +45,7 @@ public class TestPermissionService {
     public void testAddRolePermissionsByRoleId() {
         permissionService.addRolePermissions(2L, new HashSet<>(Arrays.asList(1L, 2L, 3L, 4L)));
         Set<String> permissionsExpect = new HashSet<>(
-                Arrays.asList("USER:SELECT", "USER:CREATE", "USER:UPDATE", "USER:DELETE"));
+                Arrays.asList("User:SELECT", "User:CREATE", "User:UPDATE", "User:DELETE"));
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(Collections.singleton(2L));
         Assertions.assertEquals(permissionsExpect, permissions.stream().map(Permission::getCode).collect(Collectors.toSet()));
     }
@@ -54,7 +54,7 @@ public class TestPermissionService {
     public void testRemoveRolePermissionsByRoleId() {
         permissionService.removeRolePermissions(1L, new HashSet<>(Arrays.asList(3L, 4L)));
         Set<String> permissionsExpect = new HashSet<>(
-                Arrays.asList("USER:SELECT", "USER:CREATE"));
+                Arrays.asList("User:SELECT", "User:CREATE"));
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(Collections.singleton(1L));
         Assertions.assertEquals(permissionsExpect, permissions.stream().map(Permission::getCode).collect(Collectors.toSet()));
     }
@@ -63,7 +63,7 @@ public class TestPermissionService {
     public void testReplaceRolePermissionsByRoleId() {
         permissionService.replaceRolePermissions(1L, new HashSet<>(Arrays.asList(1L, 2L)));
         Set<String> permissionsExpect = new HashSet<>(
-                Arrays.asList("USER:SELECT", "USER:CREATE"));
+                Arrays.asList("User:SELECT", "User:CREATE"));
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(Collections.singleton(1L));
         Assertions.assertEquals(permissionsExpect, permissions.stream().map(Permission::getCode).collect(Collectors.toSet()));
     }
