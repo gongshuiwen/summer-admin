@@ -27,7 +27,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     public String entityName;
 
-    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_ADMIN = "SYS_ADMIN";
     public static final String AUTHORITY_SELECT = "SELECT";
     public static final String AUTHORITY_CREATE = "CREATE";
     public static final String AUTHORITY_UPDATE = "UPDATE";
@@ -36,14 +36,14 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     public static final String EXPRESSION_PREFIX = "hasRole('" + ROLE_ADMIN + "') or hasAuthority(#root.getThis().entityName + '" + AUTHORITY_DELIMITER;
     public static final String EXPRESSION_SUFFIX = "')";
 
-    public static final String EXPRESSION_AUTHORITY_GET = EXPRESSION_PREFIX + AUTHORITY_SELECT + EXPRESSION_SUFFIX;
+    public static final String EXPRESSION_AUTHORITY_SELECT = EXPRESSION_PREFIX + AUTHORITY_SELECT + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_CREATE = EXPRESSION_PREFIX + AUTHORITY_CREATE + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_UPDATE = EXPRESSION_PREFIX + AUTHORITY_UPDATE + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_DELETE = EXPRESSION_PREFIX + AUTHORITY_DELETE + EXPRESSION_SUFFIX;
 
     @Operation(summary = "获取信息")
     @GetMapping("/{id}")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_GET)
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
     public R<T> get(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
         T entity = service.getById(id);
         BaseEntity.fetchNames(Collections.singletonList(entity));
@@ -99,7 +99,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @Operation(summary = "通用分页查询")
     @PostMapping("/page")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_GET)
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
     public R<IPage<T>> page( @RequestBody Query<T> query ) throws NoSuchFieldException, IllegalAccessException {
         IPage<T> page = new Page<>( query.getPageNum(), query.getPageSize());
         page = service.page(page, query.buildPageQueryWrapper());
@@ -109,13 +109,13 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @Operation(summary = "通用计数查询")
     @PostMapping("/count")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_GET)
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
     public R<Long> count( @RequestBody Query<T> query ) {
         return R.success(service.count(query.buildCountQueryWrapper()));
     }
 
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-        this.entityName = entityClass.getSimpleName().toUpperCase();
+        this.entityName = entityClass.getSimpleName();
     };
 }
