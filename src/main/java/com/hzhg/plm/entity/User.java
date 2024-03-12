@@ -35,6 +35,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private String username;
 
     @Schema(description = "密码")
+    @JsonIgnore
     private String password;
 
     @Schema(description = "昵称")
@@ -111,27 +112,30 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return status == 1;
     }
 
     @Override
-    @JsonIgnore
     public String getDisplayName() {
         return getNickname();
     }
