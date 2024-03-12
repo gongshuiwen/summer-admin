@@ -1,37 +1,67 @@
 package com.hzhg.plm.core.config;
 
-import org.springframework.boot.autoconfigure.session.RedisSessionProperties;
-import org.springframework.boot.autoconfigure.session.SessionProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
-import org.springframework.session.data.redis.RedisSessionRepository;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.security.jackson2.SecurityJackson2Modules;
 
-import java.time.Duration;
+/**
+ * Refer to <a href="https://github.com/spring-projects/spring-session/blob/main/spring-session-samples/spring-session-sample-boot-redis-json/src/main/java/sample/config/SessionConfig.java">Spring Session Github</a>
+ */
+@Configuration
+public class SessionConfig implements BeanClassLoaderAware {
 
-@Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(RedisSessionProperties.class)
-@EnableSpringHttpSession
-public class SessionConfig {
+    private ClassLoader loader;
 
+    /**
+     * Note that the bean name for this bean is intentionally
+     * {@code springSessionDefaultRedisSerializer}. It must be named this way to override
+     * the default {@link RedisSerializer} used by Spring Session.
+     */
     @Bean
-    public RedisSessionRepository sessionRepository(
-            RedisOperations<String, Object> redisOperations,
-            SessionProperties sessionProperties,
-            RedisSessionProperties redisSessionProperties) {
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
+        return new GenericJackson2JsonRedisSerializer(objectMapper());
+    }
 
-        RedisSessionRepository sessionRepository = new RedisSessionRepository(redisOperations);
+    /**
+     * Customized {@link ObjectMapper} for Spring Session
+     * @return the {@link ObjectMapper} to use
+     */
+    private ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        Duration timeout = sessionProperties.getTimeout();
-        if (timeout != null) {
-            sessionRepository.setDefaultMaxInactiveInterval(timeout);
-        }
+        // Set Visibility
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-        sessionRepository.setRedisKeyNamespace(redisSessionProperties.getNamespace());
-        sessionRepository.setFlushMode(redisSessionProperties.getFlushMode());
-        sessionRepository.setSaveMode(redisSessionProperties.getSaveMode());
-        return sessionRepository;
+        // Activate default typing
+        objectMapper.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY);
+
+        // Register modules from SecurityJackson2Modules
+        // Note: already include com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+        objectMapper.registerModules(SecurityJackson2Modules.getModules(loader));
+
+        return objectMapper;
+    }
+
+    /**
+     * @see
+     * org.springframework.beans.factory.BeanClassLoaderAware#setBeanClassLoader(java.lang.ClassLoader)
+     */
+    @Override
+    public void setBeanClassLoader(@NotNull ClassLoader classLoader) {
+        loader = classLoader;
     }
 }
