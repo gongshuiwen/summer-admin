@@ -18,9 +18,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -71,7 +70,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private String departmentName;
 
     @TableField(exist = false)
-    private List<Role> roles;
+    private Set<Role> roles;
 
     @TableField(exist = false)
     Set<GrantedAuthority> authorities;
@@ -98,12 +97,22 @@ public class User extends BaseEntity implements Serializable, UserDetails {
         return phone;
     }
 
-    @JsonIgnore
-    public void setAuthoritiesWithRoles(List<Role> roles) {
-        authorities =
-                roles.stream()
-                        .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getCode()))
-                        .collect(Collectors.toSet());
+    public void addAuthoritiesWithRoles(Set<Role> roles) {
+        if (authorities == null) {
+            authorities = new HashSet<>();
+        }
+        roles.stream()
+                .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getCode()))
+                .forEach(authorities::add);
+    }
+
+    public void addAuthoritiesWithPermissions(Set<Permission> permissions) {
+        if (authorities == null) {
+            authorities = new HashSet<>();
+        }
+        permissions.stream()
+                .map(perm -> new SimpleGrantedAuthority(perm.getCode()))
+                .forEach(authorities::add);
     }
 
     @Override

@@ -2,24 +2,30 @@ package com.hzhg.plm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hzhg.plm.entity.Permission;
 import com.hzhg.plm.entity.Role;
 import com.hzhg.plm.entity.User;
-import com.hzhg.plm.mapper.RoleMapper;
 import com.hzhg.plm.mapper.UserMapper;
+import com.hzhg.plm.service.PermissionService;
+import com.hzhg.plm.service.RoleService;
 import com.hzhg.plm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
-    RoleMapper roleMapper;
+    RoleService roleService;
+
+    @Autowired
+    PermissionService permissionService;
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,12 +36,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new UsernameNotFoundException("");
         }
 
-        // Set roles
-        List<Role> roles = roleMapper.getRolesByUserId(user.getId());
+        // Get and Set roles
+        Set<Role> roles = roleService.getRolesByUserId(user.getId());
         user.setRoles(roles);
 
-        // Set authorities
-        user.setAuthoritiesWithRoles(roles);
+        // Get permissions
+        Set<Long> roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
+        Set<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
+
+        // Add authorities
+        user.addAuthoritiesWithRoles(roles);
+        user.addAuthoritiesWithPermissions(permissions);
         return user;
     }
 }
