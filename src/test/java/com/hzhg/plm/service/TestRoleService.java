@@ -1,8 +1,6 @@
 package com.hzhg.plm.service;
 
-import com.hzhg.plm.entity.Permission;
 import com.hzhg.plm.entity.Role;
-import com.hzhg.plm.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
