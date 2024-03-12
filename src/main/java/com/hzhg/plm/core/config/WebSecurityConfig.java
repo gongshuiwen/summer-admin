@@ -66,6 +66,8 @@ public class WebSecurityConfig {
                         .mvcMatchers("/doc.html").permitAll()
                         .mvcMatchers("/webjars/**").permitAll()
                         .mvcMatchers("/v3/api-docs/**").permitAll()
+                        .mvcMatchers("/actuator/**").permitAll()
+                        .mvcMatchers("/file/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
@@ -143,7 +145,7 @@ public class WebSecurityConfig {
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException{
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
+            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED)));
         }
     }
 
@@ -152,7 +154,7 @@ public class WebSecurityConfig {
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED)));
+            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
         }
     }
 }
