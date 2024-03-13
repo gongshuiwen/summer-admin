@@ -1,12 +1,13 @@
 package com.hzhg.plm.core.config;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.exception.BusinessExceptionEnum;
 import com.hzhg.plm.core.protocal.R;
 import com.hzhg.plm.core.security.CustomUsernamePasswordAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -37,6 +38,12 @@ import java.nio.charset.StandardCharsets;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
+    private final ObjectMapper objectMapper;
+
+    public WebSecurityConfig(MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
+        this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
@@ -54,12 +61,12 @@ public class WebSecurityConfig {
 
                 // Config logout filter
                 .logout(configurer -> configurer
-                        .logoutSuccessHandler(new CustomLogoutSuccessHandler()))
+                        .logoutSuccessHandler(new CustomLogoutSuccessHandler(objectMapper)))
 
                 // Config exception handle filter
                 .exceptionHandling(configurer -> configurer
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper)))
 
                 // Static configurations for requests authorization
                 .authorizeHttpRequests(configurer -> configurer
@@ -76,12 +83,14 @@ public class WebSecurityConfig {
 
     @Bean
     UsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter(
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter
     ) {
         UsernamePasswordAuthenticationFilter filter =
                 new CustomUsernamePasswordAuthenticationFilter();
-        filter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler());
-        filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+        ObjectMapper objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
+        filter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler(objectMapper));
+        filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler(objectMapper));
         filter.setAuthenticationManager(authenticationManager);
         return filter;
     }
@@ -110,51 +119,81 @@ public class WebSecurityConfig {
 
     private static class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+        private final ObjectMapper objectMapper;
+
+        public CustomAuthenticationSuccessHandler(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
+
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            response.getWriter().write(JSON.toJSONString(R.success(userDetails)));
+            response.getWriter().write(objectMapper.writeValueAsString(R.success(userDetails)));
         }
     }
 
     private static class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
+        private final ObjectMapper objectMapper;
+
+        public CustomAuthenticationFailureHandler(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
+
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
+            response.getWriter().write(objectMapper.writeValueAsString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
         }
     }
 
     private static class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
+        private final ObjectMapper objectMapper;
+
+        public CustomLogoutSuccessHandler(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
+
         @Override
         public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JSON.toJSONString(R.success("Logout Success!")));
+            response.getWriter().write(objectMapper.writeValueAsString(R.success("Logout Success!")));
         }
     }
 
     private static class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
+        private final ObjectMapper objectMapper;
+
+        public CustomAccessDeniedHandler(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
+
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException{
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED)));
+            response.getWriter().write(objectMapper.writeValueAsString(R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED)));
         }
     }
 
     private static class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+        private final ObjectMapper objectMapper;
+
+        public CustomAuthenticationEntryPoint(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JSON.toJSONString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
+            response.getWriter().write(objectMapper.writeValueAsString(R.error(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED)));
         }
     }
 }
