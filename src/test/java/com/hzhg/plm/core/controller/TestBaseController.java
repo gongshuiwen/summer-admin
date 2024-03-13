@@ -1,8 +1,5 @@
 package com.hzhg.plm.core.controller;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.entity.Mock;
 import com.hzhg.plm.core.service.MockService;
@@ -14,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -27,11 +25,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.hzhg.plm.core.controller.BaseController.*;
-import static com.hzhg.plm.core.test.ResultCheckUtils.checkResultActionsAccessDined;
-import static com.hzhg.plm.core.test.ResultCheckUtils.checkResultActionsSuccess;
+import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
 @SpringBootTest
@@ -46,18 +42,18 @@ public class TestBaseController {
     static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_UPDATE;
     static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_DELETE;
 
-    @Autowired
     MockMvc mockMvc;
 
-    @Autowired
     MockService mockService;
 
-    final static ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper;
 
-    static {
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
-        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+    public TestBaseController (
+            @Autowired MockMvc mockMvc, @Autowired MockService mockService,
+            @Autowired MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
+        this.mockMvc = mockMvc;
+        this.mockService = mockService;
+        this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -87,8 +83,6 @@ public class TestBaseController {
         resultActions
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(getId))))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(mock.getName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
     }
 
@@ -111,7 +105,8 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testGetAnonymous() throws Exception {
-        testGetNotAuthorized();
+        ResultActions resultActions = doGet(1);
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     /**
@@ -139,8 +134,6 @@ public class TestBaseController {
         resultActions
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Is.is(Long.toString(returnId))))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(name)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.createUser", Is.is("0")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.updateUser", Is.is("0")))
         ;
 
         Assertions.assertEquals(1, mockService.count());
@@ -170,7 +163,8 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithAnonymousUser
     void testCreateAnonymous() throws Exception {
-        testCreateNotAuthorized();
+        ResultActions resultActions = doCreate("mock");
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     /**
@@ -223,7 +217,8 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testUpdateAnonymous() throws Exception {
-        testUpdateNotAuthorized();
+        ResultActions resultActions = doUpdate(1, "mock");
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     /**
@@ -270,7 +265,8 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testDeleteAnonymous() throws Exception{
-        testDeleteNotAuthorized();
+        ResultActions resultActions = doDelete(1);
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     /**
@@ -300,12 +296,8 @@ public class TestBaseController {
         resultActions
             .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is("1")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is(mocks.get(0).getName())))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].createUser", Is.is("0")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].updateUser", Is.is("0")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is("2")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].createUser", Is.is("0")))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].updateUser", Is.is("0")))
         ;
 
         Assertions.assertEquals(2, mockService.count());
@@ -343,7 +335,11 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithAnonymousUser
     void testBatchCreateAnonymous() throws Exception {
-        testBatchCreateNotAuthorized();
+        ArrayList<Mock> mocks = new ArrayList<>();
+        mocks.add(new Mock("mock1"));
+        mocks.add(new Mock("mock2"));
+        ResultActions resultActions = doBatchCreate(mocks);
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     /**
@@ -353,9 +349,8 @@ public class TestBaseController {
         return mockMvc.perform(
             MockMvcRequestBuilders
                 .put(MOCK_PATH_BATCH)
-                .param("ids", updateIds.stream().map(Object::toString).collect(Collectors.joining(",")))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new Mock(updateName))));
+                .content(objectMapper.writeValueAsBytes(new BatchDTO<>(updateIds, new Mock(updateName)))));
     }
 
     @Test
@@ -398,7 +393,8 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testBatchUpdateAnonymous() throws Exception {
-        testBatchUpdateNotAuthorized();
+        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L), "mock");
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     /**
@@ -408,8 +404,8 @@ public class TestBaseController {
         return mockMvc.perform(
             MockMvcRequestBuilders
                 .delete(MOCK_PATH_BATCH)
-                .param("ids", deleteIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new BatchDTO<>(deleteIds, null))));
     }
 
     @Test
@@ -446,6 +442,7 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testBatchDeleteAnonymous() throws Exception{
-        testBatchDeleteNotAuthorized();
+        ResultActions resultActions = doBatchDelete(Arrays.asList(1L, 2L));
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 }

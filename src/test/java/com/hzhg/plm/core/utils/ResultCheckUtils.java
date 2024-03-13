@@ -1,4 +1,4 @@
-package com.hzhg.plm.core.test;
+package com.hzhg.plm.core.utils;
 
 import com.hzhg.plm.core.exception.BusinessExceptionEnum;
 import com.hzhg.plm.core.protocal.R;
@@ -24,5 +24,13 @@ public class ResultCheckUtils {
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getCode())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_ACCESS_DENIED.getMessage())));
+    }
+
+    public static void checkResultActionsAuthenticationFailed(ResultActions resultActions) throws Exception {
+        resultActions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED.getMessage())));
     }
 }
