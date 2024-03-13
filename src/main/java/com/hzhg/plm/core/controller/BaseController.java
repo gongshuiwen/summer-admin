@@ -84,17 +84,17 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量更新")
     @PutMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> batchUpdate( @RequestParam List<Long> ids, @RequestBody T roleDto ) {
+    public R<Boolean> batchUpdate( @RequestBody BatchDTO<T> batchDTO ) {
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
-        updateWrapper.in(T::getId, ids);
-        return R.success(service.update(roleDto, updateWrapper));
+        updateWrapper.in(T::getId, batchDTO.getIds());
+        return R.success(service.update(batchDTO.getData(), updateWrapper));
     }
 
     @Operation(summary = "批量删除")
     @DeleteMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> batchDelete( @RequestParam List<Long> ids ) {
-        return R.success(service.removeBatchByIds(ids));
+    public R<Boolean> batchDelete( @RequestBody BatchDTO<T> batchDTO ) {
+        return R.success(service.removeBatchByIds(batchDTO.getIds()));
     }
 
     @Operation(summary = "通用分页查询")
@@ -118,4 +118,24 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.entityName = entityClass.getSimpleName();
     };
+
+    @SuppressWarnings("LombokGetterMayBeUsed")
+    public static class BatchDTO<T> {
+        private List<Long> ids;
+        private T data;
+
+        public BatchDTO(List<Long> ids, T data) {
+            this.ids = ids;
+            this.data = data;
+        }
+
+        public BatchDTO() { }
+
+        public List<Long> getIds() {
+            return ids;
+        }
+        public T getData() {
+            return data;
+        }
+    }
 }
