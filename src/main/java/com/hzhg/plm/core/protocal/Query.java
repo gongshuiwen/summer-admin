@@ -36,6 +36,10 @@ public class Query<T> {
     }
 
     private void buildDomains() {
+        if (getDomains() == null) {
+            return;
+        }
+
         for (Domain<T> domain : domains) {
             checkColumn(domain.getColumn());
             domain.applyToQueryWrapper(queryWrapper);
