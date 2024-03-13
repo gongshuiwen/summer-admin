@@ -1,10 +1,12 @@
 package com.hzhg.plm.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -40,7 +42,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
                 .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
                 .simpleDateFormat(DEFAULT_DATE_TIME_FORMAT)
-                .serializationInclusion(JsonInclude.Include.NON_NULL);
+                .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .filters(new SimpleFilterProvider().addFilter("roleBasedAnnotationFilter", new RoleBasedAnnotationFilter()));
         return new MappingJackson2HttpMessageConverter(builder.build());
     }
 }

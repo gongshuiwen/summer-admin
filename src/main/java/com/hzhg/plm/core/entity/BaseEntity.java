@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.hzhg.plm.core.annotations.FetchName;
+import com.hzhg.plm.core.annotations.AllowedForRoles;
 import com.hzhg.plm.core.utils.SpringContextUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@JsonFilter("roleBasedAnnotationFilter")
 public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "ID")
@@ -30,18 +33,22 @@ public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
+    @AllowedForRoles(value = {"SYS_ADMIN"})
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @AllowedForRoles(value = {"SYS_ADMIN"})
     private LocalDateTime updateTime;
 
     @Schema(description = "创建用户")
     @TableField(fill = FieldFill.INSERT)
+    @AllowedForRoles(value = {"SYS_ADMIN"})
     private Long createUser;
 
     @Schema(description = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @AllowedForRoles(value = {"SYS_ADMIN"})
     private Long updateUser;
 
     public abstract String getDisplayName();
