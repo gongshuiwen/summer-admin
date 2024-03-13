@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +54,9 @@ public class SessionConfig implements BeanClassLoaderAware {
         // Register modules from SecurityJackson2Modules
         // Note: already include com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
         objectMapper.registerModules(SecurityJackson2Modules.getModules(loader));
+
+        objectMapper.setFilterProvider(new SimpleFilterProvider()
+                .addFilter("roleBasedAnnotationFilter", new SimpleBeanPropertyFilter(){}));
 
         return objectMapper;
     }
