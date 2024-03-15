@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.core.annotations.AllowedForRoles;
 import com.hzhg.plm.mapper.DepartmentMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -55,9 +56,11 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @Schema(description = "状态 1=正常,0=停用")
     private Integer status;
 
+    @AllowedForRoles(value = {"SYS_ADMIN"})
     @Schema(description = "最后登录IP")
     private String loginIp;
 
+    @AllowedForRoles(value = {"SYS_ADMIN"})
     @Schema(description = "最后登录时间")
     private LocalDateTime loginTime;
 
