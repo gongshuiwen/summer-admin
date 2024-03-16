@@ -30,42 +30,6 @@ public class Condition<T> {
         }
     }
 
-    private static final Set<String> generalSet = new HashSet<>();
-    static {
-        generalSet.add("=");
-        generalSet.add("!=");
-        generalSet.add(">");
-        generalSet.add(">=");
-        generalSet.add("<");
-        generalSet.add("<=");
-    }
-
-    private static final Map<String, SqlKeyword> sqlKeywordMap = new HashMap<>();
-    static {
-        sqlKeywordMap.put("=", SqlKeyword.EQ);
-        sqlKeywordMap.put("!=", SqlKeyword.NE);
-        sqlKeywordMap.put(">", SqlKeyword.GT);
-        sqlKeywordMap.put(">=", SqlKeyword.GE);
-        sqlKeywordMap.put("<", SqlKeyword.LT);
-        sqlKeywordMap.put("<=", SqlKeyword.LE);
-        sqlKeywordMap.put("like", SqlKeyword.LIKE);
-        sqlKeywordMap.put("like left", SqlKeyword.LIKE);
-        sqlKeywordMap.put("like right", SqlKeyword.LIKE);
-        sqlKeywordMap.put("not like", SqlKeyword.NOT_LIKE);
-        sqlKeywordMap.put("not like left", SqlKeyword.NOT_LIKE);
-        sqlKeywordMap.put("not like right", SqlKeyword.NOT_LIKE);
-    }
-
-    private static final Map<String, SqlLike> sqlLikeMap = new HashMap<>();
-    static {
-        sqlLikeMap.put("like", SqlLike.DEFAULT);
-        sqlLikeMap.put("like left", SqlLike.LEFT);
-        sqlLikeMap.put("like right", SqlLike.RIGHT);
-        sqlLikeMap.put("not like", SqlLike.DEFAULT);
-        sqlLikeMap.put("not like left", SqlLike.LEFT);
-        sqlLikeMap.put("not like right", SqlLike.RIGHT);
-    }
-
     String column;
     String operator;
     Object value;
@@ -95,11 +59,11 @@ public class Condition<T> {
     }
 
     private boolean isGeneral() {
-        return generalSet.contains(operator);
+        return GeneralOperator.contains(operator);
     }
 
     private boolean isLike() {
-        return sqlLikeMap.containsKey(operator);
+        return LikeOperator.contains(operator);
     }
 
     private boolean isNested() {
@@ -110,8 +74,9 @@ public class Condition<T> {
         checkColumn();
         checkValue();
 
+        SqlKeyword sqlKeyword = GeneralOperator.get(operator).getSqlKeyword();
         try {
-            generalMethod.invoke(queryWrapper, true, column, getSqlKeyword(), value);
+            generalMethod.invoke(queryWrapper, true, column, sqlKeyword, value);
         } catch (InvocationTargetException | IllegalAccessException e) {
             // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
@@ -122,8 +87,9 @@ public class Condition<T> {
         checkColumn();
         checkValue();
 
+        LikeOperator likeOperator = LikeOperator.get(operator);
         try {
-            likeMethod.invoke(queryWrapper, true, getSqlKeyword(), column, value, getSqlLike());
+            likeMethod.invoke(queryWrapper, true, likeOperator.getSqlKeyword(), column, value, likeOperator.getSqlLike());
         } catch (InvocationTargetException | IllegalAccessException e) {
             // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
@@ -158,19 +124,5 @@ public class Condition<T> {
         if (value == null) {
             throw new IllegalArgumentException("Invalid value: value cannot be null");
         }
-    }
-
-    private SqlKeyword getSqlKeyword() {
-        if (operator == null) {
-            throw new IllegalArgumentException();
-        }
-        return sqlKeywordMap.get(operator);
-    }
-
-    private SqlLike getSqlLike() {
-        if (operator == null) {
-            throw new IllegalArgumentException();
-        }
-        return sqlLikeMap.get(operator);
     }
 }
