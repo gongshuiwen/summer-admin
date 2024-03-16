@@ -71,6 +71,17 @@ public class Condition<T> {
     Object value;
     private List<Condition<T>> conditions;
 
+    public Condition(String column, String operator, Object value) {
+        this.column = column;
+        this.operator = operator;
+        this.value = value;
+    }
+
+    public Condition(String operator, List<Condition<T>> conditions) {
+        this.operator = operator;
+        this.conditions = conditions;
+    }
+
     public void applyToQueryWrapper(QueryWrapper<T> queryWrapper) {
         if (isGeneral()) {
             applyGeneral(queryWrapper);
