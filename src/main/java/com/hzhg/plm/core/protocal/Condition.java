@@ -107,16 +107,23 @@ public class Condition<T> {
     }
 
     private void applyGeneral(QueryWrapper<T> queryWrapper) {
+        checkColumn();
+        checkValue();
+
         try {
-            generalMethod.invoke(queryWrapper, true, column, getSqlKeyword(), getValue());
+            generalMethod.invoke(queryWrapper, true, column, getSqlKeyword(), value);
         } catch (InvocationTargetException | IllegalAccessException e) {
+            // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
         }
     }
 
     private void applyLike(QueryWrapper<T> queryWrapper) {
+        checkColumn();
+        checkValue();
+
         try {
-            likeMethod.invoke(queryWrapper, true, getSqlKeyword(), column, getValue(), getSqlLike());
+            likeMethod.invoke(queryWrapper, true, getSqlKeyword(), column, value, getSqlLike());
         } catch (InvocationTargetException | IllegalAccessException e) {
             // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
@@ -124,24 +131,32 @@ public class Condition<T> {
     }
 
     private void applyNested(QueryWrapper<T> queryWrapper) {
-        if (getConditions() == null || getConditions().isEmpty()) {
+        if (conditions == null || conditions.isEmpty()) {
             throw new IllegalArgumentException("Invalid conditions: " + conditions);
         }
 
         if ("and".equals(operator)) {
-            for (Condition<T> condition : conditions) {
-                queryWrapper.and(condition::applyToQueryWrapper);
-            }
+            conditions.forEach(condition -> queryWrapper.and(condition::applyToQueryWrapper));
         } else if ("or".equals(operator)) {
-            for (Condition<T> condition : conditions) {
-                queryWrapper.or(condition::applyToQueryWrapper);
-            }
+            conditions.forEach(condition -> queryWrapper.or(condition::applyToQueryWrapper));
         } else if ("not".equals(operator)) {
-            for (Condition<T> condition : conditions) {
-                queryWrapper.not(condition::applyToQueryWrapper);
-            }
+            conditions.forEach(condition -> queryWrapper.not(condition::applyToQueryWrapper));
         } else {
             throw new RuntimeException("This should never be thrown!");
+        }
+    }
+
+    private void checkColumn() {
+        if (column == null) {
+            throw new IllegalArgumentException("Invalid column: column cannot be null");
+        }
+
+        // TODO: implement check column existing in entity class with cache
+    }
+
+    private void checkValue() {
+        if (value == null) {
+            throw new IllegalArgumentException("Invalid value: value cannot be null");
         }
     }
 
