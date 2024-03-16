@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class Query<T> {
@@ -14,7 +12,7 @@ public class Query<T> {
     private Long pageSize = 20L;
     private Long pageNum = 1L;
     private String sort;
-    private List<Domain<T>> domains;
+    private Condition<T> condition;
 
     @JsonIgnore
     private QueryWrapper<T> queryWrapper;
@@ -24,26 +22,22 @@ public class Query<T> {
 
     public QueryWrapper<T> buildPageQueryWrapper() {
         queryWrapper = new QueryWrapper<>();
-        buildDomains();
+        buildCondition();
         buildSorts();
         return queryWrapper;
     }
 
     public QueryWrapper<T> buildCountQueryWrapper() {
         queryWrapper = new QueryWrapper<>();
-        buildDomains();
+        buildCondition();
         return queryWrapper;
     }
 
-    private void buildDomains() {
-        if (getDomains() == null) {
+    private void buildCondition() {
+        if (getCondition() == null) {
             return;
         }
-
-        for (Domain<T> domain : domains) {
-            checkColumn(domain.getColumn());
-            domain.applyToQueryWrapper(queryWrapper);
-        }
+        condition.applyToQueryWrapper(queryWrapper);
     }
 
     private void buildSorts() {

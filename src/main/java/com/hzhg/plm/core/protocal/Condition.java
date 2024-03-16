@@ -13,7 +13,7 @@ import java.util.*;
 
 @Setter
 @Getter
-public class Domain<T> {
+public class Condition<T> {
 
     private static final Method generalMethod;
     private static final Method likeMethod;
@@ -69,16 +69,19 @@ public class Domain<T> {
     String column;
     String operator;
     Object value;
+    private List<Condition<T>> conditions;
 
     public void applyToQueryWrapper(QueryWrapper<T> queryWrapper) {
         if (isGeneral()) {
             applyGeneral(queryWrapper);
         } else if (isLike()) {
             applyLike(queryWrapper);
+        } else if (isNested()) {
+            applyNested(queryWrapper);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Unsupported operator: " + operator);
         }
-    };
+    }
 
     private boolean isGeneral() {
         return generalSet.contains(operator);
@@ -86,6 +89,10 @@ public class Domain<T> {
 
     private boolean isLike() {
         return sqlLikeMap.containsKey(operator);
+    }
+
+    private boolean isNested() {
+        return "and".equals(operator) || "or".equals(operator) || "not".equals(operator);
     }
 
     private void applyGeneral(QueryWrapper<T> queryWrapper) {
@@ -100,7 +107,30 @@ public class Domain<T> {
         try {
             likeMethod.invoke(queryWrapper, true, getSqlKeyword(), column, getValue(), getSqlLike());
         } catch (InvocationTargetException | IllegalAccessException e) {
+            // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
+        }
+    }
+
+    private void applyNested(QueryWrapper<T> queryWrapper) {
+        if (getConditions() == null || getConditions().isEmpty()) {
+            throw new IllegalArgumentException("Invalid conditions: " + conditions);
+        }
+
+        if ("and".equals(operator)) {
+            for (Condition<T> condition : conditions) {
+                queryWrapper.and(condition::applyToQueryWrapper);
+            }
+        } else if ("or".equals(operator)) {
+            for (Condition<T> condition : conditions) {
+                queryWrapper.or(condition::applyToQueryWrapper);
+            }
+        } else if ("not".equals(operator)) {
+            for (Condition<T> condition : conditions) {
+                queryWrapper.not(condition::applyToQueryWrapper);
+            }
+        } else {
+            throw new RuntimeException("This should never be thrown!");
         }
     }
 
