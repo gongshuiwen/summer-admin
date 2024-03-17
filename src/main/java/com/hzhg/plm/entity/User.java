@@ -33,19 +33,26 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private static final String ROLE_PREFIX = "ROLE_";
 
     @Schema(description = "用户名")
+    @NotBlank(message = "用户名不能为空")
+    @Size(max = 30, message = "用户名长度不能超过30个字符")
     private String username;
 
     @Schema(description = "密码")
+    @NotBlank(message = "用户密码不能为空")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Schema(description = "昵称")
+    @Size(max = 30, message = "昵称长度不能超过30个字符")
     private String nickname;
 
     @Schema(description = "邮箱")
+    @Email(message = "邮箱格式不正确")
+    @Size(max = 50, message = "邮箱长度不能超过50个字符")
     private String email;
 
     @Schema(description = "手机号码")
+    @Size(max = 11, message = "手机号码长度不能超过11个字符")
     private String phone;
 
     @Schema(description = "用户性别 0=未知,1=女,2=男")
@@ -77,29 +84,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private Set<Role> roles;
 
     @TableField(exist = false)
-    Set<GrantedAuthority> authorities;
-
-    @Size(max = 30, message = "用户昵称长度不能超过30个字符")
-    public String getNickname() {
-        return nickname;
-    }
-
-    @NotBlank(message = "用户账号不能为空")
-    @Size(max = 30, message = "用户账号长度不能超过30个字符")
-    public String getUsername() {
-        return username;
-    }
-
-    @Email(message = "邮箱格式不正确")
-    @Size(max = 50, message = "邮箱长度不能超过50个字符")
-    public String getEmail() {
-        return email;
-    }
-
-    @Size(max = 11, message = "手机号码长度不能超过11个字符")
-    public String getPhone() {
-        return phone;
-    }
+    private Set<GrantedAuthority> authorities;
 
     public void addAuthoritiesWithRoles(Set<Role> roles) {
         if (authorities == null) {
