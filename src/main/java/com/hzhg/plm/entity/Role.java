@@ -16,36 +16,21 @@ public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "角色标识")
+    @NotBlank(message = "角色名称不能为空")
+    @Size(max = 18, message = "角色名称长度不能超过18个字符")
+    private String code;
+
+    @Schema(description = "角色名称")
+    @NotBlank(message = "角色名称不能为空")
+    @Size(max = 18, message = "角色名称长度不能超过18个字符")
+    private String name;
+
     @Schema(description = "显示顺序")
     private Integer orderNum;
 
     @Schema(description = "状态 1=正常,0=停用")
     private Integer status;
-
-    @Schema(description = "角色名称")
-    private String name;
-
-    @Schema(description = "角色标识")
-    private String code;
-
-    public boolean isAdmin() {
-        return isAdmin(this.getId());
-    }
-
-    public static boolean isAdmin(Long roleId) {
-        return roleId != null && 1L == roleId;
-    }
-
-    @NotBlank(message = "角色名称不能为空")
-    @Size(max = 30, message = "角色名称长度不能超过30个字符")
-    public String getName() {
-        return name;
-    }
-
-    @NotNull(message = "显示顺序不能为空")
-    public Integer getOrderNum() {
-        return orderNum;
-    }
 
     @Override
     public String getDisplayName() {
