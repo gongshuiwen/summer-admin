@@ -41,7 +41,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public Set<Permission> getPermissionsByRoleIds(Set<Long> roleIds) {
-        if (roleIds == null || roleIds.isEmpty()) {
+        if (roleIds == null) {
             throw new IllegalArgumentException();
         }
         Set<Permission> permissions = new HashSet<>();
