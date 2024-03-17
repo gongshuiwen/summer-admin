@@ -3,6 +3,7 @@ package com.hzhg.plm.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.annotations.AllowedForRoles;
@@ -35,7 +36,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private String username;
 
     @Schema(description = "密码")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Schema(description = "昵称")
