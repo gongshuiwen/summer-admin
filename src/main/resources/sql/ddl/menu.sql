@@ -9,7 +9,7 @@ CREATE TABLE `menu` (
     `parent_path`   varchar(50)     NOT NULL    DEFAULT ''                  COMMENT '祖级路径',
     `name`          varchar(50)     NOT NULL    DEFAULT ''                  COMMENT '菜单名称',
     `order_num`     smallint        NOT NULL    DEFAULT 0                   COMMENT '显示顺序',
-    `status`        tinyint         NOT NULL    DEFAULT 0                   COMMENT '部门状态 0=正常,1=停用',
+    `status`        tinyint         NOT NULL    DEFAULT 1                   COMMENT '状态 1=正常,0=停用',
     `title`         varchar(100)    NOT NULL    DEFAULT ''                  COMMENT '菜单标题',
     `path`          varchar(100)    NOT NULL    DEFAULT ''                  COMMENT '路由地址',
     `component`     varchar(100)    NOT NULL    DEFAULT ''                  COMMENT '组件路径',

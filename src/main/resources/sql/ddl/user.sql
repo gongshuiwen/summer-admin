@@ -7,7 +7,7 @@ CREATE TABLE `user` (
     `update_user`   bigint          NOT NULL    DEFAULT 0                   COMMENT '更新用户',
     `username`      varchar(100)    NOT NULL                                COMMENT '用户名',
     `password`      varchar(100)    NOT NULL                                COMMENT '密码',
-    `status`        smallint        NOT NULL    DEFAULT 0                   COMMENT '状态 0=正常,1=停用',
+    `status`        tinyint         NOT NULL    DEFAULT 1                   COMMENT '状态 1=正常,0=停用',
     `nickname`      varchar(100)    NOT NULL    DEFAULT ''                  COMMENT '昵称',
     `email`         varchar(100)    NOT NULL    DEFAULT ''                  COMMENT '邮箱',
     `phone`         varchar(100)    NOT NULL    DEFAULT ''                  COMMENT '手机',
