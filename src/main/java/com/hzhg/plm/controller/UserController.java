@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Tag(name = "用户接口")
 @RestController
 @RequestMapping("/user")
@@ -32,14 +34,14 @@ public class UserController extends BaseController<UserService, User> {
     @Override
     @PutMapping("/{id}")
     @PreAuthorize(EXPRESSION_AUTHORITY_USER)
-    public R<Boolean> update(@PathVariable Long id, @RequestBody User roleDto) {
+    public R<Boolean> update(@PathVariable Long id, @Valid @RequestBody User roleDto) {
         return super.update(id, roleDto);
     }
 
     @Override
     @PostMapping
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<User> create(@RequestBody User roleDto) {
+    public R<User> create(@Valid @RequestBody User roleDto) {
         if (roleDto.getId() != null) {
             roleDto.setId(null);
         }
