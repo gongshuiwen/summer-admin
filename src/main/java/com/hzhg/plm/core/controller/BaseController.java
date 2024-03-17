@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,17 +54,17 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "创建信息")
     @PostMapping
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<T> create(@RequestBody T roleDto) {
-        service.save(roleDto);
-        return R.success(roleDto);
+    public R<T> create(@RequestBody T entityDto) {
+        service.save(entityDto);
+        return R.success(entityDto);
     }
 
     @Operation(summary = "更新信息")
     @PutMapping("/{id}")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> update(@PathVariable Long id, @RequestBody T roleDto) {
-        roleDto.setId(id);
-        return R.success(service.updateById(roleDto));
+    public R<Boolean> update(@PathVariable Long id, @RequestBody T entityDto) {
+        entityDto.setId(id);
+        return R.success(service.updateById(entityDto));
     }
 
     @Operation(summary = "删除信息")
@@ -76,9 +77,9 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量创建")
     @PostMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<List<T>> batchCreate( @RequestBody List<T> roleDtoList ) {
-        service.saveBatch(roleDtoList);
-        return R.success(roleDtoList);
+    public R<List<T>> batchCreate( @RequestBody List<T> entityDtoList ) {
+        service.saveBatch(entityDtoList);
+        return R.success(entityDtoList);
     }
 
     @Operation(summary = "批量更新")
