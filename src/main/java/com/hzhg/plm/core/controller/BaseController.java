@@ -63,6 +63,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @PostMapping
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
     public R<T> create(@Valid @RequestBody T entityDto) {
+        entityDto.setId(null);
         service.save(entityDto);
         return R.success(entityDto);
     }
@@ -86,6 +87,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @PostMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
     public R<List<T>> batchCreate(@NotEmpty @RequestBody List<@Valid T> entityDtoList) {
+        entityDtoList.forEach(entityDto -> entityDto.setId(null));
         service.saveBatch(entityDtoList);
         return R.success(entityDtoList);
     }
@@ -94,6 +96,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @PutMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
     public R<Boolean> batchUpdate(@Valid @RequestBody BatchUpdateDto<@Valid T> batchDTO) {
+        batchDTO.getData().setId(null);
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
         updateWrapper.in(T::getId, batchDTO.getIds());
         return R.success(service.update(batchDTO.getData(), updateWrapper));
