@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
@@ -21,9 +22,11 @@ import java.util.Collections;
 import java.util.List;
 
 
+@Validated
 public abstract class BaseController<S extends IService<T>, T extends BaseEntity> implements InitializingBean {
 
     @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public S service;
 
     public Class<T> entityClass;
@@ -56,7 +59,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "创建信息")
     @PostMapping
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<T> create(@RequestBody T entityDto) {
+    public R<T> create(@Valid @RequestBody T entityDto) {
         service.save(entityDto);
         return R.success(entityDto);
     }
@@ -64,7 +67,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "更新信息")
     @PutMapping("/{id}")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> update(@PathVariable Long id, @RequestBody T entityDto) {
+    public R<Boolean> update(@PathVariable Long id, @Valid @RequestBody T entityDto) {
         entityDto.setId(id);
         return R.success(service.updateById(entityDto));
     }
@@ -79,7 +82,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量创建")
     @PostMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<List<T>> batchCreate( @RequestBody List<T> entityDtoList ) {
+    public R<List<T>> batchCreate(@NotEmpty @RequestBody List<@Valid T> entityDtoList) {
         service.saveBatch(entityDtoList);
         return R.success(entityDtoList);
     }
@@ -87,7 +90,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量更新")
     @PutMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> batchUpdate( @RequestBody BatchDTO<T> batchDTO ) {
+    public R<Boolean> batchUpdate(@Valid @RequestBody BatchDTO<@Valid T> batchDTO) {
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
         updateWrapper.in(T::getId, batchDTO.getIds());
         return R.success(service.update(batchDTO.getData(), updateWrapper));
@@ -96,15 +99,15 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量删除")
     @DeleteMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> batchDelete( @RequestBody BatchDTO<T> batchDTO ) {
+    public R<Boolean> batchDelete(@Valid @RequestBody BatchDTO<T> batchDTO) {
         return R.success(service.removeBatchByIds(batchDTO.getIds()));
     }
 
     @Operation(summary = "通用分页查询")
     @PostMapping("/page")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
-    public R<IPage<T>> page( @RequestBody Query<T> query ) throws NoSuchFieldException, IllegalAccessException {
-        IPage<T> page = new Page<>( query.getPageNum(), query.getPageSize());
+    public R<IPage<T>> page(@RequestBody Query<T> query) throws NoSuchFieldException, IllegalAccessException {
+        IPage<T> page = new Page<>(query.getPageNum(), query.getPageSize());
         page = service.page(page, query.buildPageQueryWrapper());
         BaseEntity.fetchNames(page.getRecords());
         return R.success(page);
@@ -113,10 +116,11 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "通用计数查询")
     @PostMapping("/count")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
-    public R<Long> count( @RequestBody Query<T> query ) {
+    public R<Long> count(@RequestBody Query<T> query) {
         return R.success(service.count(query.buildCountQueryWrapper()));
     }
 
+    @SuppressWarnings("unchecked")
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.entityName = entityClass.getSimpleName();
@@ -124,6 +128,9 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
 
     @SuppressWarnings("LombokGetterMayBeUsed")
     public static class BatchDTO<T> {
+
+        @NotNull(message = "ids can't be null")
+        @NotEmpty(message = "ids can't be empty")
         private List<Long> ids;
         private T data;
 
