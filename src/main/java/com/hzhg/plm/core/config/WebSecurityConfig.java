@@ -12,7 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
@@ -29,13 +29,15 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
@@ -70,11 +72,11 @@ public class WebSecurityConfig {
 
                 // Static configurations for requests authorization
                 .authorizeHttpRequests(configurer -> configurer
-                        .mvcMatchers("/doc.html").permitAll()
-                        .mvcMatchers("/webjars/**").permitAll()
-                        .mvcMatchers("/v3/api-docs/**").permitAll()
-                        .mvcMatchers("/actuator/**").permitAll()
-                        .mvcMatchers("/file/**").permitAll()
+                        .requestMatchers("/doc.html").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/file/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
@@ -86,12 +88,13 @@ public class WebSecurityConfig {
             AuthenticationManager authenticationManager,
             MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter
     ) {
-        UsernamePasswordAuthenticationFilter filter =
-                new CustomUsernamePasswordAuthenticationFilter();
         ObjectMapper objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
+        UsernamePasswordAuthenticationFilter filter =
+                new CustomUsernamePasswordAuthenticationFilter(objectMapper);
         filter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler(objectMapper));
         filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler(objectMapper));
         filter.setAuthenticationManager(authenticationManager);
+        filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         return filter;
     }
 

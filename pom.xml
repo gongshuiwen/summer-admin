@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.15</version>
+        <version>3.2.3</version>
         <relativePath/>
     </parent>
 
@@ -19,13 +19,12 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <knife4j.version>4.3.0</knife4j.version>
+        <knife4j.version>4.4.0</knife4j.version>
         <lombok.version>1.18.20</lombok.version>
         <minio.version>8.5.4</minio.version>
         <mysql.version>8.0.33</mysql.version>
         <fastjson.version>2.0.25</fastjson.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <spring-session-data-redis.version>2.7.2</spring-session-data-redis.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
     </properties>
 
     <dependencies>
@@ -52,12 +51,12 @@
         </dependency>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
 
@@ -65,7 +64,6 @@
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
-            <version>${spring-session-data-redis.version}</version>
         </dependency>
 
         <!--[scope compile]-->

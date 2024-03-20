@@ -4,8 +4,9 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/plm?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: password
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    database: 0
-    password:
+  data:
+    redis:
+      host: 127.0.0.1
+      password:
+      database: 0
+      port: 6379

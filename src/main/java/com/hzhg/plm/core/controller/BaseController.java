@@ -8,13 +8,15 @@ import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.protocal.Query;
 import com.hzhg.plm.core.protocal.R;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
@@ -118,7 +120,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.entityName = entityClass.getSimpleName();
-    };
+    }
 
     @SuppressWarnings("LombokGetterMayBeUsed")
     public static class BatchDTO<T> {
@@ -130,11 +132,13 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
             this.data = data;
         }
 
-        public BatchDTO() { }
+        public BatchDTO() {
+        }
 
         public List<Long> getIds() {
             return ids;
         }
+
         public T getData() {
             return data;
         }
