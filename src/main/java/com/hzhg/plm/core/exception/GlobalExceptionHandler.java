@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     private static final String _BUSINESS_ERROR_MESSAGE_TEMPLATE = "Business Error: [%d] %s";
 
     @ExceptionHandler(BusinessException.class)
-    public R<String> businessExceptionHandler(BusinessException e) {
+    public R<String> handleBusinessException(BusinessException e) {
         int code = e.getCode();
         String message = e.getMessage();
         log.warn(String.format(_BUSINESS_ERROR_MESSAGE_TEMPLATE, code, message));
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public R<String> accessDeniedExceptionHandler(Exception e) {
+    public R<String> handleAccessDeniedException(Exception e) {
         return R.error(ERROR_ACCESS_DENIED);
     }
 
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public R<String> internalExceptionHandler(Exception e) {
+    public R<String> handleInternalException(Exception e) {
         log.error(e.toString(), e);
         return R.error(ERROR_INTERNAL);
     }
