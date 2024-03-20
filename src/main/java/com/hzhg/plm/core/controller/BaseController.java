@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -90,7 +93,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量更新")
     @PutMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> batchUpdate(@Valid @RequestBody BatchDTO<@Valid T> batchDTO) {
+    public R<Boolean> batchUpdate(@Valid @RequestBody BatchUpdateDto<@Valid T> batchDTO) {
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
         updateWrapper.in(T::getId, batchDTO.getIds());
         return R.success(service.update(batchDTO.getData(), updateWrapper));
@@ -99,7 +102,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量删除")
     @DeleteMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> batchDelete(@Valid @RequestBody BatchDTO<T> batchDTO) {
+    public R<Boolean> batchDelete(@Valid @RequestBody BatchDeleteDto batchDTO) {
         return R.success(service.removeBatchByIds(batchDTO.getIds()));
     }
 
@@ -126,28 +129,26 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
         this.entityName = entityClass.getSimpleName();
     }
 
-    @SuppressWarnings("LombokGetterMayBeUsed")
-    public static class BatchDTO<T> {
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BatchDeleteDto {
 
         @NotNull(message = "ids can't be null")
         @NotEmpty(message = "ids can't be empty")
         private List<Long> ids;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BatchUpdateDto<T> {
+
+        @NotNull(message = "ids can't be null")
+        @NotEmpty(message = "ids can't be empty")
+        private List<Long> ids;
+
+        @NotNull(message = "data can't be null")
         private T data;
-
-        public BatchDTO(List<Long> ids, T data) {
-            this.ids = ids;
-            this.data = data;
-        }
-
-        public BatchDTO() {
-        }
-
-        public List<Long> getIds() {
-            return ids;
-        }
-
-        public T getData() {
-            return data;
-        }
     }
 }
