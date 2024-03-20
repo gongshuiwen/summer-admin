@@ -345,12 +345,12 @@ public class TestBaseController {
     /**
      * batchUpdate tests
      */
-    ResultActions doBatchUpdate(List<Long> updateIds, String updateName) throws Exception {
+    ResultActions doBatchUpdate(List<Long> updateIds, Mock mock) throws Exception {
         return mockMvc.perform(
             MockMvcRequestBuilders
                 .put(MOCK_PATH_BATCH)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new BatchDTO<>(updateIds, new Mock(updateName)))));
+                .content(objectMapper.writeValueAsBytes(new BatchUpdateDto<>(updateIds, mock))));
     }
 
     @Test
@@ -362,7 +362,7 @@ public class TestBaseController {
         List<Long> updateIds = Arrays.asList(1L, 2L);
         updateIds.forEach(id -> Assertions.assertNotEquals(updateName, mockService.getById(id).getName()));
 
-        ResultActions resultActions = doBatchUpdate(updateIds, updateName);
+        ResultActions resultActions = doBatchUpdate(updateIds, new Mock(updateName));
 
         checkResultActionsSuccess(resultActions);
         Assertions.assertEquals(count, mockService.count());
@@ -378,7 +378,7 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
     void testBatchUpdateNotAuthorized() throws Exception {
-        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L), "mock");
+        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L), new Mock("mock"));
         checkResultActionsAccessDined(resultActions);
     }
 
@@ -393,8 +393,32 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testBatchUpdateAnonymous() throws Exception {
-        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L), "mock");
+        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L),  new Mock("mock"));
         checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testBatchUpdateInvalidArguments1() throws Exception {
+        ResultActions resultActions = doBatchUpdate(null, new Mock(""));
+        checkResultActionsInvalidArguments(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testBatchUpdateInvalidArguments2() throws Exception {
+        ResultActions resultActions = doBatchUpdate(new ArrayList<>(), new Mock(""));
+        checkResultActionsInvalidArguments(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testBatchUpdateInvalidArguments3() throws Exception {
+        ResultActions resultActions = doBatchUpdate(Arrays.asList(1L, 2L), null);
+        checkResultActionsInvalidArguments(resultActions);
     }
 
     /**
@@ -405,7 +429,7 @@ public class TestBaseController {
             MockMvcRequestBuilders
                 .delete(MOCK_PATH_BATCH)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new BatchDTO<>(deleteIds, null))));
+                .content(objectMapper.writeValueAsBytes(new BatchDeleteDto(deleteIds))));
     }
 
     @Test
@@ -444,5 +468,21 @@ public class TestBaseController {
     void testBatchDeleteAnonymous() throws Exception{
         ResultActions resultActions = doBatchDelete(Arrays.asList(1L, 2L));
         checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testBatchDeleteInvalidArguments1() throws Exception {
+        ResultActions resultActions = doBatchDelete(null);
+        checkResultActionsInvalidArguments(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testBatchDeleteInvalidArguments2() throws Exception {
+        ResultActions resultActions = doBatchDelete(new ArrayList<>());
+        checkResultActionsInvalidArguments(resultActions);
     }
 }
