@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "菜单接口")
 @RestController
+@Tag(name = "菜单接口")
 @RequestMapping("/menu")
 public class MenuController extends BaseController<MenuService, Menu> {
 

@@ -9,8 +9,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "文件接口")
 @RestController
+@Tag(name = "文件接口")
 @RequestMapping("/file")
 public class FileController {
 

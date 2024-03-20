@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "角色接口")
 @RestController
+@Tag(name = "角色接口")
 @RequestMapping("/role")
 public class RoleController extends BaseController<RoleService, Role> {
 
