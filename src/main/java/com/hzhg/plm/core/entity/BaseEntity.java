@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.hzhg.plm.core.controller.BaseController.ROLE_ADMIN;
+
 
 @Getter
 @Setter
@@ -33,22 +35,22 @@ public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    @AllowedForRoles(value = {"SYS_ADMIN"})
+    @AllowedForRoles(value = {ROLE_ADMIN})
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @AllowedForRoles(value = {"SYS_ADMIN"})
+    @AllowedForRoles(value = {ROLE_ADMIN})
     private LocalDateTime updateTime;
 
     @Schema(description = "创建用户")
     @TableField(fill = FieldFill.INSERT)
-    @AllowedForRoles(value = {"SYS_ADMIN"})
+    @AllowedForRoles(value = {ROLE_ADMIN})
     private Long createUser;
 
     @Schema(description = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @AllowedForRoles(value = {"SYS_ADMIN"})
+    @AllowedForRoles(value = {ROLE_ADMIN})
     private Long updateUser;
 
     public abstract String getDisplayName();
