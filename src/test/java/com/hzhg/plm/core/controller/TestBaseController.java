@@ -2,7 +2,7 @@ package com.hzhg.plm.core.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzhg.plm.core.entity.Mock;
-import com.hzhg.plm.core.service.MockService;
+import com.hzhg.plm.core.mapper.MockMapper;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -44,15 +44,16 @@ public class TestBaseController {
 
     MockMvc mockMvc;
 
-    MockService mockService;
+    MockMapper mockMapper;
 
     ObjectMapper objectMapper;
 
     public TestBaseController (
-            @Autowired MockMvc mockMvc, @Autowired MockService mockService,
+            @Autowired MockMvc mockMvc,
+            @Autowired MockMapper mockMapper,
             @Autowired MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
         this.mockMvc = mockMvc;
-        this.mockService = mockService;
+        this.mockMapper = mockMapper;
         this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
@@ -75,7 +76,7 @@ public class TestBaseController {
     @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testGetAuthorized() throws Exception {
         long getId = 1;
-        Mock mock = mockService.getById(getId);
+        Mock mock = mockMapper.selectById(getId);
 
         ResultActions resultActions = doGet(getId);
 
@@ -126,7 +127,7 @@ public class TestBaseController {
     void testCreateAuthorized() throws Exception {
         String name = "mock";
         long returnId = 1;
-        Assertions.assertEquals(0, mockService.count());
+        Assertions.assertEquals(0, mockMapper.selectCount(null));
 
         ResultActions resultActions = doCreate(name);
 
@@ -136,9 +137,9 @@ public class TestBaseController {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.name", Is.is(name)))
         ;
 
-        Assertions.assertEquals(1, mockService.count());
+        Assertions.assertEquals(1, mockMapper.selectCount(null));
 
-        Mock mock = mockService.getById(returnId);
+        Mock mock = mockMapper.selectById(returnId);
         Assertions.assertEquals(name, mock.getName());
         Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
@@ -184,15 +185,15 @@ public class TestBaseController {
     void testUpdateAuthorized() throws Exception {
         long updateId = 1;
         String updateName = "mock";
-        long count = mockService.count();
-        Assertions.assertNotEquals(updateName, mockService.getById(updateId).getName());
+        long count = mockMapper.selectCount(null);
+        Assertions.assertNotEquals(updateName, mockMapper.selectById(updateId).getName());
 
         ResultActions resultActions = doUpdate(updateId, updateName);
 
         checkResultActionsSuccess(resultActions);
-        Assertions.assertEquals(count, mockService.count());
+        Assertions.assertEquals(count, mockMapper.selectCount(null));
 
-        Mock mock = mockService.getById(updateId);
+        Mock mock = mockMapper.selectById(updateId);
         Assertions.assertEquals(updateName, mock.getName());
         Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
@@ -236,14 +237,14 @@ public class TestBaseController {
     @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
     void testDeleteAuthorized() throws Exception{
         long deleteId = 1;
-        long count = mockService.count();
-        Assertions.assertNotNull(mockService.getById(deleteId));
+        long count = mockMapper.selectCount(null);
+        Assertions.assertNotNull(mockMapper.selectById(deleteId));
 
         ResultActions resultActions = doDelete(deleteId);
 
         checkResultActionsSuccess(resultActions);
-        Assertions.assertEquals(count - 1, mockService.count());
-        Assertions.assertNull(mockService.getById(deleteId));
+        Assertions.assertEquals(count - 1, mockMapper.selectCount(null));
+        Assertions.assertNull(mockMapper.selectById(deleteId));
     }
 
     @Test
@@ -284,7 +285,7 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_CREATE)
     void testBatchCreateAuthorized() throws Exception {
-        Assertions.assertEquals(0, mockService.count());
+        Assertions.assertEquals(0, mockMapper.selectCount(null));
 
         ArrayList<Mock> mocks = new ArrayList<>();
         mocks.add(new Mock("mock1"));
@@ -300,14 +301,14 @@ public class TestBaseController {
             .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
         ;
 
-        Assertions.assertEquals(2, mockService.count());
+        Assertions.assertEquals(2, mockMapper.selectCount(null));
 
-        Mock mock1 = mockService.getById(1);
+        Mock mock1 = mockMapper.selectById(1);
         Assertions.assertEquals(mocks.get(0).getName(), mock1.getName());
         Assertions.assertEquals(0, mock1.getCreateUser());
         Assertions.assertEquals(0, mock1.getUpdateUser());
 
-        Mock mock2 = mockService.getById(2);
+        Mock mock2 = mockMapper.selectById(2);
         Assertions.assertEquals(mocks.get(1).getName(), mock2.getName());
         Assertions.assertEquals(0, mock2.getCreateUser());
         Assertions.assertEquals(0, mock2.getUpdateUser());
@@ -357,17 +358,17 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_UPDATE)
     void testBatchUpdateAuthorized() throws Exception {
-        long count = mockService.count();
+        long count = mockMapper.selectCount(null);
         String updateName = "mock";
         List<Long> updateIds = Arrays.asList(1L, 2L);
-        updateIds.forEach(id -> Assertions.assertNotEquals(updateName, mockService.getById(id).getName()));
+        updateIds.forEach(id -> Assertions.assertNotEquals(updateName, mockMapper.selectById(id).getName()));
 
         ResultActions resultActions = doBatchUpdate(updateIds, new Mock(updateName));
 
         checkResultActionsSuccess(resultActions);
-        Assertions.assertEquals(count, mockService.count());
+        Assertions.assertEquals(count, mockMapper.selectCount(null));
         for (Long updateId : updateIds) {
-            Mock mock = mockService.getById(updateId);
+            Mock mock = mockMapper.selectById(updateId);
             Assertions.assertEquals(updateName, mock.getName());
             Assertions.assertEquals(0, mock.getCreateUser());
             Assertions.assertEquals(0, mock.getUpdateUser());
@@ -436,15 +437,15 @@ public class TestBaseController {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
     void testBatchDeleteAuthorized() throws Exception{
-        long count = mockService.count();
+        long count = mockMapper.selectCount(null);
         List<Long> deleteIds = Arrays.asList(1L, 2L);
-        deleteIds.forEach(id -> Assertions.assertNotNull(mockService.getById(id)));
+        deleteIds.forEach(id -> Assertions.assertNotNull(mockMapper.selectById(id)));
 
         ResultActions resultActions = doBatchDelete(deleteIds);
 
         checkResultActionsSuccess(resultActions);
-        deleteIds.forEach(deleteId -> Assertions.assertNull(mockService.getById(deleteId)));
-        Assertions.assertEquals(count - deleteIds.size(), mockService.count());
+        deleteIds.forEach(deleteId -> Assertions.assertNull(mockMapper.selectById(deleteId)));
+        Assertions.assertEquals(count - deleteIds.size(), mockMapper.selectCount(null));
     }
 
     @Test
