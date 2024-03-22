@@ -33,4 +33,12 @@ public class ResultCheckUtils {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED.getCode())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_AUTHENTICATION_FAILED.getMessage())));
     }
+
+    public static void checkResultActionsInvalidArguments(ResultActions resultActions) throws Exception {
+        resultActions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(BusinessExceptionEnum.ERROR_INVALID_ARGUMENTS.getCode())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(BusinessExceptionEnum.ERROR_INVALID_ARGUMENTS.getMessage())));
+    }
 }
