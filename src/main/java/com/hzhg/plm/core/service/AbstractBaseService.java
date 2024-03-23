@@ -34,6 +34,16 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
+    public IPage<T> page(Long pageNum, Long pageSize, Condition<T> condition, String sort) {
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        IPage<T> page = new Page<>(pageNum, pageSize);
+        Query<T> query = new Query<>();
+        query.setSort(sort);
+        query.setCondition(condition);
+        return super.page(page, query.buildPageQueryWrapper());
+    }
+
+    @Override
     public Long count(Condition<T> condition) {
         DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
         if (condition == null) return super.count();

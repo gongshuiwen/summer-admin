@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzhg.plm.core.entity.Mock;
 import com.hzhg.plm.core.mapper.MockMapper;
 import com.hzhg.plm.core.protocal.Condition;
-import com.hzhg.plm.core.protocal.Query;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +50,61 @@ public class TestAbstractBaseService {
         Assertions.assertEquals("mock1", results.get(0).getName());
         Assertions.assertEquals(2L, results.get(1).getId());
         Assertions.assertEquals("mock2", results.get(1).getName());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
+    public void testPage() {
+        IPage<Mock> pageResult = mockService.page(1L, 20L);
+        Assertions.assertEquals(1, pageResult.getPages());
+        Assertions.assertEquals(2, pageResult.getTotal());
+        Assertions.assertEquals(1, pageResult.getCurrent());
+        Assertions.assertEquals(20, pageResult.getSize());
+
+        List<Mock> results = pageResult.getRecords();
+        Assertions.assertEquals(2, results.size());
+        Assertions.assertEquals(1L, results.get(0).getId());
+        Assertions.assertEquals("mock1", results.get(0).getName());
+        Assertions.assertEquals(2L, results.get(1).getId());
+        Assertions.assertEquals("mock2", results.get(1).getName());
+
+        pageResult = mockService.page(1L, 20L, "id desc");
+        Assertions.assertEquals(1, pageResult.getPages());
+        Assertions.assertEquals(2, pageResult.getTotal());
+        Assertions.assertEquals(1, pageResult.getCurrent());
+        Assertions.assertEquals(20, pageResult.getSize());
+
+        results = pageResult.getRecords();
+        Assertions.assertEquals(2, results.size());
+        Assertions.assertEquals(2L, results.get(0).getId());
+        Assertions.assertEquals("mock2", results.get(0).getName());
+        Assertions.assertEquals(1L, results.get(1).getId());
+        Assertions.assertEquals("mock1", results.get(1).getName());
+
+        Condition<Mock> condition = new Condition<>("id", "=", 1L);
+
+        pageResult = mockService.page(1L, 20L, condition);
+        Assertions.assertEquals(1, pageResult.getPages());
+        Assertions.assertEquals(1, pageResult.getTotal());
+        Assertions.assertEquals(1, pageResult.getCurrent());
+        Assertions.assertEquals(20, pageResult.getSize());
+
+        results = pageResult.getRecords();
+        Assertions.assertEquals(1, results.size());
+        Assertions.assertEquals(1L, results.get(0).getId());
+        Assertions.assertEquals("mock1", results.get(0).getName());
+
+        pageResult = mockService.page(1L, 20L, condition, "id desc");
+        Assertions.assertEquals(1, pageResult.getPages());
+        Assertions.assertEquals(1, pageResult.getTotal());
+        Assertions.assertEquals(1, pageResult.getCurrent());
+        Assertions.assertEquals(20, pageResult.getSize());
+
+        results = pageResult.getRecords();
+        Assertions.assertEquals(1, results.size());
+        Assertions.assertEquals(1L, results.get(0).getId());
+        Assertions.assertEquals("mock1", results.get(0).getName());
     }
 
     @Test
