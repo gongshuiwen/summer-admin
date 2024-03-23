@@ -10,7 +10,7 @@ public interface IBaseService<T extends BaseEntity> {
 
     List<T> selectByIds(List<Long> ids);
 
-    boolean create(T entity);
+    boolean createOne(T entity);
 
     boolean createBatch(List<T> entities);
 

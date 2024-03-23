@@ -41,9 +41,9 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    public void testCreate() {
+    public void testCreateOne() {
         Mock mock = new Mock("mock");
-        mockService.create(mock);
+        mockService.createOne(mock);
         Assertions.assertEquals(1, mockMapper.selectList(null).size());
 
         Assertions.assertEquals(1L, mock.getId());

@@ -14,17 +14,19 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     public T selectById(Long id) {
+        if (id == null) return null;
         return selectByIds(List.of(id)).get(0);
     }
 
     @Override
     public List<T> selectByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return Collections.emptyList();
         return listByIds(ids);
     }
 
     @Override
     @Transactional
-    public boolean create(T entity) {
+    public boolean createOne(T entity) {
         if (entity == null) return false;
         return createBatch(List.of(entity));
     }
