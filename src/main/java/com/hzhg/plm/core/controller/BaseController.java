@@ -59,56 +59,6 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
         return R.success(entity);
     }
 
-    @Operation(summary = "创建信息")
-    @PostMapping
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<T> createOne(@Valid @RequestBody T entityDto) {
-        entityDto.setId(null);
-        service.save(entityDto);
-        return R.success(entityDto);
-    }
-
-    @Operation(summary = "更新信息")
-    @PutMapping("/{id}")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> updateById(@PathVariable Long id, @Valid @RequestBody T entityDto) {
-        entityDto.setId(id);
-        return R.success(service.updateById(entityDto));
-    }
-
-    @Operation(summary = "删除信息")
-    @DeleteMapping("/{id}")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> deleteById(@PathVariable Long id) {
-        return R.success(service.removeById(id));
-    }
-
-    @Operation(summary = "批量创建")
-    @PostMapping("/batch")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<List<T>> createBatch(@NotEmpty @RequestBody List<@Valid T> entityDtoList) {
-        entityDtoList.forEach(entityDto -> entityDto.setId(null));
-        service.saveBatch(entityDtoList);
-        return R.success(entityDtoList);
-    }
-
-    @Operation(summary = "批量更新")
-    @PutMapping("/batch")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> updateByIds(@Valid @RequestBody BatchUpdateDto<@Valid T> batchDTO) {
-        batchDTO.getData().setId(null);
-        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
-        updateWrapper.in(T::getId, batchDTO.getIds());
-        return R.success(service.update(batchDTO.getData(), updateWrapper));
-    }
-
-    @Operation(summary = "批量删除")
-    @DeleteMapping("/batch")
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> deleteByIds(@Valid @RequestBody BatchDeleteDto batchDTO) {
-        return R.success(service.removeBatchByIds(batchDTO.getIds()));
-    }
-
     @Operation(summary = "通用分页查询")
     @PostMapping("/page")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
@@ -124,6 +74,56 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
     public R<Long> count(@RequestBody Query<T> query) {
         return R.success(service.count(query.buildCountQueryWrapper()));
+    }
+
+    @Operation(summary = "创建信息")
+    @PostMapping
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
+    public R<T> createOne(@Valid @RequestBody T entityDto) {
+        entityDto.setId(null);
+        service.save(entityDto);
+        return R.success(entityDto);
+    }
+
+    @Operation(summary = "批量创建")
+    @PostMapping("/batch")
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
+    public R<List<T>> createBatch(@NotEmpty @RequestBody List<@Valid T> entityDtoList) {
+        entityDtoList.forEach(entityDto -> entityDto.setId(null));
+        service.saveBatch(entityDtoList);
+        return R.success(entityDtoList);
+    }
+
+    @Operation(summary = "更新信息")
+    @PutMapping("/{id}")
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
+    public R<Boolean> updateById(@PathVariable Long id, @Valid @RequestBody T entityDto) {
+        entityDto.setId(id);
+        return R.success(service.updateById(entityDto));
+    }
+
+    @Operation(summary = "批量更新")
+    @PutMapping("/batch")
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
+    public R<Boolean> updateByIds(@Valid @RequestBody BatchUpdateDto<@Valid T> batchDTO) {
+        batchDTO.getData().setId(null);
+        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
+        updateWrapper.in(T::getId, batchDTO.getIds());
+        return R.success(service.update(batchDTO.getData(), updateWrapper));
+    }
+
+    @Operation(summary = "删除信息")
+    @DeleteMapping("/{id}")
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
+    public R<Boolean> deleteById(@PathVariable Long id) {
+        return R.success(service.removeById(id));
+    }
+
+    @Operation(summary = "批量删除")
+    @DeleteMapping("/batch")
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
+    public R<Boolean> deleteByIds(@Valid @RequestBody BatchDeleteDto batchDTO) {
+        return R.success(service.removeBatchByIds(batchDTO.getIds()));
     }
 
     @SuppressWarnings("unchecked")
