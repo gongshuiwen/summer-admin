@@ -106,6 +106,9 @@ public class User extends BaseEntity implements Serializable, UserDetails {
 
     @Override
     public Set<GrantedAuthority> getAuthorities() {
+        if (authorities == null) {
+            return new HashSet<>();
+        }
         return authorities;
     }
 
