@@ -1,7 +1,10 @@
 package com.hzhg.plm.core.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzhg.plm.core.entity.Mock;
 import com.hzhg.plm.core.mapper.MockMapper;
+import com.hzhg.plm.core.protocal.Condition;
+import com.hzhg.plm.core.protocal.Query;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +51,18 @@ public class TestAbstractBaseService {
         Assertions.assertEquals("mock1", results.get(0).getName());
         Assertions.assertEquals(2L, results.get(1).getId());
         Assertions.assertEquals("mock2", results.get(1).getName());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
+    public void testCount() {
+        Long count = mockService.count((Condition<Mock>) null);
+        Assertions.assertEquals(2, count);
+
+        Condition<Mock> condition = new Condition<>("id", "=", 1L);
+        count = mockService.count(condition);
+        Assertions.assertEquals(1, count);
     }
 
     @Test

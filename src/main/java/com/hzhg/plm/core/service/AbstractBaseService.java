@@ -1,9 +1,14 @@
 package com.hzhg.plm.core.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.core.protocal.Condition;
+import com.hzhg.plm.core.protocal.Query;
 import com.hzhg.plm.core.security.DataAccessAuthority;
 import com.hzhg.plm.core.security.DataAccessAuthorityChecker;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +31,15 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
         DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
         return listByIds(ids);
+    }
+
+    @Override
+    public Long count(Condition<T> condition) {
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        if (condition == null) return super.count();
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        condition.applyToQueryWrapper(wrapper);
+        return super.count(wrapper);
     }
 
     @Override
