@@ -25,6 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hzhg.plm.core.controller.BaseController.*;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
@@ -107,6 +108,58 @@ public class TestBaseController {
     @WithAnonymousUser
     void testSelectByIdAnonymous() throws Exception {
         ResultActions resultActions = doSelectById(1);
+        checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    /**
+     * selectByIds tests
+     */
+    ResultActions doSelectByIds(List<Long> ids) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders
+                        .get(MOCK_PATH_BATCH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("ids", ids.stream().map(String::valueOf).collect(Collectors.joining(","))));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
+    void testSelectByIdsAuthorized() throws Exception {
+        List<Long> ids = List.of(1L, 2L);
+        List<Mock> mocks = mockMapper.selectBatchIds(ids);
+
+        ResultActions resultActions = doSelectByIds(ids);
+
+        checkResultActionsSuccess(resultActions);
+        resultActions
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is(mocks.get(0).getId().toString())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is(mocks.get(0).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is(mocks.get(1).getId().toString())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
+        ;
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser
+    void testSelectByIdsNotAuthorized() throws Exception {
+        ResultActions resultActions = doSelectByIds(List.of(1L, 2L));
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testSelectByIdsAdmin() throws Exception {
+        testSelectByIdsAuthorized();
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithAnonymousUser
+    void testSelectByIdsAnonymous() throws Exception {
+        ResultActions resultActions = doSelectByIds(List.of(1L, 2L));
         checkResultActionsAuthenticationFailed(resultActions);
     }
 

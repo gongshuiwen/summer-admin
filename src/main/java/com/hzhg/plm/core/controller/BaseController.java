@@ -59,6 +59,15 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
         return R.success(entity);
     }
 
+    @Operation(summary = "批量获取")
+    @GetMapping("/batch")
+    @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
+    public R<List<T>> selectByIds(@RequestParam List<Long> ids) throws NoSuchFieldException, IllegalAccessException {
+        List<T> entity = service.listByIds(ids);
+        BaseEntity.fetchNames(entity);
+        return R.success(entity);
+    }
+
     @Operation(summary = "通用分页查询")
     @PostMapping("/page")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
