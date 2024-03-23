@@ -13,12 +13,12 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         implements IBaseService<T> {
 
     @Override
-    public T getById(Long id) {
-        return getByIds(List.of(id)).get(0);
+    public T selectById(Long id) {
+        return selectByIds(List.of(id)).get(0);
     }
 
     @Override
-    public List<T> getByIds(List<Long> ids) {
+    public List<T> selectByIds(List<Long> ids) {
         return listByIds(ids);
     }
 

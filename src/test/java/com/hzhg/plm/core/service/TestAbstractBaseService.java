@@ -1,6 +1,5 @@
 package com.hzhg.plm.core.service;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzhg.plm.core.entity.Mock;
 import com.hzhg.plm.core.mapper.MockMapper;
 import org.junit.jupiter.api.Test;
@@ -22,17 +21,17 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    public void testGetById() {
-        Mock result = mockService.getById(1L);
+    public void testSelectById() {
+        Mock result = mockService.selectById(1L);
         Assertions.assertEquals(1L, result.getId());
         Assertions.assertEquals("mock1", result.getName());
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    public void testGetByIds() {
+    public void testSelectByIds() {
         List<Long> ids = List.of(1L, 2L);
-        List<Mock> results = mockService.getByIds(ids);
+        List<Mock> results = mockService.selectByIds(ids);
         Assertions.assertEquals(2, results.size());
         Assertions.assertEquals(1L, results.get(0).getId());
         Assertions.assertEquals("mock1", results.get(0).getName());

@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface IBaseService<T extends BaseEntity> {
 
-    T getById(Long id);
+    T selectById(Long id);
 
-    List<T> getByIds(List<Long> ids);
+    List<T> selectByIds(List<Long> ids);
 
     boolean create(T entity);
 
