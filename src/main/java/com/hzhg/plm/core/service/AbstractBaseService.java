@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.core.security.DataAccessAuthority;
+import com.hzhg.plm.core.security.DataAccessAuthorityChecker;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseEntity>
@@ -21,6 +24,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Override
     public List<T> selectByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
         return listByIds(ids);
     }
 
@@ -35,6 +39,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Transactional
     public boolean createBatch(List<T> entities) {
         if (entities == null || entities.isEmpty()) return false;
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.CREATE);
         return saveBatch(entities);
     }
 
@@ -49,9 +54,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Transactional
     @SuppressWarnings("unchecked")
     public boolean updateByIds(List<Long> ids, T entity) {
-        if (ids == null || ids.isEmpty() || entity == null)
-            return false;
-
+        if (ids == null || ids.isEmpty() || entity == null) return false;
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.UPDATE);
         LambdaUpdateWrapper<T> wrapper = new LambdaUpdateWrapper<>();
         wrapper.setEntityClass((Class<T>) entity.getClass());
         wrapper.in(T::getId, ids);
@@ -69,6 +73,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Transactional
     public boolean deleteByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return false;
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.DELETE);
         return removeByIds(ids);
     }
 }
