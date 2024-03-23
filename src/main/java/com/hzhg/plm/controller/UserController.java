@@ -26,20 +26,20 @@ public class UserController extends BaseController<UserService, User> {
 
     @Override
     @PreAuthorize(EXPRESSION_AUTHORITY_USER)
-    public R<User> get(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
-        return super.get(id);
+    public R<User> selectById(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
+        return super.selectById(id);
     }
 
     @Override
     @PreAuthorize(EXPRESSION_AUTHORITY_USER)
-    public R<Boolean> update(@PathVariable Long id, @Valid @RequestBody User roleDto) {
-        return super.update(id, roleDto);
+    public R<Boolean> updateById(@PathVariable Long id, @Valid @RequestBody User roleDto) {
+        return super.updateById(id, roleDto);
     }
 
     @Override
-    public R<User> create(@Valid @RequestBody User roleDto) {
+    public R<User> createOne(@Valid @RequestBody User roleDto) {
         // encode password
         roleDto.setPassword(passwordEncoder.encode(roleDto.getPassword()));
-        return super.create(roleDto);
+        return super.createOne(roleDto);
     }
 }
