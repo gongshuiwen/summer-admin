@@ -37,11 +37,8 @@ public class UserController extends BaseController<UserService, User> {
     }
 
     @Override
-    @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
     public R<User> create(@Valid @RequestBody User roleDto) {
-        if (roleDto.getId() != null) {
-            roleDto.setId(null);
-        }
+        // encode password
         roleDto.setPassword(passwordEncoder.encode(roleDto.getPassword()));
         return super.create(roleDto);
     }
