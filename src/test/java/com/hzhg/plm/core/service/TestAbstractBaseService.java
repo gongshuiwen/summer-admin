@@ -6,12 +6,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
+import static com.hzhg.plm.core.security.DataAccessAuthority.*;
+
 @SpringBootTest
 public class TestAbstractBaseService {
+
+    static final String MOCK_ENTITY_NAME = "Mock";
+    static final String MOCK_AUTHORITY_SELECT = MOCK_ENTITY_NAME + ":" + AUTHORITY_SELECT;
+    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_CREATE;
+    static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_UPDATE;
+    static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + ":" + AUTHORITY_DELETE;
 
     @Autowired
     MockMapper mockMapper;
@@ -21,6 +30,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
     public void testSelectById() {
         Mock result = mockService.selectById(1L);
         Assertions.assertEquals(1L, result.getId());
@@ -29,6 +39,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
     public void testSelectByIds() {
         List<Long> ids = List.of(1L, 2L);
         List<Mock> results = mockService.selectByIds(ids);
@@ -41,6 +52,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_CREATE})
     public void testCreateOne() {
         Mock mock = new Mock("mock");
         mockService.createOne(mock);
@@ -64,6 +76,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_CREATE})
     public void testCreateBatch() {
         List<Mock> mocks = List.of(new Mock("mock1"), new Mock("mock2"));
         mockService.createBatch(mocks);
@@ -90,6 +103,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_UPDATE})
     public void testUpdateById() {
         Long id = 1L;
         Mock mock = new Mock("mock");
@@ -101,6 +115,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_UPDATE})
     public void testUpdateByIds() {
         List<Long> ids = List.of(1L, 2L);
         Mock mock = new Mock("mock");
@@ -114,6 +129,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_DELETE})
     public void testDeleteById() {
         Long id = 1L;
         Assertions.assertNotNull(mockMapper.selectById(id));
@@ -123,6 +139,7 @@ public class TestAbstractBaseService {
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockUser(authorities = {MOCK_AUTHORITY_DELETE})
     public void testDeleteByIds() {
         List<Long> ids = List.of(1L, 2L);
         Assertions.assertEquals(2, mockMapper.selectBatchIds(ids).size());
