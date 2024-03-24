@@ -3,6 +3,9 @@ package com.hzhg.plm.core.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
@@ -36,13 +39,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
-                .serializerByType(BigInteger.class, ToStringSerializer.instance)
-                .serializerByType(Long.class, ToStringSerializer.instance)
-                .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
-                .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
-                .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
                 .simpleDateFormat(DEFAULT_DATE_TIME_FORMAT)
                 .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .serializerByType(BigInteger.class, ToStringSerializer.instance)
+                .serializerByType(Long.class, ToStringSerializer.instance)
+                .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
+                .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
+                .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
+                .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
+                .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
+                .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
                 .filters(new SimpleFilterProvider().addFilter("roleBasedAnnotationFilter", new RoleBasedAnnotationFilter()));
         return new MappingJackson2HttpMessageConverter(builder.build());
     }
