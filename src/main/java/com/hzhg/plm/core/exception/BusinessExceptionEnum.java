@@ -14,6 +14,7 @@ public enum BusinessExceptionEnum {
     ERROR_API_NOT_IMPLEMENTED(90001, "API is not implemented!"),
     ERROR_API_DEPRECATED(90002, "API is deprecated!"),
     ERROR_INVALID_ARGUMENTS(90003, "Invalid arguments!"),
+    ERROR_INVALID_REQUEST_BODY(90004, "Invalid request body!"),
     ERROR_INTERNAL(99999, "Server internal error!"),
     ;
 

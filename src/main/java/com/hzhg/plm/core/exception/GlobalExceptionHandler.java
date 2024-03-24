@@ -4,6 +4,7 @@ import com.hzhg.plm.core.protocal.R;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,6 +57,11 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return R.error(ERROR_INVALID_ARGUMENTS, errors);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public R<String> handleHttpMessageNotReadableException(Exception e) {
+        return R.error(ERROR_INVALID_REQUEST_BODY);
     }
 
     @ExceptionHandler(Exception.class)
