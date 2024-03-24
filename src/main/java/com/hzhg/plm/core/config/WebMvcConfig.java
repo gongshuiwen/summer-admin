@@ -23,6 +23,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER;
+import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER_ID;
+
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -49,7 +52,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
                 .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
                 .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
-                .filters(new SimpleFilterProvider().addFilter("roleBasedAnnotationFilter", new RoleBasedAnnotationFilter()));
+                .filters(new SimpleFilterProvider().addFilter(ROLE_BASED_FILTER_ID, ROLE_BASED_FILTER));
         return new MappingJackson2HttpMessageConverter(builder.build());
     }
 }

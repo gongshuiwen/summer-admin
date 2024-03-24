@@ -22,11 +22,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.hzhg.plm.core.controller.BaseController.ROLE_ADMIN;
+import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER_ID;
 
 
 @Getter
 @Setter
-@JsonFilter("roleBasedAnnotationFilter")
+@JsonFilter(ROLE_BASED_FILTER_ID)
 public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "ID")
