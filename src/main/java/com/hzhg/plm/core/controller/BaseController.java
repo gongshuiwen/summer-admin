@@ -12,10 +12,6 @@ import com.hzhg.plm.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,7 +58,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量获取")
     @GetMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_SELECT)
-    public R<List<T>> selectByIds(@RequestParam List<Long> ids) throws NoSuchFieldException, IllegalAccessException {
+    public R<List<T>> selectByIds(@RequestParam @NotEmpty List<Long> ids) throws NoSuchFieldException, IllegalAccessException {
         List<T> entity = service.listByIds(ids);
         BaseEntity.fetchNames(entity);
         return R.success(entity);
@@ -116,10 +112,10 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @PutMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
     @Validated(UpdateValidationGroup.class)
-    public R<Boolean> updateByIds(@RequestBody @Valid BatchUpdateDto<@Valid T> batchDTO) {
+    public R<Boolean> updateByIds(@RequestParam @NotEmpty(groups = UpdateValidationGroup.class) List<Long> ids, @RequestBody @Valid T entityDto) {
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
-        updateWrapper.in(T::getId, batchDTO.getIds());
-        return R.success(service.update(batchDTO.getData(), updateWrapper));
+        updateWrapper.in(T::getId, ids);
+        return R.success(service.update(entityDto, updateWrapper));
     }
 
     @Operation(summary = "删除信息")
@@ -132,34 +128,13 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量删除")
     @DeleteMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> deleteByIds(@RequestBody @Valid BatchDeleteDto batchDTO) {
-        return R.success(service.removeBatchByIds(batchDTO.getIds()));
+    public R<Boolean> deleteByIds(@RequestParam @NotEmpty List<Long> ids) {
+        return R.success(service.removeBatchByIds(ids));
     }
 
     @SuppressWarnings("unchecked")
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.entityName = entityClass.getSimpleName();
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class BatchDeleteDto {
-
-        @NotEmpty(message = "ids can't be empty")
-        private List<Long> ids;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class BatchUpdateDto<T> {
-
-        @NotEmpty(message = "ids can't be empty")
-        private List<Long> ids;
-
-        @NotNull(message = "data can't be null")
-        private T data;
     }
 }
