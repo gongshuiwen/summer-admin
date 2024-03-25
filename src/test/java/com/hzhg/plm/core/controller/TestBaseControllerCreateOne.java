@@ -107,7 +107,7 @@ public class TestBaseControllerCreateOne {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateOneNameNotNull() throws Exception {
+    void testCreateOneNameNull() throws Exception {
         checkResultActionsInvalidArguments(doCreateOne(new Mock(null)));
     }
 

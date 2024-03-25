@@ -133,6 +133,27 @@ public class TestBaseControllerCreateBatch {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
+    void testCreateBatchNameNull() throws Exception {
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(new Mock(null))));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchNameEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(new Mock(""))));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchNameBlank() throws Exception {
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(new Mock("   "))));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
     void testCreateBatchIdNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setId(1L);
