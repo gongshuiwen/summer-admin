@@ -8,9 +8,11 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +59,16 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return R.error(ERROR_INVALID_ARGUMENTS, errors);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public R<String> handleMethodArgumentTypeMismatchException(Exception e) {
+        return R.error(ERROR_INVALID_ARGUMENTS);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public R<String> handleMissingServletRequestParameterException(Exception e) {
+        return R.error(ERROR_INVALID_ARGUMENTS);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
