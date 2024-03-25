@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,5 +121,57 @@ public class TestBaseControllerCreateBatch {
         mocks.add(new Mock("mock2"));
         ResultActions resultActions = doCreateBatch(mocks);
         checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchEmptyList() throws Exception {
+        checkResultActionsInvalidArguments(doCreateBatch(new ArrayList<>()));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchIdNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setId(1L);
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchCreateTimeNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setCreateTime(LocalDateTime.now());
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchUpdateTimeNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateTime(LocalDateTime.now());
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchCreateUserNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setCreateUser(1L);
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateBatchUpdateUserNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateUser(1L);
+        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
     }
 }

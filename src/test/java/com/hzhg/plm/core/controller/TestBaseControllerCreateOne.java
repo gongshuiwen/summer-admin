@@ -20,8 +20,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_CREATE;
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_DELIMITER;
+import java.time.LocalDateTime;
+
+import static com.hzhg.plm.core.controller.BaseController.*;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
@@ -48,12 +49,12 @@ public class TestBaseControllerCreateOne {
         this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
-    ResultActions doCreateOne(String name) throws Exception {
+    ResultActions doCreateOne(Mock mock) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
                         .post(MOCK_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new Mock(name))));
+                        .content(objectMapper.writeValueAsBytes(mock)));
     }
 
     @Test
@@ -64,7 +65,7 @@ public class TestBaseControllerCreateOne {
         long returnId = 1;
         Assertions.assertEquals(0, mockMapper.selectCount(null));
 
-        ResultActions resultActions = doCreateOne(name);
+        ResultActions resultActions = doCreateOne(new Mock(name));
 
         checkResultActionsSuccess(resultActions);
         resultActions
@@ -84,7 +85,7 @@ public class TestBaseControllerCreateOne {
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser
     void testCreateOneNotAuthorized() throws Exception {
-        ResultActions resultActions = doCreateOne("mock");
+        ResultActions resultActions = doCreateOne(new Mock("name"));
         checkResultActionsAccessDined(resultActions);
     }
 
@@ -99,7 +100,73 @@ public class TestBaseControllerCreateOne {
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithAnonymousUser
     void testCreateOneAnonymous() throws Exception {
-        ResultActions resultActions = doCreateOne("mock");
+        ResultActions resultActions = doCreateOne(new Mock("name"));
         checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneNameNotNull() throws Exception {
+        checkResultActionsInvalidArguments(doCreateOne(new Mock(null)));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneNameEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doCreateOne(new Mock("")));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneNameBlank() throws Exception {
+        checkResultActionsInvalidArguments(doCreateOne(new Mock("   ")));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneIdNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setId(1L);
+        checkResultActionsInvalidArguments(doCreateOne(mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneCreateTimeNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setCreateTime(LocalDateTime.now());
+        checkResultActionsInvalidArguments(doCreateOne(mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneUpdateTimeNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateTime(LocalDateTime.now());
+        checkResultActionsInvalidArguments(doCreateOne(mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneCreateUserNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setCreateUser(1L);
+        checkResultActionsInvalidArguments(doCreateOne(mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testCreateOneUpdateUserNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateUser(1L);
+        checkResultActionsInvalidArguments(doCreateOne(mock));
     }
 }
