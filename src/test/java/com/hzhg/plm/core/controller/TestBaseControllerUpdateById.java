@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
+
 import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_DELIMITER;
 import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_UPDATE;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
@@ -46,29 +48,29 @@ public class TestBaseControllerUpdateById {
         this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
-    ResultActions doUpdateById(long updateId, String updateName) throws Exception {
+    ResultActions doUpdateById(Long updateId, Mock mock) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
                         .put(MOCK_PATH + "/" + updateId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new Mock(updateName))));
+                        .content(objectMapper.writeValueAsBytes(mock)));
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_UPDATE)
     void testUpdateByIdAuthorized() throws Exception {
-        long updateId = 1;
+        Long id = 1L;
         String updateName = "mock";
         long count = mockMapper.selectCount(null);
-        Assertions.assertNotEquals(updateName, mockMapper.selectById(updateId).getName());
+        Assertions.assertNotEquals(updateName, mockMapper.selectById(id).getName());
 
-        ResultActions resultActions = doUpdateById(updateId, updateName);
+        ResultActions resultActions = doUpdateById(id, new Mock(updateName));
 
         checkResultActionsSuccess(resultActions);
         Assertions.assertEquals(count, mockMapper.selectCount(null));
 
-        Mock mock = mockMapper.selectById(updateId);
+        Mock mock = mockMapper.selectById(id);
         Assertions.assertEquals(updateName, mock.getName());
         Assertions.assertEquals(0, mock.getCreateUser());
         Assertions.assertEquals(0, mock.getUpdateUser());
@@ -78,7 +80,7 @@ public class TestBaseControllerUpdateById {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
     void testUpdateByIdNotAuthorized() throws Exception {
-        ResultActions resultActions = doUpdateById(1, "mock");
+        ResultActions resultActions = doUpdateById(1L, new Mock("mock"));
         checkResultActionsAccessDined(resultActions);
     }
 
@@ -93,7 +95,77 @@ public class TestBaseControllerUpdateById {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithAnonymousUser
     void testUpdateByIdAnonymous() throws Exception {
-        ResultActions resultActions = doUpdateById(1, "mock");
+        ResultActions resultActions = doUpdateById(1L, new Mock("mock"));
         checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdNameNull() throws Exception {
+        Long id = 1L;
+        String name = mockMapper.selectById(id).getName();
+        ResultActions resultActions = doUpdateById(id, new Mock(null));
+        checkResultActionsSuccess(resultActions);
+        Assertions.assertEquals(name, mockMapper.selectById(id).getName());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdNameEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doUpdateById(1L, new Mock("")));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdNameBlank() throws Exception {
+        checkResultActionsInvalidArguments(doUpdateById(1L, new Mock("   ")));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdIdNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setId(1L);
+        checkResultActionsInvalidArguments(doUpdateById(1L, mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdCreateTimeNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setCreateTime(LocalDateTime.now());
+        checkResultActionsInvalidArguments(doUpdateById(1L, mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdUpdateTimeNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateTime(LocalDateTime.now());
+        checkResultActionsInvalidArguments(doUpdateById(1L, mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdCreateUserNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setCreateUser(1L);
+        checkResultActionsInvalidArguments(doUpdateById(1L, mock));
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithMockAdmin
+    void testUpdateByIdUpdateUserNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateUser(1L);
+        checkResultActionsInvalidArguments(doUpdateById(1L, mock));
     }
 }
