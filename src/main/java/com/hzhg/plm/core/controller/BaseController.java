@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.protocal.Query;
 import com.hzhg.plm.core.protocal.R;
+import com.hzhg.plm.core.validation.CreateValidationGroup;
+import com.hzhg.plm.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,14 +30,6 @@ import java.util.List;
 @Validated
 public abstract class BaseController<S extends IService<T>, T extends BaseEntity> implements InitializingBean {
 
-    @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    public S service;
-
-    public Class<T> entityClass;
-
-    public String entityName;
-
     public static final String ROLE_ADMIN = "SYS_ADMIN";
     public static final String AUTHORITY_SELECT = "SELECT";
     public static final String AUTHORITY_CREATE = "CREATE";
@@ -49,6 +43,12 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     public static final String EXPRESSION_AUTHORITY_CREATE = EXPRESSION_PREFIX + AUTHORITY_CREATE + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_UPDATE = EXPRESSION_PREFIX + AUTHORITY_UPDATE + EXPRESSION_SUFFIX;
     public static final String EXPRESSION_AUTHORITY_DELETE = EXPRESSION_PREFIX + AUTHORITY_DELETE + EXPRESSION_SUFFIX;
+
+    @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    public S service;
+    public Class<T> entityClass;
+    public String entityName;
 
     @Operation(summary = "获取信息")
     @GetMapping("/{id}")
@@ -88,8 +88,8 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "创建信息")
     @PostMapping
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<T> createOne(@Valid @RequestBody T entityDto) {
-        entityDto.setId(null);
+    @Validated(CreateValidationGroup.class)
+    public R<T> createOne(@RequestBody @Valid T entityDto) {
         service.save(entityDto);
         return R.success(entityDto);
     }
@@ -97,8 +97,8 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量创建")
     @PostMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_CREATE)
-    public R<List<T>> createBatch(@NotEmpty @RequestBody List<@Valid T> entityDtoList) {
-        entityDtoList.forEach(entityDto -> entityDto.setId(null));
+    @Validated(CreateValidationGroup.class)
+    public R<List<T>> createBatch(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> entityDtoList) {
         service.saveBatch(entityDtoList);
         return R.success(entityDtoList);
     }
@@ -106,7 +106,8 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "更新信息")
     @PutMapping("/{id}")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> updateById(@PathVariable Long id, @Valid @RequestBody T entityDto) {
+    @Validated(UpdateValidationGroup.class)
+    public R<Boolean> updateById(@PathVariable Long id, @RequestBody @Valid T entityDto) {
         entityDto.setId(id);
         return R.success(service.updateById(entityDto));
     }
@@ -114,8 +115,8 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量更新")
     @PutMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_UPDATE)
-    public R<Boolean> updateByIds(@Valid @RequestBody BatchUpdateDto<@Valid T> batchDTO) {
-        batchDTO.getData().setId(null);
+    @Validated(UpdateValidationGroup.class)
+    public R<Boolean> updateByIds(@RequestBody @Valid BatchUpdateDto<@Valid T> batchDTO) {
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(entityClass);
         updateWrapper.in(T::getId, batchDTO.getIds());
         return R.success(service.update(batchDTO.getData(), updateWrapper));
@@ -131,7 +132,7 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @Operation(summary = "批量删除")
     @DeleteMapping("/batch")
     @PreAuthorize(value = EXPRESSION_AUTHORITY_DELETE)
-    public R<Boolean> deleteByIds(@Valid @RequestBody BatchDeleteDto batchDTO) {
+    public R<Boolean> deleteByIds(@RequestBody @Valid BatchDeleteDto batchDTO) {
         return R.success(service.removeBatchByIds(batchDTO.getIds()));
     }
 
@@ -146,7 +147,6 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @NoArgsConstructor
     public static class BatchDeleteDto {
 
-        @NotNull(message = "ids can't be null")
         @NotEmpty(message = "ids can't be empty")
         private List<Long> ids;
     }
@@ -156,7 +156,6 @@ public abstract class BaseController<S extends IService<T>, T extends BaseEntity
     @NoArgsConstructor
     public static class BatchUpdateDto<T> {
 
-        @NotNull(message = "ids can't be null")
         @NotEmpty(message = "ids can't be empty")
         private List<Long> ids;
 
