@@ -1,7 +1,10 @@
 package com.hzhg.plm.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.hzhg.plm.core.validation.CreateValidationGroup;
+import com.hzhg.plm.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +22,7 @@ public abstract class TreeBaseEntity<T extends TreeBaseEntity<?>> extends BaseEn
     private Long parentId;
 
     @Schema(description = "祖级路径")
+    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String parentPath;
 
     @Schema(description = "子级列表")

@@ -9,7 +9,10 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.annotations.AllowedForRoles;
 import com.hzhg.plm.core.utils.SpringContextUtils;
+import com.hzhg.plm.core.validation.CreateValidationGroup;
+import com.hzhg.plm.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,26 +35,31 @@ public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "ID")
     @TableId(type = IdType.AUTO)
+    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long id;
 
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     @AllowedForRoles(value = {ROLE_ADMIN})
+    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @AllowedForRoles(value = {ROLE_ADMIN})
+    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private LocalDateTime updateTime;
 
     @Schema(description = "创建用户")
     @TableField(fill = FieldFill.INSERT)
     @AllowedForRoles(value = {ROLE_ADMIN})
+    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long createUser;
 
     @Schema(description = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @AllowedForRoles(value = {ROLE_ADMIN})
+    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long updateUser;
 
     public abstract String getDisplayName();
