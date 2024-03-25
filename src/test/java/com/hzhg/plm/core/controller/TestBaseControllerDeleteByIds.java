@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hzhg.plm.core.controller.BaseController.*;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
@@ -49,12 +50,12 @@ public class TestBaseControllerDeleteByIds {
         this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
-    ResultActions doDeleteByIds(List<Long> deleteIds) throws Exception {
+    ResultActions doDeleteByIds(List<Long> ids) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
                         .delete(MOCK_PATH_BATCH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new BatchDeleteDto(deleteIds))));
+                        .param("ids", ids.stream().map(String::valueOf).collect(Collectors.joining(","))));
     }
 
     @Test
@@ -98,16 +99,7 @@ public class TestBaseControllerDeleteByIds {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockAdmin
-    void testDeleteByIdsInvalidArguments1() throws Exception {
-        ResultActions resultActions = doDeleteByIds(null);
-        checkResultActionsInvalidArguments(resultActions);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockAdmin
-    void testDeleteByIdsInvalidArguments2() throws Exception {
-        ResultActions resultActions = doDeleteByIds(new ArrayList<>());
-        checkResultActionsInvalidArguments(resultActions);
+    void testDeleteByIdsEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doDeleteByIds(new ArrayList<>()));
     }
 }

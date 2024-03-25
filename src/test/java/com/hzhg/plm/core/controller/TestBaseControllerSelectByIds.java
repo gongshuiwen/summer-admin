@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,5 +99,12 @@ public class TestBaseControllerSelectByIds {
     void testSelectByIdsAnonymous() throws Exception {
         ResultActions resultActions = doSelectByIds(List.of(1L, 2L));
         checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+    @WithMockAdmin
+    void testSelectByIdsEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doSelectByIds(new ArrayList<>()));
     }
 }
