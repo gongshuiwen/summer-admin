@@ -4,6 +4,7 @@ import com.hzhg.plm.core.protocal.R;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.hzhg.plm.core.exception.BusinessExceptionEnum.*;
 
@@ -41,11 +42,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public R<List<String>> handleConstraintViolationException(
+    public R<Map<String, String>> handleConstraintViolationException(
             ConstraintViolationException e) {
-        List<String> errors = e.getConstraintViolations().stream()
-                .map(ConstraintViolation::getMessage)
-                .toList();
+        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+        Map<String, String> errors = new HashMap<>();
+        for (ConstraintViolation<?> violation : violations) {
+            String fieldName = violation.getPropertyPath() instanceof PathImpl path
+                    ? path.getLeafNode().getName()
+                    : violation.getPropertyPath().toString();
+            errors.put(fieldName, violation.getMessage());
+        }
         return R.error(ERROR_INVALID_ARGUMENTS, errors);
     }
 
