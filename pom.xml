@@ -23,7 +23,6 @@
         <lombok.version>1.18.20</lombok.version>
         <minio.version>8.5.4</minio.version>
         <mysql.version>8.0.33</mysql.version>
-        <fastjson.version>2.0.25</fastjson.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
     </properties>
 
@@ -67,11 +66,6 @@
         </dependency>
 
         <!--[scope compile]-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
