@@ -1,15 +1,14 @@
 package com.hzhg.plm.core.security;
 
 import com.hzhg.plm.core.entity.BaseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.util.List;
 
 public class DataAccessAuthorityChecker {
+
+    public static final String ROLE_PREFIX = "ROLE_";
+    public static final String ROLE_ADMIN = "SYS_ADMIN";
 
     /**
      * Check if the current user has the authority to access the specified entity class with the given data access authority.
@@ -21,24 +20,15 @@ public class DataAccessAuthorityChecker {
      */
     public static void check(Class<? extends BaseEntity> entityClass, DataAccessAuthority authority)
             throws DataAccessException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new DataAccessException("没有权限访问该资源！");
+        List<SimpleGrantedAuthority> authorities = List.of(
+                new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_ADMIN),
+                new SimpleGrantedAuthority(entityClass.getSimpleName() + ":" + authority.name())
+        );
+
+        if (GrantedAuthorityCheckUtils.containsAny(authorities)) {
+            return;
         }
 
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails user) {
-            Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-            if (authorities == null || authorities.isEmpty()) {
-                throw new DataAccessException("没有权限访问该资源！");
-            }
-
-            String requiredAuthority = entityClass.getSimpleName() + ":" + authority.name();
-            if (authorities.contains(new SimpleGrantedAuthority(requiredAuthority))) {
-                return;
-            }
-        }
-
-        throw new DataAccessException("没有权限访问该资源！");
+        throw new DataAccessException("Data access authority check failed.");
     }
 }

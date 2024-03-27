@@ -5,15 +5,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.hzhg.plm.core.annotations.AllowedForRoles;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.hzhg.plm.core.security.GrantedAuthorityCheckUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class RoleBasedAnnotationFilter extends SimpleBeanPropertyFilter {
 
@@ -27,17 +22,10 @@ public class RoleBasedAnnotationFilter extends SimpleBeanPropertyFilter {
         if (annotation == null) {
             super.serializeAsField(pojo, jgen, provider, writer);
         } else {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null)
-                return;
-
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails user) {
-                List<String> allowedRoles = Arrays.stream(annotation.value()).map(x -> ROLE_PREFIX + x).toList();
-                Set<String> authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-                if (allowedRoles.stream().anyMatch(authorities::contains)) {
-                    writer.serializeAsField(pojo, jgen, provider);
-                }
+            List<SimpleGrantedAuthority> authorities = Arrays.stream(annotation.value())
+                    .map(x -> new SimpleGrantedAuthority(ROLE_PREFIX + x)).toList();
+            if (GrantedAuthorityCheckUtils.containsAny(authorities)) {
+                writer.serializeAsField(pojo, jgen, provider);
             }
         }
     }
