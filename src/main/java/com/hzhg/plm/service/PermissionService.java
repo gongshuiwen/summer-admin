@@ -1,11 +1,11 @@
 package com.hzhg.plm.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.hzhg.plm.core.service.IBaseService;
 import com.hzhg.plm.entity.Permission;
 
 import java.util.Set;
 
-public interface PermissionService extends IService<Permission> {
+public interface PermissionService extends IBaseService<Permission> {
 
     Set<Permission> getPermissionsByRoleId(Long roleId);
 

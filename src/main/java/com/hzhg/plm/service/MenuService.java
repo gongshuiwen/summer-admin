@@ -1,11 +1,11 @@
 package com.hzhg.plm.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.hzhg.plm.core.service.IBaseService;
 import com.hzhg.plm.entity.Menu;
 
 import java.util.List;
 
-public interface MenuService extends IService<Menu> {
+public interface MenuService extends IBaseService<Menu> {
 
     List<Menu> getMenusTree();
 }

@@ -1,7 +1,7 @@
 package com.hzhg.plm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hzhg.plm.core.service.AbstractBaseService;
 import com.hzhg.plm.entity.Permission;
 import com.hzhg.plm.entity.Role;
 import com.hzhg.plm.entity.User;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl extends AbstractBaseService<UserMapper, User> implements UserService {
 
     @Autowired
     RoleService roleService;

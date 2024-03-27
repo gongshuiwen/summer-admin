@@ -1,7 +1,7 @@
 package com.hzhg.plm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hzhg.plm.core.service.AbstractBaseService;
 import com.hzhg.plm.entity.Menu;
 import com.hzhg.plm.mapper.MenuMapper;
 import com.hzhg.plm.service.MenuService;
@@ -14,7 +14,7 @@ import static com.hzhg.plm.core.entity.TreeBaseEntity.buildTree;
 
 @Slf4j
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+public class MenuServiceImpl extends AbstractBaseService<MenuMapper, Menu> implements MenuService {
 
     public List<Menu> getMenusTree() {
         LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
