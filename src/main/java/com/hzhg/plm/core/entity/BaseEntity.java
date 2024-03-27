@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.hzhg.plm.core.controller.BaseController.ROLE_ADMIN;
 import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER_ID;
+import static com.hzhg.plm.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
 
 
 @Getter
