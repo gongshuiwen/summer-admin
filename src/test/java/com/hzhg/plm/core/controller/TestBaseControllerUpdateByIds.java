@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hzhg.plm.core.controller.BaseController.*;
+import static com.hzhg.plm.core.security.DataAccessAuthority.AUTHORITY_UPDATE;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
@@ -35,7 +35,7 @@ public class TestBaseControllerUpdateByIds {
     static final String MOCK_PATH = "/mock";
     static final String MOCK_PATH_BATCH = MOCK_PATH + "/batch";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_UPDATE;
+    static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_UPDATE;
 
     MockMvc mockMvc;
 

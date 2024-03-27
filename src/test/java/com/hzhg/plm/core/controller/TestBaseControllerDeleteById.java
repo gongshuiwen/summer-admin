@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_DELETE;
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_DELIMITER;
+import static com.hzhg.plm.core.security.DataAccessAuthority.AUTHORITY_DELETE;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
@@ -28,7 +27,7 @@ public class TestBaseControllerDeleteById {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_DELETE;
+    static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + ":" + AUTHORITY_DELETE;
 
     MockMvc mockMvc;
 

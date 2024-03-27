@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_DELIMITER;
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_SELECT;
+import static com.hzhg.plm.core.security.DataAccessAuthority.AUTHORITY_SELECT;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
@@ -30,7 +29,7 @@ public class TestBaseControllerSelectById {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_SELECT = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_SELECT;
+    static final String MOCK_AUTHORITY_SELECT = MOCK_ENTITY_NAME + ":" + AUTHORITY_SELECT;
 
     MockMvc mockMvc;
 

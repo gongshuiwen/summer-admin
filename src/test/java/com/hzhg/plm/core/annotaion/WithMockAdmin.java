@@ -5,7 +5,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.hzhg.plm.core.controller.BaseController.ROLE_ADMIN;
+import static com.hzhg.plm.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
+
 
 @Retention(RetentionPolicy.RUNTIME)
 @WithMockUser(roles = ROLE_ADMIN)

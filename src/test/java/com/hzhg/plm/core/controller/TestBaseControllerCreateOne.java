@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 
 import static com.hzhg.plm.core.controller.BaseController.*;
+import static com.hzhg.plm.core.security.DataAccessAuthority.AUTHORITY_CREATE;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
@@ -32,7 +33,7 @@ public class TestBaseControllerCreateOne {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_CREATE;
+    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":"  + AUTHORITY_CREATE;
 
     MockMvc mockMvc;
 

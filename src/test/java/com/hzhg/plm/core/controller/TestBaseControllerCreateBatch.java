@@ -24,8 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_CREATE;
-import static com.hzhg.plm.core.controller.BaseController.AUTHORITY_DELIMITER;
+import static com.hzhg.plm.core.security.DataAccessAuthority.AUTHORITY_CREATE;
 import static com.hzhg.plm.core.utils.ResultCheckUtils.*;
 
 
@@ -36,7 +35,7 @@ public class TestBaseControllerCreateBatch {
     static final String MOCK_PATH = "/mock";
     static final String MOCK_PATH_BATCH = MOCK_PATH + "/batch";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + AUTHORITY_DELIMITER + AUTHORITY_CREATE;
+    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_CREATE;
 
     MockMvc mockMvc;
 
