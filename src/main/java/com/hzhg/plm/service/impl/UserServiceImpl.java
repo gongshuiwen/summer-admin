@@ -12,7 +12,9 @@ import com.hzhg.plm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +28,9 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
 
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,5 +53,13 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
         user.addAuthoritiesWithRoles(roles);
         user.addAuthoritiesWithPermissions(permissions);
         return user;
+    }
+
+    @Override
+    @Transactional
+    public boolean createOne(User user) {
+        if (user == null) return false;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return super.createOne(user);
     }
 }
