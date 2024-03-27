@@ -1,6 +1,7 @@
 package com.hzhg.plm.core.exception;
 
 import com.hzhg.plm.core.protocal.R;
+import com.hzhg.plm.core.security.DataAccessException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public R<String> handleAccessDeniedException(Exception e) {
+        return R.error(ERROR_ACCESS_DENIED);
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    public R<String> handleDataAccessException(Exception e) {
         return R.error(ERROR_ACCESS_DENIED);
     }
 
