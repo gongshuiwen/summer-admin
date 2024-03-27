@@ -1,5 +1,6 @@
 package com.hzhg.plm.core.security;
 
+import com.hzhg.plm.core.annotaion.WithMockAdmin;
 import com.hzhg.plm.core.entity.Mock;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,27 +12,38 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class TestDataAccessAuthorityChecker {
 
+    final static String AUTHORITY = "Mock:SELECT";
+
+    static void doCheck() {
+        DataAccessAuthorityChecker.check(Mock.class, DataAccessAuthority.SELECT);
+    }
 
     @Test
     public void testNotAuthenticated() {
-        assertThrows(DataAccessException.class, () -> DataAccessAuthorityChecker.check(Mock.class, DataAccessAuthority.SELECT));
+        assertThrows(DataAccessException.class, TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
     @WithAnonymousUser
-    public void testAnonymousUser() {
-        assertThrows(DataAccessException.class, () -> DataAccessAuthorityChecker.check(Mock.class, DataAccessAuthority.SELECT));
+    public void testUserAnonymous() {
+        assertThrows(DataAccessException.class, TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
-    @WithMockUser(roles = {})
-    public void testUserDoesNotHaveAuthority() {
-        assertThrows(DataAccessException.class, () -> DataAccessAuthorityChecker.check(Mock.class, DataAccessAuthority.SELECT));
+    @WithMockAdmin
+    public void testUserAdmin() {
+        assertDoesNotThrow(TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
-    @WithMockUser(authorities = {"Mock:SELECT"})
-    public void testUserHasAuthority() {
-        assertDoesNotThrow(() -> DataAccessAuthorityChecker.check(Mock.class, DataAccessAuthority.SELECT));
+    @WithMockUser
+    public void testUserWithoutAuthority() {
+        assertThrows(DataAccessException.class, TestDataAccessAuthorityChecker::doCheck);
+    }
+
+    @Test
+    @WithMockUser(authorities = {AUTHORITY})
+    public void testUserWithAuthority() {
+        assertDoesNotThrow(TestDataAccessAuthorityChecker::doCheck);
     }
 }
