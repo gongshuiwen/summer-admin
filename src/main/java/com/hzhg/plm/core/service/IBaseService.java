@@ -1,11 +1,8 @@
 package com.hzhg.plm.core.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.protocal.Condition;
-import com.hzhg.plm.core.protocal.Query;
 
 import java.util.List;
 
