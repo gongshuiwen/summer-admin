@@ -6,6 +6,7 @@ import com.hzhg.plm.entity.Permission;
 import com.hzhg.plm.entity.Role;
 import com.hzhg.plm.entity.User;
 import com.hzhg.plm.mapper.UserMapper;
+import com.hzhg.plm.mapper.UserRoleMapper;
 import com.hzhg.plm.service.PermissionService;
 import com.hzhg.plm.service.RoleService;
 import com.hzhg.plm.service.UserService;
@@ -16,12 +17,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserServiceImpl extends AbstractBaseService<UserMapper, User> implements UserService {
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    UserRoleMapper userRoleMapper;
 
     @Autowired
     RoleService roleService;
@@ -60,6 +69,15 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
     public boolean createOne(User user) {
         if (user == null) return false;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return super.createOne(user);
+        boolean result = super.createOne(user);
+
+        // Add BASE_USER role
+        Role baseUserRole = roleService.getRoleByCode("BASE_USER");
+        if (baseUserRole == null) {
+            throw new RuntimeException("BASE_USER role not found");
+        }
+
+        roleService.addUserRoles(user.getId(), new HashSet<>(List.of(baseUserRole.getId())));
+        return result;
     }
 }
