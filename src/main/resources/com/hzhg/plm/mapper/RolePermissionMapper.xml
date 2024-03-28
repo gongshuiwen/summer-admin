@@ -3,6 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hzhg.plm.mapper.RolePermissionMapper">
+    <select id="getPermissionIdsByRoleIds" resultType="Long">
+        SELECT DISTINCT perm_id FROM `role_permission`
+        WHERE role_id in
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")" nullable="false">
+            #{roleId}
+        </foreach>
+    </select>
+
+    <select id="getRoleIdsByPermissionIds" resultType="Long">
+        SELECT DISTINCT role_id FROM `role_permission`
+        WHERE perm_id in
+        <foreach collection="permIds" item="permId" open="(" separator="," close=")" nullable="false">
+            #{permId}
+        </foreach>
+    </select>
+
     <insert id="addRolePermissions">
         INSERT INTO `role_permission`
         (role_id, perm_id)
