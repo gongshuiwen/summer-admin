@@ -5,10 +5,10 @@ CREATE TABLE `role` (
     `update_time`   datetime        NOT NULL    DEFAULT CURRENT_TIMESTAMP   COMMENT '更新时间',
     `create_user`   bigint          NOT NULL    DEFAULT 0                   COMMENT '创建用户',
     `update_user`   bigint          NOT NULL    DEFAULT 0                   COMMENT '更新用户',
+    `status`        tinyint         NOT NULL    DEFAULT 1                   COMMENT '状态 1=正常,0=停用',
     `code`          varchar(18)     NOT NULL    DEFAULT ''                  COMMENT '角色标识',
     `name`          varchar(18)     NOT NULL    DEFAULT ''                  COMMENT '角色名称',
     `order_num`     smallint        NOT NULL    DEFAULT 0                   COMMENT '显示顺序',
-    `status`        tinyint         NOT NULL    DEFAULT 1                   COMMENT '状态 1=正常,0=停用',
     PRIMARY KEY (`id`),
     UNIQUE KEY (`code`),
     UNIQUE KEY (`name`)
