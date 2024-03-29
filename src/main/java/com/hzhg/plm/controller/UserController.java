@@ -20,17 +20,8 @@ import static com.hzhg.plm.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
 @RequestMapping("/user")
 public class UserController extends BaseController<UserService, User> {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     public static final String EXPRESSION_AUTHORITY_USER =
             "hasRole('" + ROLE_ADMIN + "') or #id == authentication.principal.id";
-
-    @Override
-    @PreAuthorize(EXPRESSION_AUTHORITY_USER)
-    public R<User> selectById(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
-        return super.selectById(id);
-    }
 
     @Override
     @PreAuthorize(EXPRESSION_AUTHORITY_USER)
