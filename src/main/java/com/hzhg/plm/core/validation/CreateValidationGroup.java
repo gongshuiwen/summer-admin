@@ -1,4 +1,6 @@
 package com.hzhg.plm.core.validation;
 
-public interface CreateValidationGroup {
+import jakarta.validation.groups.Default;
+
+public interface CreateValidationGroup extends Default {
 }
