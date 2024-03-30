@@ -19,7 +19,7 @@ import java.util.List;
 public class MenuController extends BaseController<MenuService, Menu> {
 
     @Operation(summary = "查询菜单树")
-    @GetMapping
+    @GetMapping("/tree")
     public R<List<Menu>> tree() {
         return R.success(service.getMenusTree());
     }
