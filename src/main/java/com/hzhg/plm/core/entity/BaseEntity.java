@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hzhg.plm.core.annotations.FetchName;
 import com.hzhg.plm.core.annotations.AllowedForRoles;
 import com.hzhg.plm.core.utils.SpringContextUtils;
@@ -31,6 +32,7 @@ import static com.hzhg.plm.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
 @Getter
 @Setter
 @JsonFilter(ROLE_BASED_FILTER_ID)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "ID")
@@ -62,7 +64,13 @@ public abstract class BaseEntity implements Serializable {
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long updateUser;
 
-    public abstract String getDisplayName();
+    public String getName() {
+        return "";
+    }
+
+    public String getDisplayName() {
+        return getName();
+    }
 
     public static <T extends BaseEntity> void fetchNames(List<T> entities)
             throws NoSuchFieldException, IllegalAccessException {
