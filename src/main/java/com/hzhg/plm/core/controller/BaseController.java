@@ -60,6 +60,13 @@ public abstract class BaseController<S extends IBaseService<T>, T extends BaseEn
         return R.success(service.count(condition));
     }
 
+    @Operation(summary = "通用名称查询")
+    @GetMapping("/nameSearch")
+    public R<List<T>> nameSearch(@RequestParam String name){
+        List<T> entity = service.nameSearch(name);
+        return R.success(entity);
+    }
+
     @Operation(summary = "创建信息")
     @PostMapping
     @Validated(CreateValidationGroup.class)

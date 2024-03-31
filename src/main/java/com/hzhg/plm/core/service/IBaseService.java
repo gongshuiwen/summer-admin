@@ -28,6 +28,8 @@ public interface IBaseService<T extends BaseEntity> {
 
     Long count(Condition<T> condition);
 
+    List<T> nameSearch(String name);
+
     boolean createOne(T entity);
 
     boolean createBatch(List<T> entities);

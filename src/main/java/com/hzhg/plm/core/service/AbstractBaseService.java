@@ -1,5 +1,6 @@
 package com.hzhg.plm.core.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -50,6 +51,25 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         condition.applyToQueryWrapper(wrapper);
         return super.count(wrapper);
+    }
+
+    @Override
+    public List<T> nameSearch(String name) {
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        Page<T> page = new Page<>(1, 7);
+
+        if (name == null || name.isEmpty() || name.isBlank()) return list(page);
+
+        // TODO: optimize performance by cache
+        try {
+            entityClass.getDeclaredField("name");
+        } catch (NoSuchFieldException e) {
+            return Collections.emptyList();
+        }
+
+        LambdaQueryWrapper<T> wrapper = new LambdaQueryWrapper<>(entityClass);
+        wrapper.like(T::getName, name.trim());
+        return list(page, wrapper);
     }
 
     @Override
