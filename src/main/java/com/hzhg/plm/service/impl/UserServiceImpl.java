@@ -80,4 +80,13 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
         roleService.addUserRoles(user.getId(), new HashSet<>(List.of(baseUserRole.getId())));
         return result;
     }
+
+    @Override
+    public boolean updateById(Long id, User user) {
+        if (user == null) return false;
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return super.updateById(id, user);
+    }
 }
