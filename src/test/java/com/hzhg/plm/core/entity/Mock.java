@@ -20,9 +20,4 @@ public class Mock extends BaseEntity {
     public Mock(String name) {
         this.name = name;
     }
-
-    @Override
-    public String getDisplayName() {
-        return getName();
-    }
 }
