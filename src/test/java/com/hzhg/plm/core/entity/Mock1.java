@@ -2,8 +2,6 @@ package com.hzhg.plm.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzhg.plm.core.fields.Many2Many;
-import com.hzhg.plm.core.fields.Relation;
-import com.hzhg.plm.core.mapper.MockRelationMapper;
 import com.hzhg.plm.core.validation.CreateValidationGroup;
 import com.hzhg.plm.core.validation.NullOrNotBlank;
 import com.hzhg.plm.core.validation.UpdateValidationGroup;
@@ -22,7 +20,6 @@ public class Mock1 extends BaseEntity {
     private String name;
 
     @TableField(exist = false)
-    @Relation(mapper = MockRelationMapper.class)
     Many2Many<Mock2> mock2s;
 
     public Mock1(String name) {
