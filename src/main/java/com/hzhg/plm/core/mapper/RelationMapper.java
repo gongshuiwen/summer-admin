@@ -1,6 +1,5 @@
 package com.hzhg.plm.core.mapper;
 
-import com.hzhg.plm.core.entity.BaseEntity;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -12,13 +11,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public interface RelationMapper<S extends BaseEntity, T extends BaseEntity> extends InitializingBean {
+public interface RelationMapper extends InitializingBean {
 
     Map<Class<?>, String> mapperTables = new HashMap<>();
     Map<Class<?>, String> mapperField1 = new HashMap<>();
     Map<Class<?>, String> mapperField2 = new HashMap<>();
-    Map<Class<?>, Class<?>> mapperActualTypeArgument1 = new HashMap<>();
-    Map<Class<?>, Class<?>> mapperActualTypeArgument2 = new HashMap<>();
+    Map<Class<?>, Class<?>> mapperClass1 = new HashMap<>();
+    Map<Class<?>, Class<?>> mapperClass2 = new HashMap<>();
 
     @Select("SELECT ${targetField} FROM ${table} WHERE ${sourceField} IN (${sourceIds})")
     List<Long> _getTargetIds(String table, String sourceField, String targetField, String sourceIds);
@@ -140,10 +139,10 @@ public interface RelationMapper<S extends BaseEntity, T extends BaseEntity> exte
 
     private Map<String, String> getFieldInfo(Class<?> mapperInterface, Class<?> sourceClass) {
         Map<String, String> map = new HashMap<>();
-        if (sourceClass == mapperActualTypeArgument1.get(mapperInterface)) {
+        if (sourceClass == mapperClass1.get(mapperInterface)) {
             map.put("sourceField", mapperField1.get(mapperInterface));
             map.put("targetField", mapperField2.get(mapperInterface));
-        } else if (sourceClass == mapperActualTypeArgument2.get(mapperInterface)) {
+        } else if (sourceClass == mapperClass2.get(mapperInterface)) {
             map.put("sourceField", mapperField2.get(mapperInterface));
             map.put("targetField", mapperField1.get(mapperInterface));
         } else {

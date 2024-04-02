@@ -1,5 +1,7 @@
 package com.hzhg.plm.core.mapper;
 
+import com.hzhg.plm.core.entity.BaseEntity;
+
 import java.lang.annotation.*;
 
 @Documented
@@ -11,5 +13,9 @@ public @interface MapperRelation {
 
     String field1();
 
+    Class<? extends BaseEntity> class1();
+
     String field2();
+
+    Class<? extends BaseEntity> class2();
 }

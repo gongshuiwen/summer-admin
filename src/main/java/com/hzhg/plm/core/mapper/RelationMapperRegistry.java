@@ -17,10 +17,10 @@ public class RelationMapperRegistry {
         registry.put(key, mapperFactoryBean);
     }
 
-    public static RelationMapper<?, ?> getMapper(Class<?> class1, Class<?> class2) {
+    public static RelationMapper getMapper(Class<?> class1, Class<?> class2) {
         Key key = new Key(class1, class2);
         try {
-            return (RelationMapper<?, ?>) registry.get(key).getObject();
+            return (RelationMapper) registry.get(key).getObject();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
