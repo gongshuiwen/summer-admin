@@ -27,7 +27,7 @@ public enum LikeOperator {
         }
     }
 
-    public static LikeOperator get(String name) {
+    public static LikeOperator of(String name) {
         LikeOperator operator = lookup.get(name);
         if (operator == null) {
             throw new IllegalArgumentException("No operator named " + name);

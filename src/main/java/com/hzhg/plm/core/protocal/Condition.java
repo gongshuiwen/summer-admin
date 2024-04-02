@@ -87,7 +87,7 @@ public class Condition<T> {
         checkColumn();
         checkValue();
 
-        LikeOperator likeOperator = LikeOperator.get(operator);
+        LikeOperator likeOperator = LikeOperator.of(operator);
         try {
             likeMethod.invoke(queryWrapper, true, likeOperator.getSqlKeyword(), column, value, likeOperator.getSqlLike());
         } catch (InvocationTargetException | IllegalAccessException e) {
