@@ -74,9 +74,8 @@ public abstract class BaseEntity implements Serializable {
 
     public static <T extends BaseEntity> void fetchNames(List<T> entities)
             throws NoSuchFieldException, IllegalAccessException {
-
         // Do noting if empty
-        if ( entities.isEmpty() ) return;
+        if ( entities == null  || entities.isEmpty() ) return;
 
         // Get entity class
         Class<?> clazz = entities.get(0).getClass();
