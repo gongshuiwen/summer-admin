@@ -29,7 +29,9 @@ public class Many2Many<T extends BaseEntity> {
         List<Field> fields = many2manyFieldsCache.getOrDefault(entityClass, null);
         if ( fields == null) {
             fields = Arrays.stream(entityClass.getDeclaredFields())
-                    .filter(field -> field.getType() == Many2Many.class).collect(Collectors.toList());
+                    .filter(field -> field.getType() == Many2Many.class)
+                    .peek(field -> field.setAccessible(true))
+                    .collect(Collectors.toList());
             many2manyFieldsCache.put(entityClass, fields);
         }
         return fields;
@@ -70,7 +72,7 @@ public class Many2Many<T extends BaseEntity> {
         return many2Many;
     }
 
-    List<T> get() {
+    public List<T> get() {
         return values;
     }
 }
