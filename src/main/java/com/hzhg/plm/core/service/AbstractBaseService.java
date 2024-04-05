@@ -110,7 +110,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForCreate(List<T> entities) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
-            field.setAccessible(true);
             Class<?> targetClass = Many2Many.getTargetClass(field);
             IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
             for (T entity : entities) {
@@ -185,7 +184,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
             IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
             Many2Many<BaseEntity> filedValue;
             try {
-                field.setAccessible(true);
                 filedValue = (Many2Many<BaseEntity>) field.get(entity);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
