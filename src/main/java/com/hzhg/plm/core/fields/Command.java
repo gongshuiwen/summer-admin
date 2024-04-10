@@ -47,10 +47,10 @@ public class Command<T extends BaseEntity> {
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> update(List<Long> ids, T entity) {
+    public static <T extends BaseEntity> Command<T> update(Long id, T entity) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.UPDATE;
-        command.ids = ids;
+        command.ids = List.of(id);
         command.entities = List.of(entity);
         return command;
     }
