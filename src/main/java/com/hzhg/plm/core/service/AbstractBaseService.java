@@ -103,9 +103,45 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         // do create
         boolean res = saveBatch(entities);
 
+        // process one2many fields
+        processOne2ManyForCreate(entities);
+
         // process many2many fields
         processMany2ManyForCreate(entities);
         return res;
+    }
+
+    @SneakyThrows(IllegalAccessException.class)
+    @SuppressWarnings("unchecked")
+    private void processOne2ManyForCreate(List<T> entities) {
+        for (Field field : One2Many.getOne2ManyFields(entityClass)) {
+            Class<?> targetClass = One2Many.getTargetClass(field);
+            Field inverseField = One2Many.getInverseField(field);
+            IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
+            for (T entity : entities) {
+                One2Many<BaseEntity> filedValue;
+                try {
+                    filedValue = (One2Many<BaseEntity>) field.get(entity);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                if (filedValue == null) break;
+
+                List<Command<BaseEntity>> commands = filedValue.getCommands();
+                if (commands == null) break;
+                for (Command<BaseEntity> command : commands) {
+                    if (command == null) break;
+                    if (Objects.requireNonNull(command.getCommandType()) == CommandType.CREATE) {
+                        for (BaseEntity targetEntity : command.getEntities()) {
+                            inverseField.set(targetEntity, Many2One.ofId(entity.getId()));
+                        }
+                        targetService.createBatch(command.getEntities());
+                    } else {
+                        throw new RuntimeException();
+                    }
+                }
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -162,10 +198,58 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         // do update
         boolean res = update(entity, wrapper);
 
+        // process one2many fields
+        processOne2ManyForUpdate(ids, entity);
+
         // process many2many fields
         processMany2ManyForUpdate(ids, entity);
 
         return res;
+    }
+
+    @SneakyThrows(IllegalAccessException.class)
+    @SuppressWarnings("unchecked")
+    private void processOne2ManyForUpdate(List<Long> ids, T entity) {
+        for (Field field : One2Many.getOne2ManyFields(entityClass)) {
+            Class<?> targetClass = One2Many.getTargetClass(field);
+            Field inverseField = One2Many.getInverseField(field);
+            IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
+            One2Many<BaseEntity> filedValue;
+            try {
+                filedValue = (One2Many<BaseEntity>) field.get(entity);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            if (filedValue == null) break;
+
+            for (Long sourceId : ids) {
+                List<Command<BaseEntity>> commands = filedValue.getCommands();
+                if (commands == null) break;
+
+                for (Command<BaseEntity> command : commands) {
+                    if (command == null) break;
+                    switch (command.getCommandType()) {
+                        case CREATE: {
+                            for (BaseEntity targetEntity : command.getEntities()) {
+                                inverseField.set(targetEntity, Many2One.ofId(sourceId));
+                            }
+                            targetService.createBatch(command.getEntities());
+                        }
+                        case DELETE: {
+                            targetService.deleteByIds(command.getIds());
+                            break;
+                        }
+                        case UPDATE: {
+                            targetService.updateByIds(command.getIds(), command.getEntities().get(0));
+                            break;
+                        }
+                        default: {
+                            throw new RuntimeException();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
