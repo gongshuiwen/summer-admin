@@ -8,14 +8,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzhg.plm.core.entity.BaseEntity;
-import com.hzhg.plm.core.fields.Command;
-import com.hzhg.plm.core.fields.Many2Many;
+import com.hzhg.plm.core.fields.*;
 import com.hzhg.plm.core.mapper.RelationMapper;
 import com.hzhg.plm.core.mapper.RelationMapperRegistry;
 import com.hzhg.plm.core.protocal.Condition;
 import com.hzhg.plm.core.protocal.Query;
 import com.hzhg.plm.core.security.DataAccessAuthority;
 import com.hzhg.plm.core.security.DataAccessAuthorityChecker;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +23,14 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseEntity>
         extends ServiceImpl<M, T>
         implements IBaseService<T>, InitializingBean {
 
-    private static final Map<Class<?>, IBaseService<?>> baseServiceRegistry = new ConcurrentHashMap<>();
+    public static final Map<Class<?>, IBaseService<?>> baseServiceRegistry = new ConcurrentHashMap<>();
 
     @Override
     public T selectById(Long id) {
@@ -126,21 +127,11 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
                 for (Command<BaseEntity> command : commands) {
                     if (command == null) break;
-                    switch (command.getCommandType()) {
-                        case ADD: {
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
-                            mapper.add(entityClass, entity.getId(), command.getIds());
-                            break;
-                        }
-                        case CREATE: {
-                            targetService.createBatch(command.getEntities());
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
-                            mapper.add(entityClass, entity.getId(), command.getEntities().stream().map(BaseEntity::getId).toList());
-                            break;
-                        }
-                        default: {
-                            throw new RuntimeException();
-                        }
+                    if (Objects.requireNonNull(command.getCommandType()) == CommandType.ADD) {
+                        RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+                        mapper.add(entityClass, entity.getId(), command.getIds());
+                    } else {
+                        throw new RuntimeException();
                     }
                 }
             }
@@ -202,20 +193,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                             mapper.add(entityClass, sourceId, command.getIds());
                             break;
                         }
-                        case CREATE: {
-                            targetService.createBatch(command.getEntities());
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
-                            mapper.add(entityClass, sourceId, command.getEntities().stream().map(BaseEntity::getId).toList());
-                            break;
-                        }
                         case REMOVE: {
                             RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
                             mapper.remove(entityClass, sourceId, command.getIds());
-                            break;
-                        }
-                        case REMOVE_ALL: {
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
-                            mapper.removeAll(entityClass, sourceId);
                             break;
                         }
                         case REPLACE: {

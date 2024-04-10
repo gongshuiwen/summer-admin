@@ -10,14 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum CommandType {
-    ADD(0),
-    CREATE(1),
-    REMOVE(2),
-    REMOVE_ALL(3),
-    DELETE(4),
-    DELETE_ALL(5),
-    REPLACE(6),
-    UPDATE(7);
+    ADD(0), // For Many2Many
+    CREATE(1), // For One2Many
+    REMOVE(2), // For Many2Many
+    DELETE(3), // For One2Many
+    REPLACE(4), // For Many2Many
+    UPDATE(5); // For One2Many
 
     @JsonValue
     int code;

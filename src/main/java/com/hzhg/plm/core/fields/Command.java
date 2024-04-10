@@ -12,13 +12,6 @@ public class Command<T extends BaseEntity> {
     private List<Long> ids;
     private List<T> entities;
 
-    public static <T extends BaseEntity> Command<T> create(List<T> entities) {
-        Command<T> command = new Command<>();
-        command.commandType = CommandType.CREATE;
-        command.entities = entities;
-        return command;
-    }
-
     public static <T extends BaseEntity> Command<T> add(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.ADD;
@@ -26,16 +19,17 @@ public class Command<T extends BaseEntity> {
         return command;
     }
 
+    public static <T extends BaseEntity> Command<T> create(List<T> entities) {
+        Command<T> command = new Command<>();
+        command.commandType = CommandType.CREATE;
+        command.entities = entities;
+        return command;
+    }
+
     public static <T extends BaseEntity> Command<T> remove(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.REMOVE;
         command.ids = ids;
-        return command;
-    }
-
-    public static <T extends BaseEntity> Command<T> removeAll() {
-        Command<T> command = new Command<>();
-        command.commandType = CommandType.REMOVE_ALL;
         return command;
     }
 
