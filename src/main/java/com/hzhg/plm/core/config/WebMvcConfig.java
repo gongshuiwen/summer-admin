@@ -9,7 +9,11 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.hzhg.plm.core.fields.Many2Many;
+import com.hzhg.plm.core.fields.Many2One;
+import com.hzhg.plm.core.fields.One2Many;
 import com.hzhg.plm.core.interceptor.BaseInterceptor;
+import com.hzhg.plm.core.jackson2.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -41,7 +45,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry){
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new BaseInterceptor());
     }
 
@@ -55,9 +59,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
                 .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
                 .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
+                .serializerByType(Many2One.class, new Many2OneSerializer())
+                .serializerByType(One2Many.class, new One2ManySerializer())
+                .serializerByType(Many2Many.class, new Many2ManySerializer())
                 .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
                 .deserializerByType(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
                 .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
+                .deserializerByType(Many2One.class, new Many2OneDeserializer())
+                .deserializerByType(One2Many.class, new One2ManyDeserializer())
+                .deserializerByType(Many2Many.class, new Many2ManyDeserializer())
                 .filters(new SimpleFilterProvider().addFilter(ROLE_BASED_FILTER_ID, ROLE_BASED_FILTER));
         return new MappingJackson2HttpMessageConverter(builder.build());
     }
