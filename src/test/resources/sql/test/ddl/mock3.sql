@@ -1,11 +1,10 @@
-DROP TABLE IF EXISTS `mock2`;
-CREATE TABLE `mock2` (
+DROP TABLE IF EXISTS `mock3`;
+CREATE TABLE `mock3` (
     `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
     `create_time` datetime NOT NULL COMMENT 'create time',
     `update_time` datetime NOT NULL COMMENT 'update time',
     `create_user` bigint NOT NULL COMMENT 'create user',
     `update_user` bigint NOT NULL COMMENT 'update user',
     `name` varchar(100) NOT NULL COMMENT 'name',
-    `mock1_id` bigint NOT NULL COMMENT 'mock1 id',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Mock 2';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Mock 3';
