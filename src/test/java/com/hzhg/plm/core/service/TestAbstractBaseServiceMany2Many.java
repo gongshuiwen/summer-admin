@@ -52,7 +52,10 @@ public class TestAbstractBaseServiceMany2Many {
     Mock3Service mock3Service;
 
     @Test
-    @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK3_AUTHORITY_CREATE})
+    @WithMockUser(authorities = {
+            MOCK1_AUTHORITY_CREATE,
+            MOCK3_AUTHORITY_CREATE
+    })
     public void testMany2ManyCreateOneCommandAdd() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
@@ -72,7 +75,11 @@ public class TestAbstractBaseServiceMany2Many {
     }
 
     @Test
-    @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK1_AUTHORITY_UPDATE, MOCK3_AUTHORITY_CREATE})
+    @WithMockUser(authorities = {
+            MOCK1_AUTHORITY_CREATE,
+            MOCK1_AUTHORITY_UPDATE,
+            MOCK3_AUTHORITY_CREATE
+    })
     public void testMany2ManyUpdateByIdCommandAdd() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
@@ -96,7 +103,12 @@ public class TestAbstractBaseServiceMany2Many {
     }
 
     @Test
-    @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK1_AUTHORITY_UPDATE, MOCK3_AUTHORITY_CREATE, MOCK3_AUTHORITY_SELECT})
+    @WithMockUser(authorities = {
+            MOCK1_AUTHORITY_CREATE,
+            MOCK1_AUTHORITY_UPDATE,
+            MOCK3_AUTHORITY_CREATE,
+            MOCK3_AUTHORITY_SELECT
+    })
     public void testMany2ManyUpdateByIdCommandRemove() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
@@ -109,9 +121,9 @@ public class TestAbstractBaseServiceMany2Many {
         mock1Service.createOne(mock1);
 
         // update mock1 with removing mock3s
-        Mock1 mockUpdate = new Mock1();
-        mockUpdate.setMock3s(Many2Many.ofCommands(List.of(Command.remove(List.of(1L)))));
-        mock1Service.updateById(mock1.getId(), mockUpdate);
+        Mock1 mock1Update = new Mock1();
+        mock1Update.setMock3s(Many2Many.ofCommands(List.of(Command.remove(List.of(1L)))));
+        mock1Service.updateById(mock1.getId(), mock1Update);
 
         // check result
         List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
@@ -121,7 +133,13 @@ public class TestAbstractBaseServiceMany2Many {
     }
 
     @Test
-    @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK1_AUTHORITY_UPDATE, MOCK3_AUTHORITY_CREATE, MOCK3_AUTHORITY_SELECT})
+    @WithMockUser(authorities = {
+            MOCK1_AUTHORITY_CREATE,
+            MOCK1_AUTHORITY_UPDATE,
+            MOCK3_AUTHORITY_CREATE,
+            MOCK3_AUTHORITY_SELECT,
+            MOCK3_AUTHORITY_SELECT
+    })
     public void testMany2ManyUpdateByIdCommandReplace() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
@@ -134,9 +152,9 @@ public class TestAbstractBaseServiceMany2Many {
         mock1Service.createOne(mock1);
 
         // update mock1 with replace mock3s
-        Mock1 mockUpdate = new Mock1();
-        mockUpdate.setMock3s(Many2Many.ofCommands(List.of(Command.replace(List.of(2L)))));
-        mock1Service.updateById(mock1.getId(), mockUpdate);
+        Mock1 mock1Update = new Mock1();
+        mock1Update.setMock3s(Many2Many.ofCommands(List.of(Command.replace(List.of(2L)))));
+        mock1Service.updateById(mock1.getId(), mock1Update);
 
         // check result
         List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
@@ -146,7 +164,13 @@ public class TestAbstractBaseServiceMany2Many {
     }
 
     @Test
-    @WithMockUser(authorities = {MOCK1_AUTHORITY_SELECT, MOCK1_AUTHORITY_CREATE, MOCK1_AUTHORITY_DELETE, MOCK3_AUTHORITY_CREATE, MOCK3_AUTHORITY_SELECT})
+    @WithMockUser(authorities = {
+            MOCK1_AUTHORITY_SELECT,
+            MOCK1_AUTHORITY_CREATE,
+            MOCK1_AUTHORITY_DELETE,
+            MOCK3_AUTHORITY_CREATE,
+            MOCK3_AUTHORITY_SELECT
+    })
     public void testMany2ManyDeleteById() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
