@@ -15,7 +15,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.hzhg.plm.core.security.DataAccessAuthority.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,11 +60,11 @@ public class TestAbstractBaseServiceOne2Many {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
+        mock1.setMock2s1(One2Many.ofCommands(commands));
         mock1Service.createOne(mock1);
 
         LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Mock2::getMock1Id, mock1.getId());
+        wrapper.eq(Mock2::getMock1Id1, mock1.getId());
         List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
         assertEquals(2, mock2s.size());
         assertEquals("mock2-1", mock2s.get(0).getName());
@@ -81,11 +80,11 @@ public class TestAbstractBaseServiceOne2Many {
         Mock1 mock1Update = new Mock1();
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1Update.setMock2s(One2Many.ofCommands(commands));
+        mock1Update.setMock2s1(One2Many.ofCommands(commands));
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Mock2::getMock1Id, mock1.getId());
+        wrapper.eq(Mock2::getMock1Id1, mock1.getId());
         List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
         assertEquals(2, mock2s.size());
         assertEquals("mock2-1", mock2s.get(0).getName());
@@ -104,18 +103,18 @@ public class TestAbstractBaseServiceOne2Many {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
+        mock1.setMock2s1(One2Many.ofCommands(commands));
         mock1Service.createOne(mock1);
 
         LambdaQueryWrapper<Mock2> wrapper1 = new LambdaQueryWrapper<>();
-        wrapper1.eq(Mock2::getMock1Id, mock1.getId());
+        wrapper1.eq(Mock2::getMock1Id1, mock1.getId());
         List<Long> mock2Ids = mock2Mapper.selectList(wrapper1).stream().map(Mock2::getId).toList();
         Mock1 mock1Update = new Mock1();
-        mock1Update.setMock2s(One2Many.ofCommands(List.of(Command.delete(mock2Ids))));
+        mock1Update.setMock2s1(One2Many.ofCommands(List.of(Command.delete(mock2Ids))));
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         LambdaQueryWrapper<Mock2> wrapper2 = new LambdaQueryWrapper<>();
-        wrapper2.eq(Mock2::getMock1Id, mock1.getId());
+        wrapper2.eq(Mock2::getMock1Id1, mock1.getId());
         List<Mock2> mock2s = mock2Mapper.selectList(wrapper2);
         assertEquals(0, mock2s.size());
     }
@@ -132,18 +131,18 @@ public class TestAbstractBaseServiceOne2Many {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
+        mock1.setMock2s1(One2Many.ofCommands(commands));
         mock1Service.createOne(mock1);
 
         LambdaQueryWrapper<Mock2> wrapper1 = new LambdaQueryWrapper<>();
-        wrapper1.eq(Mock2::getMock1Id, mock1.getId());
+        wrapper1.eq(Mock2::getMock1Id1, mock1.getId());
         List<Long> mock2Ids = mock2Mapper.selectList(wrapper1).stream().map(Mock2::getId).toList();
         Mock1 mock1Update = new Mock1();
-        mock1Update.setMock2s(One2Many.ofCommands(List.of(Command.update(mock2Ids.get(0), new Mock2("mock2")))));
+        mock1Update.setMock2s1(One2Many.ofCommands(List.of(Command.update(mock2Ids.get(0), new Mock2("mock2")))));
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         LambdaQueryWrapper<Mock2> wrapper2 = new LambdaQueryWrapper<>();
-        wrapper2.eq(Mock2::getMock1Id, mock1.getId());
+        wrapper2.eq(Mock2::getMock1Id1, mock1.getId());
         List<Mock2> mock2s = mock2Mapper.selectList(wrapper2);
         assertEquals(2, mock2s.size());
         assertEquals("mock2", mock2s.get(0).getName());
@@ -158,20 +157,14 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_CREATE,
             MOCK2_AUTHORITY_SELECT
     })
-    public void testOne2ManyDeleteByIdSetNull() {
+    public void testOne2ManyDeleteByIdRestrict() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
+        mock1.setMock2s1(One2Many.ofCommands(commands));
         mock1Service.createOne(mock1);
 
-        mock1Service.deleteById(mock1.getId());
-        assertNull(mock1Service.selectById(mock1.getId()));
-
-        List<Long> mock2Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
-        assertEquals(0, mock2Ids.size());
-        assertNotNull(mock2Service.selectById(1L));
-        assertNotNull(mock2Service.selectById(2L));
+        assertThrows(RuntimeException.class, () -> mock1Service.deleteById(mock1.getId()));
     }
 
     @Test
@@ -187,16 +180,18 @@ public class TestAbstractBaseServiceOne2Many {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
+        mock1.setMock2s2(One2Many.ofCommands(commands));
         mock1Service.createOne(mock1);
 
         mock1Service.deleteById(mock1.getId());
-//        assertNull(mock1Service.selectById(mock1.getId()));
-//
-//        List<Long> mock2Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
-//        assertEquals(0, mock2Ids.size());
-//        assertNotNull(mock2Service.selectById(1L));
-//        assertNotNull(mock2Service.selectById(2L));
+        assertNull(mock1Service.selectById(mock1.getId()));
+
+        LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Mock2::getMock1Id2, mock1.getId());
+        List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
+        assertEquals(0, mock2s.size());
+        assertNull(mock2Service.selectById(1L));
+        assertNull(mock2Service.selectById(2L));
     }
 
     @Test
@@ -207,43 +202,21 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_CREATE,
             MOCK2_AUTHORITY_SELECT
     })
-    public void testOne2ManyDeleteByIdRestrict() {
+    public void testOne2ManyDeleteByIdSetNull() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
+        mock1.setMock2s3(One2Many.ofCommands(commands));
         mock1Service.createOne(mock1);
 
         mock1Service.deleteById(mock1.getId());
-//        assertNull(mock1Service.selectById(mock1.getId()));
+        assertNull(mock1Service.selectById(mock1.getId()));
 
-//        List<Long> mock2Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
-//        assertEquals(0, mock2Ids.size());
-//        assertNotNull(mock2Service.selectById(1L));
-//        assertNotNull(mock2Service.selectById(2L));
-    }
-
-    @Test
-    @WithMockUser(authorities = {
-            MOCK1_AUTHORITY_SELECT,
-            MOCK1_AUTHORITY_CREATE,
-            MOCK1_AUTHORITY_DELETE,
-            MOCK2_AUTHORITY_CREATE,
-            MOCK2_AUTHORITY_SELECT
-    })
-    public void testOne2ManyDeleteByIdNoAction() {
-        Mock1 mock1 = new Mock1("mock1-1");
-        List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
-        List<Command<Mock2>> commands = List.of(Command.create(mock2List));
-        mock1.setMock2s(One2Many.ofCommands(commands));
-        mock1Service.createOne(mock1);
-
-        mock1Service.deleteById(mock1.getId());
-//        assertNull(mock1Service.selectById(mock1.getId()));
-
-//        List<Long> mock2Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
-//        assertEquals(0, mock2Ids.size());
-//        assertNotNull(mock2Service.selectById(1L));
-//        assertNotNull(mock2Service.selectById(2L));
+        LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Mock2::getMock1Id3, mock1.getId());
+        List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
+        assertEquals(0, mock2s.size());
+        assertNull(mock2Service.selectById(1L).getMock1Id3().get());
+        assertNull(mock2Service.selectById(2L).getMock1Id3().get());
     }
 }

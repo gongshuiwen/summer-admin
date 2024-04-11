@@ -27,8 +27,8 @@ public class TestOne2ManyDeserializer {
 
     @Test
     public void testCommandCreate() throws JsonProcessingException {
-        Mock1 mock1 = mapper.readValue("{\"mock2s\": [[1, [{\"name\": \"mock2-1\"}, {\"name\": \"mock2-2\"}]]]}", Mock1.class);
-        One2Many<Mock2> one2Many = mock1.getMock2s();
+        Mock1 mock1 = mapper.readValue("{\"mock2s1\": [[1, [{\"name\": \"mock2-1\"}, {\"name\": \"mock2-2\"}]]]}", Mock1.class);
+        One2Many<Mock2> one2Many = mock1.getMock2s1();
         assertEquals(1, one2Many.getCommands().size());
 
         Command<Mock2> command = one2Many.getCommands().get(0);
@@ -52,8 +52,8 @@ public class TestOne2ManyDeserializer {
 
     @Test
     public void testCommandUpdate() throws JsonProcessingException {
-        Mock1 mock1 = mapper.readValue("{\"mock2s\": [[5, 1, {\"name\": \"mock2-1\"}]]}", Mock1.class);
-        One2Many<Mock2> one2Many = mock1.getMock2s();
+        Mock1 mock1 = mapper.readValue("{\"mock2s1\": [[5, 1, {\"name\": \"mock2-1\"}]]}", Mock1.class);
+        One2Many<Mock2> one2Many = mock1.getMock2s1();
         assertEquals(1, one2Many.getCommands().size());
 
         Command<Mock2> command = one2Many.getCommands().get(0);
