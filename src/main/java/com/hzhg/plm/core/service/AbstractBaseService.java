@@ -3,12 +3,14 @@ package com.hzhg.plm.core.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.fields.*;
+import com.hzhg.plm.core.fields.annotations.OnDelete;
 import com.hzhg.plm.core.mapper.RelationMapper;
 import com.hzhg.plm.core.mapper.RelationMapperRegistry;
 import com.hzhg.plm.core.protocal.Condition;
@@ -314,9 +316,76 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         // do delete
         boolean res = removeByIds(ids);
 
+        // process one2many fields
+        processOne2manyForDelete(ids);
+
         // process many2many fields
         processMany2manyForDelete(ids);
         return res;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void processOne2manyForDelete(List<Long> ids) {
+        for (Field field : One2Many.getOne2ManyFields(entityClass)) {
+            Class<?> targetClass = One2Many.getTargetClass(field);
+            Field inverseField = One2Many.getInverseField(field);
+            AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity> targetService =
+                    (AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity>) baseServiceRegistry.get(targetClass);
+            OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
+            OnDelete onDelete = inverseField.getDeclaredAnnotation(OnDelete.class);
+            if (onDelete != null) onDeleteType = onDelete.value();
+            switch (onDeleteType) {
+                case RESTRICT: {
+                    if (targetService.countByMany2OneIds(inverseField, ids) > 0) {
+                        // TODO: optimize exception type
+                        throw new RuntimeException("Records can't be deleted, because the " + field.getName() + "field is not empty.");
+                    }
+                }
+                case CASCADE: {
+                    List<Long> targetIds = targetService.selectIdsByMany2OneIds(inverseField, ids);
+                    if (!targetIds.isEmpty()) {
+                        targetService.deleteByIds(targetIds);
+                    }
+                    break;
+                }
+                case SET_NULL: {
+                    List<Long> targetIds = targetService.selectIdsByMany2OneIds(inverseField, ids);
+                    if (!targetIds.isEmpty()) {
+                        targetService.updateMany2OneToNullByIds(inverseField, targetIds);
+                    }
+                    break;
+                }
+                default: {
+                    throw new RuntimeException();
+                }
+            }
+        }
+    }
+
+    protected long countByMany2OneIds(Field field, List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return 0;
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.in(toColumnName(field), ids);
+        return count(wrapper);
+    }
+
+    protected List<Long> selectIdsByMany2OneIds(Field field, List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return Collections.emptyList();
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.in(toColumnName(field), ids);
+        return list(wrapper).stream().map(BaseEntity::getId).toList();
+    }
+
+    protected void updateMany2OneToNullByIds(Field field, List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return;
+        UpdateWrapper<T> wrapper = new UpdateWrapper<>();
+        wrapper.in("id", ids);
+        wrapper.set(toColumnName(field), null);
+        update(wrapper);
+    }
+
+    private String toColumnName(Field field) {
+        return field.getName().replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
     }
 
     private void processMany2manyForDelete(List<Long> ids) {
