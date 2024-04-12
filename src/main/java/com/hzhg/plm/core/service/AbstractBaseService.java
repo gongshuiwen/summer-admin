@@ -117,9 +117,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForCreate(List<T> entities) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<?> targetClass = One2Many.getTargetClass(field);
+            Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
+            IBaseService<BaseEntity> targetService = getService(targetClass);
             for (T entity : entities) {
                 One2Many<BaseEntity> filedValue;
                 try {
@@ -150,7 +150,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processMany2ManyForCreate(List<T> entities) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
             Class<?> targetClass = Many2Many.getTargetClass(field);
-            IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
             for (T entity : entities) {
                 Many2Many<BaseEntity> filedValue;
                 try {
@@ -213,9 +212,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<?> targetClass = One2Many.getTargetClass(field);
+            Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
+            IBaseService<BaseEntity> targetService = getService(targetClass);
             One2Many<BaseEntity> filedValue;
             try {
                 filedValue = (One2Many<BaseEntity>) field.get(entity);
@@ -258,7 +257,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processMany2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
             Class<?> targetClass = Many2Many.getTargetClass(field);
-            IBaseService<BaseEntity> targetService = (IBaseService<BaseEntity>) baseServiceRegistry.get(targetClass);
             Many2Many<BaseEntity> filedValue;
             try {
                 filedValue = (Many2Many<BaseEntity>) field.get(entity);
@@ -327,10 +325,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2manyForDelete(List<Long> ids) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<?> targetClass = One2Many.getTargetClass(field);
+            Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
             AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity> targetService =
-                    (AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity>) baseServiceRegistry.get(targetClass);
+                    (AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity>) getService(targetClass);
             OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
             OnDelete onDelete = inverseField.getDeclaredAnnotation(OnDelete.class);
             if (onDelete != null) onDeleteType = onDelete.value();
@@ -396,6 +394,22 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                 mapper.removeAll(entityClass, sourceId);
             }
         }
+    }
+
+    @Override
+    public Class<T> getEntityClass() {
+        return super.getEntityClass();
+    }
+
+    @Override
+    public BaseMapper<T> getMapper() {
+        return baseMapper;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <AT extends BaseEntity> IBaseService<AT> getService(Class<AT> entityClass) {
+        return (IBaseService<AT>) baseServiceRegistry.get(entityClass);
     }
 
     @Override

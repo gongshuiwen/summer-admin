@@ -1,5 +1,6 @@
 package com.hzhg.plm.core.service;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.protocal.Condition;
@@ -41,4 +42,10 @@ public interface IBaseService<T extends BaseEntity> {
     boolean deleteById(Long id);
 
     boolean deleteByIds(List<Long> ids);
+
+    Class<T> getEntityClass();
+
+    BaseMapper<T> getMapper();
+
+    <AT extends BaseEntity> IBaseService<AT> getService(Class<AT> entityClass);
 }
