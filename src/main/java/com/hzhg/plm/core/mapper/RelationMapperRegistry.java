@@ -3,14 +3,14 @@ package com.hzhg.plm.core.mapper;
 
 import org.mybatis.spring.mapper.MapperFactoryBean;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class RelationMapperRegistry {
 
-    private static final Map<Key, MapperFactoryBean<?>> registry = new HashMap<>();
+    private static final Map<Key, MapperFactoryBean<?>> registry = new ConcurrentHashMap<>();
 
     public static void register(Class<?> class1, Class<?> class2, MapperFactoryBean<?> mapperFactoryBean) {
         Key key = new Key(class1, class2);
