@@ -1,12 +1,12 @@
 package com.hzhg.plm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hzhg.plm.core.fields.Many2Many;
 import com.hzhg.plm.core.service.AbstractBaseService;
 import com.hzhg.plm.entity.Permission;
 import com.hzhg.plm.entity.Role;
 import com.hzhg.plm.entity.User;
 import com.hzhg.plm.mapper.UserMapper;
-import com.hzhg.plm.mapper.UserRoleMapper;
 import com.hzhg.plm.service.PermissionService;
 import com.hzhg.plm.service.RoleService;
 import com.hzhg.plm.service.UserService;
@@ -22,15 +22,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.hzhg.plm.core.utils.Constants.ROLE_BASE_USER;
+
 @Slf4j
 @Service
 public class UserServiceImpl extends AbstractBaseService<UserMapper, User> implements UserService {
-
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    UserRoleMapper userRoleMapper;
 
     @Autowired
     RoleService roleService;
@@ -52,7 +48,7 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
 
         // Get and Set roles
         Set<Role> roles = roleService.getRolesByUserId(user.getId());
-        user.setRoles(roles);
+        user.setRoles(Many2Many.ofValues(roles.stream().toList()));
 
         // Get permissions
         Set<Long> roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
@@ -68,11 +64,14 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
     @Transactional
     public boolean createOne(User user) {
         if (user == null) return false;
+
+        // Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         boolean result = super.createOne(user);
 
         // Add BASE_USER role
-        Role baseUserRole = roleService.getRoleByCode("BASE_USER");
+        Role baseUserRole = roleService.getRoleByCode(ROLE_BASE_USER);
         if (baseUserRole == null) {
             throw new RuntimeException("BASE_USER role not found");
         }
@@ -84,9 +83,11 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
     @Override
     public boolean updateById(Long id, User user) {
         if (user == null) return false;
-        if (user.getPassword() != null) {
+
+        // Encode password
+        if (user.getPassword() != null)
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+
         return super.updateById(id, user);
     }
 }
