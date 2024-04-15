@@ -1,6 +1,7 @@
 package com.hzhg.plm.service;
 
 import com.hzhg.plm.core.annotaion.WithMockAdmin;
+import com.hzhg.plm.entity.Permission;
 import com.hzhg.plm.entity.Role;
 import com.hzhg.plm.entity.User;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ public class TestUserService {
     UserService userService;
 
     @Autowired
+    PermissionService permissionService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Test
@@ -46,36 +50,64 @@ public class TestUserService {
         assertEquals("admin", user.getUsername());
 
         // Test Roles
-        Set<String> roles = new HashSet<>(Arrays.asList("SYS_ADMIN", "BASE_USER"));
-        assertEquals(roles, user.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()));
+        Set<String> roles = new HashSet<>(List.of("SYS_ADMIN", "BASE_USER"));
+        assertEquals(roles, user.getRoles().get().stream().map(Role::getCode).collect(Collectors.toSet()));
 
         // Test Authorities
-        assertEquals(Set.of(
-                new SimpleGrantedAuthority("ROLE_SYS_ADMIN"),
-                new SimpleGrantedAuthority("ROLE_BASE_USER"),
-                new SimpleGrantedAuthority("User:SELECT"),
-                new SimpleGrantedAuthority("User:UPDATE")
-        ), user.getAuthorities());
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_SYS_ADMIN"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_BASE_USER"));
+        Set<Long> roleIds = user.getRoles().get().stream().map(Role::getId).collect(Collectors.toSet());
+        Set<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
+        permissions.forEach(perm -> authorities.add(new SimpleGrantedAuthority(perm.getCode())));
+        assertEquals(authorities, user.getAuthorities());
     }
 
     @Test
     @WithMockAdmin
     public void testCreateOne() {
-        User user = new User();
-        user.setUsername("test");
-        user.setNickname("test");
-        user.setPassword("123456");
+        // Create user
+        User userCreate = new User();
+        userCreate.setUsername("test");
+        userCreate.setNickname("test");
+        userCreate.setPassword("123456");
+        userService.createOne(userCreate);
 
-        userService.createOne(user);
-
-        user = userService.loadUserByUsername("test");
+        User user = userService.loadUserByUsername("test");
         assertNotNull(user.getId());
+
+        // Test Password
         assertTrue(passwordEncoder.matches("123456", user.getPassword()));
-        assertEquals(Set.of("BASE_USER"), user.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()));
-        assertEquals(Set.of(
-                new SimpleGrantedAuthority("ROLE_BASE_USER"),
-                new SimpleGrantedAuthority("User:SELECT"),
-                new SimpleGrantedAuthority("User:UPDATE")
-        ), user.getAuthorities());
+
+        // Test Roles
+        Set<String> roles = new HashSet<>(List.of("BASE_USER"));
+        assertEquals(roles, user.getRoles().get().stream().map(Role::getCode).collect(Collectors.toSet()));
+
+        // Test Authorities
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_BASE_USER"));
+        Set<Long> roleIds = user.getRoles().get().stream().map(Role::getId).collect(Collectors.toSet());
+        Set<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
+        permissions.forEach(perm -> authorities.add(new SimpleGrantedAuthority(perm.getCode())));
+        assertEquals(authorities, user.getAuthorities());
+    }
+
+    @Test
+    @WithMockAdmin
+    public void testChangePassword() {
+        // Create user
+        User userCreate = new User();
+        userCreate.setUsername("test");
+        userCreate.setPassword("123456");
+        userService.createOne(userCreate);
+
+        // Change Password
+        String newPassword = "12345678";
+        User userUpdate = new User();
+        userUpdate.setPassword(newPassword);
+        userService.updateById(userCreate.getId(), userUpdate);
+
+        // Test Password
+        assertTrue(passwordEncoder.matches(newPassword, userService.selectById(userCreate.getId()).getPassword()));
     }
 }
