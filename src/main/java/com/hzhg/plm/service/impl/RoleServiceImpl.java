@@ -24,6 +24,8 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
     @Autowired
     UserRoleMapper userRoleMapper;
 
+    private static final String[] DEFAULT_ROLES = new String[]{"BASE_USER"};
+
     @Override
     public Set<Role> getRolesByUserId(Long userId) {
         if (userId == null) {
@@ -33,7 +35,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
         if (roleIds == null || roleIds.isEmpty()) {
             return new HashSet<>();
         }
-        return new HashSet<>(roleMapper.selectBatchIds(roleIds));
+        return new HashSet<>(baseMapper.selectBatchIds(roleIds));
     }
 
     @Override
@@ -49,6 +51,9 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
             throw new IllegalArgumentException();
         }
         roleIds.removeAll(userRoleMapper.getRoleIdsByUserId(userId));
+        if (roleIds.isEmpty()) {
+            return;
+        }
         userRoleMapper.addUserRoles(userId, roleIds);
     }
 
