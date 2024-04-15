@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.hzhg.plm.core.utils.Constants.ROLE_BASE_USER;
+import static com.hzhg.plm.core.utils.Constants.CODE_BASE_USER;
 
 @Slf4j
 @Service
@@ -71,7 +71,7 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
         boolean result = super.createOne(user);
 
         // Add BASE_USER role
-        Role baseUserRole = roleService.getRoleByCode(ROLE_BASE_USER);
+        Role baseUserRole = roleService.getRoleByCode(CODE_BASE_USER);
         if (baseUserRole == null) {
             throw new RuntimeException("BASE_USER role not found");
         }
