@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 
-import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER_ID;
+import static com.hzhg.plm.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
 
 /**
  * Refer to <a href="https://github.com/spring-projects/spring-session/blob/main/spring-session-samples/spring-session-sample-boot-redis-json/src/main/java/sample/config/SessionConfig.java">Spring Session Github</a>
@@ -57,9 +57,9 @@ public class SessionConfig implements BeanClassLoaderAware {
         // Note: already include com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
         objectMapper.registerModules(SecurityJackson2Modules.getModules(loader));
 
-        // Add dummy ROLE_BASED_FILTER
+        // Add dummy INSTANCE
         objectMapper.setFilterProvider(new SimpleFilterProvider()
-                .addFilter(ROLE_BASED_FILTER_ID, new SimpleBeanPropertyFilter(){}));
+                .addFilter(FILTER_ID, new SimpleBeanPropertyFilter(){}));
 
         return objectMapper;
     }

@@ -28,8 +28,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER;
-import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER_ID;
+import static com.hzhg.plm.core.jackson2.SecurityBeanPropertyFilter.INSTANCE;
+import static com.hzhg.plm.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -68,7 +68,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .deserializerByType(Many2One.class, new Many2OneDeserializer())
                 .deserializerByType(One2Many.class, new One2ManyDeserializer())
                 .deserializerByType(Many2Many.class, new Many2ManyDeserializer())
-                .filters(new SimpleFilterProvider().addFilter(ROLE_BASED_FILTER_ID, ROLE_BASED_FILTER));
+                .filters(new SimpleFilterProvider().addFilter(FILTER_ID, INSTANCE));
         return new MappingJackson2HttpMessageConverter(builder.build());
     }
 }
