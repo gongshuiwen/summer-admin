@@ -4,13 +4,14 @@ package com.hzhg.plm.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hzhg.plm.core.annotations.AllowedForRoles;
-import com.hzhg.plm.core.annotations.FetchName;
+import com.hzhg.plm.core.jackson2.AllowedForAdmin;
 import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.core.fields.Many2Many;
+import com.hzhg.plm.core.fields.Many2One;
+import com.hzhg.plm.core.fields.annotations.OnDelete;
 import com.hzhg.plm.core.validation.CreateValidationGroup;
 import com.hzhg.plm.core.validation.NullOrNotBlank;
 import com.hzhg.plm.core.validation.UpdateValidationGroup;
-import com.hzhg.plm.mapper.DepartmentMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -22,10 +23,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.hzhg.plm.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
+import static com.hzhg.plm.core.utils.Constants.ROLE_PREFIX;
 
 @Getter
 @Setter
@@ -34,8 +36,6 @@ public class User extends BaseEntity implements Serializable, UserDetails {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private static final String ROLE_PREFIX = "ROLE_";
 
     @Schema(description = "用户名")
     @NotNull(groups = {CreateValidationGroup.class})
@@ -77,32 +77,29 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     private String avatar;
 
     @Schema(description = "状态 1=正常,0=停用")
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     private Integer status;
 
     @Schema(description = "最后登录IP")
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     private String loginIp;
 
     @Schema(description = "最后登录时间")
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     private LocalDateTime loginTime;
 
-    @Schema(description = "部门ID")
-    private Long departmentId;
+    @Schema(description = "部门")
+    @OnDelete(OnDelete.Type.RESTRICT)
+    private Many2One<Department> departmentId;
 
+    @Schema(description = "角色")
     @TableField(exist = false)
-    @Schema(description = "部门名称")
-    @FetchName(idField = "departmentId", mapper = DepartmentMapper.class)
-    private String departmentName;
-
-    @TableField(exist = false)
-    private Set<Role> roles;
+    private Many2Many<Role> roles;
 
     @TableField(exist = false)
     private Set<GrantedAuthority> authorities;
 
-    public void addAuthoritiesWithRoles(Set<Role> roles) {
+    public void addAuthoritiesWithRoles(Collection<Role> roles) {
         if (authorities == null) {
             authorities = new HashSet<>();
         }
@@ -111,7 +108,7 @@ public class User extends BaseEntity implements Serializable, UserDetails {
                 .forEach(authorities::add);
     }
 
-    public void addAuthoritiesWithPermissions(Set<Permission> permissions) {
+    public void addAuthoritiesWithPermissions(Collection<Permission> permissions) {
         if (authorities == null) {
             authorities = new HashSet<>();
         }
