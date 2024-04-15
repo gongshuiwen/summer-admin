@@ -27,7 +27,7 @@ public class GrantedAuthorityCheckUtils {
     }
 
     private static Collection<? extends GrantedAuthority> getUserAuthorities() {
-        UserDetails user = BaseContext.getUser();
+        UserDetails user = BaseContext.getUserDetails();
         if (user != null){
             Collection<? extends GrantedAuthority> userAuthorities = user.getAuthorities();
             if (userAuthorities == null || userAuthorities.isEmpty()) {
