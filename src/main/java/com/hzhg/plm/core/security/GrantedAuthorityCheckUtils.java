@@ -1,8 +1,7 @@
 package com.hzhg.plm.core.security;
 
-import org.springframework.security.core.Authentication;
+import com.hzhg.plm.core.context.BaseContext;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -28,13 +27,8 @@ public class GrantedAuthorityCheckUtils {
     }
 
     private static Collection<? extends GrantedAuthority> getUserAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
-        }
-
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails user) {
+        UserDetails user = BaseContext.getUser();
+        if (user != null){
             Collection<? extends GrantedAuthority> userAuthorities = user.getAuthorities();
             if (userAuthorities == null || userAuthorities.isEmpty()) {
                 return null;
