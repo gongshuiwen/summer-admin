@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hzhg.plm.core.annotations.FetchName;
-import com.hzhg.plm.core.annotations.AllowedForRoles;
+import com.hzhg.plm.core.jackson2.AllowedForAdmin;
 import com.hzhg.plm.core.utils.SpringContextUtils;
 import com.hzhg.plm.core.validation.CreateValidationGroup;
 import com.hzhg.plm.core.validation.UpdateValidationGroup;
@@ -25,13 +25,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.hzhg.plm.core.jackson2.RoleBasedAnnotationFilter.ROLE_BASED_FILTER_ID;
-import static com.hzhg.plm.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
+import static com.hzhg.plm.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
 
 
 @Getter
 @Setter
-@JsonFilter(ROLE_BASED_FILTER_ID)
+@JsonFilter(FILTER_ID)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseEntity implements Serializable {
 
@@ -42,25 +41,25 @@ public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private LocalDateTime updateTime;
 
     @Schema(description = "创建用户")
     @TableField(fill = FieldFill.INSERT)
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long createUser;
 
     @Schema(description = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @AllowedForRoles(value = {ROLE_ADMIN})
+    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long updateUser;
 
