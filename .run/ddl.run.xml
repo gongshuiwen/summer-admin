@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ddl" type="DatabaseScript" editBeforeRun="true">
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/department.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/menu.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/permission.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/role.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/role_permission.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/user.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/user_role.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="0fb12b3e-6d96-4ad5-a619-6a08fce1f59e" />
+    <method v="2" />
+  </configuration>
+</component>

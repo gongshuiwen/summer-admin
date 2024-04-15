@@ -1,6 +1,7 @@
 # Ref: https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 
 # User-specific stuff
+**/misc.xml
 **/workspace.xml
 **/tasks.xml
 **/usage.statistics.xml
@@ -19,4 +20,7 @@
 **/uiDesigner.xml
 **/dbnavigator.xml
 
+**/sqldialects.xml
 **/runConfigurations
+**/GrepConsole.xml
+**/jpa-buddy.xml
