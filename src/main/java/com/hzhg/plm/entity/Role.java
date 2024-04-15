@@ -8,11 +8,14 @@ import lombok.Setter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.io.Serial;
+
 @Getter
 @Setter
 @Schema(description = "角色信息")
 public class Role extends BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "角色标识")
@@ -30,9 +33,4 @@ public class Role extends BaseEntity {
 
     @Schema(description = "状态 1=正常,0=停用")
     private Integer status;
-
-    @Override
-    public String getDisplayName() {
-        return getName();
-    }
 }

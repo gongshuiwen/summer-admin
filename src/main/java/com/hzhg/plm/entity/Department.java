@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
@@ -33,9 +32,4 @@ public class Department extends TreeBaseEntity<Department> {
     @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     @Size(min = 2, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String name;
-
-    @Override
-    public String getDisplayName() {
-        return getName();
-    }
 }
