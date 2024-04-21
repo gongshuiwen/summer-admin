@@ -46,6 +46,12 @@ public class Condition<T> {
         this.conditions = conditions;
     }
 
+    public QueryWrapper<T> toQueryWrapper() {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        this.applyToQueryWrapper(queryWrapper);
+        return queryWrapper;
+    }
+
     public void applyToQueryWrapper(QueryWrapper<T> queryWrapper) {
         if (isGeneral()) {
             applyGeneral(queryWrapper);
@@ -72,7 +78,6 @@ public class Condition<T> {
 
     private void applyGeneral(QueryWrapper<T> queryWrapper) {
         checkColumn();
-        checkValue();
 
         SqlKeyword sqlKeyword = GeneralOperator.get(operator).getSqlKeyword();
         try {
@@ -85,7 +90,6 @@ public class Condition<T> {
 
     private void applyLike(QueryWrapper<T> queryWrapper) {
         checkColumn();
-        checkValue();
 
         LikeOperator likeOperator = LikeOperator.of(operator);
         try {
@@ -118,11 +122,5 @@ public class Condition<T> {
         }
 
         // TODO: implement check column existing in entity class with cache
-    }
-
-    private void checkValue() {
-        if (value == null) {
-            throw new IllegalArgumentException("Invalid value: value cannot be null");
-        }
     }
 }
