@@ -60,12 +60,15 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public Long count(Condition<T> condition) {
+    public Long count(QueryWrapper<T> queryWrapper) {
         DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
-        if (condition == null) return super.count();
-        QueryWrapper<T> wrapper = new QueryWrapper<>();
-        condition.applyToQueryWrapper(wrapper);
-        return super.count(wrapper);
+        return super.count(queryWrapper);
+    }
+
+    @Override
+    public List<T> selectList(QueryWrapper<T> queryWrapper) {
+        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        return super.list(queryWrapper);
     }
 
     @Override
