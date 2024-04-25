@@ -30,9 +30,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseEntity>
         extends ServiceImpl<M, T>
-        implements IBaseService<T>, InitializingBean {
+        implements BaseService<T>, InitializingBean {
 
-    public static final Map<Class<?>, IBaseService<?>> baseServiceRegistry = new ConcurrentHashMap<>();
+    public static final Map<Class<?>, BaseService<?>> baseServiceRegistry = new ConcurrentHashMap<>();
 
     @Override
     public T selectById(Long id) {
@@ -122,7 +122,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
             Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            IBaseService<BaseEntity> targetService = getService(targetClass);
+            BaseService<BaseEntity> targetService = getService(targetClass);
             for (T entity : entities) {
                 One2Many<BaseEntity> filedValue;
                 try {
@@ -217,7 +217,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
             Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            IBaseService<BaseEntity> targetService = getService(targetClass);
+            BaseService<BaseEntity> targetService = getService(targetClass);
             One2Many<BaseEntity> filedValue;
             try {
                 filedValue = (One2Many<BaseEntity>) field.get(entity);
@@ -411,8 +411,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     @SuppressWarnings("unchecked")
-    public <AT extends BaseEntity> IBaseService<AT> getService(Class<AT> entityClass) {
-        return (IBaseService<AT>) baseServiceRegistry.get(entityClass);
+    public <AT extends BaseEntity> BaseService<AT> getService(Class<AT> entityClass) {
+        return (BaseService<AT>) baseServiceRegistry.get(entityClass);
     }
 
     @Override

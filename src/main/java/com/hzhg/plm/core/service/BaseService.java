@@ -9,7 +9,7 @@ import com.hzhg.plm.core.protocal.OrderBy;
 
 import java.util.List;
 
-public interface IBaseService<T extends BaseEntity> {
+public interface BaseService<T extends BaseEntity> {
 
     T selectById(Long id);
 
@@ -110,5 +110,5 @@ public interface IBaseService<T extends BaseEntity> {
 
     BaseMapper<T> getMapper();
 
-    <AT extends BaseEntity> IBaseService<AT> getService(Class<AT> entityClass);
+    <AT extends BaseEntity> BaseService<AT> getService(Class<AT> entityClass);
 }

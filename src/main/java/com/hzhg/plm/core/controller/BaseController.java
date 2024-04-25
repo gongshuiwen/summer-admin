@@ -5,7 +5,7 @@ import com.hzhg.plm.core.entity.BaseEntity;
 import com.hzhg.plm.core.protocal.Condition;
 import com.hzhg.plm.core.protocal.Query;
 import com.hzhg.plm.core.protocal.R;
-import com.hzhg.plm.core.service.IBaseService;
+import com.hzhg.plm.core.service.BaseService;
 import com.hzhg.plm.core.validation.CreateValidationGroup;
 import com.hzhg.plm.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ import java.util.List;
 
 
 @Validated
-public abstract class BaseController<S extends IBaseService<T>, T extends BaseEntity> implements InitializingBean {
+public abstract class BaseController<S extends BaseService<T>, T extends BaseEntity> implements InitializingBean {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
