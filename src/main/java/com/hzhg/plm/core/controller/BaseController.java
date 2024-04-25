@@ -2,10 +2,15 @@ package com.hzhg.plm.core.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzhg.plm.core.entity.BaseEntity;
+import com.hzhg.plm.core.fields.Many2Many;
+import com.hzhg.plm.core.fields.Many2One;
+import com.hzhg.plm.core.mapper.RelationMapper;
+import com.hzhg.plm.core.mapper.RelationMapperRegistry;
 import com.hzhg.plm.core.protocal.Condition;
 import com.hzhg.plm.core.protocal.Query;
 import com.hzhg.plm.core.protocal.R;
 import com.hzhg.plm.core.service.BaseService;
+import com.hzhg.plm.core.service.BaseServiceRegistry;
 import com.hzhg.plm.core.validation.CreateValidationGroup;
 import com.hzhg.plm.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +22,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Validated
@@ -34,23 +40,26 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @GetMapping("/{id}")
     public R<T> selectById(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
         T entity = service.selectById(id);
-        BaseEntity.fetchNames(Collections.singletonList(entity));
+        fetchMany2One(Collections.singletonList(entity));
+        fetchMany2Many(Collections.singletonList(entity));
         return R.success(entity);
     }
 
     @Operation(summary = "批量获取")
     @GetMapping("/batch")
-    public R<List<T>> selectByIds(@RequestParam @NotEmpty List<Long> ids) throws NoSuchFieldException, IllegalAccessException {
-        List<T> entity = service.selectByIds(ids);
-        BaseEntity.fetchNames(entity);
-        return R.success(entity);
+    public R<List<T>> selectByIds(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
+        List<T> entities = service.selectByIds(ids);
+        fetchMany2One(entities);
+        fetchMany2Many(entities);
+        return R.success(entities);
     }
 
     @Operation(summary = "通用分页查询")
     @PostMapping("/page")
-    public R<IPage<T>> page(@RequestBody Query<T> query) throws NoSuchFieldException, IllegalAccessException {
+    public R<IPage<T>> page(@RequestBody Query<T> query) throws IllegalAccessException {
         IPage<T> page = service.page(query.getPageNum(), query.getPageSize(), query.getCondition(), query.getSort());
-        BaseEntity.fetchNames(page.getRecords());
+        fetchMany2One(page.getRecords());
+        fetchMany2Many(page.getRecords());
         return R.success(page);
     }
 
@@ -62,7 +71,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
 
     @Operation(summary = "通用名称查询")
     @GetMapping("/nameSearch")
-    public R<List<T>> nameSearch(@RequestParam String name){
+    public R<List<T>> nameSearch(@RequestParam String name) {
         List<T> entity = service.nameSearch(name);
         return R.success(entity);
     }
@@ -113,5 +122,75 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedTypeImpl) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
         this.entityName = entityClass.getSimpleName();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void fetchMany2One(List<T> entities) throws IllegalAccessException {
+        // Do noting if empty
+        if (entities == null || entities.isEmpty()) return;
+
+        // Get entity class
+        Class<?> entityClass = entities.get(0).getClass();
+        for (Field field : Many2One.getMany2OneFields(entityClass)) {
+            // Get target ids
+            Set<Long> targetIds = new HashSet<>();
+            for (T entity : entities) {
+                Long targetId = ((Many2One<?>) field.get(entity)).getId();
+                if (targetId != null && targetId > 0) {
+                    targetIds.add(((Many2One<?>) field.get(entity)).getId());
+                }
+            }
+
+            // Get target entities
+            BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) Many2One.getTargetClass(field));
+            List<? extends BaseEntity> targetEntities = targetService.selectByIds(targetIds.stream().toList());
+            Map<Long, ? extends BaseEntity> targetEntitiesMap = targetEntities.stream()
+                    .collect(Collectors.toMap(BaseEntity::getId, t -> t));
+
+            // Set target entities to many2one field
+            for (T entity : entities) {
+                Many2One<BaseEntity> many2One = (Many2One<BaseEntity>) field.get(entity);
+                Long targetId = many2One.getId();
+                if (targetId != null && targetId > 0) {
+                    many2One.set(targetEntitiesMap.get(targetId));
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void fetchMany2Many(List<T> entities) throws IllegalAccessException {
+        // Do noting if empty
+        if (entities == null || entities.isEmpty()) return;
+
+        // Get entity class
+        Class<?> entityClass = entities.get(0).getClass();
+        for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
+            Class<?> targetClass = Many2Many.getTargetClass(field);
+            RelationMapper relationMapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+
+            // Get all target ids and the map of entity id -> target ids
+            Set<Long> allTargetIds = new HashSet<>();
+            Map<Long, List<Long>> entityId2TargetIdsMap = new HashMap<>();
+            for (T entity : entities) {
+                List<Long> targetIds = relationMapper.getTargetIds(entityClass, List.of(entity.getId()));
+                allTargetIds.addAll(targetIds);
+                entityId2TargetIdsMap.put(entity.getId(), targetIds);
+            }
+
+            // Get allTargetEntities
+            BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) targetClass);
+            List<? extends BaseEntity> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
+            Map<Long, ? extends BaseEntity> targetEntitiesMap = allTargetEntities.stream()
+                    .collect(Collectors.toMap(BaseEntity::getId, t -> t));
+
+            // Set many2many field
+            for (T entity : entities) {
+                List<Long> targetIds = entityId2TargetIdsMap.get(entity.getId());
+                List<? extends BaseEntity> targetEntities = targetIds.stream()
+                        .map(targetEntitiesMap::get).collect(Collectors.toList());
+                field.set(entity, Many2Many.ofValues(targetEntities));
+            }
+        }
     }
 }
