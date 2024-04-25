@@ -24,15 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseEntity>
         extends ServiceImpl<M, T>
         implements BaseService<T>, InitializingBean {
-
-    public static final Map<Class<?>, BaseService<?>> baseServiceRegistry = new ConcurrentHashMap<>();
 
     @Override
     public T selectById(Long id) {
@@ -410,9 +406,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <AT extends BaseEntity> BaseService<AT> getService(Class<AT> entityClass) {
-        return (BaseService<AT>) baseServiceRegistry.get(entityClass);
+        return BaseServiceRegistry.getService(entityClass);
     }
 
     @Override
@@ -420,6 +415,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (entityClass == null) {
             throw new RuntimeException();
         }
-        baseServiceRegistry.put(entityClass, this);
+        BaseServiceRegistry.register(this);
     }
 }
