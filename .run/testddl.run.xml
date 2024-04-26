@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="testddl" type="DatabaseScript" editBeforeRun="true">
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/department.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/menu.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/permission.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/role.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/role_permission.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/user.sql" />
+    <script-file value="$PROJECT_DIR$/src/main/resources/sql/ddl/user_role.sql" />
+    <script-file value="$PROJECT_DIR$/src/test/resources/sql/test/ddl/mock.sql" />
+    <script-file value="$PROJECT_DIR$/src/test/resources/sql/test/ddl/mock1.sql" />
+    <script-file value="$PROJECT_DIR$/src/test/resources/sql/test/ddl/mock2.sql" />
+    <script-file value="$PROJECT_DIR$/src/test/resources/sql/test/ddl/mock3.sql" />
+    <script-file value="$PROJECT_DIR$/src/test/resources/sql/test/ddl/mock_relation.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="a0daaf77-f0f9-478b-b0ac-aabe8a579c8c" />
+    <method v="2" />
+  </configuration>
+</component>
