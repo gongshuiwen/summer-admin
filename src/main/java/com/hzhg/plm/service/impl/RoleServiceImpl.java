@@ -24,8 +24,6 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
     @Autowired
     UserRoleMapper userRoleMapper;
 
-    private static final String[] DEFAULT_ROLES = new String[]{"BASE_USER"};
-
     @Override
     public Set<Role> getRolesByUserId(Long userId) {
         if (userId == null) {
