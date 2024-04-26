@@ -69,7 +69,7 @@ public class TestAbstractBaseService {
         Assertions.assertEquals(2L, results.get(1).getId());
         Assertions.assertEquals("mock2", results.get(1).getName());
 
-        pageResult = mockService.page(1L, 20L, "id desc");
+        pageResult = mockService.page(1L, 20L, null,"id desc");
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(2, pageResult.getTotal());
         Assertions.assertEquals(1, pageResult.getCurrent());
