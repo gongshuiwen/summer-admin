@@ -2,6 +2,7 @@ package com.hzhg.plm.service.impl;
 
 import com.hzhg.plm.core.service.AbstractBaseService;
 import com.hzhg.plm.entity.Permission;
+import com.hzhg.plm.entity.Role;
 import com.hzhg.plm.mapper.PermissionMapper;
 import com.hzhg.plm.mapper.RolePermissionMapper;
 import com.hzhg.plm.service.PermissionService;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -40,7 +42,11 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionMapper,
             throw new IllegalArgumentException();
         }
         Set<Long> permIds = rolePermissionMapper.getPermissionIdsByRoleIds(roleIds);
-        return new HashSet<>(permissionMapper.selectBatchIds(permIds));
+        if (permIds.isEmpty()) {
+            return Set.of();
+        }
+
+        return permissionMapper.selectBatchIds(permIds).stream().collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
@@ -49,8 +55,8 @@ public class PermissionServiceImpl extends AbstractBaseService<PermissionMapper,
         if (roleId == null || permIds == null || permIds.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        permIds.removeAll(rolePermissionMapper.getPermissionIdsByRoleId(roleId));
-        rolePermissionMapper.addRolePermissions(roleId, permIds);
+        Set<Long> existPermIds = rolePermissionMapper.getPermissionIdsByRoleId(roleId);
+        rolePermissionMapper.add(Role.class, roleId, permIds.stream().filter(id -> !existPermIds.contains(id)).toList());
     }
 
     @Override
