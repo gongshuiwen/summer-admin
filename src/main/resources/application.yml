@@ -17,7 +17,7 @@ springdoc:
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
-      packages-to-scan: com.hzhg.plm
+      packages-to-scan: com.hzboiler
   swagger-ui:
     enabled: true
 knife4j:

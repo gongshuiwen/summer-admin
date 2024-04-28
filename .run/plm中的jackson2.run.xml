@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="plm中的jackson2" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+  <configuration default="false" name="plm中的jackson2" type="JUnit" factoryName="JUnit" folderName="core" nameIsGenerated="true">
     <module name="plm" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="directory" />
-    <dir value="$PROJECT_DIR$/src/test/java/com/hzhg/plm/core/jackson2" />
+    <dir value="$PROJECT_DIR$/src/test/java/com/hzboiler/core/jackson2" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

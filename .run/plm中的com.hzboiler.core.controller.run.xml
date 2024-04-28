@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="plm中的com.hzboiler.core.controller" type="JUnit" factoryName="JUnit" folderName="core" nameIsGenerated="true">
+    <module name="plm" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.hzhg.plm.core.controller.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="PACKAGE_NAME" value="com.hzboiler.core.controller" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="package" />
+    <option name="VM_PARAMETERS" value="-ea -Dspring.profiles.active=test --add-opens java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
