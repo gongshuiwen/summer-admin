@@ -3,7 +3,6 @@ package com.hzhg.plm.core.mapper;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.beans.factory.InitializingBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public interface RelationMapper extends InitializingBean {
+public interface RelationMapper {
 
     Map<Class<?>, String> mapperTables = new HashMap<>();
     Map<Class<?>, String> mapperField1 = new HashMap<>();
@@ -24,13 +23,14 @@ public interface RelationMapper extends InitializingBean {
 
     default List<Long> getTargetIds(Class<?> sourceClass, List<Long> sourceIds) {
         if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null");
+            throw new RuntimeException("sourceClass must not be null!");
         }
 
         if (sourceIds == null || sourceIds.isEmpty()) {
-            throw new RuntimeException("sourceIds must not be empty");
+            throw new RuntimeException("sourceIds must not be null or empty!");
         }
 
+        // Get mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get table name
@@ -50,17 +50,18 @@ public interface RelationMapper extends InitializingBean {
 
     default void add(Class<?> sourceClass, Long sourceId, List<Long> targetIds) {
         if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null");
+            throw new RuntimeException("sourceClass must not be null!");
         }
 
         if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null");
+            throw new RuntimeException("sourceId must not be null!");
         }
 
         if (targetIds == null || targetIds.isEmpty()) {
-            throw new RuntimeException("targetIds must not be empty");
+            throw new RuntimeException("targetIds must not be null or empty!");
         }
 
+        // Get mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get table name
@@ -82,17 +83,18 @@ public interface RelationMapper extends InitializingBean {
 
     default void remove(Class<?> sourceClass, Long sourceId, List<Long> targetIds) {
         if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null");
+            throw new RuntimeException("sourceClass must not be null!");
         }
 
         if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null");
+            throw new RuntimeException("sourceId must not be null!");
         }
 
         if (targetIds == null || targetIds.isEmpty()) {
-            throw new RuntimeException("targetIds must not be empty");
+            throw new RuntimeException("targetIds must not be null or empty!");
         }
 
+        // Get mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get table name
@@ -112,13 +114,14 @@ public interface RelationMapper extends InitializingBean {
 
     default void removeAll(Class<?> sourceClass, Long sourceId) {
         if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null");
+            throw new RuntimeException("sourceClass must not be null!");
         }
 
         if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null");
+            throw new RuntimeException("sourceId must not be null!");
         }
 
+        // Get mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get table name
@@ -146,7 +149,7 @@ public interface RelationMapper extends InitializingBean {
             map.put("sourceField", mapperField2.get(mapperInterface));
             map.put("targetField", mapperField1.get(mapperInterface));
         } else {
-            throw new RuntimeException("");
+            throw new RuntimeException("the sourceClass '" + sourceClass + "' is invalid for RelationMapper '" + mapperInterface + "'!");
         }
         return map;
     }

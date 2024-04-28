@@ -1,12 +1,10 @@
 package com.hzhg.plm.core.mapper;
 
-
 import org.mybatis.spring.mapper.MapperFactoryBean;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 public class RelationMapperRegistry {
 
@@ -30,8 +28,8 @@ public class RelationMapperRegistry {
         private final Class<?> class1;
         private final Class<?> class2;
 
-        public Key(Class<?> sourceClass, Class<?> class2) {
-            this.class1 = sourceClass;
+        public Key(Class<?> class1, Class<?> class2) {
+            this.class1 = class1;
             this.class2 = class2;
         }
 
