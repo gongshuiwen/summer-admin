@@ -11,7 +11,7 @@
     <option name="MAIN_CLASS_NAME" value="com.hzboiler.base.service.TestUserService" />
     <option name="METHOD_NAME" value="testLoadUserByUsername" />
     <option name="TEST_OBJECT" value="class" />
-    <option name="VM_PARAMETERS" value="-ea -Dspring.profiles.active=test --add-opens java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-ea -Dspring.profiles.active=test" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

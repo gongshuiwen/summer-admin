@@ -1,10 +1,11 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ACTIVE_PROFILES" value="dev" />
     <option name="HIDE_BANNER" value="true" />
     <module name="plm" />
     <option name="SHORTEN_COMMAND_LINE" value="MANIFEST" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.hzboiler.Application" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=dev -Dserver.port=18000 -Xms512m -Xmx512m --add-opens java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-Dserver.port=18000 -Xms512m -Xmx512m" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
