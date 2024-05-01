@@ -3,6 +3,7 @@
 # User-specific stuff
 **/misc.xml
 **/workspace.xml
+**/workspace**
 **/tasks.xml
 **/usage.statistics.xml
 **/dictionaries
@@ -14,6 +15,7 @@
 # Sensitive or high-churn files
 **/dataSources/
 **/dataSources.ids
+**/dataSources.xml
 **/dataSources.local.xml
 **/sqlDataSources.xml
 **/dynamic.xml
