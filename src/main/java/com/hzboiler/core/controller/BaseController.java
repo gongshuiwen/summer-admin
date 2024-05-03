@@ -126,7 +126,6 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
         this.entityName = entityClass.getSimpleName();
     }
 
-    @SuppressWarnings("unchecked")
     private void fetchMany2One(List<T> entities) throws IllegalAccessException {
         // Do noting if empty
         if (entities == null || entities.isEmpty()) return;
@@ -144,6 +143,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
             }
 
             // Get target entities
+            @SuppressWarnings("unchecked")
             BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) Many2One.getTargetClass(field));
             List<? extends BaseEntity> targetEntities = targetService.selectByIds(targetIds.stream().toList());
             Map<Long, ? extends BaseEntity> targetEntitiesMap = targetEntities.stream()
@@ -151,6 +151,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
 
             // Set target entities to many2one field
             for (T entity : entities) {
+                @SuppressWarnings("unchecked")
                 Many2One<BaseEntity> many2One = (Many2One<BaseEntity>) field.get(entity);
                 Long targetId = many2One.getId();
                 if (targetId != null && targetId > 0) {
@@ -160,7 +161,6 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void fetchMany2Many(List<T> entities) throws IllegalAccessException {
         // Do noting if empty
         if (entities == null || entities.isEmpty()) return;
@@ -181,6 +181,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
             }
 
             // Get allTargetEntities
+            @SuppressWarnings("unchecked")
             BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) targetClass);
             List<? extends BaseEntity> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
             Map<Long, ? extends BaseEntity> targetEntitiesMap = allTargetEntities.stream()
