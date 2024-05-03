@@ -40,8 +40,10 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @GetMapping("/{id}")
     public R<T> selectById(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
         T entity = service.selectById(id);
-        fetchMany2One(Collections.singletonList(entity));
-        fetchMany2Many(Collections.singletonList(entity));
+        if (entity != null) {
+            fetchMany2One(Collections.singletonList(entity));
+            fetchMany2Many(Collections.singletonList(entity));
+        }
         return R.success(entity);
     }
 
