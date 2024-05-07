@@ -1,7 +1,7 @@
 package com.hzboiler.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzboiler.base.entity.Permission;
+import com.hzboiler.base.model.Permission;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

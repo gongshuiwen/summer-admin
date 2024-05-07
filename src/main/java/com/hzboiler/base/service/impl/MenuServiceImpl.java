@@ -1,7 +1,7 @@
 package com.hzboiler.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hzboiler.base.entity.Menu;
+import com.hzboiler.base.model.Menu;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.base.mapper.MenuMapper;
 import com.hzboiler.base.service.MenuService;

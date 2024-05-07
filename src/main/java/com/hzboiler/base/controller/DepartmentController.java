@@ -1,6 +1,6 @@
 package com.hzboiler.base.controller;
 
-import com.hzboiler.base.entity.Department;
+import com.hzboiler.base.model.Department;
 import com.hzboiler.core.controller.BaseController;
 import com.hzboiler.base.service.DepartmentService;
 import io.swagger.v3.oas.annotations.tags.Tag;

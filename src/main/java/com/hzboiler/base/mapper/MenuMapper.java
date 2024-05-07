@@ -1,7 +1,7 @@
 package com.hzboiler.base.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzboiler.base.entity.Menu;
+import com.hzboiler.base.model.Menu;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

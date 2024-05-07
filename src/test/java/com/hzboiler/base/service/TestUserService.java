@@ -1,9 +1,9 @@
 package com.hzboiler.base.service;
 
 import com.hzboiler.core.annotaion.WithMockAdmin;
-import com.hzboiler.base.entity.Permission;
-import com.hzboiler.base.entity.Role;
-import com.hzboiler.base.entity.User;
+import com.hzboiler.base.model.Permission;
+import com.hzboiler.base.model.Role;
+import com.hzboiler.base.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

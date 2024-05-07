@@ -1,6 +1,6 @@
 package com.hzboiler.base.service;
 
-import com.hzboiler.base.entity.Permission;
+import com.hzboiler.base.model.Permission;
 import com.hzboiler.core.service.BaseService;
 
 import java.util.Set;
