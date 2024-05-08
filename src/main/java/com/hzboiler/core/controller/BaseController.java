@@ -175,7 +175,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
             Set<Long> allTargetIds = new HashSet<>();
             Map<Long, List<Long>> entityId2TargetIdsMap = new HashMap<>();
             for (T entity : entities) {
-                List<Long> targetIds = relationMapper.getTargetIds(entityClass, List.of(entity.getId()));
+                List<Long> targetIds = relationMapper.getTargetIds(entityClass, entity.getId());
                 allTargetIds.addAll(targetIds);
                 entityId2TargetIdsMap.put(entity.getId(), targetIds);
             }
