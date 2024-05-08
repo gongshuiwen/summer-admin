@@ -1,6 +1,8 @@
-package com.hzboiler.core.security;
+package com.hzboiler.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.MediaType;
@@ -10,16 +12,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
-public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class RequestBodyUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    @Getter
+    @Setter
+    private static class LoginDto {
+        private String username;
+        private String password;
+    }
 
     private final ObjectMapper objectMapper;
 
-    public CustomUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
+    public RequestBodyUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -38,12 +44,5 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
             return this.getAuthenticationManager().authenticate(authRequest);
         }
         throw new AuthenticationServiceException("Authentication request's content type is invalid!" );
-    }
-
-    @Getter
-    @Setter
-    private static class LoginDto {
-        private String username;
-        private String password;
     }
 }
