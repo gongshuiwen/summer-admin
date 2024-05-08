@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-import static com.hzboiler.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
+import static com.hzboiler.core.utils.Constants.ROLE_SYS_ADMIN;
 
 @RestController
 @Tag(name = "用户接口")
@@ -19,7 +19,7 @@ import static com.hzboiler.core.security.DataAccessAuthorityChecker.ROLE_ADMIN;
 public class UserController extends BaseController<UserService, User> {
 
     public static final String EXPRESSION_AUTHORITY_USER =
-            "hasRole('" + ROLE_ADMIN + "') or #id == authentication.principal.id";
+            "hasRole('" + ROLE_SYS_ADMIN + "') or #id == authentication.principal.id";
 
     @Override
     @PreAuthorize(EXPRESSION_AUTHORITY_USER)
