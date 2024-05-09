@@ -1,6 +1,6 @@
 package com.hzboiler.core.config;
 
-import com.hzboiler.core.utils.SpringContextUtils;
+import com.hzboiler.core.utils.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class MiscConfig {
 
     @Bean
-    SpringContextUtils springContextUtils() {
-        return new SpringContextUtils();
+    SpringContextUtil springContextUtil() {
+        return new SpringContextUtil();
     }
 }
