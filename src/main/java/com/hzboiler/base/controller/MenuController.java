@@ -1,7 +1,7 @@
 package com.hzboiler.base.controller;
 
 
-import com.hzboiler.base.model.Menu;
+import com.hzboiler.base.entity.Menu;
 import com.hzboiler.core.controller.BaseController;
 import com.hzboiler.core.protocal.R;
 import com.hzboiler.base.service.MenuService;

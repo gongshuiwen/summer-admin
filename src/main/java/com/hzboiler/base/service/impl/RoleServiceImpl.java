@@ -1,7 +1,7 @@
 package com.hzboiler.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hzboiler.base.model.Role;
+import com.hzboiler.base.entity.Role;
 import com.hzboiler.base.mapper.RoleMapper;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.base.mapper.UserRoleMapper;

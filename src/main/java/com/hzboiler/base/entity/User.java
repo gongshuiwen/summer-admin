@@ -1,4 +1,4 @@
-package com.hzboiler.base.model;
+package com.hzboiler.base.entity;
 
 
 import com.baomidou.mybatisplus.annotation.TableField;

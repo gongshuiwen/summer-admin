@@ -1,4 +1,4 @@
-package com.hzboiler.base.model;
+package com.hzboiler.base.entity;
 
 import com.hzboiler.core.entity.TreeBaseEntity;
 import com.hzboiler.core.validation.CreateValidationGroup;

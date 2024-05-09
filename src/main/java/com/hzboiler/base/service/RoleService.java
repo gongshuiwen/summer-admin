@@ -1,6 +1,6 @@
 package com.hzboiler.base.service;
 
-import com.hzboiler.base.model.Role;
+import com.hzboiler.base.entity.Role;
 import com.hzboiler.core.service.BaseService;
 
 import java.util.Set;
