@@ -56,7 +56,7 @@ public class SessionConfig implements BeanClassLoaderAware {
         // Note: already include com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
         objectMapper.registerModules(SecurityJackson2Modules.getModules(loader));
 
-        // Add dummy INSTANCE
+        // Add dummy SecurityBeanPropertyFilter
         objectMapper.setFilterProvider(new SimpleFilterProvider()
                 .addFilter(SecurityBeanPropertyFilter.FILTER_ID, new SimpleBeanPropertyFilter(){}));
 
