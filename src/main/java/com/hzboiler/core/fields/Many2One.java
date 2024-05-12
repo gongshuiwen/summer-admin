@@ -1,6 +1,7 @@
 package com.hzboiler.core.fields;
 
 import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.utils.ReflectUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,7 @@ public class Many2One<T extends BaseEntity> {
     public static List<Field> getMany2OneFields(Class<?> entityClass) {
         List<Field> fields = many2oneFieldsCache.getOrDefault(entityClass, null);
         if ( fields == null) {
-            fields = Arrays.stream(entityClass.getDeclaredFields())
+            fields = Arrays.stream(ReflectUtil.getAllDeclaredFields(entityClass))
                     .filter(field -> field.getType() == Many2One.class)
                     .peek(field -> field.setAccessible(true))
                     .collect(Collectors.toList());

@@ -2,6 +2,7 @@ package com.hzboiler.core.fields;
 
 import com.hzboiler.core.fields.annotations.InverseField;
 import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.utils.ReflectUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ public class One2Many<T extends BaseEntity> {
     public static List<Field> getOne2ManyFields(Class<?> entityClass) {
         List<Field> fields = one2manyFieldsCache.getOrDefault(entityClass, null);
         if (fields == null) {
-            fields = Arrays.stream(entityClass.getDeclaredFields())
+            fields = Arrays.stream(ReflectUtil.getAllDeclaredFields(entityClass))
                     .filter(field -> field.getType() == One2Many.class)
                     .peek(field -> field.setAccessible(true))
                     .collect(Collectors.toList());
