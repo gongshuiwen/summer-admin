@@ -19,11 +19,11 @@ public interface BaseService<T extends BaseEntity> {
         return page(pageNum, pageSize, null, null);
     }
 
-    default IPage<T> page(Long pageNum, Long pageSize, Condition<T> condition) {
-        return page(pageNum, pageSize, condition, null);
+    default IPage<T> page(Long pageNum, Long pageSize, String sort) {
+        return page(pageNum, pageSize, sort, null);
     }
 
-    IPage<T> page(Long pageNum, Long pageSize, Condition<T> condition, String sort);
+    IPage<T> page(Long pageNum, Long pageSize, String sort, Condition<T> condition);
 
     default Long count(Condition<T> condition) {
         if (condition == null)

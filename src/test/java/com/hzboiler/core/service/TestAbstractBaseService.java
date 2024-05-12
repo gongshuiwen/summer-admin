@@ -69,7 +69,7 @@ public class TestAbstractBaseService {
         Assertions.assertEquals(2L, results.get(1).getId());
         Assertions.assertEquals("mock2", results.get(1).getName());
 
-        pageResult = mockService.page(1L, 20L, null,"id desc");
+        pageResult = mockService.page(1L, 20L,"id desc");
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(2, pageResult.getTotal());
         Assertions.assertEquals(1, pageResult.getCurrent());
@@ -84,7 +84,7 @@ public class TestAbstractBaseService {
 
         Condition<Mock> condition = new Condition<>("id", "=", 1L);
 
-        pageResult = mockService.page(1L, 20L, condition);
+        pageResult = mockService.page(1L, 20L, "id desc", condition);
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(1, pageResult.getTotal());
         Assertions.assertEquals(1, pageResult.getCurrent());
@@ -95,7 +95,7 @@ public class TestAbstractBaseService {
         Assertions.assertEquals(1L, results.get(0).getId());
         Assertions.assertEquals("mock1", results.get(0).getName());
 
-        pageResult = mockService.page(1L, 20L, condition, "id desc");
+        pageResult = mockService.page(1L, 20L, null, condition);
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(1, pageResult.getTotal());
         Assertions.assertEquals(1, pageResult.getCurrent());
