@@ -98,15 +98,15 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @Operation(summary = "更新信息")
     @PutMapping("/{id}")
     @Validated(UpdateValidationGroup.class)
-    public R<Boolean> updateById(@PathVariable Long id, @RequestBody @Valid T entityDto) {
-        return R.success(service.updateById(id, entityDto));
+    public R<Boolean> updateById(@PathVariable Long id, @RequestBody @Valid T updateDto) {
+        return R.success(service.updateById(id, updateDto));
     }
 
     @Operation(summary = "批量更新")
     @PutMapping("/batch")
     @Validated(UpdateValidationGroup.class)
-    public R<Boolean> updateByIds(@RequestParam @NotEmpty(groups = UpdateValidationGroup.class) List<Long> ids, @RequestBody @Valid T entityDto) {
-        return R.success(service.updateByIds(ids, entityDto));
+    public R<Boolean> updateByIds(@RequestParam @NotEmpty List<Long> ids, @RequestBody @Valid T updateDto) {
+        return R.success(service.updateByIds(ids, updateDto));
     }
 
     @Operation(summary = "删除信息")
