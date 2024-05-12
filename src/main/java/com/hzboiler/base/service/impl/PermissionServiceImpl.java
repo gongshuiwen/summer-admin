@@ -1,7 +1,7 @@
 package com.hzboiler.base.service.impl;
 
-import com.hzboiler.base.entity.Permission;
-import com.hzboiler.base.entity.Role;
+import com.hzboiler.base.model.Permission;
+import com.hzboiler.base.model.Role;
 import com.hzboiler.base.mapper.RolePermissionMapper;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.base.mapper.PermissionMapper;

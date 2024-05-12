@@ -1,6 +1,6 @@
 package com.hzboiler.base.service.impl;
 
-import com.hzboiler.base.entity.Department;
+import com.hzboiler.base.model.Department;
 import com.hzboiler.base.mapper.DepartmentMapper;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.base.service.DepartmentService;
