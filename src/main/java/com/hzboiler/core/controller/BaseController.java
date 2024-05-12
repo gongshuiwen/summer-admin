@@ -34,7 +34,6 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public S service;
     public Class<T> entityClass;
-    public String entityName;
 
     @Operation(summary = "获取信息")
     @GetMapping("/{id}")
@@ -125,7 +124,6 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @SuppressWarnings("unchecked")
     public void afterPropertiesSet() {
         this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-        this.entityName = entityClass.getSimpleName();
     }
 
     private void fetchMany2One(List<T> entities) throws IllegalAccessException {
