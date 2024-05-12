@@ -8,7 +8,6 @@ import com.hzboiler.core.fields.Many2One;
 import com.hzboiler.core.mapper.RelationMapper;
 import com.hzboiler.core.mapper.RelationMapperRegistry;
 import com.hzboiler.core.protocal.Condition;
-import com.hzboiler.core.protocal.Query;
 import com.hzboiler.core.protocal.R;
 import com.hzboiler.core.service.BaseService;
 import com.hzboiler.core.service.BaseServiceRegistry;
@@ -58,16 +57,21 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     }
 
     @Operation(summary = "通用分页查询")
-    @PostMapping("/page")
-    public R<IPage<T>> page(@RequestBody Query<T> query) throws IllegalAccessException {
-        IPage<T> page = service.page(query.getPageNum(), query.getPageSize(), query.getCondition(), query.getSort());
-        fetchMany2One(page.getRecords());
-        fetchMany2Many(page.getRecords());
+    @GetMapping("/page")
+    public R<IPage<T>> page(@RequestParam Long pageNum, @RequestParam Long pageSize,
+                            @RequestParam(required = false) String sort,
+                            @RequestBody(required = false) Condition<T> condition) throws IllegalAccessException {
+        IPage<T> page = service.page(pageNum, pageSize, sort, condition);
+        List<T> records = page.getRecords();
+        if (records != null && !records.isEmpty()) {
+            fetchMany2One(records);
+            fetchMany2Many(records);
+        }
         return R.success(page);
     }
 
     @Operation(summary = "通用计数查询")
-    @PostMapping("/count")
+    @GetMapping("/count")
     public R<Long> count(@RequestBody Condition<T> condition) {
         return R.success(service.count(condition));
     }
