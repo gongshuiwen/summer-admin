@@ -2,8 +2,8 @@ package com.hzboiler.base.mapper;
 
 import com.hzboiler.core.mapper.MapperRelation;
 import com.hzboiler.core.mapper.RelationMapper;
-import com.hzboiler.base.model.Permission;
-import com.hzboiler.base.model.Role;
+import com.hzboiler.base.entity.Permission;
+import com.hzboiler.base.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Set;

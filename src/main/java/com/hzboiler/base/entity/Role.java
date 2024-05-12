@@ -1,4 +1,4 @@
-package com.hzboiler.base.model;
+package com.hzboiler.base.entity;
 
 import com.hzboiler.core.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;

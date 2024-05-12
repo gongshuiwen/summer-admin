@@ -1,6 +1,6 @@
 package com.hzboiler.base.controller;
 
-import com.hzboiler.base.model.Role;
+import com.hzboiler.base.entity.Role;
 import com.hzboiler.core.controller.BaseController;
 import com.hzboiler.base.service.RoleService;
 import io.swagger.v3.oas.annotations.tags.Tag;

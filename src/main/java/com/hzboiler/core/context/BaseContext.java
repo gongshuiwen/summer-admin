@@ -1,6 +1,6 @@
 package com.hzboiler.core.context;
 
-import com.hzboiler.base.model.User;
+import com.hzboiler.base.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

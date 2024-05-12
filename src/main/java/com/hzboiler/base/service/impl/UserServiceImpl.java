@@ -1,9 +1,9 @@
 package com.hzboiler.base.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hzboiler.base.model.Permission;
-import com.hzboiler.base.model.Role;
-import com.hzboiler.base.model.User;
+import com.hzboiler.base.entity.Permission;
+import com.hzboiler.base.entity.Role;
+import com.hzboiler.base.entity.User;
 import com.hzboiler.core.fields.Many2Many;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.base.mapper.UserMapper;

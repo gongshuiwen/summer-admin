@@ -1,7 +1,7 @@
 package com.hzboiler.base.mapper;
 
-import com.hzboiler.base.model.Role;
-import com.hzboiler.base.model.User;
+import com.hzboiler.base.entity.Role;
+import com.hzboiler.base.entity.User;
 import com.hzboiler.core.mapper.MapperRelation;
 import com.hzboiler.core.mapper.RelationMapper;
 import org.apache.ibatis.annotations.Mapper;
