@@ -39,21 +39,23 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @Operation(summary = "获取信息")
     @GetMapping("/{id}")
     public R<T> selectById(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
-        T entity = service.selectById(id);
-        if (entity != null) {
-            fetchMany2One(Collections.singletonList(entity));
-            fetchMany2Many(Collections.singletonList(entity));
+        T record = service.selectById(id);
+        if (record != null) {
+            fetchMany2One(Collections.singletonList(record));
+            fetchMany2Many(Collections.singletonList(record));
         }
-        return R.success(entity);
+        return R.success(record);
     }
 
     @Operation(summary = "批量获取")
     @GetMapping("/batch")
     public R<List<T>> selectByIds(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
-        List<T> entities = service.selectByIds(ids);
-        fetchMany2One(entities);
-        fetchMany2Many(entities);
-        return R.success(entities);
+        List<T> records = service.selectByIds(ids);
+        if (records != null && !records.isEmpty()) {
+            fetchMany2One(records);
+            fetchMany2Many(records);
+        }
+        return R.success(records);
     }
 
     @Operation(summary = "通用分页查询")
@@ -74,8 +76,8 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @Operation(summary = "通用名称查询")
     @GetMapping("/nameSearch")
     public R<List<T>> nameSearch(@RequestParam String name) {
-        List<T> entity = service.nameSearch(name);
-        return R.success(entity);
+        List<T> records = service.nameSearch(name);
+        return R.success(records);
     }
 
     @Operation(summary = "创建信息")
