@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_SELECT;
-import static com.hzboiler.core.utils.ResultCheckUtils.*;
+import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 
 @SpringBootTest

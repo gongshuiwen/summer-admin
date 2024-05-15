@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_SELECT;
-import static com.hzboiler.core.utils.ResultCheckUtils.*;
+import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 
 @SpringBootTest

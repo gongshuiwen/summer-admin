@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_CREATE;
-import static com.hzboiler.core.utils.ResultCheckUtils.*;
+import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 
 @SpringBootTest

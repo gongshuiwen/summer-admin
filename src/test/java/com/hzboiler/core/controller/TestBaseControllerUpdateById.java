@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_UPDATE;
-import static com.hzboiler.core.utils.ResultCheckUtils.*;
+import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 
 @SpringBootTest

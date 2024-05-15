@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_CREATE;
-import static com.hzboiler.core.utils.ResultCheckUtils.*;
+import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 
 @SpringBootTest

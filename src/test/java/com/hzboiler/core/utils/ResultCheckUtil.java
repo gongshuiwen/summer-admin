@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ResultCheckUtils {
+public class ResultCheckUtil {
 
     public static void checkResultActionsSuccess(ResultActions resultActions) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
