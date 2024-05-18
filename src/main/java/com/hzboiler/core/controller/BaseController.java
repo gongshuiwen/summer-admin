@@ -14,6 +14,7 @@ import com.hzboiler.core.service.BaseServiceRegistry;
 import com.hzboiler.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
         return R.success(records);
     }
 
-    @Operation(summary = "通用分页查询")
+    @Operation(summary = "分页查询")
     @GetMapping("/page")
     public R<IPage<T>> page(@RequestParam Long pageNum, @RequestParam Long pageSize,
                             @RequestParam(required = false) String sort,
@@ -59,15 +60,15 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
         return R.success(page);
     }
 
-    @Operation(summary = "通用计数查询")
+    @Operation(summary = "计数查询")
     @GetMapping("/count")
-    public R<Long> count(@RequestBody Condition<T> condition) {
+    public R<Long> count(@RequestBody(required = false) Condition<T> condition) {
         return R.success(service.count(condition));
     }
 
-    @Operation(summary = "通用名称查询")
+    @Operation(summary = "名称查询")
     @GetMapping("/nameSearch")
-    public R<List<T>> nameSearch(@RequestParam String name) {
+    public R<List<T>> nameSearch(@RequestParam @NotBlank String name) {
         List<T> records = service.nameSearch(name);
         return R.success(records);
     }
