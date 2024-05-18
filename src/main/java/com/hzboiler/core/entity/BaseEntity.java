@@ -11,6 +11,7 @@ import com.hzboiler.core.jackson2.SecurityBeanPropertyFilter;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +29,8 @@ public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "ID")
     @TableId(type = IdType.AUTO)
-    @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @Null(groups = {CreateValidationGroup.class})
+    @NotNull(groups = {UpdateValidationGroup.class})
     private Long id;
 
     @Schema(description = "创建时间")

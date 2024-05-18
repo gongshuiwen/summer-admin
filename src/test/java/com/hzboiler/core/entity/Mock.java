@@ -21,4 +21,10 @@ public class Mock extends BaseEntity {
     public Mock(String name) {
         this.name = name;
     }
+
+    public static Mock of(Long id, String name) {
+        Mock mock = new Mock(name);
+        mock.setId(id);
+        return mock;
+    }
 }

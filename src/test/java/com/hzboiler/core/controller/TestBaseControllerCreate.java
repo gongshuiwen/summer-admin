@@ -30,12 +30,13 @@ import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestBaseControllerCreateBatch {
+@Sql(scripts = {"/sql/test/ddl/mock.sql"})
+public class TestBaseControllerCreate {
 
     static final String MOCK_PATH = "/mock";
-    static final String MOCK_PATH_BATCH = MOCK_PATH + "/batch";
     static final String MOCK_ENTITY_NAME = "Mock";
     static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_CREATE;
+    static final List<Mock> MOCKS = List.of(new Mock("mock1"), new Mock("mock2"));
 
     MockMvc mockMvc;
 
@@ -43,7 +44,7 @@ public class TestBaseControllerCreateBatch {
 
     ObjectMapper objectMapper;
 
-    public TestBaseControllerCreateBatch(
+    public TestBaseControllerCreate(
             @Autowired MockMvc mockMvc,
             @Autowired MockMapper mockMapper,
             @Autowired MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
@@ -52,146 +53,122 @@ public class TestBaseControllerCreateBatch {
         this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
-    ResultActions doCreateBatch(List<Mock> mocks) throws Exception {
+    ResultActions doCreate(List<Mock> mocks) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post(MOCK_PATH_BATCH)
+                        .post(MOCK_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(mocks)));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
+    @WithAnonymousUser
+    void testAnonymous() throws Exception {
+        ResultActions resultActions = doCreate(MOCKS);
+        checkResultActionsAuthenticationFailed(resultActions);
+    }
+
+    @Test
+    @WithMockUser
+    void testNotAuthorized() throws Exception {
+        ResultActions resultActions = doCreate(MOCKS);
+        checkResultActionsAccessDined(resultActions);
+    }
+
+    @Test
     @WithMockUser(authorities = MOCK_AUTHORITY_CREATE)
-    void testCreateBatchAuthorized() throws Exception {
+    void testAuthorized() throws Exception {
         Assertions.assertEquals(0, mockMapper.selectCount(null));
 
-        ArrayList<Mock> mocks = new ArrayList<>();
-        mocks.add(new Mock("mock1"));
-        mocks.add(new Mock("mock2"));
-
-        ResultActions resultActions = doCreateBatch(mocks);
-
+        ResultActions resultActions = doCreate(MOCKS);
         checkResultActionsSuccess(resultActions);
         resultActions
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is("1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is(mocks.get(0).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is(MOCKS.get(0).getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is("2")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(MOCKS.get(1).getName())))
         ;
 
         Assertions.assertEquals(2, mockMapper.selectCount(null));
 
         Mock mock1 = mockMapper.selectById(1);
-        Assertions.assertEquals(mocks.get(0).getName(), mock1.getName());
+        Assertions.assertEquals(MOCKS.get(0).getName(), mock1.getName());
         Assertions.assertEquals(0, mock1.getCreateUser());
         Assertions.assertEquals(0, mock1.getUpdateUser());
 
         Mock mock2 = mockMapper.selectById(2);
-        Assertions.assertEquals(mocks.get(1).getName(), mock2.getName());
+        Assertions.assertEquals(MOCKS.get(1).getName(), mock2.getName());
         Assertions.assertEquals(0, mock2.getCreateUser());
         Assertions.assertEquals(0, mock2.getUpdateUser());
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    @WithMockUser
-    void testCreateBatchNotAuthorized() throws Exception {
-        ArrayList<Mock> mocks = new ArrayList<>();
-        mocks.add(new Mock("mock1"));
-        mocks.add(new Mock("mock2"));
-        ResultActions resultActions = doCreateBatch(mocks);
-        checkResultActionsAccessDined(resultActions);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchAdmin() throws Exception {
-        testCreateBatchAuthorized();
+    void testAdmin() throws Exception {
+        testAuthorized();
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-    @WithAnonymousUser
-    void testCreateBatchAnonymous() throws Exception {
-        ArrayList<Mock> mocks = new ArrayList<>();
-        mocks.add(new Mock("mock1"));
-        mocks.add(new Mock("mock2"));
-        ResultActions resultActions = doCreateBatch(mocks);
-        checkResultActionsAuthenticationFailed(resultActions);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchEmptyList() throws Exception {
-        checkResultActionsInvalidArguments(doCreateBatch(new ArrayList<>()));
+    void testEmptyList() throws Exception {
+        checkResultActionsInvalidArguments(doCreate(new ArrayList<>()));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchNameNull() throws Exception {
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(new Mock(null))));
+    void testNameNull() throws Exception {
+        checkResultActionsInvalidArguments(doCreate(List.of(new Mock(null))));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchNameEmpty() throws Exception {
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(new Mock(""))));
+    void testNameEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doCreate(List.of(new Mock(""))));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchNameBlank() throws Exception {
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(new Mock("   "))));
+    void testNameBlank() throws Exception {
+        checkResultActionsInvalidArguments(doCreate(List.of(new Mock("   "))));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchIdNotNull() throws Exception {
+    void testIdNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setId(1L);
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchCreateTimeNotNull() throws Exception {
+    void testCreateTimeNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setCreateTime(LocalDateTime.now());
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchUpdateTimeNotNull() throws Exception {
+    void testUpdateTimeNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateTime(LocalDateTime.now());
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchCreateUserNotNull() throws Exception {
+    void testCreateUserNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setCreateUser(1L);
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
-    void testCreateBatchUpdateUserNotNull() throws Exception {
+    void testUpdateUserNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateUser(1L);
-        checkResultActionsInvalidArguments(doCreateBatch(List.of(mock)));
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 }

@@ -1,9 +1,10 @@
 package com.hzboiler.core.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hzboiler.core.mapper.MockMapper;
 import com.hzboiler.core.annotaion.WithMockAdmin;
-import org.junit.jupiter.api.Assertions;
+import com.hzboiler.core.entity.Mock;
+import com.hzboiler.core.mapper.MockMapper;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,24 +17,23 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_DELETE;
+import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_SELECT;
 import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestBaseControllerDeleteByIds {
+@Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
+public class TestBaseControllerSelect {
 
     static final String MOCK_PATH = "/mock";
-    static final String MOCK_PATH_BATCH = MOCK_PATH + "/batch";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + ":" + AUTHORITY_DELETE;
+    static final String MOCK_AUTHORITY_SELECT = MOCK_ENTITY_NAME + ":" + AUTHORITY_SELECT;
 
     MockMvc mockMvc;
 
@@ -41,7 +41,7 @@ public class TestBaseControllerDeleteByIds {
 
     ObjectMapper objectMapper;
 
-    public TestBaseControllerDeleteByIds(
+    public TestBaseControllerSelect(
             @Autowired MockMvc mockMvc,
             @Autowired MockMapper mockMapper,
             @Autowired MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
@@ -50,56 +50,55 @@ public class TestBaseControllerDeleteByIds {
         this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
     }
 
-    ResultActions doDeleteByIds(List<Long> ids) throws Exception {
+    ResultActions doSelect(List<Long> ids) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
-                        .delete(MOCK_PATH_BATCH)
+                        .get(MOCK_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("ids", ids.stream().map(String::valueOf).collect(Collectors.joining(","))));
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
-    void testDeleteByIdsAuthorized() throws Exception {
-        long count = mockMapper.selectCount(null);
-        List<Long> deleteIds = Arrays.asList(1L, 2L);
-        deleteIds.forEach(id -> Assertions.assertNotNull(mockMapper.selectById(id)));
-
-        ResultActions resultActions = doDeleteByIds(deleteIds);
-
-        checkResultActionsSuccess(resultActions);
-        deleteIds.forEach(deleteId -> Assertions.assertNull(mockMapper.selectById(deleteId)));
-        Assertions.assertEquals(count - deleteIds.size(), mockMapper.selectCount(null));
+    @WithAnonymousUser
+    void testAnonymous() throws Exception {
+        ResultActions resultActions = doSelect(List.of(1L, 2L));
+        checkResultActionsAuthenticationFailed(resultActions);
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser
-    void testDeleteByIdsNotAuthorized() throws Exception {
-        ResultActions resultActions = doDeleteByIds(Arrays.asList(1L, 2L));
+    void testNotAuthorized() throws Exception {
+        ResultActions resultActions = doSelect(List.of(1L, 2L));
         checkResultActionsAccessDined(resultActions);
     }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithMockAdmin
-    void testDeleteByIdsAdmin() throws Exception {
-        testDeleteByIdsAuthorized();
+    @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
+    void testAuthorized() throws Exception {
+        List<Long> ids = List.of(1L, 2L);
+        List<Mock> mocks = mockMapper.selectBatchIds(ids);
+
+        ResultActions resultActions = doSelect(ids);
+
+        checkResultActionsSuccess(resultActions);
+        resultActions
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", Is.is(mocks.get(0).getId().toString())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].name", Is.is(mocks.get(0).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is(mocks.get(1).getId().toString())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
+        ;
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-    @WithAnonymousUser
-    void testDeleteByIdsAnonymous() throws Exception {
-        ResultActions resultActions = doDeleteByIds(Arrays.asList(1L, 2L));
-        checkResultActionsAuthenticationFailed(resultActions);
+    @WithMockAdmin
+    void testAdmin() throws Exception {
+        testAuthorized();
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockAdmin
-    void testDeleteByIdsEmpty() throws Exception {
-        checkResultActionsInvalidArguments(doDeleteByIds(new ArrayList<>()));
+    void testIdsEmpty() throws Exception {
+        checkResultActionsInvalidArguments(doSelect(List.of()));
     }
 }

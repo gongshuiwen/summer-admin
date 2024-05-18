@@ -34,20 +34,9 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     public S service;
     public Class<T> entityClass;
 
-    @Operation(summary = "获取信息")
-    @GetMapping("/{id}")
-    public R<T> selectById(@PathVariable Long id) throws NoSuchFieldException, IllegalAccessException {
-        T record = service.selectById(id);
-        if (record != null) {
-            fetchMany2One(Collections.singletonList(record));
-            fetchMany2Many(Collections.singletonList(record));
-        }
-        return R.success(record);
-    }
-
-    @Operation(summary = "批量获取")
-    @GetMapping("/batch")
-    public R<List<T>> selectByIds(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
+    @Operation(summary = "ID查询")
+    @GetMapping
+    public R<List<T>> select(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
         List<T> records = service.selectByIds(ids);
         if (records != null && !records.isEmpty()) {
             fetchMany2One(records);
@@ -83,45 +72,27 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
         return R.success(records);
     }
 
-    @Operation(summary = "创建信息")
+    @Operation(summary = "创建记录")
     @PostMapping
     @Validated(CreateValidationGroup.class)
-    public R<T> createOne(@RequestBody @Valid T entityDto) {
-        service.createOne(entityDto);
-        return R.success(entityDto);
+    public R<List<T>> create(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> createDtoList) {
+        service.createBatch(createDtoList);
+        return R.success(createDtoList);
     }
 
-    @Operation(summary = "批量创建")
-    @PostMapping("/batch")
-    @Validated(CreateValidationGroup.class)
-    public R<List<T>> createBatch(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> entityDtoList) {
-        service.createBatch(entityDtoList);
-        return R.success(entityDtoList);
-    }
-
-    @Operation(summary = "更新信息")
-    @PutMapping("/{id}")
+    @Operation(summary = "更新记录")
+    @PutMapping
     @Validated(UpdateValidationGroup.class)
-    public R<Boolean> updateById(@PathVariable Long id, @RequestBody @Valid T updateDto) {
-        return R.success(service.updateById(id, updateDto));
+    public R<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid T> updateDtoList) {
+        for (T t : updateDtoList) {
+            service.updateById(t.getId(), t);
+        }
+        return R.success(true);
     }
 
-    @Operation(summary = "批量更新")
-    @PutMapping("/batch")
-    @Validated(UpdateValidationGroup.class)
-    public R<Boolean> updateByIds(@RequestParam @NotEmpty List<Long> ids, @RequestBody @Valid T updateDto) {
-        return R.success(service.updateByIds(ids, updateDto));
-    }
-
-    @Operation(summary = "删除信息")
-    @DeleteMapping("/{id}")
-    public R<Boolean> deleteById(@PathVariable Long id) {
-        return R.success(service.deleteById(id));
-    }
-
-    @Operation(summary = "批量删除")
-    @DeleteMapping("/batch")
-    public R<Boolean> deleteByIds(@RequestParam @NotEmpty List<Long> ids) {
+    @Operation(summary = "删除记录")
+    @DeleteMapping
+    public R<Boolean> delete(@RequestParam @NotEmpty List<Long> ids) {
         return R.success(service.deleteByIds(ids));
     }
 
