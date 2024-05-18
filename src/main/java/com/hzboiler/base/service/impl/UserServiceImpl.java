@@ -55,8 +55,7 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
 
         // Add authorities
-        user.addAuthoritiesWithRoles(roles);
-        user.addAuthoritiesWithPermissions(permissions);
+        user.addAuthoritiesWithRolesAndPermissions(roles, permissions);
         return user;
     }
 

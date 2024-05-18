@@ -4,8 +4,8 @@ package com.hzboiler.base.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hzboiler.core.entity.BaseUser;
 import com.hzboiler.core.jackson2.AllowedForAdmin;
-import com.hzboiler.core.entity.BaseEntity;
 import com.hzboiler.core.fields.Many2Many;
 import com.hzboiler.core.fields.Many2One;
 import com.hzboiler.core.fields.annotations.OnDelete;
@@ -18,12 +18,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ import static com.hzboiler.core.utils.Constants.ROLE_PREFIX;
 @Getter
 @Setter
 @Schema(description = "用户信息")
-public class User extends BaseEntity implements Serializable, UserDetails {
+public class User extends BaseUser implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -96,51 +96,15 @@ public class User extends BaseEntity implements Serializable, UserDetails {
     @TableField(exist = false)
     private Many2Many<Role> roles;
 
-    @TableField(exist = false)
-    private Set<GrantedAuthority> authorities;
-
-    public void addAuthoritiesWithRoles(Collection<Role> roles) {
-        if (authorities == null) {
-            authorities = new HashSet<>();
-        }
+    public void addAuthoritiesWithRolesAndPermissions(Collection<Role> roles, Collection<Permission> permissions) {
+        Set<GrantedAuthority> authorities = new HashSet<>();
         roles.stream()
                 .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getCode()))
                 .forEach(authorities::add);
-    }
-
-    public void addAuthoritiesWithPermissions(Collection<Permission> permissions) {
-        if (authorities == null) {
-            authorities = new HashSet<>();
-        }
         permissions.stream()
-                .map(perm -> new SimpleGrantedAuthority(perm.getCode()))
+                .map(permission -> new SimpleGrantedAuthority(permission.getCode()))
                 .forEach(authorities::add);
-    }
-
-    @Override
-    public Set<GrantedAuthority> getAuthorities() {
-        if (authorities == null) {
-            return new HashSet<>();
-        }
-        return authorities;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
-        return true;
+        setAuthorities(Collections.unmodifiableSet(authorities));
     }
 
     @Override
