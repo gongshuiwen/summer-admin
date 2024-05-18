@@ -26,11 +26,12 @@ public class R<T>{
     public static <T> R<T> error(int code, String message) {
         return new R<>(code, message, null);
     }
+
     public static <T> R<T> error(BusinessExceptionEnum businessException) {
-        return new R<>(businessException.getCode(), businessException.getMessage(), null);
+        return new R<>(businessException.code(), businessException.message(), null);
     }
 
     public static <T> R<T> error(BusinessExceptionEnum businessException, T data) {
-        return new R<>(businessException.getCode(), businessException.getMessage(), data);
+        return new R<>(businessException.code(), businessException.message(), data);
     }
 }

@@ -1,24 +1,18 @@
 package com.hzboiler.core.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public enum BusinessExceptionEnum {
+public record BusinessExceptionEnum(String namespace, int code, String message) {
 
-    ERROR_AUTHENTICATION_FAILED(80001, "身份认证失败！"),
-    ERROR_ACCESS_DENIED(80002, "权限验证失败，无当前资源的访问权限！"),
+    public static final String CORE_NAME_SPACE = "core";
 
-    ERROR_TEST(90000, "This error is for test!"),
-    ERROR_API_NOT_IMPLEMENTED(90001, "API is not implemented!"),
-    ERROR_API_DEPRECATED(90002, "API is deprecated!"),
-    ERROR_INVALID_ARGUMENTS(90003, "Invalid arguments!"),
-    ERROR_INVALID_REQUEST_BODY(90004, "Invalid request body!"),
-    ERROR_INTERNAL(99999, "Server internal error!"),
-    ;
+    public static final BusinessExceptionEnum ERROR_AUTHENTICATION_FAILED = new BusinessExceptionEnum(CORE_NAME_SPACE, 80001, "身份认证失败！");
+    public static final BusinessExceptionEnum ERROR_ACCESS_DENIED = new BusinessExceptionEnum(CORE_NAME_SPACE, 80002, "权限验证失败，无当前资源的访问权限！");
 
-    private final int code;
-    private final String message;
+    public static final BusinessExceptionEnum ERROR_TEST = new BusinessExceptionEnum(CORE_NAME_SPACE, 90000, "This error is for test!");
+    public static final BusinessExceptionEnum ERROR_API_NOT_IMPLEMENTED = new BusinessExceptionEnum(CORE_NAME_SPACE, 90001, "API is not implemented!");
+    public static final BusinessExceptionEnum ERROR_API_DEPRECATED = new BusinessExceptionEnum(CORE_NAME_SPACE, 90002, "API is deprecated!");
+    public static final BusinessExceptionEnum ERROR_INVALID_ARGUMENTS = new BusinessExceptionEnum(CORE_NAME_SPACE, 90003, "Invalid arguments!");
+    public static final BusinessExceptionEnum ERROR_INVALID_REQUEST_BODY = new BusinessExceptionEnum(CORE_NAME_SPACE, 90004, "Invalid request body!");
 
+    public static final BusinessExceptionEnum ERROR_INTERNAL = new BusinessExceptionEnum(CORE_NAME_SPACE, 99999, "Server internal error!");
 }
