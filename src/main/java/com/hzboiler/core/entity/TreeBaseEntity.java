@@ -27,30 +27,36 @@ public abstract class TreeBaseEntity<T extends TreeBaseEntity<?>> extends BaseEn
 
     @Schema(description = "子级列表")
     @TableField(exist = false)
-    private List<T> children = new ArrayList<>();
+    private List<T> children;
 
     /**
-     * build a flat entity list to a hierarchical tree, return roots' list
-     * @param entities flat entity list
+     * build a flat record list to a hierarchical tree, return roots' list
+     *
+     * @param records flat record list
      * @return roots' list
      */
-    public static <T extends TreeBaseEntity<T>> List<T> buildTree(List<T> entities) {
-        Map<Long, T> entityMap = new HashMap<>(entities.size());
-        List<T> rootEntities = new ArrayList<>();
+    public static <T extends TreeBaseEntity<T>> List<T> buildTree(List<T> records) {
+        List<T> roots = new ArrayList<>();
+        Map<Long, T> recordMap = new HashMap<>(records.size());
 
-        // Loop 1: Build entity map using id as key
-        entities.forEach(entity -> entityMap.put(entity.getId(), entity));
+        // Loop 1: Build record map using id as key
+        records.forEach(record -> recordMap.put(record.getId(), record));
 
         // Loop 2
-        entities.forEach(entity -> {
-            if ( entity.getParentId() == 0 )
-                // Add every not-root entity to parent's children list
-                rootEntities.add(entity);
-            else
-                // Add every root entity to roots' list
-                entityMap.get(entity.getParentId()).getChildren().add(entity);
+        records.forEach(record -> {
+            if (record.getParentId() == null || record.getParentId() == 0) {
+                // Add root record to roots' list
+                roots.add(record);
+            } else {
+                // Add leaf record to parent's children list
+                List<T> children = recordMap.get(record.getParentId()).getChildren();
+                if (children == null) {
+                    children = new ArrayList<>();
+                }
+                children.add(record);
+            }
         });
 
-        return rootEntities;
+        return roots;
     }
 }
