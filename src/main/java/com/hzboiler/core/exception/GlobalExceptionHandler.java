@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
+
 
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
@@ -37,12 +39,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public R<String> handleAccessDeniedException(Exception e) {
-        return R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED);
+        return R.error(ERROR_ACCESS_DENIED);
     }
 
     @ExceptionHandler(DataAccessException.class)
     public R<String> handleDataAccessException(Exception e) {
-        return R.error(BusinessExceptionEnum.ERROR_ACCESS_DENIED);
+        return R.error(ERROR_ACCESS_DENIED);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -56,7 +58,7 @@ public class GlobalExceptionHandler {
                     : violation.getPropertyPath().toString();
             errors.put(fieldName, violation.getMessage());
         }
-        return R.error(BusinessExceptionEnum.ERROR_INVALID_ARGUMENTS, errors);
+        return R.error(ERROR_INVALID_ARGUMENTS, errors);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -68,27 +70,27 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return R.error(BusinessExceptionEnum.ERROR_INVALID_ARGUMENTS, errors);
+        return R.error(ERROR_INVALID_ARGUMENTS, errors);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public R<String> handleMethodArgumentTypeMismatchException(Exception e) {
-        return R.error(BusinessExceptionEnum.ERROR_INVALID_ARGUMENTS);
+        return R.error(ERROR_INVALID_ARGUMENTS);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public R<String> handleMissingServletRequestParameterException(Exception e) {
-        return R.error(BusinessExceptionEnum.ERROR_INVALID_ARGUMENTS);
+        return R.error(ERROR_INVALID_ARGUMENTS);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public R<String> handleHttpMessageNotReadableException(Exception e) {
-        return R.error(BusinessExceptionEnum.ERROR_INVALID_REQUEST_BODY);
+        return R.error(ERROR_INVALID_REQUEST_BODY);
     }
 
     @ExceptionHandler(Exception.class)
     public R<String> handleInternalException(Exception e) {
         log.error(e.toString(), e);
-        return R.error(BusinessExceptionEnum.ERROR_INTERNAL);
+        return R.error(ERROR_INTERNAL);
     }
 }
