@@ -164,10 +164,13 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                 for (Command<BaseEntity> command : commands) {
                     if (command == null) break;
                     if (Objects.requireNonNull(command.getCommandType()) == CommandType.ADD) {
+                        if (command.getIds() == null || command.getIds().isEmpty()) {
+                            throw new IllegalArgumentException("The ids of Command ADD cannot be null or empty");
+                        }
                         RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
                         mapper.add(entityClass, entity.getId(), command.getIds());
                     } else {
-                        throw new RuntimeException();
+                        throw new IllegalArgumentException("The Command " + command.getCommandType() + " is not supported for create");
                     }
                 }
             }
