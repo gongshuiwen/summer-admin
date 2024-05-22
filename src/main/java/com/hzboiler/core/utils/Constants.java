@@ -15,5 +15,6 @@ public class Constants {
     public static final GrantedAuthority AUTHORITY_ROLE_SYS_ADMIN = new SimpleGrantedAuthority(ROLE_SYS_ADMIN);
     public static final GrantedAuthority AUTHORITY_ROLE_BASE_USER = new SimpleGrantedAuthority(ROLE_BASE_USER);
 
+    // prevent instantiation
     private Constants() {}
 }
