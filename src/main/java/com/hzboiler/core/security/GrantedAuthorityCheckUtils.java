@@ -1,41 +1,31 @@
 package com.hzboiler.core.security;
 
-import com.hzboiler.core.context.BaseContext;
+import com.hzboiler.core.context.BaseContextHolder;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 public class GrantedAuthorityCheckUtils {
 
+    public static boolean isAdmin() {
+        return BaseContextHolder.getContext().isAdmin();
+    }
+
     public static boolean contains(GrantedAuthority authority) {
-        Collection<? extends GrantedAuthority> userAuthorities = getUserAuthorities();
-        if (userAuthorities == null) return false;
-        return userAuthorities.contains(authority);
+        return getUserAuthorities().contains(authority);
     }
 
     public static boolean containsAny(Collection<? extends GrantedAuthority> authorities) {
         Collection<? extends GrantedAuthority> userAuthorities = getUserAuthorities();
-        if (userAuthorities == null) return false;
         return authorities.stream().anyMatch(userAuthorities::contains);
     }
 
-    public static boolean containsAll(Collection<? extends GrantedAuthority> authorities) {
+    public static boolean containsAll(Collection<GrantedAuthority> authorities) {
         Collection<? extends GrantedAuthority> userAuthorities = getUserAuthorities();
-        if (userAuthorities == null) return false;
         return userAuthorities.containsAll(authorities);
     }
 
     private static Collection<? extends GrantedAuthority> getUserAuthorities() {
-        UserDetails user = BaseContext.getUserDetails();
-        if (user != null){
-            Collection<? extends GrantedAuthority> userAuthorities = user.getAuthorities();
-            if (userAuthorities == null || userAuthorities.isEmpty()) {
-                return null;
-            }
-            return userAuthorities;
-        }
-
-        return null;
+        return BaseContextHolder.getContext().getAuthorities();
     }
 }

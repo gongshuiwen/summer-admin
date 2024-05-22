@@ -1,7 +1,9 @@
 package com.hzboiler.core.security;
 
 import com.hzboiler.core.annotaion.WithMockAdmin;
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.entity.Mock;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -16,6 +18,11 @@ public class TestDataAccessAuthorityChecker {
 
     static void doCheck() {
         DataAccessAuthorityChecker.check(Mock.class, DataAccessAuthority.SELECT);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        BaseContextHolder.clearContext();
     }
 
     @Test

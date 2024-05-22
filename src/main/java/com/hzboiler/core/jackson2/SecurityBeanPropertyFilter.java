@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.security.GrantedAuthorityCheckUtils;
-import com.hzboiler.core.context.BaseContext;
 import com.hzboiler.core.entity.BaseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -75,10 +75,10 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
     }
 
     private boolean checkAllowedForCreateUser(BaseEntity entity) {
-        return Objects.equals(BaseContext.getCurrentUserId(), entity.getCreateUser());
+        return Objects.equals(BaseContextHolder.getContext().getUserId(), entity.getCreateUser());
     }
 
     private boolean checkAllowedForUpdateUser(BaseEntity entity) {
-        return Objects.equals(BaseContext.getCurrentUserId(), entity.getUpdateUser());
+        return Objects.equals(BaseContextHolder.getContext().getUserId(), entity.getUpdateUser());
     }
 }

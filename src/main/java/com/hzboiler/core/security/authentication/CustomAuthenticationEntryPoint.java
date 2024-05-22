@@ -1,6 +1,7 @@
 package com.hzboiler.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.protocal.R;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +20,9 @@ public record CustomAuthenticationEntryPoint(ObjectMapper objectMapper) implemen
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        // clear BaseContext for anonymous user
+        BaseContextHolder.clearContext();
         response.getWriter().write(objectMapper.writeValueAsString(R.error(ERROR_AUTHENTICATION_FAILED)));
     }
 }

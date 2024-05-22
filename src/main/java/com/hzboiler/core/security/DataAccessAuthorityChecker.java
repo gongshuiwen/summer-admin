@@ -1,34 +1,32 @@
 package com.hzboiler.core.security;
 
 import com.hzboiler.core.entity.BaseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.List;
-
 public class DataAccessAuthorityChecker {
-
-    public static final String ROLE_PREFIX = "ROLE_";
-    public static final String ROLE_ADMIN = "SYS_ADMIN";
 
     /**
      * Check if the current user has the authority to access the specified entity class with the given data access authority.
      * Throws a DataAccessException if the user does not have the required authority.
      *
-     * @param entityClass The entity class to check access for.
+     * @param modelClass The entity class to check access for.
      * @param authority The data access authority required.
      * @throws DataAccessException If the user does not have the required authority.
      */
-    public static void check(Class<? extends BaseEntity> entityClass, DataAccessAuthority authority)
+    public static void check(Class<? extends BaseEntity> modelClass, DataAccessAuthority authority)
             throws DataAccessException {
-        List<SimpleGrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority(ROLE_PREFIX + ROLE_ADMIN),
-                new SimpleGrantedAuthority(entityClass.getSimpleName() + ":" + authority.name())
-        );
-
-        if (GrantedAuthorityCheckUtils.containsAny(authorities)) {
+        // SYS_ADMIN has access to everything
+        if (GrantedAuthorityCheckUtils.isAdmin()) {
             return;
         }
 
-        throw new DataAccessException("Data access authority check failed.");
+        // Otherwise, check if the user has the required authority
+        GrantedAuthority authorityRequired = new SimpleGrantedAuthority(modelClass.getSimpleName() + ":" + authority.name());
+        if (GrantedAuthorityCheckUtils.contains(authorityRequired)) {
+            return;
+        }
+
+        throw new DataAccessException("Data access denied: [" + authority.name() + "] " + modelClass.getSimpleName());
     }
 }

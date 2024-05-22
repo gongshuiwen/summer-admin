@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.hzboiler.core.context.BaseContext;
+import com.hzboiler.core.context.BaseContextHolder;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,16 +32,18 @@ public class MyBatisPlusConfig {
 
             @Override
             public void insertFill(MetaObject metaObject) {
-                metaObject.setValue(CREATE_TIME_FIELD_NAME, LocalDateTime.now());
-                metaObject.setValue(UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
-                metaObject.setValue(CREATE_USER_FIELD_NAME, BaseContext.getCurrentUserId());
-                metaObject.setValue(UPDATE_USER_FIELD_NAME, BaseContext.getCurrentUserId());
+                LocalDateTime now = LocalDateTime.now();
+                Long userId = BaseContextHolder.getContext().getUserId();
+                metaObject.setValue(CREATE_TIME_FIELD_NAME, now);
+                metaObject.setValue(UPDATE_TIME_FIELD_NAME, now);
+                metaObject.setValue(CREATE_USER_FIELD_NAME, userId);
+                metaObject.setValue(UPDATE_USER_FIELD_NAME, userId);
             }
 
             @Override
             public void updateFill(MetaObject metaObject) {
                 metaObject.setValue(UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
-                metaObject.setValue(UPDATE_USER_FIELD_NAME, BaseContext.getCurrentUserId());
+                metaObject.setValue(UPDATE_USER_FIELD_NAME, BaseContextHolder.getContext().getUserId());
             }
         };
     }
