@@ -35,7 +35,7 @@ public class TestMany2ManyDeserializer {
 
     @Test
     public void testCommandRemove() throws JsonProcessingException {
-        Many2Many<?> many2Many = mapper.readValue("[[2, [1, 2, 3]]]", Many2Many.class);
+        Many2Many<?> many2Many = mapper.readValue("[[1, [1, 2, 3]]]", Many2Many.class);
         assertEquals(1, many2Many.getCommands().size());
 
         Command<?> command = many2Many.getCommands().get(0);
@@ -46,7 +46,7 @@ public class TestMany2ManyDeserializer {
 
     @Test
     public void testCommandReplace() throws JsonProcessingException {
-        Many2Many<?> many2Many = mapper.readValue("[[4, [1, 2, 3]]]", Many2Many.class);
+        Many2Many<?> many2Many = mapper.readValue("[[2, [1, 2, 3]]]", Many2Many.class);
         assertEquals(1, many2Many.getCommands().size());
 
         Command<?> command = many2Many.getCommands().get(0);
