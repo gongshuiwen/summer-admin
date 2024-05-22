@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum CommandType {
-    ADD(0), // For Many2Many
-    CREATE(1), // For One2Many
-    REMOVE(2), // For Many2Many
-    DELETE(3), // For One2Many
-    REPLACE(4), // For Many2Many
-    UPDATE(5); // For One2Many
+
+    // Many2Many field command types
+    ADD(0),
+    REMOVE(1),
+    REPLACE(2),
+
+    // One2Many field command types
+    CREATE(3),
+    DELETE(4),
+    UPDATE(5);
 
     @JsonValue
     int code;
