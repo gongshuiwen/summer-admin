@@ -141,7 +141,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                         }
                         targetService.createBatch(command.getEntities());
                     } else {
-                        throw new RuntimeException();
+                        throw new IllegalArgumentException("The Command " + command.getCommandType()
+                                + " is not supported for one2many field in create method");
                     }
                 }
             }
@@ -173,7 +174,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                         RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
                         mapper.add(entityClass, entity.getId(), command.getIds());
                     } else {
-                        throw new IllegalArgumentException("The Command " + command.getCommandType() + " is not supported for create");
+                        throw new IllegalArgumentException("The Command " + command.getCommandType()
+                                + " is not supported for many2many field in create method");
                     }
                 }
             }
