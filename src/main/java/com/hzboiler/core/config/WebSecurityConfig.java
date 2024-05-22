@@ -38,7 +38,7 @@ public class WebSecurityConfig {
         ) throws Exception {
 
         http
-                // Disable CSRF protection for separation architecture
+                // Disable CSRF protection
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // Config login filter
