@@ -133,6 +133,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                 for (Command<BaseEntity> command : commands) {
                     if (command == null) break;
                     if (Objects.requireNonNull(command.getCommandType()) == CommandType.CREATE) {
+                        if (command.getEntities() == null || command.getEntities().isEmpty()) {
+                            throw new IllegalArgumentException("The entities of Command CREATE cannot be null or empty");
+                        }
                         for (BaseEntity targetEntity : command.getEntities()) {
                             inverseField.set(targetEntity, Many2One.ofId(entity.getId()));
                         }
