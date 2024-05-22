@@ -1,6 +1,36 @@
 package com.hzboiler.core.exception;
 
 
+/**
+ * Record class {@code BusinessExceptionEnum} is used to globally define business exception constants,
+ * which can be used to build {@link BusinessException}.
+ * <p>
+ * Define example:
+ * <blockquote><pre>
+ * public class CoreBusinessExceptionEnums {
+ *     public static final String NAME_SPACE = "core";
+ *     public static final BusinessExceptionEnum ERROR_TEST = new BusinessExceptionEnum(NAME_SPACE, 99999, "This error is for test!");
+ *     // prevent instantiation
+ *     private BusinessExceptionEnums() {}
+ * }</pre></blockquote>
+ *
+ * Usage example:
+ * <blockquote><pre>
+ * throw new BusinessException(BusinessExceptionEnums.ERROR_TEST);
+ * </pre></blockquote>
+ *
+ * Or use static import:
+ * <blockquote><pre>
+ * throw new BusinessException(ERROR_TEST);
+ * </pre></blockquote>
+ *
+ * @see CoreBusinessExceptionEnums
+ * @author gongshuiwen
+ *
+ * @param namespace exception namespace
+ * @param code exception code
+ * @param message exception message
+ */
 public record BusinessExceptionEnum(String namespace, int code, String message) {
 
     public static final String CORE_NAME_SPACE = "core";
