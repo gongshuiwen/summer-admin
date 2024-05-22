@@ -58,14 +58,6 @@ public class TestBaseControllerUpdate {
                         .content(objectMapper.writeValueAsBytes(mocks)));
     }
 
-    ResultActions doCreate(List<Mock> mocks) throws Exception {
-        return mockMvc.perform(
-                MockMvcRequestBuilders
-                        .post(MOCK_PATH)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(mocks)));
-    }
-
     @Test
     @WithAnonymousUser
     void testAnonymous() throws Exception {
