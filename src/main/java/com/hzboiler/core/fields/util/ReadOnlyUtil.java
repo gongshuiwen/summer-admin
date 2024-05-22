@@ -18,10 +18,10 @@ public class ReadOnlyUtil {
      * @return fields array, ensure all fields are always accessible
      */
     public static Field[] getReadOnlyFields(Class<?> clazz) {
-        return readOnlyFieldsCache.computeIfAbsent(clazz, ReadOnlyUtil::getReadOnlyFieldsInternal);
+        return readOnlyFieldsCache.computeIfAbsent(clazz, ReadOnlyUtil::_getReadOnlyFields);
     }
 
-    private static Field[] getReadOnlyFieldsInternal(Class<?> clazz) {
+    private static Field[] _getReadOnlyFields(Class<?> clazz) {
         Field[] fields = ReflectUtil.getAllDeclaredFieldsWithAnnotation(clazz, ReadOnly.class);
         for (Field field : fields) field.setAccessible(true);
         return fields;
