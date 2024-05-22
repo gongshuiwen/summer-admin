@@ -1,6 +1,8 @@
 package com.hzboiler.core.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.hzboiler.core.context.BaseContext;
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.entity.BaseEntity;
 import com.hzboiler.core.fields.Many2Many;
@@ -95,6 +97,10 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
     @DeleteMapping
     public R<Boolean> delete(@RequestParam @NotEmpty List<Long> ids) {
         return R.success(service.deleteByIds(ids));
+    }
+
+    protected BaseContext getContext() {
+        return BaseContextHolder.getContext();
     }
 
     @SuppressWarnings("unchecked")
