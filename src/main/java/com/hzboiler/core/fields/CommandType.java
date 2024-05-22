@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +19,12 @@ public enum CommandType {
     @JsonValue
     int code;
 
+    /**
+     * Get CommandType enum by code.
+     * @param code command type code
+     * @return CommandType enum
+     * @throws IllegalArgumentException Invalid command type code
+     */
     public static CommandType of(int code) {
         for (CommandType type : values()) {
             if (type.code == code) {

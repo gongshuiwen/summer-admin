@@ -12,17 +12,13 @@ public class Command<T extends BaseEntity> {
     private List<Long> ids;
     private List<T> entities;
 
+    // ===================================================
+    // Static factory methods for Many2Many field commands
+    // ===================================================
     public static <T extends BaseEntity> Command<T> add(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.ADD;
         command.ids = ids;
-        return command;
-    }
-
-    public static <T extends BaseEntity> Command<T> create(List<T> entities) {
-        Command<T> command = new Command<>();
-        command.commandType = CommandType.CREATE;
-        command.entities = entities;
         return command;
     }
 
@@ -33,16 +29,26 @@ public class Command<T extends BaseEntity> {
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> delete(List<Long> ids) {
+    public static <T extends BaseEntity> Command<T> replace(List<Long> ids) {
         Command<T> command = new Command<>();
-        command.commandType = CommandType.DELETE;
+        command.commandType = CommandType.REPLACE;
         command.ids = ids;
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> replace(List<Long> ids) {
+    // ==================================================
+    // Static factory methods for One2Many field commands
+    // ==================================================
+    public static <T extends BaseEntity> Command<T> create(List<T> entities) {
         Command<T> command = new Command<>();
-        command.commandType = CommandType.REPLACE;
+        command.commandType = CommandType.CREATE;
+        command.entities = entities;
+        return command;
+    }
+
+    public static <T extends BaseEntity> Command<T> delete(List<Long> ids) {
+        Command<T> command = new Command<>();
+        command.commandType = CommandType.DELETE;
         command.ids = ids;
         return command;
     }
