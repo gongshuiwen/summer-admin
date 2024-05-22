@@ -1,5 +1,8 @@
 package com.hzboiler.core.exception;
 
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Record class {@code BusinessExceptionEnum} is used to globally define business exception constants,
@@ -33,6 +36,9 @@ package com.hzboiler.core.exception;
  */
 public record BusinessExceptionEnum(String namespace, int code, String message) {
 
+    private record Key(String namespace, int code) {}
+    private static final Map<Key, BusinessExceptionEnum> REGISTRY = new ConcurrentHashMap<>();
+
     public static final String CORE_NAME_SPACE = "core";
 
     public static final BusinessExceptionEnum ERROR_AUTHENTICATION_FAILED = new BusinessExceptionEnum(CORE_NAME_SPACE, 80001, "身份认证失败！");
@@ -45,4 +51,15 @@ public record BusinessExceptionEnum(String namespace, int code, String message) 
     public static final BusinessExceptionEnum ERROR_INVALID_REQUEST_BODY = new BusinessExceptionEnum(CORE_NAME_SPACE, 90004, "Invalid request body!");
 
     public static final BusinessExceptionEnum ERROR_INTERNAL = new BusinessExceptionEnum(CORE_NAME_SPACE, 99999, "Server internal error!");
+
+    public BusinessExceptionEnum {
+        Objects.requireNonNull(namespace, "namespace must not be null");
+        Objects.requireNonNull(message, "message must not be null");
+        Key key = new Key(namespace, code);
+        if (REGISTRY.containsKey(key)) {
+            throw new IllegalArgumentException("Duplicate business exception enum: " + key);
+        }
+
+        REGISTRY.put(key, this);
+    }
 }
