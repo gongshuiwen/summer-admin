@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hzboiler.core.jackson2.AllowedForAdmin;
 import com.hzboiler.core.jackson2.SecurityBeanPropertyFilter;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.UpdateValidationGroup;
@@ -35,25 +34,21 @@ public abstract class BaseEntity implements Serializable {
 
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private LocalDateTime createTime;
 
     @Schema(description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private LocalDateTime updateTime;
 
     @Schema(description = "创建用户")
     @TableField(fill = FieldFill.INSERT)
-    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long createUser;
 
     @Schema(description = "更新用户")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @AllowedForAdmin
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private Long updateUser;
 
