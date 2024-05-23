@@ -19,7 +19,7 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(
             RedisConnectionFactory redisConnectionFactory,
-            @Autowired @Qualifier("springSessionDefaultRedisSerializer")
+            @Qualifier("springSessionDefaultRedisSerializer")
             RedisSerializer<Object> valueSerializer) {
 
         // Create RedisTemplate

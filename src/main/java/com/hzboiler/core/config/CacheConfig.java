@@ -25,7 +25,7 @@ public class CacheConfig {
     @Bean
     public RedisCacheManager redisCacheManager(
             RedisConnectionFactory redisConnectionFactory,
-            @Autowired @Qualifier("springSessionDefaultRedisSerializer")
+            @Qualifier("springSessionDefaultRedisSerializer")
             RedisSerializer<Object> valueSerializer) {
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
