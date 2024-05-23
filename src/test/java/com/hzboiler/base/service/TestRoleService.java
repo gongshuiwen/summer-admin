@@ -1,6 +1,7 @@
 package com.hzboiler.base.service;
 
-import com.hzboiler.base.model.Role;
+import com.hzboiler.module.base.model.Role;
+import com.hzboiler.module.base.service.RoleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

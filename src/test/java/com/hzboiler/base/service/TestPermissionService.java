@@ -1,6 +1,8 @@
 package com.hzboiler.base.service;
 
-import com.hzboiler.base.model.Permission;
+import com.hzboiler.module.base.model.Permission;
+import com.hzboiler.module.base.service.PermissionService;
+import com.hzboiler.module.base.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
