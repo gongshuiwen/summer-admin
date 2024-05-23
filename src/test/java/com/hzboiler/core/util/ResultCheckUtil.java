@@ -1,4 +1,4 @@
-package com.hzboiler.core.utils;
+package com.hzboiler.core.util;
 
 import com.hzboiler.core.protocal.R;
 import org.hamcrest.core.Is;

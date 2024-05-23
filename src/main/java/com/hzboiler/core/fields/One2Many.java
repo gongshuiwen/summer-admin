@@ -2,7 +2,7 @@ package com.hzboiler.core.fields;
 
 import com.hzboiler.core.fields.annotations.InverseField;
 import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.core.utils.ReflectUtil;
+import com.hzboiler.core.util.ReflectUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 

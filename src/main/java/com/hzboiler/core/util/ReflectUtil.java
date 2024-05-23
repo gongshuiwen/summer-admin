@@ -1,4 +1,4 @@
-package com.hzboiler.core.utils;
+package com.hzboiler.core.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

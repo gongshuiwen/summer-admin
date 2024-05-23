@@ -1,7 +1,7 @@
 package com.hzboiler.core.fields.util;
 
 import com.hzboiler.core.fields.annotations.ReadOnly;
-import com.hzboiler.core.utils.ReflectUtil;
+import com.hzboiler.core.util.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.Map;
