@@ -1,4 +1,4 @@
-package com.hzboiler.base.service;
+package com.hzboiler.module.base.service;
 
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import com.hzboiler.module.base.model.Permission;

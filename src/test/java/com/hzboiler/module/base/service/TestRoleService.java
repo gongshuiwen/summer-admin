@@ -1,4 +1,4 @@
-package com.hzboiler.base.service;
+package com.hzboiler.module.base.service;
 
 import com.hzboiler.module.base.model.Role;
 import com.hzboiler.module.base.service.RoleService;
