@@ -1,19 +1,14 @@
 package com.hzboiler.core.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.core.mapper.MockMapper;
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -21,33 +16,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_DELETE;
-import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
-
-@SpringBootTest
-@AutoConfigureMockMvc
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-public class TestBaseControllerDelete {
+public class TestBaseControllerDelete extends ControllerTestBase {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";
     static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + ":" + AUTHORITY_DELETE;
 
-    MockMvc mockMvc;
-
+    @Autowired
     MockMapper mockMapper;
-
-    ObjectMapper objectMapper;
-
-    public TestBaseControllerDelete(
-            @Autowired MockMvc mockMvc,
-            @Autowired MockMapper mockMapper,
-            @Autowired MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
-        this.mockMvc = mockMvc;
-        this.mockMapper = mockMapper;
-        this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
-    }
 
     ResultActions doDelete(List<Long> ids) throws Exception {
         return mockMvc.perform(
@@ -60,15 +40,13 @@ public class TestBaseControllerDelete {
     @Test
     @WithAnonymousUser
     void testAnonymous() throws Exception {
-        ResultActions resultActions = doDelete(Arrays.asList(1L, 2L));
-        checkResultActionsAuthenticationFailed(resultActions);
+        checkResultActionsException(doDelete(Arrays.asList(1L, 2L)), ERROR_AUTHENTICATION_FAILED);
     }
 
     @Test
     @WithMockUser
     void testNotAuthorized() throws Exception {
-        ResultActions resultActions = doDelete(Arrays.asList(1L, 2L));
-        checkResultActionsAccessDined(resultActions);
+        checkResultActionsException(doDelete(Arrays.asList(1L, 2L)), ERROR_ACCESS_DENIED);
     }
 
     @Test
@@ -92,6 +70,6 @@ public class TestBaseControllerDelete {
     @Test
     @WithMockAdmin
     void testIdsEmpty() throws Exception {
-        checkResultActionsInvalidArguments(doDelete(List.of()));
+        checkResultActionsException(doDelete(List.of()), ERROR_INVALID_ARGUMENTS);
     }
 }

@@ -1,6 +1,5 @@
 package com.hzboiler.core.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.core.mapper.MockMapper;
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import com.hzboiler.core.entity.Mock;
@@ -8,14 +7,10 @@ import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -24,34 +19,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
 import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_CREATE;
-import static com.hzboiler.core.utils.ResultCheckUtil.*;
 
-
-@SpringBootTest
-@AutoConfigureMockMvc
 @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-public class TestBaseControllerCreate {
+public class TestBaseControllerCreate extends ControllerTestBase {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";
     static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_CREATE;
     static final List<Mock> MOCKS = List.of(new Mock("mock1"), new Mock("mock2"));
 
-    MockMvc mockMvc;
-
+    @Autowired
     MockMapper mockMapper;
-
-    ObjectMapper objectMapper;
-
-    public TestBaseControllerCreate(
-            @Autowired MockMvc mockMvc,
-            @Autowired MockMapper mockMapper,
-            @Autowired MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
-        this.mockMvc = mockMvc;
-        this.mockMapper = mockMapper;
-        this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
-    }
 
     ResultActions doCreate(List<Mock> mocks) throws Exception {
         return mockMvc.perform(
@@ -64,15 +44,13 @@ public class TestBaseControllerCreate {
     @Test
     @WithAnonymousUser
     void testAnonymous() throws Exception {
-        ResultActions resultActions = doCreate(MOCKS);
-        checkResultActionsAuthenticationFailed(resultActions);
+        checkResultActionsException(doCreate(MOCKS), ERROR_AUTHENTICATION_FAILED);
     }
 
     @Test
     @WithMockUser
     void testNotAuthorized() throws Exception {
-        ResultActions resultActions = doCreate(MOCKS);
-        checkResultActionsAccessDined(resultActions);
+        checkResultActionsException(doCreate(MOCKS), ERROR_ACCESS_DENIED);
     }
 
     @Test
@@ -111,25 +89,25 @@ public class TestBaseControllerCreate {
     @Test
     @WithMockAdmin
     void testEmptyList() throws Exception {
-        checkResultActionsInvalidArguments(doCreate(new ArrayList<>()));
+        checkResultActionsException(doCreate(new ArrayList<>()), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
     @WithMockAdmin
     void testNameNull() throws Exception {
-        checkResultActionsInvalidArguments(doCreate(List.of(new Mock(null))));
+        checkResultActionsException(doCreate(List.of(new Mock(null))), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
     @WithMockAdmin
     void testNameEmpty() throws Exception {
-        checkResultActionsInvalidArguments(doCreate(List.of(new Mock(""))));
+        checkResultActionsException(doCreate(List.of(new Mock(""))), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
     @WithMockAdmin
     void testNameBlank() throws Exception {
-        checkResultActionsInvalidArguments(doCreate(List.of(new Mock("   "))));
+        checkResultActionsException(doCreate(List.of(new Mock("   "))), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
@@ -137,7 +115,7 @@ public class TestBaseControllerCreate {
     void testIdNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setId(1L);
-        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
+        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
@@ -145,7 +123,7 @@ public class TestBaseControllerCreate {
     void testCreateTimeNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setCreateTime(LocalDateTime.now());
-        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
+        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
@@ -153,7 +131,7 @@ public class TestBaseControllerCreate {
     void testUpdateTimeNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateTime(LocalDateTime.now());
-        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
+        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
@@ -161,7 +139,7 @@ public class TestBaseControllerCreate {
     void testCreateUserNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setCreateUser(1L);
-        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
+        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
     }
 
     @Test
@@ -169,6 +147,6 @@ public class TestBaseControllerCreate {
     void testUpdateUserNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateUser(1L);
-        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
+        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
     }
 }
