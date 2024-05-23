@@ -11,8 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.*;
 
-import static com.hzboiler.core.utils.Constants.ROLE_PREFIX;
-import static com.hzboiler.core.utils.Constants.ROLE_SYS_ADMIN;
+import static com.hzboiler.core.security.Constants.ROLE_PREFIX;
+import static com.hzboiler.core.security.Constants.ROLE_SYS_ADMIN;
 
 public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
 

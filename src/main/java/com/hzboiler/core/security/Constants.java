@@ -1,4 +1,4 @@
-package com.hzboiler.core.utils;
+package com.hzboiler.core.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

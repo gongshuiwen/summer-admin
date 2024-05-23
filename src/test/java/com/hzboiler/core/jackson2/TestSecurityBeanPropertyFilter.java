@@ -21,7 +21,7 @@ import java.util.List;
 
 import static com.hzboiler.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
 import static com.hzboiler.core.jackson2.SecurityBeanPropertyFilter.INSTANCE;
-import static com.hzboiler.core.utils.Constants.*;
+import static com.hzboiler.core.security.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSecurityBeanPropertyFilter {

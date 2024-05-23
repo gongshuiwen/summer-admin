@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.hzboiler.core.utils.Constants.ROLE_PREFIX;
+import static com.hzboiler.core.security.Constants.ROLE_PREFIX;
 
 @Getter
 @Setter

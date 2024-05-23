@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.hzboiler.core.utils.Constants.AUTHORITY_ROLE_SYS_ADMIN;
+import static com.hzboiler.core.security.Constants.AUTHORITY_ROLE_SYS_ADMIN;
 
 /**
  * BaseContext stores common data for every request of the application,
