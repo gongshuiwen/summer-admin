@@ -1,6 +1,7 @@
 package com.hzboiler.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -14,6 +15,7 @@ import com.hzboiler.core.fields.Many2One;
 import com.hzboiler.core.fields.One2Many;
 import com.hzboiler.core.interceptor.BaseInterceptor;
 import com.hzboiler.core.jackson2.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -47,7 +49,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(
+            @Qualifier("mappingJackson2HttpMessageConverterObjectMapper") ObjectMapper objectMapper
+    ) {
+        return new MappingJackson2HttpMessageConverter(objectMapper);
+    }
+
+    @Bean
+    public ObjectMapper mappingJackson2HttpMessageConverterObjectMapper() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
                 .simpleDateFormat(DEFAULT_DATE_TIME_FORMAT)
                 .serializationInclusion(JsonInclude.Include.NON_NULL)
@@ -66,6 +75,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .deserializerByType(One2Many.class, new One2ManyDeserializer())
                 .deserializerByType(Many2Many.class, new Many2ManyDeserializer())
                 .filters(new SimpleFilterProvider().addFilter(SecurityBeanPropertyFilter.FILTER_ID, SecurityBeanPropertyFilter.INSTANCE));
-        return new MappingJackson2HttpMessageConverter(builder.build());
+        return builder.build();
     }
 }

@@ -3,9 +3,9 @@ package com.hzboiler.core.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.core.security.authentication.*;
 import com.hzboiler.core.security.access.CustomAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -26,9 +26,10 @@ public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
 
-    public WebSecurityConfig(MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter) {
+    public WebSecurityConfig(
+            @Qualifier("mappingJackson2HttpMessageConverterObjectMapper") ObjectMapper ObjectMapper) {
         // use the same objectMapper instance with the MappingJackson2HttpMessageConverter
-        this.objectMapper = mappingJackson2HttpMessageConverter.getObjectMapper();
+        this.objectMapper = ObjectMapper;
     }
 
     @Bean
