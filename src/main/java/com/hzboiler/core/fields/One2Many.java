@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 public class One2Many<T extends BaseEntity> {
 

@@ -17,6 +17,7 @@ import org.springframework.security.jackson2.SecurityJackson2Modules;
 
 /**
  * Refer to <a href="https://github.com/spring-projects/spring-session/blob/main/spring-session-samples/spring-session-sample-boot-redis-json/src/main/java/sample/config/SessionConfig.java">Spring Session Github</a>
+ * @author gongshuiwen
  */
 @Configuration
 public class SessionConfig implements BeanClassLoaderAware {

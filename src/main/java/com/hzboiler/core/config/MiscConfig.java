@@ -4,6 +4,9 @@ import com.hzboiler.core.util.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author gongshuiwen
+ */
 @Configuration
 public class MiscConfig {
 

@@ -30,6 +30,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * @author gongshuiwen
+ */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 

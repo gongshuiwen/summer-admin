@@ -13,7 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @Setter
 public abstract class TreeBaseEntity<T extends TreeBaseEntity<?>> extends BaseEntity {

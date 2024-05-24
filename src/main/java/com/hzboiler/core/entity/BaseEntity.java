@@ -19,6 +19,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @Setter
 @JsonFilter(SecurityBeanPropertyFilter.FILTER_ID)

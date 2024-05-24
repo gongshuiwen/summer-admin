@@ -1,6 +1,5 @@
 package com.hzboiler.core.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +13,9 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.time.Duration;
 
+/**
+ * @author gongshuiwen
+ */
 @EnableCaching
 @Configuration
 public class CacheConfig {

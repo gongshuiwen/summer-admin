@@ -6,6 +6,9 @@ import com.hzboiler.core.mybatis.Many2OneTypeHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author gongshuiwen
+ */
 @Configuration
 public class MyBatisConfig {
 

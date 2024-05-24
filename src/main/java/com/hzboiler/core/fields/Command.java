@@ -5,6 +5,9 @@ import lombok.Getter;
 
 import java.util.List;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 public class Command<T extends BaseEntity> {
 

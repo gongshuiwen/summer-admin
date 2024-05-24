@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * @author gongshuiwen
+ */
 @Setter
 public abstract class BaseUser extends BaseEntity implements Serializable, UserDetails {
 

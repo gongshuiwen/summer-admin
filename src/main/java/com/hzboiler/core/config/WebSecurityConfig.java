@@ -20,6 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
+/**
+ * @author gongshuiwen
+ */
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {

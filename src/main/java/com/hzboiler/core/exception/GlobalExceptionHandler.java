@@ -22,7 +22,9 @@ import java.util.Set;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
 
-
+/**
+ * @author gongshuiwen
+ */
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler {
