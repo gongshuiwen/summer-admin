@@ -1,6 +1,5 @@
 package com.hzboiler.core.config;
 
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.hzboiler.core.jackson2.SecurityBeanPropertyFilter;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,11 +62,10 @@ public class SessionConfig implements BeanClassLoaderAware {
     }
 
     /**
-     * @see
-     * org.springframework.beans.factory.BeanClassLoaderAware#setBeanClassLoader(java.lang.ClassLoader)
+     * @see org.springframework.beans.factory.BeanClassLoaderAware#setBeanClassLoader(java.lang.ClassLoader)
      */
     @Override
-    public void setBeanClassLoader(@NotNull ClassLoader classLoader) {
+    public void setBeanClassLoader(ClassLoader classLoader) {
         loader = classLoader;
     }
 }

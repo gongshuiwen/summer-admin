@@ -3,7 +3,6 @@ package com.hzboiler.core.fields;
 import com.hzboiler.core.entity.BaseEntity;
 import com.hzboiler.core.util.ReflectUtil;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -45,7 +44,6 @@ public class Many2One<T extends BaseEntity> {
         return targetClass;
     }
 
-    @NotNull
     private static Class<?> _getTargetClass(Field field) {
         if (field.getType() != Many2One.class)
             throw new IllegalArgumentException("Not a Many2One field: " + field.getName());

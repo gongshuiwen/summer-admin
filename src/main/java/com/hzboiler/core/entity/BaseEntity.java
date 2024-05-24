@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
 @Getter
 @Setter
 @JsonFilter(SecurityBeanPropertyFilter.FILTER_ID)
