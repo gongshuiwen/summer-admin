@@ -28,14 +28,13 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Validated
 public abstract class BaseController<S extends BaseService<T>, T extends BaseEntity> implements InitializingBean {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    public S service;
-    public Class<T> entityClass;
+    protected S service;
+    protected Class<T> entityClass;
 
     @Operation(summary = "ID查询")
     @GetMapping
