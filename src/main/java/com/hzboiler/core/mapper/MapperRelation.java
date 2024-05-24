@@ -4,6 +4,9 @@ import com.hzboiler.core.entity.BaseEntity;
 
 import java.lang.annotation.*;
 
+/**
+ * @author gongshuiwen
+ */
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

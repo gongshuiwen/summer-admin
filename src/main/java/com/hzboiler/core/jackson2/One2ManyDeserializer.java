@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author gongshuiwen
+ */
 public class One2ManyDeserializer extends StdDeserializer<One2Many<?>> implements ContextualDeserializer {
 
     private JavaType type;

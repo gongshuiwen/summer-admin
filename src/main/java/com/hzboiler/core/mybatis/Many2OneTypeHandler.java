@@ -8,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author gongshuiwen
+ */
 public class Many2OneTypeHandler extends BaseTypeHandler<Many2One<?>> {
-
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Many2One<?> parameter, JdbcType jdbcType) throws SQLException {

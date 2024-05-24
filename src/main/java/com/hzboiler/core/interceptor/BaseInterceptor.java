@@ -6,7 +6,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
+/**
+ * @author gongshuiwen
+ */
 public class BaseInterceptor implements HandlerInterceptor {
 
     @Override

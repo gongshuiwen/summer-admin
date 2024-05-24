@@ -14,6 +14,9 @@ import java.util.*;
 import static com.hzboiler.core.security.Constants.ROLE_PREFIX;
 import static com.hzboiler.core.security.Constants.ROLE_SYS_ADMIN;
 
+/**
+ * @author gongshuiwen
+ */
 public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
 
     public static final String FILTER_ID = "securityBeanPropertyFilter";

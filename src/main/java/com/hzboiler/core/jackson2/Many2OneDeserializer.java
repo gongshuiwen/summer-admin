@@ -7,6 +7,9 @@ import com.hzboiler.core.fields.Many2One;
 
 import java.io.IOException;
 
+/**
+ * @author gongshuiwen
+ */
 public class Many2OneDeserializer extends StdDeserializer<Many2One<?>>{
 
     public Many2OneDeserializer() {

@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author gongshuiwen
+ */
 public class Many2ManyDeserializer extends StdDeserializer<Many2Many<?>> {
 
     private final TypeReference<List<Long>> typeReferenceListLong = new TypeReference<>() {

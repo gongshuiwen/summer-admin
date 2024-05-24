@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author gongshuiwen
+ */
 public class RelationMapperRegistry {
 
     private static final Map<Key, MapperFactoryBean<?>> registry = new ConcurrentHashMap<>();

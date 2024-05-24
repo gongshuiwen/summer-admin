@@ -8,6 +8,9 @@ import java.util.Arrays;
 
 import static com.hzboiler.core.mapper.RelationMapper.*;
 
+/**
+ * @author gongshuiwen
+ */
 @Component
 public class MapperBeanPostProcessor implements BeanPostProcessor {
 

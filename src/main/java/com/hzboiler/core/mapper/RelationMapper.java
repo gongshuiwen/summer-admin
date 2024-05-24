@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
+/**
+ * @author gongshuiwen
+ */
 public interface RelationMapper {
 
     Map<Class<?>, String> mapperTables = new HashMap<>();

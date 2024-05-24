@@ -7,6 +7,9 @@ import com.hzboiler.core.fields.Many2Many;
 
 import java.io.IOException;
 
+/**
+ * @author gongshuiwen
+ */
 public class Many2ManySerializer extends StdSerializer<Many2Many<?>> {
 
     public Many2ManySerializer() {

@@ -7,6 +7,9 @@ import com.hzboiler.core.fields.One2Many;
 
 import java.io.IOException;
 
+/**
+ * @author gongshuiwen
+ */
 public class One2ManySerializer extends StdSerializer<One2Many<?>> {
 
     public One2ManySerializer() {
