@@ -10,6 +10,9 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * @author gongshuiwen
+ */
 @Target({ElementType.FIELD})
 @Retention(RUNTIME)
 @Documented

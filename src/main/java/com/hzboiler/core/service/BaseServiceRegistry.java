@@ -5,6 +5,9 @@ import com.hzboiler.core.entity.BaseEntity;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author gongshuiwen
+ */
 public class BaseServiceRegistry {
 
     private static final Map<Class<?>, BaseService<?>> baseServiceRegistry = new ConcurrentHashMap<>();
