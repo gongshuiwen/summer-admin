@@ -18,8 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
-import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_SELECT;
+import static com.hzboiler.core.security.Constants.AUTHORITY_SELECT;
 
+/**
+ * @author gongshuiwen
+ */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
 public class TestBaseControllerSelect extends ControllerTestBase {
 

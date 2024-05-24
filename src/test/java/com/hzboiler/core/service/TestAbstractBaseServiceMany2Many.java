@@ -15,9 +15,12 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static com.hzboiler.core.security.DataAccessAuthority.*;
+import static com.hzboiler.core.security.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author gongshuiwen
+ */
 @SpringBootTest
 @Sql(scripts = {
         "/sql/test/ddl/mock1.sql",

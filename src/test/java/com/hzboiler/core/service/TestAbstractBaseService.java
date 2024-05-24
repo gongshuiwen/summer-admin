@@ -13,8 +13,11 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static com.hzboiler.core.security.DataAccessAuthority.*;
+import static com.hzboiler.core.security.Constants.*;
 
+/**
+ * @author gongshuiwen
+ */
 @SpringBootTest
 public class TestAbstractBaseService {
 

@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
-import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_DELETE;
+import static com.hzboiler.core.security.Constants.AUTHORITY_DELETE;
 
+/**
+ * @author gongshuiwen
+ */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
 public class TestBaseControllerDelete extends ControllerTestBase {
 

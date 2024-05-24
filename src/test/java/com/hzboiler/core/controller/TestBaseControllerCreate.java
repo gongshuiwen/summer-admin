@@ -20,8 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
-import static com.hzboiler.core.security.DataAccessAuthority.AUTHORITY_CREATE;
+import static com.hzboiler.core.security.Constants.AUTHORITY_CREATE;
 
+/**
+ * @author gongshuiwen
+ */
 @Sql(scripts = {"/sql/test/ddl/mock.sql"})
 public class TestBaseControllerCreate extends ControllerTestBase {
 

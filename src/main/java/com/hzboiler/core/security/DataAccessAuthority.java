@@ -3,19 +3,21 @@ package com.hzboiler.core.security;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.hzboiler.core.security.Constants.*;
+
+/**
+ * Data access authority enumerations
+ *
+ * @author gongshuiwen
+ */
 @Getter
 @AllArgsConstructor
 public enum DataAccessAuthority {
 
-    SELECT("SELECT"),
-    CREATE("CREATE"),
-    UPDATE("UPDATE"),
-    DELETE("DELETE");
-
-    public static final String AUTHORITY_SELECT = "SELECT";
-    public static final String AUTHORITY_CREATE = "CREATE";
-    public static final String AUTHORITY_UPDATE = "UPDATE";
-    public static final String AUTHORITY_DELETE = "DELETE";
+    SELECT(AUTHORITY_SELECT),
+    CREATE(AUTHORITY_CREATE),
+    UPDATE(AUTHORITY_UPDATE),
+    DELETE(AUTHORITY_DELETE);
 
     private final String name;
 
