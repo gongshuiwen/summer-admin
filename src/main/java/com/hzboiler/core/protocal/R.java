@@ -3,6 +3,9 @@ package com.hzboiler.core.protocal;
 import com.hzboiler.core.exception.BusinessExceptionEnum;
 import lombok.Getter;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 public class R<T>{
 

@@ -8,6 +8,9 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @AllArgsConstructor
 public enum LikeOperator {

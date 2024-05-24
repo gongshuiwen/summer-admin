@@ -11,6 +11,9 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author gongshuiwen
+ */
 public record CustomLogoutSuccessHandler(ObjectMapper objectMapper) implements LogoutSuccessHandler {
 
     @Override

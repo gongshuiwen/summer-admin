@@ -13,6 +13,9 @@ import java.nio.charset.StandardCharsets;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
 
+/**
+ * @author gongshuiwen
+ */
 public record CustomAccessDeniedHandler(ObjectMapper objectMapper) implements AccessDeniedHandler {
 
     @Override

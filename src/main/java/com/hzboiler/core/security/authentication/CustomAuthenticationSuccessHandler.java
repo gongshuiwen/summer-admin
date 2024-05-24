@@ -12,6 +12,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author gongshuiwen
+ */
 public record CustomAuthenticationSuccessHandler(
         ObjectMapper objectMapper) implements AuthenticationSuccessHandler {
 

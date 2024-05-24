@@ -11,6 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * @author gongshuiwen
+ */
 @Setter
 @Getter
 public class Condition<T> {

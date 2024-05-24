@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @Setter
 public class Query<T> {

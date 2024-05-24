@@ -13,6 +13,9 @@ import java.nio.charset.StandardCharsets;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.ERROR_AUTHENTICATION_FAILED;
 
+/**
+ * @author gongshuiwen
+ */
 public record CustomAuthenticationFailureHandler(
         ObjectMapper objectMapper) implements AuthenticationFailureHandler {
 

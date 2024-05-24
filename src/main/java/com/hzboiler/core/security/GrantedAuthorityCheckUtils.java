@@ -5,6 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
+/**
+ * @author gongshuiwen
+ */
 public class GrantedAuthorityCheckUtils {
 
     public static boolean isAdmin() {

@@ -4,6 +4,9 @@ import com.hzboiler.core.entity.BaseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+/**
+ * @author gongshuiwen
+ */
 public class DataAccessAuthorityChecker {
 
     /**

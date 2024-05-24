@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @Setter
 public class OrderBy<T> {
