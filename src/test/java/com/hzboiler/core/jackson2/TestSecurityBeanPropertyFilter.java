@@ -7,17 +7,15 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.hzboiler.core.context.BaseContext;
 import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.module.base.model.Role;
-import com.hzboiler.module.base.model.User;
 import com.hzboiler.core.entity.BaseUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
-
+import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.Field;
-import java.util.List;
+import java.util.Set;
 
 import static com.hzboiler.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
 import static com.hzboiler.core.jackson2.SecurityBeanPropertyFilter.INSTANCE;
@@ -61,6 +59,24 @@ public class TestSecurityBeanPropertyFilter {
         }
     }
 
+    public static class User extends BaseUser {
+
+        @Override
+        public String getPassword() {
+            return "";
+        }
+
+        @Override
+        public String getUsername() {
+            return "";
+        }
+
+        public User(Long id, Set<GrantedAuthority> authorities) {
+            setId(id);
+            setAuthorities(authorities);
+        }
+    }
+
     private static void setBaseContextWithUser(BaseUser user) throws NoSuchFieldException, IllegalAccessException {
         BaseContext baseContext = BaseContextHolder.getContext();
         Field field = BaseContext.class.getDeclaredField("user");
@@ -93,37 +109,10 @@ public class TestSecurityBeanPropertyFilter {
         mock.setAllowedForRolesAndCreateUser(true);
     }
 
-    Role roleSysAdmin;
-    {
-        roleSysAdmin = new Role();
-        roleSysAdmin.setCode(CODE_SYS_ADMIN);
-    }
-
-    Role roleBaseUser;
-    {
-        roleBaseUser = new Role();
-        roleBaseUser.setCode(CODE_BASE_USER);
-    }
-
-    User userWithRoleSysAdmin;
-    {
-        userWithRoleSysAdmin = new User();
-        userWithRoleSysAdmin.setId(1L);
-        userWithRoleSysAdmin.addAuthoritiesWithRolesAndPermissions(List.of(roleSysAdmin), List.of());
-    }
-
-    User userWithRoleBaseUser;
-    {
-        userWithRoleBaseUser = new User();
-        userWithRoleBaseUser.setId(1L);
-        userWithRoleBaseUser.addAuthoritiesWithRolesAndPermissions(List.of(roleBaseUser), List.of());
-    }
-
-    User userWithRoleEmpty;
-    {
-        userWithRoleEmpty = new User();
-        userWithRoleEmpty.setId(1L);
-    }
+    Long userId = 2L;
+    User userWithRoleSysAdmin = new User(userId, Set.of(GRANTED_AUTHORITY_ROLE_SYS_ADMIN));
+    User userWithRoleBaseUser = new User(userId, Set.of(GRANTED_AUTHORITY_ROLE_BASE_USER));
+    User userWithRoleEmpty = new User(userId, Set.of());
 
     @Test
     public void testAllowedForAdmin() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
@@ -142,23 +131,23 @@ public class TestSecurityBeanPropertyFilter {
     @Test
     public void testAllowedForCreateUser() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
         setBaseContextWithUser(userWithRoleEmpty);
-        mock.setCreateUser(1L);
+        mock.setCreateUser(userId);
         String result = mapper.writeValueAsString(mock);
-        assertEquals("{\"createUser\":1,\"allowedForCreateUser\":true,\"allowedForCreateOrUpdateUser\":true}", result);
+        assertEquals("{\"createUser\":2,\"allowedForCreateUser\":true,\"allowedForCreateOrUpdateUser\":true}", result);
     }
 
     @Test
     public void testAllowedForUpdateUser() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
         setBaseContextWithUser(userWithRoleEmpty);
-        mock.setUpdateUser(1L);
+        mock.setUpdateUser(userId);
         String result = mapper.writeValueAsString(mock);
-        assertEquals("{\"updateUser\":1,\"allowedForUpdateUser\":true,\"allowedForCreateOrUpdateUser\":true}", result);
+        assertEquals("{\"updateUser\":2,\"allowedForUpdateUser\":true,\"allowedForCreateOrUpdateUser\":true}", result);
     }
 
     @Test void testAllowedForRolesAndCreateUser() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
         setBaseContextWithUser(userWithRoleBaseUser);
-        mock.setCreateUser(1L);
+        mock.setCreateUser(userId);
         String result = mapper.writeValueAsString(mock);
-        assertEquals("{\"createUser\":1,\"allowedForRoles\":true,\"allowedForAdminOrRoles\":true,\"allowedForCreateUser\":true,\"allowedForCreateOrUpdateUser\":true,\"allowedForRolesAndCreateUser\":true}", result);
+        assertEquals("{\"createUser\":2,\"allowedForRoles\":true,\"allowedForAdminOrRoles\":true,\"allowedForCreateUser\":true,\"allowedForCreateOrUpdateUser\":true,\"allowedForRolesAndCreateUser\":true}", result);
     }
 }
