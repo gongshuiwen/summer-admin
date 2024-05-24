@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.hzboiler.core.security.Constants.AUTHORITY_ROLE_SYS_ADMIN;
+import static com.hzboiler.core.security.Constants.GRANTED_AUTHORITY_ROLE_SYS_ADMIN;
 
 /**
  * BaseContext stores common data for every request of the application,
@@ -103,14 +103,14 @@ public class BaseContext {
 
     /**
      * Checks if the current user is an admin by retrieving their authorities and checking if they contain the
-     * AUTHORITY_ROLE_SYS_ADMIN authority.
+     * GRANTED_AUTHORITY_ROLE_SYS_ADMIN authority.
      *
      * @return true if the user is an admin, false otherwise.
      */
     public boolean isAdmin() {
         if (admin == null) {
             Collection<? extends GrantedAuthority> authorities = getAuthorities();
-            admin = authorities != null && authorities.contains(AUTHORITY_ROLE_SYS_ADMIN);
+            admin = authorities != null && authorities.contains(GRANTED_AUTHORITY_ROLE_SYS_ADMIN);
         }
         return admin;
     }
@@ -182,7 +182,7 @@ public class BaseContext {
             if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
                 request = servletRequestAttributes.getRequest();
             } else {
-
+                throw new RuntimeException("Failed to get HttpServletRequest from RequestContextHolder");
             }
         }
         return request;
