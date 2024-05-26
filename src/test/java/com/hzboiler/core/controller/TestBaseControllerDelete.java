@@ -23,7 +23,7 @@ import static com.hzboiler.core.security.Constants.AUTHORITY_DELETE;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-public class TestBaseControllerDelete extends ControllerTestBase {
+class TestBaseControllerDelete extends ControllerTestBase {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";

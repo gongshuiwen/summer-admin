@@ -26,7 +26,7 @@ import static com.hzboiler.core.security.Constants.AUTHORITY_CREATE;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-public class TestBaseControllerCreate extends ControllerTestBase {
+class TestBaseControllerCreate extends ControllerTestBase {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";

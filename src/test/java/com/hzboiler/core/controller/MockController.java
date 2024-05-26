@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mock")
-public class MockController extends BaseController<MockService, Mock> {
+class MockController extends BaseController<MockService, Mock> {
 }
