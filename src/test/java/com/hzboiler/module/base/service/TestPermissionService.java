@@ -1,8 +1,6 @@
 package com.hzboiler.module.base.service;
 
 import com.hzboiler.module.base.model.Permission;
-import com.hzboiler.module.base.service.PermissionService;
-import com.hzboiler.module.base.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         "/sql/test/data/permission.sql",
         "/sql/test/data/role_permission.sql",
 })
-public class TestPermissionService {
+class TestPermissionService {
 
     @Autowired
     PermissionService permissionService;
@@ -33,7 +31,7 @@ public class TestPermissionService {
     UserService userService;
 
     @Test
-    public void testGetPermissionsByRoleId() {
+    void testGetPermissionsByRoleId() {
         Set<String> permissionsExpect = Set.of(
                 "User:SELECT",
                 "User:UPDATE",
@@ -46,7 +44,7 @@ public class TestPermissionService {
     }
 
     @Test
-    public void testGetPermissionsByRoleIds() {
+    void testGetPermissionsByRoleIds() {
         Set<String> permissionsExpect = Set.of(
                 "User:SELECT",
                 "User:UPDATE",
@@ -59,7 +57,7 @@ public class TestPermissionService {
     }
 
     @Test
-    public void testAddRolePermissionsByRoleId() {
+    void testAddRolePermissionsByRoleId() {
         permissionService.addRolePermissions(2L, Set.of(1L, 2L, 3L, 4L));
         Set<String> permissionsExpect = Set.of(
                 "User:SELECT",
@@ -75,7 +73,7 @@ public class TestPermissionService {
     }
 
     @Test
-    public void testRemoveRolePermissionsByRoleId() {
+    void testRemoveRolePermissionsByRoleId() {
         permissionService.removeRolePermissions(2L, new HashSet<>(Arrays.asList(2L, 3L, 4L)));
         Set<String> permissionsExpect = Set.of(
                 "User:SELECT",
@@ -88,7 +86,7 @@ public class TestPermissionService {
     }
 
     @Test
-    public void testReplaceRolePermissionsByRoleId() {
+    void testReplaceRolePermissionsByRoleId() {
         permissionService.replaceRolePermissions(2L, Set.of(1L, 2L, 3L, 4L));
         Set<String> permissionsExpect = Set.of("User:SELECT", "User:CREATE", "User:UPDATE", "User:DELETE");
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(Set.of(2L));

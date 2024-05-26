@@ -4,8 +4,6 @@ import com.hzboiler.core.annotaion.WithMockAdmin;
 import com.hzboiler.module.base.model.Permission;
 import com.hzboiler.module.base.model.Role;
 import com.hzboiler.module.base.model.User;
-import com.hzboiler.module.base.service.PermissionService;
-import com.hzboiler.module.base.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
         "/sql/test/data/user_role.sql",
         "/sql/test/data/role_permission.sql",
 })
-public class TestUserService {
+class TestUserService {
 
     @Autowired
     UserService userService;
@@ -46,7 +44,7 @@ public class TestUserService {
     PasswordEncoder passwordEncoder;
 
     @Test
-    public void testLoadUserByUsername() {
+    void testLoadUserByUsername() {
         User user = userService.loadUserByUsername("admin");
         assertEquals("admin", user.getUsername());
 
@@ -66,7 +64,7 @@ public class TestUserService {
 
     @Test
     @WithMockAdmin
-    public void testCreateOne() {
+    void testCreateOne() {
         // Create user
         User userCreate = new User();
         userCreate.setUsername("test");
@@ -95,7 +93,7 @@ public class TestUserService {
 
     @Test
     @WithMockAdmin
-    public void testChangePassword() {
+    void testChangePassword() {
         // Create user
         User userCreate = new User();
         userCreate.setUsername("test");
