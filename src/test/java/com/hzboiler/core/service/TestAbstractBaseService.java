@@ -1,9 +1,11 @@
 package com.hzboiler.core.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.entity.Mock;
 import com.hzboiler.core.mapper.MockMapper;
 import com.hzboiler.core.protocal.Condition;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,11 @@ public class TestAbstractBaseService {
 
     @Autowired
     MockService mockService;
+
+    @AfterEach
+    void afterEach() {
+        BaseContextHolder.clearContext();
+    }
 
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})

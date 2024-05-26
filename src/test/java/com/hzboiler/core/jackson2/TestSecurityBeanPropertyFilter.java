@@ -11,6 +11,7 @@ import com.hzboiler.core.entity.BaseUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -113,6 +114,11 @@ class TestSecurityBeanPropertyFilter {
     User userWithRoleSysAdmin = new User(userId, Set.of(GRANTED_AUTHORITY_ROLE_SYS_ADMIN));
     User userWithRoleBaseUser = new User(userId, Set.of(GRANTED_AUTHORITY_ROLE_BASE_USER));
     User userWithRoleEmpty = new User(userId, Set.of());
+
+    @AfterEach
+    void afterEach() {
+        BaseContextHolder.clearContext();
+    }
 
     @Test
     void testAllowedForAdmin() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {

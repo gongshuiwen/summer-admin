@@ -1,5 +1,6 @@
 package com.hzboiler.core.service;
 
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.entity.Mock1;
 import com.hzboiler.core.entity.Mock3;
 import com.hzboiler.core.fields.Command;
@@ -7,6 +8,7 @@ import com.hzboiler.core.fields.Many2Many;
 import com.hzboiler.core.mapper.Mock1Mapper;
 import com.hzboiler.core.mapper.Mock3Mapper;
 import com.hzboiler.core.mapper.MockRelationMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,6 +58,11 @@ class TestAbstractBaseServiceMany2Many {
 
     @Autowired
     Mock3Service mock3Service;
+
+    @AfterEach
+    void afterEach() {
+        BaseContextHolder.clearContext();
+    }
 
     @Test
     @WithMockUser(authorities = {

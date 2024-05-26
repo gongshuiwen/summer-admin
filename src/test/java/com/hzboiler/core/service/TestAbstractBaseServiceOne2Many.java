@@ -1,6 +1,7 @@
 package com.hzboiler.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hzboiler.core.context.BaseContextHolder;
 import com.hzboiler.core.entity.Mock1;
 import com.hzboiler.core.entity.Mock2;
 import com.hzboiler.core.fields.Command;
@@ -8,6 +9,7 @@ import com.hzboiler.core.fields.One2Many;
 import com.hzboiler.core.mapper.Mock1Mapper;
 import com.hzboiler.core.mapper.Mock2Mapper;
 import com.hzboiler.core.mapper.MockRelationMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,6 +58,10 @@ class TestAbstractBaseServiceOne2Many {
     @Autowired
     Mock2Service mock2Service;
 
+    @AfterEach
+    void afterEach() {
+        BaseContextHolder.clearContext();
+    }
 
     @Test
     @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK2_AUTHORITY_CREATE})
