@@ -20,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
         "/sql/test/data/mock2.sql",
         "/sql/test/data/mock_relation.sql",
 })
-public class TestRelationMapper {
+class TestRelationMapper {
 
     @Autowired
     MockRelationMapper mapper;
 
     @Test
-    public void testGetTargetIds() {
+    void testGetTargetIds() {
         List<Long> mock2Ids = mapper.getTargetIds(Mock1.class, List.of(1L));
         assertEquals(2, mock2Ids.size());
         assertEquals(1, mock2Ids.get(0));
@@ -39,7 +39,7 @@ public class TestRelationMapper {
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         // remove all
         mapper.removeAll(Mock1.class, 1L);
         assertEquals(0, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
@@ -51,20 +51,20 @@ public class TestRelationMapper {
     }
 
     @Test
-    public void testRemove() {
+    void testRemove() {
         mapper.remove(Mock1.class, 1L, List.of(1L));
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
         assertEquals(2, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));
     }
 
     @Test
-    public void testRemoveAll() {
+    void testRemoveAll() {
         mapper.removeAll(Mock1.class, 1L);
         assertEquals(0, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
     }
 
     @Test
-    public void testReplace() {
+    void testReplace() {
         mapper.replace(Mock1.class, 1L, List.of(1L));
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));

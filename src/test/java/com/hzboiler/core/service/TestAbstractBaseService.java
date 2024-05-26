@@ -36,7 +36,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
-    public void testSelectById() {
+    void testSelectById() {
         Mock result = mockService.selectById(1L);
         Assertions.assertEquals(1L, result.getId());
         Assertions.assertEquals("mock1", result.getName());
@@ -45,7 +45,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
-    public void testSelectByIds() {
+    void testSelectByIds() {
         List<Long> ids = List.of(1L, 2L);
         List<Mock> results = mockService.selectByIds(ids);
         Assertions.assertEquals(2, results.size());
@@ -58,7 +58,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
-    public void testPage() {
+    void testPage() {
         IPage<Mock> pageResult = mockService.page(1L, 20L);
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(2, pageResult.getTotal());
@@ -113,7 +113,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
-    public void testCount() {
+    void testCount() {
         Long count = mockService.count((Condition<Mock>) null);
         Assertions.assertEquals(2, count);
 
@@ -125,7 +125,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_CREATE})
-    public void testCreateOne() {
+    void testCreateOne() {
         Mock mock = new Mock("mock");
         mockService.createOne(mock);
         Assertions.assertEquals(1, mockMapper.selectList(null).size());
@@ -149,7 +149,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_CREATE})
-    public void testCreateBatch() {
+    void testCreateBatch() {
         List<Mock> mocks = List.of(new Mock("mock1"), new Mock("mock2"));
         mockService.createBatch(mocks);
         Assertions.assertEquals(2, mockMapper.selectList(null).size());
@@ -176,7 +176,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_UPDATE})
-    public void testUpdateById() {
+    void testUpdateById() {
         Long id = 1L;
         Mock mock = new Mock("mock");
         mockService.updateById(id, mock);
@@ -188,7 +188,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_UPDATE})
-    public void testUpdateByIds() {
+    void testUpdateByIds() {
         List<Long> ids = List.of(1L, 2L);
         Mock mock = new Mock("mock");
         mockService.updateByIds(ids, mock);
@@ -202,7 +202,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_DELETE})
-    public void testDeleteById() {
+    void testDeleteById() {
         Long id = 1L;
         Assertions.assertNotNull(mockMapper.selectById(id));
         mockService.deleteById(id);
@@ -212,7 +212,7 @@ public class TestAbstractBaseService {
     @Test
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_DELETE})
-    public void testDeleteByIds() {
+    void testDeleteByIds() {
         List<Long> ids = List.of(1L, 2L);
         Assertions.assertEquals(2, mockMapper.selectBatchIds(ids).size());
         mockService.deleteByIds(ids);

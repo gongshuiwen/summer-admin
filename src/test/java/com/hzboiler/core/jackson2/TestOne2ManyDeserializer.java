@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TestOne2ManyDeserializer {
+class TestOne2ManyDeserializer {
 
     ObjectMapper mapper;
     {
@@ -26,7 +26,7 @@ public class TestOne2ManyDeserializer {
     }
 
     @Test
-    public void testCommandCreate() throws JsonProcessingException {
+    void testCommandCreate() throws JsonProcessingException {
         Mock1 mock1 = mapper.readValue("{\"mock2s1\": [[3, [{\"name\": \"mock2-1\"}, {\"name\": \"mock2-2\"}]]]}", Mock1.class);
         One2Many<Mock2> one2Many = mock1.getMock2s1();
         assertEquals(1, one2Many.getCommands().size());
@@ -40,7 +40,7 @@ public class TestOne2ManyDeserializer {
     }
 
     @Test
-    public void testCommandDelete() throws JsonProcessingException {
+    void testCommandDelete() throws JsonProcessingException {
         One2Many<?> One2Many = mapper.readValue("[[4, [1, 2, 3]]]", One2Many.class);
         assertEquals(1, One2Many.getCommands().size());
 
@@ -51,7 +51,7 @@ public class TestOne2ManyDeserializer {
     }
 
     @Test
-    public void testCommandUpdate() throws JsonProcessingException {
+    void testCommandUpdate() throws JsonProcessingException {
         Mock1 mock1 = mapper.readValue("{\"mock2s1\": [[5, 1, {\"name\": \"mock2-1\"}]]}", Mock1.class);
         One2Many<Mock2> one2Many = mock1.getMock2s1();
         assertEquals(1, one2Many.getCommands().size());

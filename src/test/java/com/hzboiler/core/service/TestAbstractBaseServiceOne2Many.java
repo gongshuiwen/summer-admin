@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
         "/sql/test/ddl/mock1.sql",
         "/sql/test/ddl/mock2.sql",
 })
-public class TestAbstractBaseServiceOne2Many {
+class TestAbstractBaseServiceOne2Many {
 
     static final String MOCK1_ENTITY_NAME = "Mock1";
     static final String MOCK1_AUTHORITY_SELECT = MOCK1_ENTITY_NAME + ":" + AUTHORITY_SELECT;
@@ -59,7 +59,7 @@ public class TestAbstractBaseServiceOne2Many {
 
     @Test
     @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK2_AUTHORITY_CREATE})
-    public void testOne2ManyCreateOneCommandCreate() {
+    void testOne2ManyCreateOneCommandCreate() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
@@ -76,7 +76,7 @@ public class TestAbstractBaseServiceOne2Many {
 
     @Test
     @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK1_AUTHORITY_UPDATE, MOCK2_AUTHORITY_CREATE})
-    public void testOne2ManyUpdateByIdCommandCreate() {
+    void testOne2ManyUpdateByIdCommandCreate() {
         Mock1 mock1 = new Mock1("mock1-1");
         mock1Service.createOne(mock1);
 
@@ -102,7 +102,7 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_SELECT,
             MOCK2_AUTHORITY_DELETE
     })
-    public void testOne2ManyUpdateByIdCommandDelete() {
+    void testOne2ManyUpdateByIdCommandDelete() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
@@ -130,7 +130,7 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_SELECT,
             MOCK2_AUTHORITY_UPDATE
     })
-    public void testOne2ManyUpdateByIdCommandUpdate() {
+    void testOne2ManyUpdateByIdCommandUpdate() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
@@ -160,7 +160,7 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_CREATE,
             MOCK2_AUTHORITY_SELECT
     })
-    public void testOne2ManyDeleteByIdRestrict() {
+    void testOne2ManyDeleteByIdRestrict() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
@@ -179,7 +179,7 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_SELECT,
             MOCK2_AUTHORITY_DELETE
     })
-    public void testOne2ManyDeleteByIdCascade() {
+    void testOne2ManyDeleteByIdCascade() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));
@@ -205,7 +205,7 @@ public class TestAbstractBaseServiceOne2Many {
             MOCK2_AUTHORITY_CREATE,
             MOCK2_AUTHORITY_SELECT
     })
-    public void testOne2ManyDeleteByIdSetNull() {
+    void testOne2ManyDeleteByIdSetNull() {
         Mock1 mock1 = new Mock1("mock1-1");
         List<Mock2> mock2List = List.of(new Mock2("mock2-1"), new Mock2("mock2-2"));
         List<Command<Mock2>> commands = List.of(Command.create(mock2List));

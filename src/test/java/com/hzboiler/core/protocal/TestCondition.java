@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestCondition {
+class TestCondition {
 
-    private static final LocalDateTime CREATE_TIME = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+    static final LocalDateTime CREATE_TIME = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
 
-    private static final List<Condition<Mock>> SIMPLE_QUERY_CONDITIONS = Arrays.asList(
+    static final List<Condition<Mock>> SIMPLE_QUERY_CONDITIONS = Arrays.asList(
             new Condition<>("name", "=", "mock"),
             new Condition<>("createTime", ">=", CREATE_TIME),
             new Condition<>("createUser", "=", 1)
     );
 
     @Test
-    public void testApplyToQueryWrapperGeneral() {
+    void testApplyToQueryWrapperGeneral() {
         QueryWrapper<Mock> mockQueryWrapper;
         Condition<Mock> condition;
 
@@ -62,7 +62,7 @@ public class TestCondition {
     }
 
     @Test
-    public void testApplyToQueryWrapperLike() {
+    void testApplyToQueryWrapperLike() {
         QueryWrapper<Mock> mockQueryWrapper;
         Condition<Mock> condition;
 
@@ -104,7 +104,7 @@ public class TestCondition {
     }
 
     @Test
-    public void testApplyToQueryWrapperNestedSimpleAnd() {
+    void testApplyToQueryWrapperNestedSimpleAnd() {
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         Condition<Mock> condition = new Condition<>("and", SIMPLE_QUERY_CONDITIONS);
         condition.applyToQueryWrapper(mockQueryWrapper);
@@ -115,7 +115,7 @@ public class TestCondition {
     }
 
     @Test
-    public void testApplyToQueryWrapperNestedSimpleOr() {
+    void testApplyToQueryWrapperNestedSimpleOr() {
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         Condition<Mock> condition = new Condition<>("or", SIMPLE_QUERY_CONDITIONS);
         condition.applyToQueryWrapper(mockQueryWrapper);
@@ -126,7 +126,7 @@ public class TestCondition {
     }
 
     @Test
-    public void testApplyToQueryWrapperNestedSimpleNot() {
+    void testApplyToQueryWrapperNestedSimpleNot() {
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         Condition<Mock> condition = new Condition<>("not", SIMPLE_QUERY_CONDITIONS);
         condition.applyToQueryWrapper(mockQueryWrapper);

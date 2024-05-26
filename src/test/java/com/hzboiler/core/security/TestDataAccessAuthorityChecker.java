@@ -12,7 +12,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class TestDataAccessAuthorityChecker {
+class TestDataAccessAuthorityChecker {
 
     final static String AUTHORITY = "Mock:SELECT";
 
@@ -21,36 +21,36 @@ public class TestDataAccessAuthorityChecker {
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         BaseContextHolder.clearContext();
     }
 
     @Test
-    public void testNotAuthenticated() {
+    void testNotAuthenticated() {
         assertThrows(DataAccessException.class, TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
     @WithAnonymousUser
-    public void testUserAnonymous() {
+    void testUserAnonymous() {
         assertThrows(DataAccessException.class, TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
     @WithMockAdmin
-    public void testUserAdmin() {
+    void testUserAdmin() {
         assertDoesNotThrow(TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
     @WithMockUser
-    public void testUserWithoutAuthority() {
+    void testUserWithoutAuthority() {
         assertThrows(DataAccessException.class, TestDataAccessAuthorityChecker::doCheck);
     }
 
     @Test
     @WithMockUser(authorities = {AUTHORITY})
-    public void testUserWithAuthority() {
+    void testUserWithAuthority() {
         assertDoesNotThrow(TestDataAccessAuthorityChecker::doCheck);
     }
 }

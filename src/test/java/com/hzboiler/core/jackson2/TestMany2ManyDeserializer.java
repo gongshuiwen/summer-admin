@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestMany2ManyDeserializer {
+class TestMany2ManyDeserializer {
 
     ObjectMapper mapper;
     {
@@ -23,7 +23,7 @@ public class TestMany2ManyDeserializer {
     }
 
     @Test
-    public void testCommandAdd() throws JsonProcessingException {
+    void testCommandAdd() throws JsonProcessingException {
         Many2Many<?> many2Many = mapper.readValue("[[0, [1, 2, 3]]]", Many2Many.class);
         assertEquals(1, many2Many.getCommands().size());
 
@@ -34,7 +34,7 @@ public class TestMany2ManyDeserializer {
     }
 
     @Test
-    public void testCommandRemove() throws JsonProcessingException {
+    void testCommandRemove() throws JsonProcessingException {
         Many2Many<?> many2Many = mapper.readValue("[[1, [1, 2, 3]]]", Many2Many.class);
         assertEquals(1, many2Many.getCommands().size());
 
@@ -45,7 +45,7 @@ public class TestMany2ManyDeserializer {
     }
 
     @Test
-    public void testCommandReplace() throws JsonProcessingException {
+    void testCommandReplace() throws JsonProcessingException {
         Many2Many<?> many2Many = mapper.readValue("[[2, [1, 2, 3]]]", Many2Many.class);
         assertEquals(1, many2Many.getCommands().size());
 

@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
         "/sql/test/ddl/mock3.sql",
         "/sql/test/ddl/mock_relation.sql",
 })
-public class TestAbstractBaseServiceMany2Many {
+class TestAbstractBaseServiceMany2Many {
 
     static final String MOCK1_ENTITY_NAME = "Mock1";
     static final String MOCK1_AUTHORITY_SELECT = MOCK1_ENTITY_NAME + ":" + AUTHORITY_SELECT;
@@ -62,7 +62,7 @@ public class TestAbstractBaseServiceMany2Many {
             MOCK1_AUTHORITY_CREATE,
             MOCK3_AUTHORITY_CREATE
     })
-    public void testMany2ManyCreateOneCommandAdd() {
+    void testMany2ManyCreateOneCommandAdd() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
         mock3Service.saveBatch(mock3List);
@@ -86,7 +86,7 @@ public class TestAbstractBaseServiceMany2Many {
             MOCK1_AUTHORITY_UPDATE,
             MOCK3_AUTHORITY_CREATE
     })
-    public void testMany2ManyUpdateByIdCommandAdd() {
+    void testMany2ManyUpdateByIdCommandAdd() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
         mock3Service.saveBatch(mock3List);
@@ -115,7 +115,7 @@ public class TestAbstractBaseServiceMany2Many {
             MOCK3_AUTHORITY_CREATE,
             MOCK3_AUTHORITY_SELECT
     })
-    public void testMany2ManyUpdateByIdCommandRemove() {
+    void testMany2ManyUpdateByIdCommandRemove() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
         mock3Service.saveBatch(mock3List);
@@ -146,7 +146,7 @@ public class TestAbstractBaseServiceMany2Many {
             MOCK3_AUTHORITY_SELECT,
             MOCK3_AUTHORITY_SELECT
     })
-    public void testMany2ManyUpdateByIdCommandReplace() {
+    void testMany2ManyUpdateByIdCommandReplace() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
         mock3Service.saveBatch(mock3List);
@@ -178,7 +178,7 @@ public class TestAbstractBaseServiceMany2Many {
             MOCK3_AUTHORITY_CREATE,
             MOCK3_AUTHORITY_SELECT
     })
-    public void testMany2ManyDeleteById() {
+    void testMany2ManyDeleteById() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
         mock3Service.saveBatch(mock3List);

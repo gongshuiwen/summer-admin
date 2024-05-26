@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestMany2OneDeserializer {
+class TestMany2OneDeserializer {
 
     ObjectMapper mapper;
     {
@@ -19,7 +19,7 @@ public class TestMany2OneDeserializer {
     }
 
     @Test
-    public void testDeserialize() throws JsonProcessingException {
+    void testDeserialize() throws JsonProcessingException {
         Many2One<?> many2One = mapper.readValue("1", Many2One.class);
         assertEquals(1, many2One.getId());
     }
