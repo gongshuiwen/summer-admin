@@ -1,10 +1,8 @@
 package com.hzboiler.core.controller;
 
-import com.hzboiler.core.mapper.MockMapper;
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -17,20 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
-import static com.hzboiler.core.security.Constants.AUTHORITY_DELETE;
 
 /**
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerDelete extends ControllerTestBase {
-
-    static final String MOCK_PATH = "/mock";
-    static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + ":" + AUTHORITY_DELETE;
-
-    @Autowired
-    MockMapper mockMapper;
+class TestBaseControllerDelete extends MockControllerTestBase {
 
     ResultActions doDelete(List<Long> ids) throws Exception {
         return mockMvc.perform(

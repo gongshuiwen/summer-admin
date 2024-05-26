@@ -2,10 +2,8 @@ package com.hzboiler.core.controller;
 
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import com.hzboiler.core.entity.Mock;
-import com.hzboiler.core.mapper.MockMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -18,20 +16,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
-import static com.hzboiler.core.security.Constants.AUTHORITY_UPDATE;
 
 /**
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerUpdate extends ControllerTestBase {
-
-    static final String MOCK_PATH = "/mock";
-    static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_UPDATE;
-
-    @Autowired
-    MockMapper mockMapper;
+class TestBaseControllerUpdate extends MockControllerTestBase {
 
     ResultActions doUpdate(List<Mock> mocks) throws Exception {
         return mockMvc.perform(

@@ -1,12 +1,10 @@
 package com.hzboiler.core.controller;
 
-import com.hzboiler.core.mapper.MockMapper;
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import com.hzboiler.core.entity.Mock;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -20,21 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hzboiler.core.exception.CoreBusinessExceptionEnums.*;
-import static com.hzboiler.core.security.Constants.AUTHORITY_CREATE;
 
 /**
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-class TestBaseControllerCreate extends ControllerTestBase {
+class TestBaseControllerCreate extends MockControllerTestBase {
 
-    static final String MOCK_PATH = "/mock";
-    static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_CREATE;
     static final List<Mock> MOCKS = List.of(new Mock("mock1"), new Mock("mock2"));
-
-    @Autowired
-    MockMapper mockMapper;
 
     ResultActions doCreate(List<Mock> mocks) throws Exception {
         return mockMvc.perform(
