@@ -1,6 +1,5 @@
 package com.hzboiler.module.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hzboiler.module.base.model.Permission;
 import com.hzboiler.module.base.model.Role;
 import com.hzboiler.module.base.model.User;
@@ -39,9 +38,7 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUsername, username);
-        User user = this.getOne(wrapper);
+        User user = lambdaQuery().eq(User::getUsername, username).one();
         if (user == null) {
             throw new UsernameNotFoundException("");
         }
