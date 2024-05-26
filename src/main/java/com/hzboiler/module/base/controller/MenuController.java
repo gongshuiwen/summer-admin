@@ -1,6 +1,5 @@
 package com.hzboiler.module.base.controller;
 
-
 import com.hzboiler.module.base.model.Menu;
 import com.hzboiler.core.controller.BaseController;
 import com.hzboiler.core.protocal.R;
