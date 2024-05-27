@@ -1,11 +1,13 @@
 package com.hzboiler.module.base.model;
 
 import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.validation.CreateValidationGroup;
+import com.hzboiler.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
@@ -19,13 +21,15 @@ public class Role extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "角色标识")
-    @NotBlank(message = "角色名称不能为空")
-    @Size(max = 18, message = "角色名称长度不能超过18个字符")
+    @NotNull(groups = {CreateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String code;
 
     @Schema(description = "角色名称")
-    @NotBlank(message = "角色名称不能为空")
-    @Size(max = 18, message = "角色名称长度不能超过18个字符")
+    @NotNull(groups = {CreateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String name;
 
     @Schema(description = "显示顺序")

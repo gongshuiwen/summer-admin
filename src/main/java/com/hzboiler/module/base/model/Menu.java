@@ -29,34 +29,34 @@ public class Menu extends TreeBaseEntity<Menu> {
 
     @Schema(description = "菜单名称")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(min = 2, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String name;
 
     @Schema(description = "菜单标题")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(min = 2, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String title;
 
     @Schema(description = "路由地址")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(max = 18)
     private String path;
 
     @Schema(description = "菜单图标")
-    @Size(max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @Size(max = 18)
     private String icon;
 
     @Schema(description = "组件路径")
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(max = 50, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(max = 50)
     private String component;
 
     @Schema(description = "重定向")
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(max = 50, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(max = 50)
     private String redirect;
 
     @Override

@@ -11,7 +11,6 @@ import com.hzboiler.core.fields.Many2One;
 import com.hzboiler.core.fields.annotations.OnDelete;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
-import com.hzboiler.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -39,38 +38,35 @@ public class User extends BaseUser implements Serializable {
 
     @Schema(description = "用户名")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(min = 2, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String username;
 
     @Schema(description = "昵称")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(min = 2, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String nickname;
 
     @Schema(description = "密码")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(min = 6, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 6, max = 18)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Schema(description = "邮箱")
-    @Email(groups = {CreateValidationGroup.class, UpdateValidationGroup.class},
-            message = "邮箱格式不正确")
-    @Size(max = 50, groups = {CreateValidationGroup.class, UpdateValidationGroup.class},
-            message = "邮箱长度不能超过50个字符")
+    @Email(message = "邮箱格式不正确")
+    @Size(max = 50, message = "邮箱长度不能超过50个字符")
     private String email;
 
     @Schema(description = "手机号码")
-    @Size(max = 11, groups = {CreateValidationGroup.class, UpdateValidationGroup.class},
-            message = "手机号码长度不能超过11个字符")
+    @Size(max = 11, message = "手机号码长度不能超过11个字符")
     private String phone;
 
     @Schema(description = "用户性别 0=未知,1=女,2=男")
-    @Min(value = 0, groups = {CreateValidationGroup.class, UpdateValidationGroup.class}, message = "性别不正确")
-    @Max(value = 2, groups = {CreateValidationGroup.class, UpdateValidationGroup.class}, message = "性别不正确")
+    @Min(value = 0, message = "性别不正确")
+    @Max(value = 2, message = "性别不正确")
     private Integer sex;
 
     @Schema(description = "用户头像")

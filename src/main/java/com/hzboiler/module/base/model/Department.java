@@ -29,7 +29,7 @@ public class Department extends TreeBaseEntity<Department> {
 
     @Schema(description = "部门名称")
     @NotNull(groups = {CreateValidationGroup.class})
-    @NullOrNotBlank(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
-    @Size(min = 2, max = 18, groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String name;
 }

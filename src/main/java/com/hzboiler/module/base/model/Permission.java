@@ -2,7 +2,10 @@ package com.hzboiler.module.base.model;
 
 
 import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.validation.CreateValidationGroup;
+import com.hzboiler.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,13 +23,15 @@ public class Permission  extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "权限标识")
-    @NotBlank(message = "权限标识不能为空")
-    @Size(max = 18, message = "权限标识长度不能超过18个字符")
+    @NotNull(groups = {CreateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String code;
 
     @Schema(description = "权限名称")
-    @NotBlank(message = "权限名称不能为空")
-    @Size(max = 18, message = "权限名称长度不能超过18个字符")
+    @NotNull(groups = {CreateValidationGroup.class})
+    @NullOrNotBlank
+    @Size(min = 2, max = 18)
     private String name;
 
     @Schema(description = "显示顺序")
