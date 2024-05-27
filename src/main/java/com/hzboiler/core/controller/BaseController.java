@@ -3,10 +3,10 @@ package com.hzboiler.core.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzboiler.core.context.BaseContext;
 import com.hzboiler.core.context.BaseContextHolder;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.validation.CreateValidationGroup;
-import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.core.fields.Many2Many;
-import com.hzboiler.core.fields.Many2One;
+import com.hzboiler.core.field.Many2Many;
+import com.hzboiler.core.field.Many2One;
 import com.hzboiler.core.mapper.RelationMapper;
 import com.hzboiler.core.mapper.RelationMapperRegistry;
 import com.hzboiler.core.protocal.Condition;
@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Validated
-public abstract class BaseController<S extends BaseService<T>, T extends BaseEntity> implements InitializingBean {
+public abstract class BaseController<S extends BaseService<T>, T extends BaseModel> implements InitializingBean {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -121,14 +121,14 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
             // Get target entities
             @SuppressWarnings("unchecked")
             BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) Many2One.getTargetClass(field));
-            List<? extends BaseEntity> targetEntities = targetService.selectByIds(targetIds.stream().toList());
-            Map<Long, ? extends BaseEntity> targetEntitiesMap = targetEntities.stream()
-                    .collect(Collectors.toMap(BaseEntity::getId, t -> t));
+            List<? extends BaseModel> targetEntities = targetService.selectByIds(targetIds.stream().toList());
+            Map<Long, ? extends BaseModel> targetEntitiesMap = targetEntities.stream()
+                    .collect(Collectors.toMap(BaseModel::getId, t -> t));
 
             // Set target entities to many2one field
             for (T entity : entities) {
                 @SuppressWarnings("unchecked")
-                Many2One<BaseEntity> many2One = (Many2One<BaseEntity>) field.get(entity);
+                Many2One<BaseModel> many2One = (Many2One<BaseModel>) field.get(entity);
                 Long targetId = many2One.getId();
                 if (targetId != null && targetId > 0) {
                     many2One.set(targetEntitiesMap.get(targetId));
@@ -154,14 +154,14 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseEnt
             // Get allTargetEntities
             @SuppressWarnings("unchecked")
             BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) targetClass);
-            List<? extends BaseEntity> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
-            Map<Long, ? extends BaseEntity> targetEntitiesMap = allTargetEntities.stream()
-                    .collect(Collectors.toMap(BaseEntity::getId, t -> t));
+            List<? extends BaseModel> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
+            Map<Long, ? extends BaseModel> targetEntitiesMap = allTargetEntities.stream()
+                    .collect(Collectors.toMap(BaseModel::getId, t -> t));
 
             // Set many2many field
             for (T entity : entities) {
                 List<Long> targetIds = entityId2TargetIdsMap.get(entity.getId());
-                List<? extends BaseEntity> targetEntities = targetIds.stream()
+                List<? extends BaseModel> targetEntities = targetIds.stream()
                         .map(targetEntitiesMap::get).collect(Collectors.toList());
                 field.set(entity, Many2Many.ofValues(targetEntities));
             }

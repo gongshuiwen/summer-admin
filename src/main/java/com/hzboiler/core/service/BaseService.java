@@ -3,13 +3,13 @@ package com.hzboiler.core.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.protocal.Condition;
-import com.hzboiler.core.entity.BaseEntity;
 import com.hzboiler.core.protocal.OrderBy;
 
 import java.util.List;
 
-public interface BaseService<T extends BaseEntity> {
+public interface BaseService<T extends BaseModel> {
 
     T selectById(Long id);
 
@@ -110,5 +110,5 @@ public interface BaseService<T extends BaseEntity> {
 
     BaseMapper<T> getMapper();
 
-    <AT extends BaseEntity> BaseService<AT> getService(Class<AT> entityClass);
+    <AT extends BaseModel> BaseService<AT> getService(Class<AT> entityClass);
 }

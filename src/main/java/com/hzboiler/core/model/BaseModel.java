@@ -1,4 +1,4 @@
-package com.hzboiler.core.entity;
+package com.hzboiler.core.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -26,7 +26,7 @@ import java.util.Objects;
 @Setter
 @JsonFilter(SecurityBeanPropertyFilter.FILTER_ID)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseModel implements Serializable {
 
     @Schema(description = "ID")
     @TableId(type = IdType.AUTO)
@@ -70,8 +70,8 @@ public abstract class BaseEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (!(o instanceof BaseEntity)) return false;
-        return Objects.equals(this.id, ((BaseEntity) o).getId());
+        if (!(o instanceof BaseModel)) return false;
+        return Objects.equals(this.id, ((BaseModel) o).getId());
     }
 
     @Override

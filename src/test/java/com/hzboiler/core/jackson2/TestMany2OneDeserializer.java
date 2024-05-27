@@ -3,7 +3,7 @@ package com.hzboiler.core.jackson2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.hzboiler.core.fields.Many2One;
+import com.hzboiler.core.field.Many2One;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

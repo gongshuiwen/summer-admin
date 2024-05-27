@@ -1,7 +1,7 @@
 package com.hzboiler.core.config;
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
-import com.hzboiler.core.fields.Many2One;
+import com.hzboiler.core.field.Many2One;
 import com.hzboiler.core.mybatis.Many2OneTypeHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

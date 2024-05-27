@@ -8,15 +8,15 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hzboiler.core.fields.*;
+import com.hzboiler.core.field.*;
 import com.hzboiler.core.mapper.RelationMapper;
 import com.hzboiler.core.mapper.RelationMapperRegistry;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.protocal.Condition;
 import com.hzboiler.core.protocal.Query;
 import com.hzboiler.core.security.DataAccessAuthority;
 import com.hzboiler.core.security.DataAccessAuthorityChecker;
-import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.core.fields.annotations.OnDelete;
+import com.hzboiler.core.field.annotations.OnDelete;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseEntity>
+public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseModel>
         extends ServiceImpl<M, T>
         implements BaseService<T>, InitializingBean {
 
@@ -116,27 +116,27 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForCreate(List<T> entities) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
+            Class<BaseModel> targetClass = (Class<BaseModel>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            BaseService<BaseEntity> targetService = getService(targetClass);
+            BaseService<BaseModel> targetService = getService(targetClass);
             for (T entity : entities) {
-                One2Many<BaseEntity> filedValue;
+                One2Many<BaseModel> filedValue;
                 try {
-                    filedValue = (One2Many<BaseEntity>) field.get(entity);
+                    filedValue = (One2Many<BaseModel>) field.get(entity);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
                 if (filedValue == null) break;
 
-                List<Command<BaseEntity>> commands = filedValue.getCommands();
+                List<Command<BaseModel>> commands = filedValue.getCommands();
                 if (commands == null) break;
-                for (Command<BaseEntity> command : commands) {
+                for (Command<BaseModel> command : commands) {
                     if (command == null) break;
                     if (Objects.requireNonNull(command.getCommandType()) == CommandType.CREATE) {
                         if (command.getEntities() == null || command.getEntities().isEmpty()) {
                             throw new IllegalArgumentException("The entities of Command CREATE cannot be null or empty");
                         }
-                        for (BaseEntity targetEntity : command.getEntities()) {
+                        for (BaseModel targetEntity : command.getEntities()) {
                             inverseField.set(targetEntity, Many2One.ofId(entity.getId()));
                         }
                         targetService.createBatch(command.getEntities());
@@ -154,18 +154,18 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
             Class<?> targetClass = Many2Many.getTargetClass(field);
             for (T entity : entities) {
-                Many2Many<BaseEntity> filedValue;
+                Many2Many<BaseModel> filedValue;
                 try {
-                    filedValue = (Many2Many<BaseEntity>) field.get(entity);
+                    filedValue = (Many2Many<BaseModel>) field.get(entity);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
                 if (filedValue == null) break;
 
-                List<Command<BaseEntity>> commands = filedValue.getCommands();
+                List<Command<BaseModel>> commands = filedValue.getCommands();
                 if (commands == null) break;
 
-                for (Command<BaseEntity> command : commands) {
+                for (Command<BaseModel> command : commands) {
                     if (command == null) break;
                     if (Objects.requireNonNull(command.getCommandType()) == CommandType.ADD) {
                         if (command.getIds() == null || command.getIds().isEmpty()) {
@@ -219,26 +219,26 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
+            Class<BaseModel> targetClass = (Class<BaseModel>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            BaseService<BaseEntity> targetService = getService(targetClass);
-            One2Many<BaseEntity> filedValue;
+            BaseService<BaseModel> targetService = getService(targetClass);
+            One2Many<BaseModel> filedValue;
             try {
-                filedValue = (One2Many<BaseEntity>) field.get(entity);
+                filedValue = (One2Many<BaseModel>) field.get(entity);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
             if (filedValue == null) break;
 
             for (Long sourceId : ids) {
-                List<Command<BaseEntity>> commands = filedValue.getCommands();
+                List<Command<BaseModel>> commands = filedValue.getCommands();
                 if (commands == null) break;
 
-                for (Command<BaseEntity> command : commands) {
+                for (Command<BaseModel> command : commands) {
                     if (command == null) break;
                     switch (command.getCommandType()) {
                         case CREATE: {
-                            for (BaseEntity targetEntity : command.getEntities()) {
+                            for (BaseModel targetEntity : command.getEntities()) {
                                 inverseField.set(targetEntity, Many2One.ofId(sourceId));
                             }
                             targetService.createBatch(command.getEntities());
@@ -264,19 +264,19 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processMany2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
             Class<?> targetClass = Many2Many.getTargetClass(field);
-            Many2Many<BaseEntity> filedValue;
+            Many2Many<BaseModel> filedValue;
             try {
-                filedValue = (Many2Many<BaseEntity>) field.get(entity);
+                filedValue = (Many2Many<BaseModel>) field.get(entity);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
             if (filedValue == null) break;
 
             for (Long sourceId : ids) {
-                List<Command<BaseEntity>> commands = filedValue.getCommands();
+                List<Command<BaseModel>> commands = filedValue.getCommands();
                 if (commands == null) break;
 
-                for (Command<BaseEntity> command : commands) {
+                for (Command<BaseModel> command : commands) {
                     if (command == null) break;
                     switch (command.getCommandType()) {
                         case ADD: {
@@ -332,10 +332,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2manyForDelete(List<Long> ids) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<BaseEntity> targetClass = (Class<BaseEntity>) One2Many.getTargetClass(field);
+            Class<BaseModel> targetClass = (Class<BaseModel>) One2Many.getTargetClass(field);
             Field inverseField = One2Many.getInverseField(field);
-            AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity> targetService =
-                    (AbstractBaseService<BaseMapper<BaseEntity>, BaseEntity>) getService(targetClass);
+            AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
+                    (AbstractBaseService<BaseMapper<BaseModel>, BaseModel>) getService(targetClass);
             OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
             OnDelete onDelete = inverseField.getDeclaredAnnotation(OnDelete.class);
             if (onDelete != null) onDeleteType = onDelete.value();
@@ -378,7 +378,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         wrapper.in(toColumnName(field), ids);
-        return list(wrapper).stream().map(BaseEntity::getId).toList();
+        return list(wrapper).stream().map(BaseModel::getId).toList();
     }
 
     protected void updateMany2OneToNullByIds(Field field, List<Long> ids) {
@@ -414,7 +414,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public <AT extends BaseEntity> BaseService<AT> getService(Class<AT> entityClass) {
+    public <AT extends BaseModel> BaseService<AT> getService(Class<AT> entityClass) {
         return BaseServiceRegistry.getService(entityClass);
     }
 

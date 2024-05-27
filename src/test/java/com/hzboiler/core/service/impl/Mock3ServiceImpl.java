@@ -1,6 +1,6 @@
 package com.hzboiler.core.service.impl;
 
-import com.hzboiler.core.entity.Mock3;
+import com.hzboiler.core.model.Mock3;
 import com.hzboiler.core.mapper.Mock3Mapper;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.core.service.Mock3Service;

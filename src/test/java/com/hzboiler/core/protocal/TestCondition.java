@@ -1,7 +1,7 @@
 package com.hzboiler.core.protocal;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hzboiler.core.entity.Mock;
+import com.hzboiler.core.model.Mock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

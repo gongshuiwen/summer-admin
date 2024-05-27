@@ -3,7 +3,7 @@ package com.hzboiler.core.jackson2;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.hzboiler.core.fields.Many2One;
+import com.hzboiler.core.field.Many2One;
 
 import java.io.IOException;
 

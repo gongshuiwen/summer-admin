@@ -1,4 +1,4 @@
-package com.hzboiler.core.fields.annotations;
+package com.hzboiler.core.field.annotations;
 
 import java.lang.annotation.*;
 

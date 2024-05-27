@@ -1,9 +1,9 @@
-package com.hzboiler.core.entity;
+package com.hzboiler.core.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.hzboiler.core.fields.Many2Many;
-import com.hzboiler.core.fields.One2Many;
-import com.hzboiler.core.fields.annotations.InverseField;
+import com.hzboiler.core.field.Many2Many;
+import com.hzboiler.core.field.One2Many;
+import com.hzboiler.core.field.annotations.InverseField;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
 import com.hzboiler.core.validation.UpdateValidationGroup;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Mock1 extends BaseEntity {
+public class Mock1 extends BaseModel {
 
     @NotBlank(groups = CreateValidationGroup.class)
     @NullOrNotBlank(groups = UpdateValidationGroup.class)

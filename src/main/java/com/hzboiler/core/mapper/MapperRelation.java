@@ -1,6 +1,6 @@
 package com.hzboiler.core.mapper;
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 
 import java.lang.annotation.*;
 
@@ -16,9 +16,9 @@ public @interface MapperRelation {
 
     String field1();
 
-    Class<? extends BaseEntity> class1();
+    Class<? extends BaseModel> class1();
 
     String field2();
 
-    Class<? extends BaseEntity> class2();
+    Class<? extends BaseModel> class2();
 }

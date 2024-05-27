@@ -2,7 +2,7 @@ package com.hzboiler.core.security;
 
 import com.hzboiler.core.annotaion.WithMockAdmin;
 import com.hzboiler.core.context.BaseContextHolder;
-import com.hzboiler.core.entity.Mock;
+import com.hzboiler.core.model.Mock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

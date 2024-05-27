@@ -1,7 +1,7 @@
 package com.hzboiler.core.controller;
 
 import com.hzboiler.core.annotaion.WithMockAdmin;
-import com.hzboiler.core.entity.Mock;
+import com.hzboiler.core.model.Mock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

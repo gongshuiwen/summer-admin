@@ -1,4 +1,4 @@
-package com.hzboiler.core.entity;
+package com.hzboiler.core.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,7 +13,7 @@ import java.util.Set;
  * @author gongshuiwen
  */
 @Setter
-public abstract class BaseUser extends BaseEntity implements Serializable, UserDetails {
+public abstract class BaseUser extends BaseModel implements Serializable, UserDetails {
 
     @TableField(exist = false)
     private Set<GrantedAuthority> authorities;

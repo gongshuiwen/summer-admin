@@ -1,7 +1,7 @@
 package com.hzboiler.core.controller;
 
 import com.hzboiler.core.service.MockService;
-import com.hzboiler.core.entity.Mock;
+import com.hzboiler.core.model.Mock;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

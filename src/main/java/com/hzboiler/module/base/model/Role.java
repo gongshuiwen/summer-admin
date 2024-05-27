@@ -1,6 +1,6 @@
 package com.hzboiler.module.base.model;
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +15,7 @@ import java.io.Serial;
 @Getter
 @Setter
 @Schema(description = "角色信息")
-public class Role extends BaseEntity {
+public class Role extends BaseModel {
 
     @Serial
     private static final long serialVersionUID = 1L;

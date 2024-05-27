@@ -1,6 +1,6 @@
-package com.hzboiler.core.fields.util;
+package com.hzboiler.core.field.util;
 
-import com.hzboiler.core.fields.annotations.ReadOnly;
+import com.hzboiler.core.field.annotations.ReadOnly;
 import com.hzboiler.core.util.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -15,7 +15,7 @@ public class ReadOnlyUtil {
     private static final Map<Class<?>, Field[]> readOnlyFieldsCache = new ConcurrentHashMap<>();
 
     /**
-     * Get all declared fields (include inherited) with annotation {@link com.hzboiler.core.fields.annotations.ReadOnly} for class ,
+     * Get all declared fields (include inherited) with annotation {@link com.hzboiler.core.field.annotations.ReadOnly} for class ,
      * a ConcurrentHashMap cache is used.
      * @param clazz the class
      * @return fields array, ensure all fields are always accessible

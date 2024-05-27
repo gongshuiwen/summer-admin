@@ -1,9 +1,8 @@
 package com.hzboiler.module.base.model;
 
-import com.hzboiler.core.entity.TreeBaseEntity;
+import com.hzboiler.core.model.BaseTreeModel;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
-import com.hzboiler.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.io.Serial;
 @Getter
 @Setter
 @Schema(description = "部门信息")
-public class Department extends TreeBaseEntity<Department> {
+public class Department extends BaseTreeModel<Department> {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -1,7 +1,7 @@
 package com.hzboiler.core.mapper;
 
-import com.hzboiler.core.entity.Mock1;
-import com.hzboiler.core.entity.Mock3;
+import com.hzboiler.core.model.Mock1;
+import com.hzboiler.core.model.Mock3;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

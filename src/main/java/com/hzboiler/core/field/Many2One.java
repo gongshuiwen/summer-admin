@@ -1,6 +1,6 @@
-package com.hzboiler.core.fields;
+package com.hzboiler.core.field;
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.util.ReflectUtil;
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Getter
-public class Many2One<T extends BaseEntity> {
+public class Many2One<T extends BaseModel> {
 
     private static final Map<Class<?>, List<Field>> many2oneFieldsCache = new ConcurrentHashMap<>();
     private static final Map<Field, Class<?>> fieldTargetClassCache = new ConcurrentHashMap<>();
@@ -60,13 +60,13 @@ public class Many2One<T extends BaseEntity> {
         throw new RuntimeException("Cannot find target class for Many2One field: " + field.getName());
     }
 
-    public static <T extends BaseEntity> Many2One<T> ofId(Long id) {
+    public static <T extends BaseModel> Many2One<T> ofId(Long id) {
         Many2One<T> many2One = new Many2One<>();
         many2One.id = id;
         return many2One;
     }
 
-    public static <T extends BaseEntity> Many2One<T> ofValue(T value) {
+    public static <T extends BaseModel> Many2One<T> ofValue(T value) {
         Many2One<T> many2One = new Many2One<>();
         many2One.id = value.getId();
         many2One.name = value.getDisplayName();

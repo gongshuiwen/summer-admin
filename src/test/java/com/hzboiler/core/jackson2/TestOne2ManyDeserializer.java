@@ -3,11 +3,11 @@ package com.hzboiler.core.jackson2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.hzboiler.core.entity.Mock1;
-import com.hzboiler.core.entity.Mock2;
-import com.hzboiler.core.fields.Command;
-import com.hzboiler.core.fields.CommandType;
-import com.hzboiler.core.fields.One2Many;
+import com.hzboiler.core.model.Mock1;
+import com.hzboiler.core.model.Mock2;
+import com.hzboiler.core.field.Command;
+import com.hzboiler.core.field.CommandType;
+import com.hzboiler.core.field.One2Many;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

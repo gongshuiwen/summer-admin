@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.core.fields.Command;
-import com.hzboiler.core.fields.CommandType;
-import com.hzboiler.core.fields.One2Many;
+import com.hzboiler.core.model.BaseModel;
+import com.hzboiler.core.field.Command;
+import com.hzboiler.core.field.CommandType;
+import com.hzboiler.core.field.One2Many;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,14 +46,14 @@ public class One2ManyDeserializer extends StdDeserializer<One2Many<?>> implement
     public One2Many<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonParseException {
         JsonNode rootNode = p.getCodec().readTree(p);
         if (rootNode instanceof ArrayNode arrayNode) {
-            List<Command<BaseEntity>> commands = new ArrayList<>();
+            List<Command<BaseModel>> commands = new ArrayList<>();
             for (JsonNode subNode : arrayNode) {
                 if (subNode instanceof ArrayNode commandNode) {
                     CommandType type = CommandType.of(commandNode.get(0).asInt());
                     try {
                         switch (type) {
                             case CREATE: {
-                                List<BaseEntity> objects = new ArrayList<>();
+                                List<BaseModel> objects = new ArrayList<>();
                                 for (JsonNode jsonNode : commandNode.get(1))
                                     objects.add(p.getCodec().readValue(jsonNode.traverse(), this.type));
                                 commands.add(Command.create(objects));

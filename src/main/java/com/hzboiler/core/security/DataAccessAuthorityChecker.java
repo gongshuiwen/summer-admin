@@ -1,6 +1,6 @@
 package com.hzboiler.core.security;
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,7 +17,7 @@ public class DataAccessAuthorityChecker {
      * @param authority The data access authority required.
      * @throws DataAccessException If the user does not have the required authority.
      */
-    public static void check(Class<? extends BaseEntity> modelClass, DataAccessAuthority authority)
+    public static void check(Class<? extends BaseModel> modelClass, DataAccessAuthority authority)
             throws DataAccessException {
         // SYS_ADMIN has access to everything
         if (GrantedAuthorityCheckUtils.isAdmin()) {

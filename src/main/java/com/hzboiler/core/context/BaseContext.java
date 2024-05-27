@@ -1,6 +1,6 @@
 package com.hzboiler.core.context;
 
-import com.hzboiler.core.entity.BaseUser;
+import com.hzboiler.core.model.BaseUser;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;

@@ -1,6 +1,6 @@
 package com.hzboiler.core.mybatis;
 
-import com.hzboiler.core.fields.Many2One;
+import com.hzboiler.core.field.Many2One;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import java.sql.CallableStatement;

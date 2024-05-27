@@ -1,7 +1,7 @@
-package com.hzboiler.core.fields;
+package com.hzboiler.core.field;
 
-import com.hzboiler.core.fields.annotations.InverseField;
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.field.annotations.InverseField;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.util.ReflectUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Getter
-public class One2Many<T extends BaseEntity> {
+public class One2Many<T extends BaseModel> {
 
     private static final Map<Class<?>, List<Field>> one2manyFieldsCache = new ConcurrentHashMap<>();
     private static final Map<Field, Class<?>> fieldTargetClassCache = new ConcurrentHashMap<>();
@@ -85,13 +85,13 @@ public class One2Many<T extends BaseEntity> {
         return inverseField;
     }
 
-    public static <T extends BaseEntity> One2Many<T> ofCommands(List<Command<T>> commands) {
+    public static <T extends BaseModel> One2Many<T> ofCommands(List<Command<T>> commands) {
         One2Many<T> One2Many = new One2Many<>();
         One2Many.commands = commands;
         return One2Many;
     }
 
-    public static <T extends BaseEntity> One2Many<T> ofValues(List<T> values) {
+    public static <T extends BaseModel> One2Many<T> ofValues(List<T> values) {
         One2Many<T> One2Many = new One2Many<>();
         One2Many.values = values;
         return One2Many;

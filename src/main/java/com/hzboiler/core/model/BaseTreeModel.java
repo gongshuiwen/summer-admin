@@ -1,4 +1,4 @@
-package com.hzboiler.core.entity;
+package com.hzboiler.core.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzboiler.core.validation.CreateValidationGroup;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public abstract class TreeBaseEntity<T extends TreeBaseEntity<?>> extends BaseEntity {
+public abstract class BaseTreeModel<T extends BaseTreeModel<?>> extends BaseModel {
 
     @Schema(description = "父级ID")
     private Long parentId;
@@ -37,7 +37,7 @@ public abstract class TreeBaseEntity<T extends TreeBaseEntity<?>> extends BaseEn
      * @param records flat record list
      * @return roots' list
      */
-    public static <T extends TreeBaseEntity<T>> List<T> buildTree(List<T> records) {
+    public static <T extends BaseTreeModel<T>> List<T> buildTree(List<T> records) {
         List<T> roots = new ArrayList<>();
         Map<Long, T> recordMap = new HashMap<>(records.size());
 

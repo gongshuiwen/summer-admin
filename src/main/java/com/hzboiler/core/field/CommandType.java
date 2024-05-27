@@ -1,4 +1,4 @@
-package com.hzboiler.core.fields;
+package com.hzboiler.core.field;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;

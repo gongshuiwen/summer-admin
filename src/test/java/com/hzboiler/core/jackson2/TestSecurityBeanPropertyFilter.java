@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.hzboiler.core.context.BaseContext;
 import com.hzboiler.core.context.BaseContextHolder;
-import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.core.entity.BaseUser;
+import com.hzboiler.core.model.BaseModel;
+import com.hzboiler.core.model.BaseUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +28,7 @@ class TestSecurityBeanPropertyFilter {
     @Getter
     @Setter
     @NoArgsConstructor
-    static class Mock extends BaseEntity {
+    static class Mock extends BaseModel {
 
         @AllowedForAdmin
         private Boolean allowedForAdmin;

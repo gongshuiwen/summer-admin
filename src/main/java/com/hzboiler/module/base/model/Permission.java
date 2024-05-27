@@ -1,7 +1,7 @@
 package com.hzboiler.module.base.model;
 
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
@@ -17,7 +16,7 @@ import java.io.Serial;
 @Getter
 @Setter
 @Schema(description = "权限信息")
-public class Permission  extends BaseEntity {
+public class Permission  extends BaseModel {
 
     @Serial
     private static final long serialVersionUID = 1L;

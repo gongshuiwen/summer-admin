@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.hzboiler.core.context.BaseContextHolder;
+import com.hzboiler.core.model.BaseModel;
 import com.hzboiler.core.security.GrantedAuthorityCheckUtils;
-import com.hzboiler.core.entity.BaseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.*;
@@ -68,20 +68,20 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
         if (allowedForCreateUserAnnotation == null && allowedForUpdateUserAnnotation == null) {
             return true;
         } else if (allowedForCreateUserAnnotation == null) {
-            return checkAllowedForUpdateUser((BaseEntity) pojo);
+            return checkAllowedForUpdateUser((BaseModel) pojo);
         } else if (allowedForUpdateUserAnnotation == null) {
-            return checkAllowedForCreateUser((BaseEntity) pojo);
+            return checkAllowedForCreateUser((BaseModel) pojo);
         } else {
-            BaseEntity entity = (BaseEntity) pojo;
+            BaseModel entity = (BaseModel) pojo;
             return checkAllowedForCreateUser(entity) || checkAllowedForUpdateUser(entity);
         }
     }
 
-    private boolean checkAllowedForCreateUser(BaseEntity entity) {
+    private boolean checkAllowedForCreateUser(BaseModel entity) {
         return Objects.equals(BaseContextHolder.getContext().getUserId(), entity.getCreateUser());
     }
 
-    private boolean checkAllowedForUpdateUser(BaseEntity entity) {
+    private boolean checkAllowedForUpdateUser(BaseModel entity) {
         return Objects.equals(BaseContextHolder.getContext().getUserId(), entity.getUpdateUser());
     }
 }

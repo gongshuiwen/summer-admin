@@ -1,10 +1,10 @@
 package com.hzboiler.core.service;
 
 import com.hzboiler.core.context.BaseContextHolder;
-import com.hzboiler.core.entity.Mock1;
-import com.hzboiler.core.entity.Mock3;
-import com.hzboiler.core.fields.Command;
-import com.hzboiler.core.fields.Many2Many;
+import com.hzboiler.core.model.Mock1;
+import com.hzboiler.core.model.Mock3;
+import com.hzboiler.core.field.Command;
+import com.hzboiler.core.field.Many2Many;
 import com.hzboiler.core.mapper.Mock1Mapper;
 import com.hzboiler.core.mapper.Mock3Mapper;
 import com.hzboiler.core.mapper.MockRelationMapper;

@@ -1,6 +1,6 @@
 package com.hzboiler.core.service;
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +20,7 @@ public class BaseServiceRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends BaseEntity> BaseService<T> getService(Class<T> entityClass) {
+    public static <T extends BaseModel> BaseService<T> getService(Class<T> entityClass) {
         return (BaseService<T>) baseServiceRegistry.get(entityClass);
     }
 }

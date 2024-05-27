@@ -1,6 +1,6 @@
-package com.hzboiler.core.fields;
+package com.hzboiler.core.field;
 
-import com.hzboiler.core.entity.BaseEntity;
+import com.hzboiler.core.model.BaseModel;
 import lombok.Getter;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author gongshuiwen
  */
 @Getter
-public class Command<T extends BaseEntity> {
+public class Command<T extends BaseModel> {
 
     private CommandType commandType;
     private List<Long> ids;
@@ -18,21 +18,21 @@ public class Command<T extends BaseEntity> {
     // ===================================================
     // Static factory methods for Many2Many field commands
     // ===================================================
-    public static <T extends BaseEntity> Command<T> add(List<Long> ids) {
+    public static <T extends BaseModel> Command<T> add(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.ADD;
         command.ids = ids;
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> remove(List<Long> ids) {
+    public static <T extends BaseModel> Command<T> remove(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.REMOVE;
         command.ids = ids;
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> replace(List<Long> ids) {
+    public static <T extends BaseModel> Command<T> replace(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.REPLACE;
         command.ids = ids;
@@ -42,21 +42,21 @@ public class Command<T extends BaseEntity> {
     // ==================================================
     // Static factory methods for One2Many field commands
     // ==================================================
-    public static <T extends BaseEntity> Command<T> create(List<T> entities) {
+    public static <T extends BaseModel> Command<T> create(List<T> entities) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.CREATE;
         command.entities = entities;
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> delete(List<Long> ids) {
+    public static <T extends BaseModel> Command<T> delete(List<Long> ids) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.DELETE;
         command.ids = ids;
         return command;
     }
 
-    public static <T extends BaseEntity> Command<T> update(Long id, T entity) {
+    public static <T extends BaseModel> Command<T> update(Long id, T entity) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.UPDATE;
         command.ids = List.of(id);

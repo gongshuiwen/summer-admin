@@ -1,9 +1,8 @@
 package com.hzboiler.module.base.model;
 
-import com.hzboiler.core.entity.TreeBaseEntity;
+import com.hzboiler.core.model.BaseTreeModel;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
-import com.hzboiler.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.io.Serial;
 @Getter
 @Setter
 @Schema(description = "菜单信息")
-public class Menu extends TreeBaseEntity<Menu> {
+public class Menu extends BaseTreeModel<Menu> {
 
     @Serial
     private static final long serialVersionUID = 1L;

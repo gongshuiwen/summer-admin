@@ -1,4 +1,4 @@
-package com.hzboiler.core.fields.annotations;
+package com.hzboiler.core.field.annotations;
 
 import java.lang.annotation.*;
 
@@ -8,5 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ReadOnly {
+public @interface InverseField {
+
+    String value();
 }

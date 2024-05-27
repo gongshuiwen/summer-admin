@@ -2,10 +2,10 @@ package com.hzboiler.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hzboiler.core.context.BaseContextHolder;
-import com.hzboiler.core.entity.Mock1;
-import com.hzboiler.core.entity.Mock2;
-import com.hzboiler.core.fields.Command;
-import com.hzboiler.core.fields.One2Many;
+import com.hzboiler.core.model.Mock1;
+import com.hzboiler.core.model.Mock2;
+import com.hzboiler.core.field.Command;
+import com.hzboiler.core.field.One2Many;
 import com.hzboiler.core.mapper.Mock1Mapper;
 import com.hzboiler.core.mapper.Mock2Mapper;
 import com.hzboiler.core.mapper.MockRelationMapper;

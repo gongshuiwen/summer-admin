@@ -3,7 +3,7 @@ package com.hzboiler.module.base.service.impl;
 import com.hzboiler.module.base.model.Permission;
 import com.hzboiler.module.base.model.Role;
 import com.hzboiler.module.base.model.User;
-import com.hzboiler.core.fields.Many2Many;
+import com.hzboiler.core.field.Many2Many;
 import com.hzboiler.core.service.AbstractBaseService;
 import com.hzboiler.module.base.mapper.UserMapper;
 import com.hzboiler.module.base.service.PermissionService;

@@ -6,10 +6,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.hzboiler.core.entity.BaseEntity;
-import com.hzboiler.core.fields.Command;
-import com.hzboiler.core.fields.CommandType;
-import com.hzboiler.core.fields.Many2Many;
+import com.hzboiler.core.model.BaseModel;
+import com.hzboiler.core.field.Command;
+import com.hzboiler.core.field.CommandType;
+import com.hzboiler.core.field.Many2Many;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Many2ManyDeserializer extends StdDeserializer<Many2Many<?>> {
     public Many2Many<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode rootNode = p.getCodec().readTree(p);
         if (rootNode instanceof ArrayNode arrayNode) {
-            List<Command<BaseEntity>> commands = new ArrayList<>();
+            List<Command<BaseModel>> commands = new ArrayList<>();
             for (JsonNode subNode : arrayNode) {
                 if (subNode instanceof ArrayNode commandNode) {
                     CommandType type = CommandType.of(commandNode.get(0).asInt());

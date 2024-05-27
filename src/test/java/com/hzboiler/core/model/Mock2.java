@@ -1,7 +1,7 @@
-package com.hzboiler.core.entity;
+package com.hzboiler.core.model;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.hzboiler.core.fields.Many2Many;
+import com.hzboiler.core.field.Many2One;
+import com.hzboiler.core.field.annotations.OnDelete;
 import com.hzboiler.core.validation.CreateValidationGroup;
 import com.hzboiler.core.validation.NullOrNotBlank;
 import com.hzboiler.core.validation.UpdateValidationGroup;
@@ -13,16 +13,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Mock3 extends BaseEntity {
+public class Mock2 extends BaseModel {
 
     @NotBlank(groups = CreateValidationGroup.class)
     @NullOrNotBlank(groups = UpdateValidationGroup.class)
     private String name;
 
-    @TableField(exist = false)
-    Many2Many<Mock1> mock1s;
+    @OnDelete(OnDelete.Type.RESTRICT)
+    private Many2One<Mock1> mock1Id1;
 
-    public Mock3(String name) {
+    @OnDelete(OnDelete.Type.CASCADE)
+    private Many2One<Mock1> mock1Id2;
+
+    @OnDelete(OnDelete.Type.SET_NULL)
+    private Many2One<Mock1> mock1Id3;
+
+    public Mock2(String name) {
         this.name = name;
     }
 }
