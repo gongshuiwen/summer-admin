@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!--[versions of dependencies]-->
+        <common-pool2.version>2.12.0</common-pool2.version>
         <knife4j.version>4.4.0</knife4j.version>
         <lombok.version>1.18.20</lombok.version>
         <minio.version>8.5.4</minio.version>
@@ -88,6 +89,12 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons-pool2.version}</version>
             <scope>runtime</scope>
         </dependency>
 
