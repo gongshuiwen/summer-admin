@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: plm
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  mvc:
+    servlet:
+      load-on-startup: 1
+  profiles:
+    active: test
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: AUTO
