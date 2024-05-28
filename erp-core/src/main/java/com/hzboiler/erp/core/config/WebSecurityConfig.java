@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                 // Static configurations for requests authorization
                 .authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/doc.html").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
