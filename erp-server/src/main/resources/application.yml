@@ -11,6 +11,9 @@ spring:
   mvc:
     servlet:
       load-on-startup: 1
+  session:
+    redis:
+      repository-type: indexed
 springdoc:
   api-docs:
     path: /v3/api-docs
