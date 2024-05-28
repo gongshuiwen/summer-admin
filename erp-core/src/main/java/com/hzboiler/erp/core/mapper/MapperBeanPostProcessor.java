@@ -11,7 +11,6 @@ import static com.hzboiler.erp.core.mapper.RelationMapper.*;
 /**
  * @author gongshuiwen
  */
-@Component
 public class MapperBeanPostProcessor implements BeanPostProcessor {
 
     @Override
