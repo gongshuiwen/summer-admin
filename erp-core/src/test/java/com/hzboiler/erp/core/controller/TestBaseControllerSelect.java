@@ -56,6 +56,6 @@ class TestBaseControllerSelect extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testIdsEmpty() throws Exception {
-        checkResultActionsException(doSelect(List.of()), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doSelect(List.of()));
     }
 }

@@ -70,25 +70,25 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testEmptyList() throws Exception {
-        checkResultActionsException(doCreate(new ArrayList<>()), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(new ArrayList<>()));
     }
 
     @Test
     @WithMockAdmin
     void testNameNull() throws Exception {
-        checkResultActionsException(doCreate(List.of(new Mock(null))), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(new Mock(null))));
     }
 
     @Test
     @WithMockAdmin
     void testNameEmpty() throws Exception {
-        checkResultActionsException(doCreate(List.of(new Mock(""))), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(new Mock(""))));
     }
 
     @Test
     @WithMockAdmin
     void testNameBlank() throws Exception {
-        checkResultActionsException(doCreate(List.of(new Mock("   "))), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(new Mock("   "))));
     }
 
     @Test
@@ -96,7 +96,7 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     void testIdNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setId(1L);
-        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
@@ -104,7 +104,7 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     void testCreateTimeNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setCreateTime(LocalDateTime.now());
-        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
@@ -112,7 +112,7 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     void testUpdateTimeNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateTime(LocalDateTime.now());
-        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
@@ -120,7 +120,7 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     void testCreateUserNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setCreateUser(1L);
-        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
@@ -128,7 +128,7 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     void testUpdateUserNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateUser(1L);
-        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 
     @Test
@@ -136,6 +136,6 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     void testReadOnlyNotNull() throws Exception {
         Mock mock = new Mock("mock");
         mock.setUpdateUser(1L);
-        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doCreate(List.of(mock)));
     }
 }

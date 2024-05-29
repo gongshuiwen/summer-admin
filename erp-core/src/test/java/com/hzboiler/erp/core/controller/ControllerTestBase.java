@@ -14,6 +14,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public abstract class ControllerTestBase {
@@ -39,5 +42,9 @@ public abstract class ControllerTestBase {
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(businessExceptionEnum.code())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(businessExceptionEnum.message())));
+    }
+
+    protected void checkResultActionsInvalidArguments(ResultActions resultActions) throws Exception {
+        checkResultActionsException(resultActions, ERROR_INVALID_ARGUMENTS);
     }
 }

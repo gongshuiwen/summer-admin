@@ -60,13 +60,13 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testEmpty() throws Exception {
-        checkResultActionsException(doUpdate(List.of()), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of()));
     }
 
     @Test
     @WithMockAdmin
     void testIdNull() throws Exception {
-        checkResultActionsException(doUpdate(List.of(new Mock("mock"))), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(new Mock("mock"))));
     }
 
     @Test
@@ -83,13 +83,13 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testNameEmpty() throws Exception {
-        checkResultActionsException(doUpdate(List.of(Mock.of(1L, ""))), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(Mock.of(1L, ""))));
     }
 
     @Test
     @WithMockAdmin
     void testNameBlank() throws Exception {
-        checkResultActionsException(doUpdate(List.of(Mock.of(1L, "   "))), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(Mock.of(1L, "   "))));
     }
 
     @Test
@@ -97,7 +97,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     void testCreateTimeNotNull() throws Exception {
         Mock mock = Mock.of(1L, "mock");
         mock.setCreateTime(LocalDateTime.now());
-        checkResultActionsException(doUpdate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(mock)));
     }
 
     @Test
@@ -105,7 +105,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     void testUpdateTimeNotNull() throws Exception {
         Mock mock = Mock.of(1L, "mock");
         mock.setUpdateTime(LocalDateTime.now());
-        checkResultActionsException(doUpdate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(mock)));
     }
 
     @Test
@@ -113,7 +113,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     void testCreateUserNotNull() throws Exception {
         Mock mock = Mock.of(1L, "mock");
         mock.setCreateUser(1L);
-        checkResultActionsException(doUpdate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(mock)));
     }
 
     @Test
@@ -121,7 +121,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     void testUpdateUserNotNull() throws Exception {
         Mock mock = Mock.of(1L, "mock");
         mock.setUpdateUser(1L);
-        checkResultActionsException(doUpdate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(mock)));
     }
 
     @Test
@@ -129,6 +129,6 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     void testReadOnlyNotNull() throws Exception {
         Mock mock = Mock.of(1L, "mock");
         mock.setUpdateUser(1L);
-        checkResultActionsException(doUpdate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doUpdate(List.of(mock)));
     }
 }

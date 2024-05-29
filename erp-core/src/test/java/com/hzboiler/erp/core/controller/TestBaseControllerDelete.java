@@ -49,6 +49,6 @@ class TestBaseControllerDelete extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testIdsEmpty() throws Exception {
-        checkResultActionsException(doDelete(List.of()), ERROR_INVALID_ARGUMENTS);
+        checkResultActionsInvalidArguments(doDelete(List.of()));
     }
 }
