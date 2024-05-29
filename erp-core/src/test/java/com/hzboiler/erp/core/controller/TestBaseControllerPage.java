@@ -2,7 +2,7 @@ package com.hzboiler.erp.core.controller;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.model.Mock;
-import org.hamcrest.Condition;
+import com.hzboiler.erp.core.protocal.Condition;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -65,13 +65,13 @@ class TestBaseControllerPage extends MockControllerTestBase {
         ;
     }
 
-
     @Test
     @WithMockAdmin
     void testPageNumNotValid() throws Exception {
         checkResultActionsInvalidArguments(doPage(null, 20L, null, null));
         checkResultActionsInvalidArguments(doPage(0L, 20L, null, null));
         checkResultActionsInvalidArguments(doPage(-1L, 20L, null, null));
+        checkResultActionsInvalidArguments(doPage(1001L, 20L, null, null));
     }
 
     @Test
@@ -80,5 +80,43 @@ class TestBaseControllerPage extends MockControllerTestBase {
         checkResultActionsInvalidArguments(doPage(1L, null, null, null));
         checkResultActionsInvalidArguments(doPage(1L, 0L, null, null));
         checkResultActionsInvalidArguments(doPage(1L, -1L, null, null));
+        checkResultActionsInvalidArguments(doPage(1L, 1001L, null, null));
+    }
+
+    @Test
+    @WithMockAdmin
+    void testSortsIdDesc() throws Exception {
+        List<Long> ids = List.of(1L, 2L);
+        List<Mock> mocks = mockMapper.selectBatchIds(ids);
+
+        ResultActions resultActions = doPage(1L, 20L, "id desc", null);
+
+        checkResultActionsSuccess(resultActions);
+        resultActions
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.current", Is.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.size", Is.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.total", Is.is(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pages", Is.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.records[0].id", Is.is(mocks.get(1).getId().toString())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.records[0].name", Is.is(mocks.get(1).getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.records[1].id", Is.is(mocks.get(0).getId().toString())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.records[1].name", Is.is(mocks.get(0).getName())))
+        ;
+    }
+
+    @Test
+    @WithMockAdmin
+    void testSimpleCondition() throws Exception {
+        Condition<Mock> condition = new Condition<>("name", "=", "mock1");
+        ResultActions resultActions = doPage(1L, 20L, null, condition);
+        checkResultActionsSuccess(resultActions);
+        resultActions
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.current", Is.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.size", Is.is(20)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.total", Is.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.pages", Is.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.records[0].id", Is.is("1")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.records[0].name", Is.is("mock1")))
+        ;
     }
 }
