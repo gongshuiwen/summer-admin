@@ -31,7 +31,6 @@ class TestBaseControllerCount extends MockControllerTestBase {
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testAuthorized() throws Exception {
         ResultActions resultActions = doCount(null);

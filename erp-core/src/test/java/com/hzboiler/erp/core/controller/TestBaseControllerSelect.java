@@ -37,7 +37,6 @@ class TestBaseControllerSelect extends MockControllerTestBase {
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testAuthorized() throws Exception {
         List<Long> ids = List.of(1L, 2L);

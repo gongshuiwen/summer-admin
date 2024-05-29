@@ -101,7 +101,6 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/mock.sql"})
     @WithMockAdmin
     void testUpdateTimeNotNull() throws Exception {
         Mock mock = Mock.of(1L, "mock");
