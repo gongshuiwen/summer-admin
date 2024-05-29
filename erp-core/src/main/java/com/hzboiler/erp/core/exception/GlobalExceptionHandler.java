@@ -29,13 +29,16 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.*;
 @RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionHandler {
 
-    private static final String _BUSINESS_ERROR_MESSAGE_TEMPLATE = "Business Error: [%d] %s";
+    private static final String _BUSINESS_EXCEPTION_MESSAGE_TEMPLATE = "BusinessException [%s,%d]: %s";
 
     @ExceptionHandler(BusinessException.class)
     public R<String> handleBusinessException(BusinessException e) {
-        int code = e.getCode();
+        String namespace = e.getBusinessExceptionEnum().namespace();
+        int code = e.getBusinessExceptionEnum().code();
         String message = e.getMessage();
-        log.warn(String.format(_BUSINESS_ERROR_MESSAGE_TEMPLATE, code, message));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format(_BUSINESS_EXCEPTION_MESSAGE_TEMPLATE, namespace, code, message));
+        }
         return R.error(code, message);
     }
 
