@@ -4,7 +4,6 @@ import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,16 +29,9 @@ class TestBaseControllerDelete extends MockControllerTestBase {
                         .param("ids", ids.stream().map(String::valueOf).collect(Collectors.joining(","))));
     }
 
-    @Test
-    @WithAnonymousUser
-    void testAnonymous() throws Exception {
-        checkResultActionsException(doDelete(Arrays.asList(1L, 2L)), ERROR_AUTHENTICATION_FAILED);
-    }
-
-    @Test
-    @WithMockUser
-    void testNotAuthorized() throws Exception {
-        checkResultActionsException(doDelete(Arrays.asList(1L, 2L)), ERROR_ACCESS_DENIED);
+    @Override
+    ResultActions doExample() throws Exception {
+        return doDelete(Arrays.asList(1L, 2L));
     }
 
     @Test
@@ -52,12 +44,6 @@ class TestBaseControllerDelete extends MockControllerTestBase {
 
         checkResultActionsSuccess(resultActions);
         deleteIds.forEach(deleteId -> Assertions.assertNull(mockMapper.selectById(deleteId)));
-    }
-
-    @Test
-    @WithMockAdmin
-    void testAdmin() throws Exception {
-        testAuthorized();
     }
 
     @Test

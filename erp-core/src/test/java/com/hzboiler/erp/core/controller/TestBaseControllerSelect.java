@@ -31,16 +31,9 @@ class TestBaseControllerSelect extends MockControllerTestBase {
                         .param("ids", ids.stream().map(String::valueOf).collect(Collectors.joining(","))));
     }
 
-    @Test
-    @WithAnonymousUser
-    void testAnonymous() throws Exception {
-        checkResultActionsException(doSelect(List.of(1L, 2L)), ERROR_AUTHENTICATION_FAILED);
-    }
-
-    @Test
-    @WithMockUser
-    void testNotAuthorized() throws Exception {
-        checkResultActionsException(doSelect(List.of(1L, 2L)), ERROR_ACCESS_DENIED);
+    @Override
+    ResultActions doExample() throws Exception {
+        return doSelect(List.of(1L, 2L));
     }
 
     @Test
@@ -59,12 +52,6 @@ class TestBaseControllerSelect extends MockControllerTestBase {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].id", Is.is(mocks.get(1).getId().toString())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(mocks.get(1).getName())))
         ;
-    }
-
-    @Test
-    @WithMockAdmin
-    void testAdmin() throws Exception {
-        testAuthorized();
     }
 
     @Test

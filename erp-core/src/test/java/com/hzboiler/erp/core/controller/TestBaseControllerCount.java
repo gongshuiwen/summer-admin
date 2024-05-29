@@ -1,19 +1,14 @@
 package com.hzboiler.erp.core.controller;
 
-import com.hzboiler.erp.core.annotaion.WithMockAdmin;
-import com.hzboiler.erp.core.model.Mock;
 import com.hzboiler.erp.core.protocal.Condition;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.*;
 
 /**
  * @author gongshuiwen
@@ -30,16 +25,9 @@ class TestBaseControllerCount extends MockControllerTestBase {
                 ;
     }
 
-    @Test
-    @WithAnonymousUser
-    void testAnonymous() throws Exception {
-        checkResultActionsException(doCount(null), ERROR_AUTHENTICATION_FAILED);
-    }
-
-    @Test
-    @WithMockUser
-    void testNotAuthorized() throws Exception {
-        checkResultActionsException(doCount(null), ERROR_ACCESS_DENIED);
+    @Override
+    ResultActions doExample() throws Exception {
+        return doCount(null);
     }
 
     @Test
@@ -49,11 +37,5 @@ class TestBaseControllerCount extends MockControllerTestBase {
         ResultActions resultActions = doCount(null);
         checkResultActionsSuccess(resultActions);
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is("2")));
-    }
-
-    @Test
-    @WithMockAdmin
-    void testAdmin() throws Exception {
-        testAuthorized();
     }
 }

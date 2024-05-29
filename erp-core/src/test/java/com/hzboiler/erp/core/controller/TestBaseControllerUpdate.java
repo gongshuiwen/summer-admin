@@ -31,22 +31,9 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
                         .content(objectMapper.writeValueAsBytes(mocks)));
     }
 
-    @Test
-    @WithAnonymousUser
-    void testAnonymous() throws Exception {
-        checkResultActionsException(doUpdate(List.of(
-                Mock.of(1L, "mock11"),
-                Mock.of(2L, "mock22")
-        )), ERROR_AUTHENTICATION_FAILED);
-    }
-
-    @Test
-    @WithMockUser
-    void testNotAuthorized() throws Exception {
-        checkResultActionsException(doUpdate(List.of(
-                Mock.of(1L, "mock11"),
-                Mock.of(2L, "mock22")
-        )), ERROR_ACCESS_DENIED);
+    @Override
+    ResultActions doExample() throws Exception {
+        return doUpdate(List.of(Mock.of(1L, "mock11")));
     }
 
     @Test
@@ -68,12 +55,6 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
             Assertions.assertEquals(0, mock.getCreateUser());
             Assertions.assertEquals(0, mock.getUpdateUser());
         }
-    }
-
-    @Test
-    @WithMockAdmin
-    void testAdmin() throws Exception {
-        testAuthorized();
     }
 
     @Test

@@ -35,16 +35,9 @@ class TestBaseControllerCreate extends MockControllerTestBase {
                         .content(objectMapper.writeValueAsBytes(mocks)));
     }
 
-    @Test
-    @WithAnonymousUser
-    void testAnonymous() throws Exception {
-        checkResultActionsException(doCreate(MOCKS), ERROR_AUTHENTICATION_FAILED);
-    }
-
-    @Test
-    @WithMockUser
-    void testNotAuthorized() throws Exception {
-        checkResultActionsException(doCreate(MOCKS), ERROR_ACCESS_DENIED);
+    @Override
+    ResultActions doExample() throws Exception {
+        return doCreate(MOCKS);
     }
 
     @Test
@@ -72,12 +65,6 @@ class TestBaseControllerCreate extends MockControllerTestBase {
         Assertions.assertEquals(MOCKS.get(1).getName(), mock2.getName());
         Assertions.assertEquals(0, mock2.getCreateUser());
         Assertions.assertEquals(0, mock2.getUpdateUser());
-    }
-
-    @Test
-    @WithMockAdmin
-    void testAdmin() throws Exception {
-        testAuthorized();
     }
 
     @Test
