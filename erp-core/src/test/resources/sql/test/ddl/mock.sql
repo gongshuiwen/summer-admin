@@ -6,5 +6,6 @@ CREATE TABLE `mock` (
     `create_user` bigint NOT NULL COMMENT 'create user',
     `update_user` bigint NOT NULL COMMENT 'update user',
     `name` varchar(100) NOT NULL COMMENT 'name',
+    `read_only` varchar(100) NULL COMMENT 'read_only',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Mock';

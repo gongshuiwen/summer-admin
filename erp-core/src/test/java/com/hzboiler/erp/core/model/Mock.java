@@ -1,5 +1,6 @@
 package com.hzboiler.erp.core.model;
 
+import com.hzboiler.erp.core.field.annotations.ReadOnly;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.NullOrNotBlank;
@@ -17,6 +18,9 @@ public class Mock extends BaseModel {
     @NotBlank(groups = CreateValidationGroup.class)
     @NullOrNotBlank(groups = UpdateValidationGroup.class)
     private String name;
+
+    @ReadOnly
+    private String readOnly;
 
     public Mock(String name) {
         this.name = name;

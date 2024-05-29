@@ -143,4 +143,12 @@ class TestBaseControllerCreate extends MockControllerTestBase {
         mock.setUpdateUser(1L);
         checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
     }
+
+    @Test
+    @WithMockAdmin
+    void testReadOnlyNotNull() throws Exception {
+        Mock mock = new Mock("mock");
+        mock.setUpdateUser(1L);
+        checkResultActionsException(doCreate(List.of(mock)), ERROR_INVALID_ARGUMENTS);
+    }
 }
