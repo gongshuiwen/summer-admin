@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Record class {@code BusinessExceptionEnum} is used to globally define business exception constants,
- * which can be used to build {@link BusinessException}.
+ * which can be used to construct {@link BusinessException}.
  * <p>
  * Define example:
  * <blockquote><pre>
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Usage example:
  * <blockquote><pre>
- * throw new BusinessException(BusinessExceptionEnums.ERROR_TEST);
+ * throw new BusinessException(CoreBusinessExceptionEnums.ERROR_TEST);
  * </pre></blockquote>
  *
  * Or use static import:
@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * throw new BusinessException(ERROR_TEST);
  * </pre></blockquote>
  *
+ * @see BusinessException
  * @see CoreBusinessExceptionEnums
  * @author gongshuiwen
  *
