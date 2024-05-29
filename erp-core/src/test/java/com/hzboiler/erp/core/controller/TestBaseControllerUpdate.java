@@ -5,7 +5,6 @@ import com.hzboiler.erp.core.model.Mock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
@@ -14,8 +13,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.*;
 
 /**
  * @author gongshuiwen
