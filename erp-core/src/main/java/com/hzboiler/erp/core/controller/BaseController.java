@@ -3,6 +3,8 @@ package com.hzboiler.erp.core.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
+import com.hzboiler.erp.core.exception.BusinessException;
+import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.field.Many2Many;
@@ -27,6 +29,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
 
 @Validated
 public abstract class BaseController<S extends BaseService<T>, T extends BaseModel> implements InitializingBean {
@@ -78,6 +82,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @PostMapping
     @Validated(CreateValidationGroup.class)
     public R<List<T>> create(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> createDtoList) {
+        checkReadOnlyForDtoList(createDtoList);
         service.createBatch(createDtoList);
         return R.success(createDtoList);
     }
@@ -86,6 +91,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @PutMapping
     @Validated(UpdateValidationGroup.class)
     public R<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid T> updateDtoList) {
+        checkReadOnlyForDtoList(updateDtoList);
         for (T t : updateDtoList) {
             service.updateById(t.getId(), t);
         }
@@ -164,6 +170,21 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
                 List<? extends BaseModel> targetEntities = targetIds.stream()
                         .map(targetEntitiesMap::get).collect(Collectors.toList());
                 field.set(entity, Many2Many.ofValues(targetEntities));
+            }
+        }
+    }
+
+    private void checkReadOnlyForDtoList(List<T> dtoList) {
+        for (Field field : ReadOnlyUtil.getReadOnlyFields(entityClass)) {
+            for (T dto : dtoList) {
+                try {
+                    if (field.get(dto) != null) {
+                        throw new BusinessException(ERROR_INVALID_ARGUMENTS);
+                    }
+                } catch (IllegalAccessException e) {
+                    // this should never happen
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
