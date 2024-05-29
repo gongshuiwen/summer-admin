@@ -1,5 +1,7 @@
 package com.hzboiler.erp.core.controller;
 
+import com.hzboiler.erp.core.annotaion.WithMockAdmin;
+import com.hzboiler.erp.core.model.Mock;
 import com.hzboiler.erp.core.protocal.Condition;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
@@ -36,5 +38,14 @@ class TestBaseControllerCount extends MockControllerTestBase {
         ResultActions resultActions = doCount(null);
         checkResultActionsSuccess(resultActions);
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is("2")));
+    }
+
+    @Test
+    @WithMockAdmin
+    void testCondition() throws Exception {
+        Condition<Mock> condition = new Condition<>("name", "=", "mock1");
+        ResultActions resultActions = doCount(condition);
+        checkResultActionsSuccess(resultActions);
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is("1")));
     }
 }
