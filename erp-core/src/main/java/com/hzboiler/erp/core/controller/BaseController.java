@@ -18,8 +18,10 @@ import com.hzboiler.erp.core.service.BaseServiceRegistry;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -53,10 +55,10 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    public R<IPage<T>> page(@RequestParam Long pageNum, @RequestParam Long pageSize,
-                            @RequestParam(required = false) String sort,
+    public R<IPage<T>> page(@RequestParam @Positive @Max(1000) Long pageNum, @RequestParam @Positive @Max(1000) Long pageSize,
+                            @RequestParam(required = false) String sorts,
                             @RequestBody(required = false) Condition<T> condition) throws IllegalAccessException {
-        IPage<T> page = service.page(pageNum, pageSize, sort, condition);
+        IPage<T> page = service.page(pageNum, pageSize, sorts, condition);
         List<T> records = page.getRecords();
         if (records != null && !records.isEmpty()) {
             fetchMany2One(records);
