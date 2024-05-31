@@ -14,7 +14,6 @@ import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.protocal.Condition;
 import com.hzboiler.erp.core.protocal.R;
 import com.hzboiler.erp.core.service.BaseService;
-import com.hzboiler.erp.core.service.BaseServiceRegistry;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -128,7 +127,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
             // Get target entities
             @SuppressWarnings("unchecked")
-            BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) Many2One.getTargetClass(field));
+            BaseService<T> targetService = service.getService((Class<T>) Many2One.getTargetClass(field));
             List<? extends BaseModel> targetEntities = targetService.selectByIds(targetIds.stream().toList());
             Map<Long, ? extends BaseModel> targetEntitiesMap = targetEntities.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));
@@ -161,7 +160,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
             // Get allTargetEntities
             @SuppressWarnings("unchecked")
-            BaseService<T> targetService = BaseServiceRegistry.getService((Class<T>) targetClass);
+            BaseService<T> targetService = service.getService((Class<T>) targetClass);
             List<? extends BaseModel> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
             Map<Long, ? extends BaseModel> targetEntitiesMap = allTargetEntities.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));

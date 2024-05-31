@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *
  * @author gongshuiwen
  */
 public class BaseServiceRegistry {
@@ -16,7 +15,7 @@ public class BaseServiceRegistry {
             baseServiceRegistry = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T extends BaseModel> BaseService<T> getService(Class<T> modelClass) {
+    static <T extends BaseModel> BaseService<T> getService(Class<T> modelClass) {
         return (BaseService<T>) baseServiceRegistry.get(modelClass);
     }
 
