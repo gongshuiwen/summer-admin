@@ -420,9 +420,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     public void afterPropertiesSet() {
-        if (entityClass == null) {
-            throw new RuntimeException();
-        }
         BaseServiceRegistry.register(this);
     }
 }
