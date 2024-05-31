@@ -106,7 +106,7 @@ public interface BaseService<T extends BaseModel> {
 
     boolean deleteByIds(List<Long> ids);
 
-    Class<T> getEntityClass();
+    Class<T> getModelClass();
 
     BaseMapper<T> getMapper();
 

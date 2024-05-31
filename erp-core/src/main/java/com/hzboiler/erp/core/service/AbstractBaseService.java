@@ -404,7 +404,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public Class<T> getEntityClass() {
+    public Class<T> getModelClass() {
         return super.getEntityClass();
     }
 
