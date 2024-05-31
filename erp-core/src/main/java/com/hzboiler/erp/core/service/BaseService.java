@@ -110,5 +110,5 @@ public interface BaseService<T extends BaseModel> {
 
     BaseMapper<T> getMapper();
 
-    <AT extends BaseModel> BaseService<AT> getService(Class<AT> entityClass);
+    <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass);
 }

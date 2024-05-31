@@ -414,8 +414,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public <AT extends BaseModel> BaseService<AT> getService(Class<AT> entityClass) {
-        return BaseServiceRegistry.getService(entityClass);
+    public <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass) {
+        return BaseServiceRegistry.getService(modelClass);
     }
 
     @Override
