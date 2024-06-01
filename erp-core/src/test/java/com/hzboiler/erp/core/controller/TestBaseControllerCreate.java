@@ -3,7 +3,6 @@ package com.hzboiler.erp.core.controller;
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.model.Mock;
 import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,6 +14,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author gongshuiwen
@@ -40,7 +41,7 @@ class TestBaseControllerCreate extends MockControllerTestBase {
     @Test
     @WithMockUser(authorities = MOCK_AUTHORITY_CREATE)
     void testAuthorized() throws Exception {
-        Assertions.assertEquals(0, mockMapper.selectCount(null));
+        assertEquals(0, mockMapper.selectCount(null));
 
         ResultActions resultActions = doCreate(MOCKS);
         checkResultActionsSuccess(resultActions);
@@ -51,17 +52,17 @@ class TestBaseControllerCreate extends MockControllerTestBase {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(MOCKS.get(1).getName())))
         ;
 
-        Assertions.assertEquals(2, mockMapper.selectCount(null));
+        assertEquals(2, mockMapper.selectCount(null));
 
         Mock mock1 = mockMapper.selectById(1);
-        Assertions.assertEquals(MOCKS.get(0).getName(), mock1.getName());
-        Assertions.assertEquals(0, mock1.getCreateUser());
-        Assertions.assertEquals(0, mock1.getUpdateUser());
+        assertEquals(MOCKS.get(0).getName(), mock1.getName());
+        assertEquals(0, mock1.getCreateUser());
+        assertEquals(0, mock1.getUpdateUser());
 
         Mock mock2 = mockMapper.selectById(2);
-        Assertions.assertEquals(MOCKS.get(1).getName(), mock2.getName());
-        Assertions.assertEquals(0, mock2.getCreateUser());
-        Assertions.assertEquals(0, mock2.getUpdateUser());
+        assertEquals(MOCKS.get(1).getName(), mock2.getName());
+        assertEquals(0, mock2.getCreateUser());
+        assertEquals(0, mock2.getUpdateUser());
     }
 
     @Test

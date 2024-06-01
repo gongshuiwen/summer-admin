@@ -2,7 +2,6 @@ package com.hzboiler.erp.core.controller;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.model.Mock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -13,6 +12,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author gongshuiwen
@@ -41,16 +42,16 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
         Mock mock2 = Mock.of(2L, updateName);
 
         List<Long> updateIds = Arrays.asList(1L, 2L);
-        updateIds.forEach(id -> Assertions.assertNotEquals(updateName, mockMapper.selectById(id).getName()));
+        updateIds.forEach(id -> assertNotEquals(updateName, mockMapper.selectById(id).getName()));
 
         ResultActions resultActions = doUpdate(List.of(mock1, mock2));
 
         checkResultActionsSuccess(resultActions, true);
         for (Long updateId : updateIds) {
             Mock mock = mockMapper.selectById(updateId);
-            Assertions.assertEquals(updateName, mock.getName());
-            Assertions.assertEquals(0, mock.getCreateUser());
-            Assertions.assertEquals(0, mock.getUpdateUser());
+            assertEquals(updateName, mock.getName());
+            assertEquals(0, mock.getCreateUser());
+            assertEquals(0, mock.getUpdateUser());
         }
     }
 
@@ -74,7 +75,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
         ResultActions resultActions = doUpdate(List.of(Mock.of(1L, null)));
         checkResultActionsSuccess(resultActions, true);
 
-        Assertions.assertEquals(oldName, mockMapper.selectById(1L).getName());
+        assertEquals(oldName, mockMapper.selectById(1L).getName());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.hzboiler.erp.core.controller;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -12,6 +11,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author gongshuiwen
@@ -36,12 +37,12 @@ class TestBaseControllerDelete extends MockControllerTestBase {
     @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
     void testAuthorized() throws Exception {
         List<Long> deleteIds = Arrays.asList(1L, 2L);
-        deleteIds.forEach(id -> Assertions.assertNotNull(mockMapper.selectById(id)));
+        deleteIds.forEach(id -> assertNotNull(mockMapper.selectById(id)));
 
         ResultActions resultActions = doDelete(deleteIds);
 
         checkResultActionsSuccess(resultActions, true);
-        deleteIds.forEach(deleteId -> Assertions.assertNull(mockMapper.selectById(deleteId)));
+        deleteIds.forEach(deleteId -> assertNull(mockMapper.selectById(deleteId)));
     }
 
     @Test

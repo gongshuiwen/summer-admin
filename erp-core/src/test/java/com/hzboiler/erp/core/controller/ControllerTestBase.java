@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.exception.BusinessExceptionEnum;
 import com.hzboiler.erp.core.protocal.Result;
 import org.hamcrest.core.Is;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,10 +35,10 @@ public abstract class ControllerTestBase {
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
         // check the error field is null
-        Assertions.assertThrowsExactly(AssertionError.class, () ->
+        assertThrowsExactly(AssertionError.class, () ->
                 resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.error", nullValue())));
         Result<?> result = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Result.class);
-        Assertions.assertNull(result.getError());
+        assertNull(result.getError());
     }
 
     protected void checkResultActionsSuccess(ResultActions resultActions, Object value) throws Exception {
@@ -48,10 +48,10 @@ public abstract class ControllerTestBase {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(value)));
 
         // check the error field is null
-        Assertions.assertThrowsExactly(AssertionError.class, () ->
+        assertThrowsExactly(AssertionError.class, () ->
                 resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.error", nullValue())));
         Result<?> result = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Result.class);
-        Assertions.assertNull(result.getError());
+        assertNull(result.getError());
     }
 
     protected void checkResultActionsException(ResultActions resultActions, BusinessExceptionEnum businessExceptionEnum) throws Exception {

@@ -2,12 +2,13 @@ package com.hzboiler.erp.core.protocal.query;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hzboiler.erp.core.model.Mock;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class TestCompositeCondition {
 
@@ -24,15 +25,15 @@ class TestCompositeCondition {
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         Condition condition = CompositeCondition.and(SIMPLE_QUERY_CONDITIONS);
         condition.applyToQueryWrapper(mockQueryWrapper);
-        Assertions.assertEquals("(" +
+        assertEquals("(" +
                 "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "AND " +
                 "(createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "AND " +
                 "(createUser = #{ew.paramNameValuePairs.MPGENVAL3}))", mockQueryWrapper.getSqlSegment());
-        Assertions.assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
-        Assertions.assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
-        Assertions.assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
+        assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
+        assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
+        assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
     }
 
     @Test
@@ -40,16 +41,16 @@ class TestCompositeCondition {
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         Condition condition = CompositeCondition.or(SIMPLE_QUERY_CONDITIONS);
         condition.applyToQueryWrapper(mockQueryWrapper);
-        Assertions.assertEquals("(" +
+        assertEquals("(" +
                 "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "OR " +
                 "(createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "OR " +
                 "(createUser = #{ew.paramNameValuePairs.MPGENVAL3}))"
                 , mockQueryWrapper.getSqlSegment());
-        Assertions.assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
-        Assertions.assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
-        Assertions.assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
+        assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
+        assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
+        assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
     }
 
     @Test
@@ -57,15 +58,15 @@ class TestCompositeCondition {
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         Condition condition = CompositeCondition.not(SIMPLE_QUERY_CONDITIONS);
         condition.applyToQueryWrapper(mockQueryWrapper);
-        Assertions.assertEquals("(" +
+        assertEquals("(" +
                 "NOT (name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "AND " +
                 "NOT (createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "AND " +
                 "NOT (createUser = #{ew.paramNameValuePairs.MPGENVAL3}))", mockQueryWrapper.getSqlSegment());
-        Assertions.assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
-        Assertions.assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
-        Assertions.assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
+        assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
+        assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
+        assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
     }
 
     @Test
@@ -86,7 +87,7 @@ class TestCompositeCondition {
 
         QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
         condition.applyToQueryWrapper(mockQueryWrapper);
-        Assertions.assertEquals("(" +
+        assertEquals("(" +
                 "(" +
                     "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                     "OR " +
@@ -100,7 +101,7 @@ class TestCompositeCondition {
                 ") " +
                 "AND " +
                 "(createUser <> #{ew.paramNameValuePairs.MPGENVAL5}))", mockQueryWrapper.getSqlSegment());
-        Assertions.assertEquals("mock1", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
-        Assertions.assertEquals("mock2", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
+        assertEquals("mock1", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
+        assertEquals("mock2", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
     }
 }
