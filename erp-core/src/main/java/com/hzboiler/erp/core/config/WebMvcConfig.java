@@ -15,6 +15,7 @@ import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.interceptor.BaseInterceptor;
 import com.hzboiler.erp.core.jackson2.*;
+import com.hzboiler.erp.core.protocal.query.Condition;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,6 +78,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .deserializerByType(Many2One.class, new Many2OneDeserializer())
                 .deserializerByType(One2Many.class, new One2ManyDeserializer())
                 .deserializerByType(Many2Many.class, new Many2ManyDeserializer())
+                .deserializerByType(Condition.class, new ConditionDeserializer())
                 .filters(new SimpleFilterProvider().addFilter(SecurityBeanPropertyFilter.FILTER_ID, SecurityBeanPropertyFilter.INSTANCE));
         return builder.build();
     }
