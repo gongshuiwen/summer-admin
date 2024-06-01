@@ -96,7 +96,7 @@ public interface BaseService<T extends BaseModel> {
 
     boolean createOne(T entity);
 
-    boolean createBatch(List<T> entities);
+    boolean createBatch(List<T> records);
 
     boolean updateById(Long id, T entity);
 
