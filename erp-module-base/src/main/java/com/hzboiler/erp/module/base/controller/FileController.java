@@ -1,6 +1,6 @@
 package com.hzboiler.erp.module.base.controller;
 
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import com.hzboiler.erp.module.base.storage.StorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,8 +19,8 @@ public class FileController {
 
     @Operation(summary = "上传文件")
     @PostMapping("/upload")
-    public R<String> upload(@RequestBody MultipartFile file) throws Exception {
-        return R.success(storageService.store(file));
+    public Result<String> upload(@RequestBody MultipartFile file) throws Exception {
+        return Result.success(storageService.store(file));
     }
 
     @Operation(summary = "下载文件")

@@ -2,7 +2,7 @@ package com.hzboiler.erp.module.base.controller;
 
 import com.hzboiler.erp.module.base.model.User;
 import com.hzboiler.erp.core.controller.BaseController;
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import com.hzboiler.erp.module.base.service.UserService;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_A
 public class UserController extends BaseController<UserService, User> {
 
     @Override
-    public R<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid User> updateDtoList) {
+    public Result<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid User> updateDtoList) {
         // SYS_ADMIN can update any user
         if (getContext().isAdmin()) {
             return super.update(updateDtoList);
@@ -30,7 +30,7 @@ public class UserController extends BaseController<UserService, User> {
 
         // Current user can only update info of himself
         if (updateDtoList.size() != 1 || !Objects.equals(updateDtoList.get(0).getId(), getContext().getUserId())) {
-            return R.error(ERROR_ACCESS_DENIED);
+            return Result.error(ERROR_ACCESS_DENIED);
         }
 
         return super.update(updateDtoList);
