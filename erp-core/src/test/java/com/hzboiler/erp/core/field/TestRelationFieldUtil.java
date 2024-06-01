@@ -1,5 +1,6 @@
 package com.hzboiler.erp.core.field;
 
+import com.hzboiler.erp.core.field.annotations.InverseField;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.util.ReflectUtil;
@@ -17,7 +18,11 @@ class TestRelationFieldUtil {
     @Getter
     @Setter
     static class Mock extends BaseModel {
+
+        @InverseField("field2")
         private Many2One<Mock> field1;
+
+        @InverseField("field10")
         private One2Many<Mock> field2;
         private Many2Many<Mock> field3;
         private Many2One<?> field4;
@@ -64,5 +69,14 @@ class TestRelationFieldUtil {
         assertEquals(2, many2ManyFields.length);
         assertArrayEquals(ReflectUtil.getAllDeclaredFieldsWithType(Mock2.class, Many2Many.class), many2ManyFields);
         assertTrue(Arrays.stream(many2ManyFields).allMatch((field) -> field.canAccess(new Mock2())));
+    }
+
+    @Test
+    void testGetInverseField() throws NoSuchFieldException {
+        Field inverseField = RelationFieldUtil.getInverseField(Mock.class.getDeclaredField("field1"));
+        assertEquals(Mock.class.getDeclaredField("field2"), inverseField);
+
+        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class.getDeclaredField("field2")));
+        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class.getDeclaredField("field3")));
     }
 }
