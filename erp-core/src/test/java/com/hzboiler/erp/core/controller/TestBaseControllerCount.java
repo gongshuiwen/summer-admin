@@ -1,8 +1,8 @@
 package com.hzboiler.erp.core.controller;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
-import com.hzboiler.erp.core.model.Mock;
-import com.hzboiler.erp.core.protocal.Condition;
+import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.SimpleCondition;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
 class TestBaseControllerCount extends MockControllerTestBase {
 
-    ResultActions doCount(Condition<?> condition) throws Exception {
+    ResultActions doCount(Condition condition) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
                         .get(MOCK_PATH + "/count")
@@ -43,7 +43,7 @@ class TestBaseControllerCount extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testCondition() throws Exception {
-        Condition<Mock> condition = new Condition<>("name", "=", "mock1");
+        Condition condition = SimpleCondition.of("name", "=", "mock1");
         ResultActions resultActions = doCount(condition);
         checkResultActionsSuccess(resultActions);
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is("1")));

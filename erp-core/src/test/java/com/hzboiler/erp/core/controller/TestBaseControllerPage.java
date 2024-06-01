@@ -2,7 +2,8 @@ package com.hzboiler.erp.core.controller;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.model.Mock;
-import com.hzboiler.erp.core.protocal.Condition;
+import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.SimpleCondition;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -21,7 +22,7 @@ import java.util.List;
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
 class TestBaseControllerPage extends MockControllerTestBase {
 
-    ResultActions doPage(Long pageNum, Long pageSize, String sorts, Condition<Mock> condition) throws Exception {
+    ResultActions doPage(Long pageNum, Long pageSize, String sorts, Condition condition) throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(MOCK_PATH + "/page");
         builder.contentType(MediaType.APPLICATION_JSON);
         if (pageNum != null) {
@@ -89,7 +90,7 @@ class TestBaseControllerPage extends MockControllerTestBase {
         List<Long> ids = List.of(1L, 2L);
         List<Mock> mocks = mockMapper.selectBatchIds(ids);
 
-        ResultActions resultActions = doPage(1L, 20L, "id desc", null);
+        ResultActions resultActions = doPage(1L, 20L, "_id", null);
 
         checkResultActionsSuccess(resultActions);
         resultActions
@@ -107,7 +108,7 @@ class TestBaseControllerPage extends MockControllerTestBase {
     @Test
     @WithMockAdmin
     void testSimpleCondition() throws Exception {
-        Condition<Mock> condition = new Condition<>("name", "=", "mock1");
+        Condition condition = SimpleCondition.of("name", "=", "mock1");
         ResultActions resultActions = doPage(1L, 20L, null, condition);
         checkResultActionsSuccess(resultActions);
         resultActions
