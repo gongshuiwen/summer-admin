@@ -5,8 +5,6 @@ import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Getter;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -18,7 +16,6 @@ import java.util.stream.Collectors;
 public class Many2Many<T extends BaseModel> {
 
     private static final Map<Class<?>, List<Field>> many2manyFieldsCache = new ConcurrentHashMap<>();
-    private static final Map<Field, Class<?>> fieldTargetClassCache = new ConcurrentHashMap<>();
 
     private List<Command<T>> commands; // for update use
     private List<T> values;
@@ -33,28 +30,6 @@ public class Many2Many<T extends BaseModel> {
             many2manyFieldsCache.put(entityClass, fields);
         }
         return fields;
-    }
-
-    public static Class<?> getTargetClass(Field field) {
-        Class<?> targetClass = fieldTargetClassCache.getOrDefault(field, null);
-        if ( targetClass == null) {
-            targetClass = _getTargetClass(field);
-            fieldTargetClassCache.put(field, targetClass);
-        }
-        return targetClass;
-    }
-
-    private static Class<?> _getTargetClass(Field field) {
-        if (field.getType() != Many2Many.class)
-            throw new IllegalArgumentException("Not a Many2Many field: " + field.getName());
-
-        Type genericType = field.getGenericType();
-        if (genericType instanceof ParameterizedType pt) {
-            Type[] actualTypes = pt.getActualTypeArguments();
-            if (actualTypes.length > 0 && actualTypes[0] instanceof Class<?> targetClass)
-                return targetClass;
-        }
-        throw new RuntimeException("Cannot find target class for Many2Many field: " + field.getName());
     }
 
     public static <T extends BaseModel> Many2Many<T> ofCommands(List<Command<T>> commands) {

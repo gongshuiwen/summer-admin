@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.exception.BusinessException;
+import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.model.BaseModel;
@@ -123,8 +124,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
             }
 
             // Get target entities
-            @SuppressWarnings("unchecked")
-            BaseService<T> targetService = service.getService((Class<T>) Many2One.getTargetClass(field));
+            BaseService<?> targetService = service.getService(RelationFieldUtil.getTargetModelClass(field));
             List<? extends BaseModel> targetEntities = targetService.selectByIds(targetIds.stream().toList());
             Map<Long, ? extends BaseModel> targetEntitiesMap = targetEntities.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));
@@ -143,7 +143,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     private void fetchMany2Many(List<T> entities) throws IllegalAccessException {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = Many2Many.getTargetClass(field);
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             RelationMapper relationMapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
 
             // Get all target ids and the map of entity id -> target ids
@@ -156,8 +156,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
             }
 
             // Get allTargetEntities
-            @SuppressWarnings("unchecked")
-            BaseService<T> targetService = service.getService((Class<T>) targetClass);
+            BaseService<?> targetService = service.getService(targetClass);
             List<? extends BaseModel> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
             Map<Long, ? extends BaseModel> targetEntitiesMap = allTargetEntities.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzboiler.erp.core.field.*;
+import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.protocal.Condition;
@@ -116,7 +117,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForCreate(List<T> entities) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = (Class<BaseModel>) One2Many.getTargetClass(field);
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Field inverseField = One2Many.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             for (T entity : entities) {
@@ -152,7 +153,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForCreate(List<T> entities) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = Many2Many.getTargetClass(field);
+            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
             for (T entity : entities) {
                 Many2Many<BaseModel> filedValue;
                 try {
@@ -219,7 +220,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = (Class<BaseModel>) One2Many.getTargetClass(field);
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Field inverseField = One2Many.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             One2Many<BaseModel> filedValue;
@@ -263,7 +264,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = Many2Many.getTargetClass(field);
+            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Many2Many<BaseModel> filedValue;
             try {
                 filedValue = (Many2Many<BaseModel>) field.get(entity);
@@ -329,10 +330,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         return res;
     }
 
-    @SuppressWarnings("unchecked")
     private void processOne2manyForDelete(List<Long> ids) {
         for (Field field : One2Many.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = (Class<BaseModel>) One2Many.getTargetClass(field);
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Field inverseField = One2Many.getInverseField(field);
             AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
                     (AbstractBaseService<BaseMapper<BaseModel>, BaseModel>) getService(targetClass);
@@ -395,7 +395,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     private void processMany2manyForDelete(List<Long> ids) {
         for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = Many2Many.getTargetClass(field);
+            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
             for (Long sourceId : ids) {
                 RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
                 mapper.removeAll(entityClass, sourceId);

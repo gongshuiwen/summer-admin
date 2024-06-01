@@ -5,8 +5,6 @@ import com.hzboiler.erp.core.util.ReflectUtil;
 import lombok.Getter;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 public class Many2One<T extends BaseModel> {
 
     private static final Map<Class<?>, List<Field>> many2oneFieldsCache = new ConcurrentHashMap<>();
-    private static final Map<Field, Class<?>> fieldTargetClassCache = new ConcurrentHashMap<>();
 
     private Long id;
     private String name;
@@ -36,28 +33,6 @@ public class Many2One<T extends BaseModel> {
             many2oneFieldsCache.put(entityClass, fields);
         }
         return fields;
-    }
-
-    public static Class<?> getTargetClass(Field field) {
-        Class<?> targetClass = fieldTargetClassCache.getOrDefault(field, null);
-        if ( targetClass == null) {
-            targetClass = _getTargetClass(field);
-            fieldTargetClassCache.put(field, targetClass);
-        }
-        return targetClass;
-    }
-
-    private static Class<?> _getTargetClass(Field field) {
-        if (field.getType() != Many2One.class)
-            throw new IllegalArgumentException("Not a Many2One field: " + field.getName());
-
-        Type genericType = field.getGenericType();
-        if (genericType instanceof ParameterizedType pt) {
-            Type[] actualTypes = pt.getActualTypeArguments();
-            if (actualTypes.length > 0 && actualTypes[0] instanceof Class<?> targetClass)
-                return targetClass;
-        }
-        throw new RuntimeException("Cannot find target class for Many2One field: " + field.getName());
     }
 
     public static <T extends BaseModel> Many2One<T> ofId(Long id) {
