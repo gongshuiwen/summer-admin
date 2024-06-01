@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzboiler.erp.core.model.BaseModel;
-import com.hzboiler.erp.core.protocal.OrderBy;
+import com.hzboiler.erp.core.protocal.query.OrderBy;
 import com.hzboiler.erp.core.protocal.query.Condition;
 
 import java.util.List;
