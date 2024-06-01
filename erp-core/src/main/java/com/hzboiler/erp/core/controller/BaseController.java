@@ -37,7 +37,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected S service;
-    protected Class<T> entityClass;
+    protected Class<T> modelClass;
 
     @Operation(summary = "ID查询")
     @GetMapping
@@ -109,70 +109,70 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     @SuppressWarnings("unchecked")
     public void afterPropertiesSet() {
-        this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        this.modelClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
-    private void fetchMany2One(List<T> entities) throws IllegalAccessException {
-        for (Field field : RelationFieldUtil.getMany2OneFields(entityClass)) {
+    private void fetchMany2One(List<T> records) throws IllegalAccessException {
+        for (Field field : RelationFieldUtil.getMany2OneFields(modelClass)) {
             // Get target ids
             Set<Long> targetIds = new HashSet<>();
-            for (T entity : entities) {
-                Long targetId = ((Many2One<?>) field.get(entity)).getId();
+            for (T record : records) {
+                Long targetId = ((Many2One<?>) field.get(record)).getId();
                 if (targetId != null && targetId > 0) {
-                    targetIds.add(((Many2One<?>) field.get(entity)).getId());
+                    targetIds.add(((Many2One<?>) field.get(record)).getId());
                 }
             }
 
-            // Get target entities
+            // Get target records
             BaseService<?> targetService = service.getService(RelationFieldUtil.getTargetModelClass(field));
-            List<? extends BaseModel> targetEntities = targetService.selectByIds(targetIds.stream().toList());
-            Map<Long, ? extends BaseModel> targetEntitiesMap = targetEntities.stream()
+            List<? extends BaseModel> targetRecords = targetService.selectByIds(targetIds.stream().toList());
+            Map<Long, ? extends BaseModel> targetRecordsMap = targetRecords.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));
 
-            // Set target entities to many2one field
-            for (T entity : entities) {
+            // Set target records to many2one field
+            for (T record : records) {
                 @SuppressWarnings("unchecked")
-                Many2One<BaseModel> many2One = (Many2One<BaseModel>) field.get(entity);
+                Many2One<BaseModel> many2One = (Many2One<BaseModel>) field.get(record);
                 Long targetId = many2One.getId();
                 if (targetId != null && targetId > 0) {
-                    many2One.set(targetEntitiesMap.get(targetId));
+                    many2One.set(targetRecordsMap.get(targetId));
                 }
             }
         }
     }
 
-    private void fetchMany2Many(List<T> entities) throws IllegalAccessException {
-        for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
+    private void fetchMany2Many(List<T> records) throws IllegalAccessException {
+        for (Field field : RelationFieldUtil.getMany2ManyFields(modelClass)) {
             Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
-            RelationMapper relationMapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+            RelationMapper relationMapper = RelationMapperRegistry.getMapper(modelClass, targetClass);
 
-            // Get all target ids and the map of entity id -> target ids
+            // Get all target ids and the map of record id -> target ids
             Set<Long> allTargetIds = new HashSet<>();
-            Map<Long, List<Long>> entityId2TargetIdsMap = new HashMap<>();
-            for (T entity : entities) {
-                List<Long> targetIds = relationMapper.getTargetIds(entityClass, entity.getId());
+            Map<Long, List<Long>> recordId2TargetIdsMap = new HashMap<>();
+            for (T record : records) {
+                List<Long> targetIds = relationMapper.getTargetIds(modelClass, record.getId());
                 allTargetIds.addAll(targetIds);
-                entityId2TargetIdsMap.put(entity.getId(), targetIds);
+                recordId2TargetIdsMap.put(record.getId(), targetIds);
             }
 
-            // Get allTargetEntities
+            // Get allTargetRecords
             BaseService<?> targetService = service.getService(targetClass);
-            List<? extends BaseModel> allTargetEntities = targetService.selectByIds(allTargetIds.stream().toList());
-            Map<Long, ? extends BaseModel> targetEntitiesMap = allTargetEntities.stream()
+            List<? extends BaseModel> allTargetRecords = targetService.selectByIds(allTargetIds.stream().toList());
+            Map<Long, ? extends BaseModel> targetRecordsMap = allTargetRecords.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));
 
             // Set many2many field
-            for (T entity : entities) {
-                List<Long> targetIds = entityId2TargetIdsMap.get(entity.getId());
-                List<? extends BaseModel> targetEntities = targetIds.stream()
-                        .map(targetEntitiesMap::get).collect(Collectors.toList());
-                field.set(entity, Many2Many.ofValues(targetEntities));
+            for (T record : records) {
+                List<Long> targetIds = recordId2TargetIdsMap.get(record.getId());
+                List<? extends BaseModel> targetRecords = targetIds.stream()
+                        .map(targetRecordsMap::get).collect(Collectors.toList());
+                field.set(record, Many2Many.ofValues(targetRecords));
             }
         }
     }
 
     private void checkReadOnlyForDtoList(List<T> dtoList) {
-        for (Field field : ReadOnlyUtil.getReadOnlyFields(entityClass)) {
+        for (Field field : ReadOnlyUtil.getReadOnlyFields(modelClass)) {
             for (T dto : dtoList) {
                 try {
                     if (field.get(dto) != null) {
