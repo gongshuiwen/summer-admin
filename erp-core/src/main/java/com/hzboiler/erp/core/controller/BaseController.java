@@ -6,13 +6,13 @@ import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.exception.BusinessException;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
+import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
-import com.hzboiler.erp.core.protocal.Condition;
 import com.hzboiler.erp.core.protocal.R;
 import com.hzboiler.erp.core.service.BaseService;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
@@ -54,7 +54,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @GetMapping("/page")
     public R<IPage<T>> page(@RequestParam @Positive @Max(1000) Long pageNum, @RequestParam @Positive @Max(1000) Long pageSize,
                             @RequestParam(required = false) String sorts,
-                            @RequestBody(required = false) Condition<T> condition) throws IllegalAccessException {
+                            @RequestBody(required = false) Condition condition) throws IllegalAccessException {
         IPage<T> page = service.page(pageNum, pageSize, sorts, condition);
         List<T> records = page.getRecords();
         if (records != null && !records.isEmpty()) {
@@ -66,7 +66,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     @Operation(summary = "计数查询")
     @GetMapping("/count")
-    public R<Long> count(@RequestBody(required = false) Condition<T> condition) {
+    public R<Long> count(@RequestBody(required = false) Condition condition) {
         return R.success(service.count(condition));
     }
 

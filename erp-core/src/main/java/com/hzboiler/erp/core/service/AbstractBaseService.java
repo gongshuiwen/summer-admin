@@ -12,8 +12,8 @@ import com.hzboiler.erp.core.field.*;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
-import com.hzboiler.erp.core.protocal.Condition;
-import com.hzboiler.erp.core.protocal.Query;
+import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.Query;
 import com.hzboiler.erp.core.security.DataAccessAuthority;
 import com.hzboiler.erp.core.security.DataAccessAuthorityChecker;
 import com.hzboiler.erp.core.model.BaseModel;
@@ -47,13 +47,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public IPage<T> page(Long pageNum, Long pageSize, String sort, Condition<T> condition) {
+    public IPage<T> page(Long pageNum, Long pageSize, String sorts, Condition condition) {
         DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
-        IPage<T> page = new Page<>(pageNum, pageSize);
-        Query<T> query = new Query<>();
-        query.setSort(sort);
-        query.setCondition(condition);
-        return super.page(page, query.buildPageQueryWrapper());
+        Query<T> query = new Query<>(entityClass, pageNum, pageSize, sorts, condition);
+        return super.page(query.getPage(), query.getQueryWrapper());
     }
 
     @Override

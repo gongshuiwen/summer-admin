@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.protocal;
+package com.hzboiler.erp.core.protocal.query;
 
 import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import com.baomidou.mybatisplus.core.enums.SqlLike;

@@ -3,9 +3,9 @@ package com.hzboiler.erp.core.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.hzboiler.erp.core.protocal.Condition;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.OrderBy;
+import com.hzboiler.erp.core.protocal.query.Condition;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public interface BaseService<T extends BaseModel> {
         return page(pageNum, pageSize, sort, null);
     }
 
-    IPage<T> page(Long pageNum, Long pageSize, String sort, Condition<T> condition);
+    IPage<T> page(Long pageNum, Long pageSize, String sorts, Condition condition);
 
-    default Long count(Condition<T> condition) {
+    default Long count(Condition condition) {
         if (condition == null)
             return count((QueryWrapper<T>) null);
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
@@ -35,12 +35,12 @@ public interface BaseService<T extends BaseModel> {
 
     Long count(QueryWrapper<T> queryWrapper);
 
-    default T selectOne(Condition<T> condition) {
+    default T selectOne(Condition condition) {
         return selectOne(condition, null);
     }
 
-    default T selectOne(Condition<T> condition, List<OrderBy<T>> orderBys) {
-        QueryWrapper<T> queryWrapper = condition.toQueryWrapper();
+    default T selectOne(Condition condition, List<OrderBy<T>> orderBys) {
+        QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
 
         if (orderBys != null && !orderBys.isEmpty()) {
             for (OrderBy<T> orderBy : orderBys) {
@@ -55,25 +55,25 @@ public interface BaseService<T extends BaseModel> {
         return list.isEmpty() ? null : list.get(0);
     }
 
-    default List<T> selectList(Condition<T> condition) {
+    default List<T> selectList(Condition condition) {
         return selectList(condition, 0L, 0L, null);
     }
 
-    default List<T> selectList(Condition<T> condition, Long limit) {
+    default List<T> selectList(Condition condition, Long limit) {
         return selectList(condition, limit, 0L, null);
     }
 
-    default List<T> selectList(Condition<T> condition, Long limit, Long offset) {
+    default List<T> selectList(Condition condition, Long limit, Long offset) {
         return selectList(condition, limit, offset, null);
     };
 
-    default List<T> selectList(Condition<T> condition, Long limit, Long offset, List<OrderBy<T>> orderBys) {
+    default List<T> selectList(Condition condition, Long limit, Long offset, List<OrderBy<T>> orderBys) {
         if (limit == null || limit < 0)
             throw new IllegalArgumentException("limit must not be null or < 0!");
         if (offset == null || offset < 0)
             throw new IllegalArgumentException("offset must not be null or < 0!");
 
-        QueryWrapper<T> queryWrapper = condition.toQueryWrapper();
+        QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
         if (limit > 0) {
             queryWrapper.last("limit " + limit);
             if (offset > 0) {
