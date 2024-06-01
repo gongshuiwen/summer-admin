@@ -50,6 +50,6 @@ class TestReadOnlyUtil {
     void testGetReadOnlyFields() {
         Field[] readOnlyFields = ReadOnlyUtil.getReadOnlyFields(Class2.class);
         assertArrayEquals(readonlyFields.toArray(), readOnlyFields);
-        assertTrue(Arrays.stream(readOnlyFields).allMatch((field) -> field.canAccess(new TestRelationFieldUtil.Mock2())));
+        assertTrue(Arrays.stream(readOnlyFields).allMatch((field) -> field.canAccess(new Class2())));
     }
 }
