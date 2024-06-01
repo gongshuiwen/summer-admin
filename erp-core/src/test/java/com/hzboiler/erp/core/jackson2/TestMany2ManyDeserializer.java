@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.hzboiler.erp.core.field.Command;
 import com.hzboiler.erp.core.field.CommandType;
 import com.hzboiler.erp.core.field.Many2Many;
-import com.hzboiler.erp.core.jackson2.Many2ManyDeserializer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
