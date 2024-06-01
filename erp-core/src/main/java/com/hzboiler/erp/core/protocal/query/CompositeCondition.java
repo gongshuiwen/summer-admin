@@ -63,20 +63,11 @@ public class CompositeCondition extends Condition {
         }
 
         if ("and".equals(getOperator())) {
-            conditions.forEach(condition -> {
-                Objects.requireNonNull(condition, "condition must not be null");
-                queryWrapper.and(condition::applyToQueryWrapper);
-            });
+            conditions.forEach(condition -> queryWrapper.and(condition::applyToQueryWrapper));
         } else if ("or".equals(getOperator())) {
-            conditions.forEach(condition -> {
-                Objects.requireNonNull(condition, "condition must not be null");
-                queryWrapper.or(condition::applyToQueryWrapper);
-            });
+            conditions.forEach(condition -> queryWrapper.or(condition::applyToQueryWrapper));
         } else if ("not".equals(getOperator())) {
-            conditions.forEach(condition -> {
-                Objects.requireNonNull(condition, "condition must not be null");
-                queryWrapper.not(condition::applyToQueryWrapper);
-            });
+            conditions.forEach(condition -> queryWrapper.not(condition::applyToQueryWrapper));
         } else {
             throw new RuntimeException("This should never be thrown!");
         }
