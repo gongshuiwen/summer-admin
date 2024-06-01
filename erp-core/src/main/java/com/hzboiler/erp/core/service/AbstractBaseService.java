@@ -86,9 +86,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     @Transactional
-    public boolean createOne(T entity) {
-        if (entity == null) return false;
-        return createBatch(List.of(entity));
+    public boolean createOne(T record) {
+        if (record == null) return false;
+        return createBatch(List.of(record));
     }
 
     @Override
@@ -117,10 +117,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Field inverseField = RelationFieldUtil.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
-            for (T entity : records) {
+            for (T record : records) {
                 One2Many<BaseModel> filedValue;
                 try {
-                    filedValue = (One2Many<BaseModel>) field.get(entity);
+                    filedValue = (One2Many<BaseModel>) field.get(record);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -134,8 +134,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                         if (command.getRecords() == null || command.getRecords().isEmpty()) {
                             throw new IllegalArgumentException("The records of Command CREATE cannot be null or empty");
                         }
-                        for (BaseModel targetEntity : command.getRecords()) {
-                            inverseField.set(targetEntity, Many2One.ofId(entity.getId()));
+                        for (BaseModel targetRecord : command.getRecords()) {
+                            inverseField.set(targetRecord, Many2One.ofId(record.getId()));
                         }
                         targetService.createBatch(command.getRecords());
                     } else {
@@ -151,10 +151,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processMany2ManyForCreate(List<T> records) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
             Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
-            for (T entity : records) {
+            for (T record : records) {
                 Many2Many<BaseModel> filedValue;
                 try {
-                    filedValue = (Many2Many<BaseModel>) field.get(entity);
+                    filedValue = (Many2Many<BaseModel>) field.get(record);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -170,7 +170,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                             throw new IllegalArgumentException("The ids of Command ADD cannot be null or empty");
                         }
                         RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
-                        mapper.add(entityClass, entity.getId(), command.getIds());
+                        mapper.add(entityClass, record.getId(), command.getIds());
                     } else {
                         throw new IllegalArgumentException("The Command " + command.getCommandType()
                                 + " is not supported for many2many field in create method");
@@ -182,47 +182,47 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     @Transactional
-    public boolean updateById(Long id, T entity) {
-        if (id == null || entity == null) return false;
-        return updateByIds(List.of(id), entity);
+    public boolean updateById(Long id, T record) {
+        if (id == null || record == null) return false;
+        return updateByIds(List.of(id), record);
     }
 
     @Override
     @Transactional
     @SuppressWarnings("unchecked")
-    public boolean updateByIds(List<Long> ids, T entity) {
-        if (ids == null || ids.isEmpty() || entity == null) return false;
+    public boolean updateByIds(List<Long> ids, T record) {
+        if (ids == null || ids.isEmpty() || record == null) return false;
 
         // check authority for update
         DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.UPDATE);
 
         // construct LambdaUpdateWrapper
         LambdaUpdateWrapper<T> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.setEntityClass((Class<T>) entity.getClass());
+        wrapper.setEntityClass((Class<T>) record.getClass());
         wrapper.in(T::getId, ids);
 
         // do update
-        boolean res = update(entity, wrapper);
+        boolean res = update(record, wrapper);
 
         // process one2many fields
-        processOne2ManyForUpdate(ids, entity);
+        processOne2ManyForUpdate(ids, record);
 
         // process many2many fields
-        processMany2ManyForUpdate(ids, entity);
+        processMany2ManyForUpdate(ids, record);
 
         return res;
     }
 
     @SneakyThrows(IllegalAccessException.class)
     @SuppressWarnings("unchecked")
-    private void processOne2ManyForUpdate(List<Long> ids, T entity) {
+    private void processOne2ManyForUpdate(List<Long> ids, T record) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Field inverseField = RelationFieldUtil.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             One2Many<BaseModel> filedValue;
             try {
-                filedValue = (One2Many<BaseModel>) field.get(entity);
+                filedValue = (One2Many<BaseModel>) field.get(record);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -236,8 +236,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                     if (command == null) break;
                     switch (command.getCommandType()) {
                         case CREATE: {
-                            for (BaseModel targetEntity : command.getRecords()) {
-                                inverseField.set(targetEntity, Many2One.ofId(sourceId));
+                            for (BaseModel targetRecord : command.getRecords()) {
+                                inverseField.set(targetRecord, Many2One.ofId(sourceId));
                             }
                             targetService.createBatch(command.getRecords());
                         }
@@ -259,12 +259,12 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @SuppressWarnings("unchecked")
-    private void processMany2ManyForUpdate(List<Long> ids, T entity) {
+    private void processMany2ManyForUpdate(List<Long> ids, T record) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
             Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
             Many2Many<BaseModel> filedValue;
             try {
-                filedValue = (Many2Many<BaseModel>) field.get(entity);
+                filedValue = (Many2Many<BaseModel>) field.get(record);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

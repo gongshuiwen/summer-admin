@@ -94,13 +94,13 @@ public interface BaseService<T extends BaseModel> {
 
     List<T> nameSearch(String name);
 
-    boolean createOne(T entity);
+    boolean createOne(T record);
 
     boolean createBatch(List<T> records);
 
-    boolean updateById(Long id, T entity);
+    boolean updateById(Long id, T record);
 
-    boolean updateByIds(List<Long> ids, T entity);
+    boolean updateByIds(List<Long> ids, T record);
 
     boolean deleteById(Long id);
 
