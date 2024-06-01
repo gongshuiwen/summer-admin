@@ -40,7 +40,7 @@ class TestBaseControllerDelete extends MockControllerTestBase {
 
         ResultActions resultActions = doDelete(deleteIds);
 
-        checkResultActionsSuccess(resultActions);
+        checkResultActionsSuccess(resultActions, true);
         deleteIds.forEach(deleteId -> Assertions.assertNull(mockMapper.selectById(deleteId)));
     }
 

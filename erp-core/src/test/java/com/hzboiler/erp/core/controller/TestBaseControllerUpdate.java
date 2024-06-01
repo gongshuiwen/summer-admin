@@ -45,7 +45,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
 
         ResultActions resultActions = doUpdate(List.of(mock1, mock2));
 
-        checkResultActionsSuccess(resultActions);
+        checkResultActionsSuccess(resultActions, true);
         for (Long updateId : updateIds) {
             Mock mock = mockMapper.selectById(updateId);
             Assertions.assertEquals(updateName, mock.getName());
@@ -72,7 +72,7 @@ class TestBaseControllerUpdate extends MockControllerTestBase {
         String oldName = mockMapper.selectById(1L).getName();
 
         ResultActions resultActions = doUpdate(List.of(Mock.of(1L, null)));
-        checkResultActionsSuccess(resultActions);
+        checkResultActionsSuccess(resultActions, true);
 
         Assertions.assertEquals(oldName, mockMapper.selectById(1L).getName());
     }

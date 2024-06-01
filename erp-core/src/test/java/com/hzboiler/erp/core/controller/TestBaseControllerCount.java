@@ -36,8 +36,7 @@ class TestBaseControllerCount extends MockControllerTestBase {
     @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testAuthorized() throws Exception {
         ResultActions resultActions = doCount(null);
-        checkResultActionsSuccess(resultActions);
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is("2")));
+        checkResultActionsSuccess(resultActions, "2");
     }
 
     @Test
@@ -45,7 +44,6 @@ class TestBaseControllerCount extends MockControllerTestBase {
     void testCondition() throws Exception {
         Condition condition = SimpleCondition.of("name", "=", "mock1");
         ResultActions resultActions = doCount(condition);
-        checkResultActionsSuccess(resultActions);
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is("1")));
+        checkResultActionsSuccess(resultActions, "1");
     }
 }

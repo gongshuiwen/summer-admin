@@ -41,6 +41,19 @@ public abstract class ControllerTestBase {
         Assertions.assertNull(result.getError());
     }
 
+    protected void checkResultActionsSuccess(ResultActions resultActions, Object value) throws Exception {
+        resultActions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(value)));
+
+        // check the error field is null
+        Assertions.assertThrowsExactly(AssertionError.class, () ->
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.error", nullValue())));
+        Result<?> result = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Result.class);
+        Assertions.assertNull(result.getError());
+    }
+
     protected void checkResultActionsException(ResultActions resultActions, BusinessExceptionEnum businessExceptionEnum) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
