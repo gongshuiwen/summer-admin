@@ -10,10 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class DataAccessAuthorityChecker {
 
     /**
-     * Check if the current user has the authority to access the specified entity class with the given data access authority.
+     * Check if the current user has the authority to access the specified model class with the given data access authority.
      * Throws a DataAccessException if the user does not have the required authority.
      *
-     * @param modelClass The entity class to check access for.
+     * @param modelClass The model class to check access for.
      * @param authority The data access authority required.
      * @throws DataAccessException If the user does not have the required authority.
      */

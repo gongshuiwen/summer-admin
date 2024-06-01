@@ -50,6 +50,6 @@ public record Query<T extends BaseModel>(
     }
 
     private void checkField(String fieldName) {
-        // TODO: implement check field existing in entity class with cache
+        // TODO: implement check field existing in model class with cache
     }
 }
