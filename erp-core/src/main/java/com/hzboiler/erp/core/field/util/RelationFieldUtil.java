@@ -50,7 +50,7 @@ public abstract class RelationFieldUtil {
      */
     private static <T extends BaseModel> Class<T> _getTargetModelClass(Field field) {
         if (!isRelationField(field))
-            throw new IllegalArgumentException("Field " + field + " is not a relation field");
+            throw new IllegalArgumentException("Field '" + _formatFieldName(field) + "' is not a relation field.");
 
         Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType pt) {
@@ -62,7 +62,7 @@ public abstract class RelationFieldUtil {
             }
         }
 
-        throw new RuntimeException("Cannot find target class for relation field " + field);
+        throw new RuntimeException("Cannot find target class for relation field '" + _formatFieldName(field) + "'.");
     }
 
     /**
