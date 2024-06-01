@@ -2,8 +2,9 @@ package com.hzboiler.erp.core.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.exception.BusinessExceptionEnum;
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import org.hamcrest.core.Is;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
-
+import static org.hamcrest.Matchers.nullValue;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -31,17 +32,22 @@ public abstract class ControllerTestBase {
     protected void checkResultActionsSuccess(ResultActions resultActions) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(R.SUCCESS_CODE)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(R.SUCCESS_MESSAGE)));
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        // check the error field is null
+        Assertions.assertThrowsExactly(AssertionError.class, () ->
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.error", nullValue())));
+        Result<?> result = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Result.class);
+        Assertions.assertNull(result.getError());
     }
 
     protected void checkResultActionsException(ResultActions resultActions, BusinessExceptionEnum businessExceptionEnum) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code", Is.is(businessExceptionEnum.code())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Is.is(businessExceptionEnum.message())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error.namespace", Is.is(businessExceptionEnum.namespace())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error.code", Is.is(businessExceptionEnum.code())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error.message", Is.is(businessExceptionEnum.message())));
     }
 
     protected void checkResultActionsInvalidArguments(ResultActions resultActions) throws Exception {
