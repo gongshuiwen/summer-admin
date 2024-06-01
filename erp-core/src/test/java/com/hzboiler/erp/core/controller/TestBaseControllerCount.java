@@ -3,14 +3,12 @@ package com.hzboiler.erp.core.controller;
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.SimpleCondition;
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 /**
  * @author gongshuiwen
