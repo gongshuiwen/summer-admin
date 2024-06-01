@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.model.Mock;
 import com.hzboiler.erp.core.mapper.MockMapper;
-import com.hzboiler.erp.core.protocal.Condition;
+import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.SimpleCondition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -79,7 +80,7 @@ public class TestAbstractBaseService {
         Assertions.assertEquals(2L, results.get(1).getId());
         Assertions.assertEquals("mock2", results.get(1).getName());
 
-        pageResult = mockService.page(1L, 20L,"id desc");
+        pageResult = mockService.page(1L, 20L,"_id");
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(2, pageResult.getTotal());
         Assertions.assertEquals(1, pageResult.getCurrent());
@@ -92,9 +93,9 @@ public class TestAbstractBaseService {
         Assertions.assertEquals(1L, results.get(1).getId());
         Assertions.assertEquals("mock1", results.get(1).getName());
 
-        Condition<Mock> condition = new Condition<>("id", "=", 1L);
+        Condition condition = SimpleCondition.of("id", "=", 1L);
 
-        pageResult = mockService.page(1L, 20L, "id desc", condition);
+        pageResult = mockService.page(1L, 20L, "_id", condition);
         Assertions.assertEquals(1, pageResult.getPages());
         Assertions.assertEquals(1, pageResult.getTotal());
         Assertions.assertEquals(1, pageResult.getCurrent());
@@ -121,10 +122,10 @@ public class TestAbstractBaseService {
     @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
     void testCount() {
-        Long count = mockService.count((Condition<Mock>) null);
+        Long count = mockService.count((Condition) null);
         Assertions.assertEquals(2, count);
 
-        Condition<Mock> condition = new Condition<>("id", "=", 1L);
+        Condition condition = SimpleCondition.of("id", "=", 1L);
         count = mockService.count(condition);
         Assertions.assertEquals(1, count);
     }
