@@ -24,28 +24,6 @@ public class One2Many<T extends BaseModel> {
     private List<Command<T>> commands; // for update use
     private List<T> values;
 
-    public static Field getInverseField(Field field) {
-        Field inverseField = fieldInverseFieldCache.getOrDefault(field, null);
-        if (inverseField == null) {
-            inverseField = _getInverseField(field);
-            fieldInverseFieldCache.put(field, inverseField);
-        }
-        return inverseField;
-    }
-
-    private static Field _getInverseField(Field field) {
-        Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
-        InverseField inverseFieldAnnotation = field.getDeclaredAnnotation(InverseField.class);
-        Field inverseField;
-        try {
-            inverseField = targetClass.getDeclaredField(inverseFieldAnnotation.value());
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-        inverseField.setAccessible(true);
-        return inverseField;
-    }
-
     public static <T extends BaseModel> One2Many<T> ofCommands(List<Command<T>> commands) {
         One2Many<T> One2Many = new One2Many<>();
         One2Many.commands = commands;

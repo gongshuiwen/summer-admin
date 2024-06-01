@@ -118,7 +118,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processOne2ManyForCreate(List<T> entities) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
-            Field inverseField = One2Many.getInverseField(field);
+            Field inverseField = RelationFieldUtil.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             for (T entity : entities) {
                 One2Many<BaseModel> filedValue;
@@ -221,7 +221,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processOne2ManyForUpdate(List<Long> ids, T entity) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
-            Field inverseField = One2Many.getInverseField(field);
+            Field inverseField = RelationFieldUtil.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             One2Many<BaseModel> filedValue;
             try {
@@ -333,7 +333,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processOne2manyForDelete(List<Long> ids) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
-            Field inverseField = One2Many.getInverseField(field);
+            Field inverseField = RelationFieldUtil.getInverseField(field);
             AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
                     (AbstractBaseService<BaseMapper<BaseModel>, BaseModel>) getService(targetClass);
             OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
