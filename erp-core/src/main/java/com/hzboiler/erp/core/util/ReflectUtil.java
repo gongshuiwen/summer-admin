@@ -7,12 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Static utility class that contains reflection-related utility methods.
+ *
  * @author gongshuiwen
  */
-public class ReflectUtil {
+public abstract class ReflectUtil {
 
     /**
-     * Get all declared fields (include inherited) for class
+     * Get all declared fields (include inherited) of class
      * @param clazz the class
      * @return fields array
      */
@@ -26,7 +28,7 @@ public class ReflectUtil {
     }
 
     /**
-     * Get all declared fields (include inherited) with given annotation for class
+     * Get all declared fields (include inherited) with given annotation of class
      * @param clazz the class
      * @return fields array
      */
@@ -42,7 +44,7 @@ public class ReflectUtil {
     }
 
     /**
-     * Get all declared fields (include inherited) with given type for class
+     * Get all declared fields (include inherited) with given type of class
      * @param clazz the class
      * @return fields array
      */
