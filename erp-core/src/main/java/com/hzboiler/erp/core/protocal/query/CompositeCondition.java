@@ -69,7 +69,7 @@ public class CompositeCondition extends Condition {
         } else if ("not".equals(getOperator())) {
             conditions.forEach(condition -> queryWrapper.not(condition::applyToQueryWrapper));
         } else {
-            throw new RuntimeException("This should never be thrown!");
+            throw new IllegalArgumentException("Unsupported operator '" + getOperator() + "' for CompositeCondition.");
         }
     }
 

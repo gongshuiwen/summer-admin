@@ -86,7 +86,7 @@ public class SimpleCondition extends Condition {
         } else if (isLike()) {
             applyLike(queryWrapper);
         } else {
-            throw new IllegalArgumentException("Unsupported operator: " + getOperator());
+            throw new IllegalArgumentException("Unsupported operator '" + getOperator() + "' for SimpleCondition.");
         }
     }
 
