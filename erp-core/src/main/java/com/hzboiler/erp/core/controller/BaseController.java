@@ -113,7 +113,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     }
 
     private void fetchMany2One(List<T> entities) throws IllegalAccessException {
-        for (Field field : Many2One.getMany2OneFields(entityClass)) {
+        for (Field field : RelationFieldUtil.getMany2OneFields(entityClass)) {
             // Get target ids
             Set<Long> targetIds = new HashSet<>();
             for (T entity : entities) {
@@ -142,7 +142,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     }
 
     private void fetchMany2Many(List<T> entities) throws IllegalAccessException {
-        for (Field field : Many2Many.getMany2ManyFields(entityClass)) {
+        for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
             Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
             RelationMapper relationMapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
 

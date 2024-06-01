@@ -17,23 +17,9 @@ import java.util.stream.Collectors;
 @Getter
 public class Many2One<T extends BaseModel> {
 
-    private static final Map<Class<?>, List<Field>> many2oneFieldsCache = new ConcurrentHashMap<>();
-
     private Long id;
     private String name;
     private T value;
-
-    public static List<Field> getMany2OneFields(Class<?> entityClass) {
-        List<Field> fields = many2oneFieldsCache.getOrDefault(entityClass, null);
-        if ( fields == null) {
-            fields = Arrays.stream(ReflectUtil.getAllDeclaredFields(entityClass))
-                    .filter(field -> field.getType() == Many2One.class)
-                    .peek(field -> field.setAccessible(true))
-                    .collect(Collectors.toList());
-            many2oneFieldsCache.put(entityClass, fields);
-        }
-        return fields;
-    }
 
     public static <T extends BaseModel> Many2One<T> ofId(Long id) {
         Many2One<T> many2One = new Many2One<>();

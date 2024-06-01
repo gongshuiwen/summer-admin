@@ -19,23 +19,10 @@ import java.util.stream.Collectors;
 @Getter
 public class One2Many<T extends BaseModel> {
 
-    private static final Map<Class<?>, List<Field>> one2manyFieldsCache = new ConcurrentHashMap<>();
     private static final Map<Field, Field> fieldInverseFieldCache = new ConcurrentHashMap<>();
 
     private List<Command<T>> commands; // for update use
     private List<T> values;
-
-    public static List<Field> getOne2ManyFields(Class<?> entityClass) {
-        List<Field> fields = one2manyFieldsCache.getOrDefault(entityClass, null);
-        if (fields == null) {
-            fields = Arrays.stream(ReflectUtil.getAllDeclaredFields(entityClass))
-                    .filter(field -> field.getType() == One2Many.class)
-                    .peek(field -> field.setAccessible(true))
-                    .collect(Collectors.toList());
-            one2manyFieldsCache.put(entityClass, fields);
-        }
-        return fields;
-    }
 
     public static Field getInverseField(Field field) {
         Field inverseField = fieldInverseFieldCache.getOrDefault(field, null);
