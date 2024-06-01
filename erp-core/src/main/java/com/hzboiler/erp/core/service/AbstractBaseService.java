@@ -131,13 +131,13 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                 for (Command<BaseModel> command : commands) {
                     if (command == null) break;
                     if (Objects.requireNonNull(command.getCommandType()) == CommandType.CREATE) {
-                        if (command.getEntities() == null || command.getEntities().isEmpty()) {
+                        if (command.getRecords() == null || command.getRecords().isEmpty()) {
                             throw new IllegalArgumentException("The entities of Command CREATE cannot be null or empty");
                         }
-                        for (BaseModel targetEntity : command.getEntities()) {
+                        for (BaseModel targetEntity : command.getRecords()) {
                             inverseField.set(targetEntity, Many2One.ofId(entity.getId()));
                         }
-                        targetService.createBatch(command.getEntities());
+                        targetService.createBatch(command.getRecords());
                     } else {
                         throw new IllegalArgumentException("The Command " + command.getCommandType()
                                 + " is not supported for one2many field in create method");
@@ -236,17 +236,17 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                     if (command == null) break;
                     switch (command.getCommandType()) {
                         case CREATE: {
-                            for (BaseModel targetEntity : command.getEntities()) {
+                            for (BaseModel targetEntity : command.getRecords()) {
                                 inverseField.set(targetEntity, Many2One.ofId(sourceId));
                             }
-                            targetService.createBatch(command.getEntities());
+                            targetService.createBatch(command.getRecords());
                         }
                         case DELETE: {
                             targetService.deleteByIds(command.getIds());
                             break;
                         }
                         case UPDATE: {
-                            targetService.updateByIds(command.getIds(), command.getEntities().get(0));
+                            targetService.updateByIds(command.getIds(), command.getRecords().get(0));
                             break;
                         }
                         default: {

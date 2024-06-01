@@ -13,7 +13,7 @@ public class Command<T extends BaseModel> {
 
     private CommandType commandType;
     private List<Long> ids;
-    private List<T> entities;
+    private List<T> records;
 
     // ===================================================
     // Static factory methods for Many2Many field commands
@@ -42,10 +42,10 @@ public class Command<T extends BaseModel> {
     // ==================================================
     // Static factory methods for One2Many field commands
     // ==================================================
-    public static <T extends BaseModel> Command<T> create(List<T> entities) {
+    public static <T extends BaseModel> Command<T> create(List<T> records) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.CREATE;
-        command.entities = entities;
+        command.records = records;
         return command;
     }
 
@@ -56,11 +56,11 @@ public class Command<T extends BaseModel> {
         return command;
     }
 
-    public static <T extends BaseModel> Command<T> update(Long id, T entity) {
+    public static <T extends BaseModel> Command<T> update(Long id, T record) {
         Command<T> command = new Command<>();
         command.commandType = CommandType.UPDATE;
         command.ids = List.of(id);
-        command.entities = List.of(entity);
+        command.records = List.of(record);
         return command;
     }
 }

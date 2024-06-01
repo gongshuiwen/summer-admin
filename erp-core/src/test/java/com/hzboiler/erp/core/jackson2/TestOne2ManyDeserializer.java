@@ -33,9 +33,9 @@ class TestOne2ManyDeserializer {
         Command<Mock2> command = one2Many.getCommands().get(0);
         assertEquals(CommandType.CREATE, command.getCommandType());
         assertNull(command.getIds());
-        assertEquals(2, command.getEntities().size());
-        assertEquals("mock2-1", command.getEntities().get(0).getName());
-        assertEquals("mock2-2", command.getEntities().get(1).getName());
+        assertEquals(2, command.getRecords().size());
+        assertEquals("mock2-1", command.getRecords().get(0).getName());
+        assertEquals("mock2-2", command.getRecords().get(1).getName());
     }
 
     @Test
@@ -46,7 +46,7 @@ class TestOne2ManyDeserializer {
         Command<?> command = One2Many.getCommands().get(0);
         assertEquals(CommandType.DELETE, command.getCommandType());
         assertEquals(List.of(1L, 2L, 3L), command.getIds());
-        assertNull(command.getEntities());
+        assertNull(command.getRecords());
     }
 
     @Test
@@ -58,7 +58,7 @@ class TestOne2ManyDeserializer {
         Command<Mock2> command = one2Many.getCommands().get(0);
         assertEquals(CommandType.UPDATE, command.getCommandType());
         assertEquals(List.of(1L), command.getIds());
-        assertEquals(1, command.getEntities().size());
-        assertEquals("mock2-1", command.getEntities().get(0).getName());
+        assertEquals(1, command.getRecords().size());
+        assertEquals("mock2-1", command.getRecords().get(0).getName());
     }
 }

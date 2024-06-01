@@ -72,16 +72,16 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
         } else if (allowedForUpdateUserAnnotation == null) {
             return checkAllowedForCreateUser((BaseModel) pojo);
         } else {
-            BaseModel entity = (BaseModel) pojo;
-            return checkAllowedForCreateUser(entity) || checkAllowedForUpdateUser(entity);
+            BaseModel record = (BaseModel) pojo;
+            return checkAllowedForCreateUser(record) || checkAllowedForUpdateUser(record);
         }
     }
 
-    private boolean checkAllowedForCreateUser(BaseModel entity) {
-        return Objects.equals(BaseContextHolder.getContext().getUserId(), entity.getCreateUser());
+    private boolean checkAllowedForCreateUser(BaseModel record) {
+        return Objects.equals(BaseContextHolder.getContext().getUserId(), record.getCreateUser());
     }
 
-    private boolean checkAllowedForUpdateUser(BaseModel entity) {
-        return Objects.equals(BaseContextHolder.getContext().getUserId(), entity.getUpdateUser());
+    private boolean checkAllowedForUpdateUser(BaseModel record) {
+        return Objects.equals(BaseContextHolder.getContext().getUserId(), record.getUpdateUser());
     }
 }

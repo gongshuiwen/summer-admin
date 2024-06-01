@@ -30,7 +30,7 @@ class TestMany2ManyDeserializer {
         Command<?> command = many2Many.getCommands().get(0);
         assertEquals(CommandType.ADD, command.getCommandType());
         assertEquals(List.of(1L, 2L, 3L), command.getIds());
-        assertNull(command.getEntities());
+        assertNull(command.getRecords());
     }
 
     @Test
@@ -41,7 +41,7 @@ class TestMany2ManyDeserializer {
         Command<?> command = many2Many.getCommands().get(0);
         assertEquals(CommandType.REMOVE, command.getCommandType());
         assertEquals(List.of(1L, 2L, 3L), command.getIds());
-        assertNull(command.getEntities());
+        assertNull(command.getRecords());
     }
 
     @Test
@@ -52,6 +52,6 @@ class TestMany2ManyDeserializer {
         Command<?> command = many2Many.getCommands().get(0);
         assertEquals(CommandType.REPLACE, command.getCommandType());
         assertEquals(List.of(1L, 2L, 3L), command.getIds());
-        assertNull(command.getEntities());
+        assertNull(command.getRecords());
     }
 }
