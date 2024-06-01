@@ -1,7 +1,8 @@
 package com.hzboiler.erp.core.exception;
 
+import com.hzboiler.erp.core.protocal.Error;
+import com.hzboiler.erp.core.protocal.Result;
 import com.hzboiler.erp.core.security.DataAccessException;
-import com.hzboiler.erp.core.protocal.R;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,28 +33,28 @@ public class GlobalExceptionHandler {
     private static final String _BUSINESS_EXCEPTION_MESSAGE_TEMPLATE = "BusinessException [%s,%d]: %s";
 
     @ExceptionHandler(BusinessException.class)
-    public R<String> handleBusinessException(BusinessException e) {
+    public Result<String> handleBusinessException(BusinessException e) {
         String namespace = e.getBusinessExceptionEnum().namespace();
         int code = e.getBusinessExceptionEnum().code();
         String message = e.getMessage();
         if (log.isDebugEnabled()) {
             log.debug(String.format(_BUSINESS_EXCEPTION_MESSAGE_TEMPLATE, namespace, code, message));
         }
-        return R.error(code, message);
+        return Result.error(Error.builder(e.getBusinessExceptionEnum()).build());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public R<String> handleAccessDeniedException(Exception e) {
-        return R.error(ERROR_ACCESS_DENIED);
+    public Result<String> handleAccessDeniedException(Exception e) {
+        return Result.error(ERROR_ACCESS_DENIED);
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public R<String> handleDataAccessException(Exception e) {
-        return R.error(ERROR_ACCESS_DENIED);
+    public Result<String> handleDataAccessException(Exception e) {
+        return Result.error(ERROR_ACCESS_DENIED);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public R<Map<String, String>> handleConstraintViolationException(
+    public Result<Map<String, String>> handleConstraintViolationException(
             ConstraintViolationException e) {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         Map<String, String> errors = new HashMap<>();
@@ -63,11 +64,11 @@ public class GlobalExceptionHandler {
                     : violation.getPropertyPath().toString();
             errors.put(fieldName, violation.getMessage());
         }
-        return R.error(ERROR_INVALID_ARGUMENTS, errors);
+        return Result.error(Error.builder(ERROR_INVALID_ARGUMENTS).details(errors).build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public R<Map<String, String>> handleMethodArgumentNotValidException(
+    public Result<Map<String, String>> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -75,27 +76,27 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return R.error(ERROR_INVALID_ARGUMENTS, errors);
+        return Result.error(Error.builder(ERROR_INVALID_ARGUMENTS).details(errors).build());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public R<String> handleMethodArgumentTypeMismatchException(Exception e) {
-        return R.error(ERROR_INVALID_ARGUMENTS);
+    public Result<String> handleMethodArgumentTypeMismatchException(Exception e) {
+        return Result.error(ERROR_INVALID_ARGUMENTS);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public R<String> handleMissingServletRequestParameterException(Exception e) {
-        return R.error(ERROR_INVALID_ARGUMENTS);
+    public Result<String> handleMissingServletRequestParameterException(Exception e) {
+        return Result.error(ERROR_INVALID_ARGUMENTS);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public R<String> handleHttpMessageNotReadableException(Exception e) {
-        return R.error(ERROR_INVALID_REQUEST_BODY);
+    public Result<String> handleHttpMessageNotReadableException(Exception e) {
+        return Result.error(ERROR_INVALID_REQUEST_BODY);
     }
 
     @ExceptionHandler(Exception.class)
-    public R<String> handleInternalException(Exception e) {
+    public Result<String> handleInternalException(Exception e) {
         log.error(e.toString(), e);
-        return R.error(ERROR_INTERNAL);
+        return Result.error(ERROR_INTERNAL);
     }
 }

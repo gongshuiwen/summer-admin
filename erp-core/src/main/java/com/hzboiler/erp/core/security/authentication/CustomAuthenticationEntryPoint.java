@@ -2,7 +2,7 @@ package com.hzboiler.erp.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.context.BaseContextHolder;
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -26,6 +26,6 @@ public record CustomAuthenticationEntryPoint(ObjectMapper objectMapper) implemen
 
         // clear BaseContext for anonymous user
         BaseContextHolder.clearContext();
-        response.getWriter().write(objectMapper.writeValueAsString(R.error(ERROR_AUTHENTICATION_FAILED)));
+        response.getWriter().write(objectMapper.writeValueAsString(Result.error(ERROR_AUTHENTICATION_FAILED)));
     }
 }

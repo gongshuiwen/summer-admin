@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -23,6 +23,6 @@ public record CustomAuthenticationSuccessHandler(
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        response.getWriter().write(objectMapper.writeValueAsString(R.success(userDetails)));
+        response.getWriter().write(objectMapper.writeValueAsString(Result.success(userDetails)));
     }
 }

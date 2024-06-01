@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -20,6 +20,6 @@ public record CustomLogoutSuccessHandler(ObjectMapper objectMapper) implements L
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(objectMapper.writeValueAsString(R.success("Logout Success!")));
+        response.getWriter().write(objectMapper.writeValueAsString(Result.success("Logout Success!")));
     }
 }

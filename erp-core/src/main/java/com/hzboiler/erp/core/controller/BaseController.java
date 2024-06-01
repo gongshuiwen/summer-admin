@@ -13,7 +13,7 @@ import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
-import com.hzboiler.erp.core.protocal.R;
+import com.hzboiler.erp.core.protocal.Result;
 import com.hzboiler.erp.core.service.BaseService;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,66 +41,66 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     @Operation(summary = "ID查询")
     @GetMapping
-    public R<List<T>> select(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
+    public Result<List<T>> select(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
         List<T> records = service.selectByIds(ids);
         if (records != null && !records.isEmpty()) {
             fetchMany2One(records);
             fetchMany2Many(records);
         }
-        return R.success(records);
+        return Result.success(records);
     }
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    public R<IPage<T>> page(@RequestParam @Positive @Max(1000) Long pageNum, @RequestParam @Positive @Max(1000) Long pageSize,
-                            @RequestParam(required = false) String sorts,
-                            @RequestBody(required = false) Condition condition) throws IllegalAccessException {
+    public Result<IPage<T>> page(@RequestParam @Positive @Max(1000) Long pageNum, @RequestParam @Positive @Max(1000) Long pageSize,
+                                 @RequestParam(required = false) String sorts,
+                                 @RequestBody(required = false) Condition condition) throws IllegalAccessException {
         IPage<T> page = service.page(pageNum, pageSize, sorts, condition);
         List<T> records = page.getRecords();
         if (records != null && !records.isEmpty()) {
             fetchMany2One(records);
             fetchMany2Many(records);
         }
-        return R.success(page);
+        return Result.success(page);
     }
 
     @Operation(summary = "计数查询")
     @GetMapping("/count")
-    public R<Long> count(@RequestBody(required = false) Condition condition) {
-        return R.success(service.count(condition));
+    public Result<Long> count(@RequestBody(required = false) Condition condition) {
+        return Result.success(service.count(condition));
     }
 
     @Operation(summary = "名称查询")
     @GetMapping("/nameSearch")
-    public R<List<T>> nameSearch(@RequestParam @NotBlank String name) {
+    public Result<List<T>> nameSearch(@RequestParam @NotBlank String name) {
         List<T> records = service.nameSearch(name);
-        return R.success(records);
+        return Result.success(records);
     }
 
     @Operation(summary = "创建记录")
     @PostMapping
     @Validated(CreateValidationGroup.class)
-    public R<List<T>> create(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> createDtoList) {
+    public Result<List<T>> create(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> createDtoList) {
         checkReadOnlyForDtoList(createDtoList);
         service.createBatch(createDtoList);
-        return R.success(createDtoList);
+        return Result.success(createDtoList);
     }
 
     @Operation(summary = "更新记录")
     @PutMapping
     @Validated(UpdateValidationGroup.class)
-    public R<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid T> updateDtoList) {
+    public Result<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid T> updateDtoList) {
         checkReadOnlyForDtoList(updateDtoList);
         for (T t : updateDtoList) {
             service.updateById(t.getId(), t);
         }
-        return R.success(true);
+        return Result.success(true);
     }
 
     @Operation(summary = "删除记录")
     @DeleteMapping
-    public R<Boolean> delete(@RequestParam @NotEmpty List<Long> ids) {
-        return R.success(service.deleteByIds(ids));
+    public Result<Boolean> delete(@RequestParam @NotEmpty List<Long> ids) {
+        return Result.success(service.deleteByIds(ids));
     }
 
     protected BaseContext getContext() {
