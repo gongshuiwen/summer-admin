@@ -20,8 +20,9 @@ public class ReadOnlyUtil {
     private static final Map<Class<? extends BaseModel>, Field[]> readOnlyFieldsCache = new ConcurrentHashMap<>();
 
     /**
-     * Get all declared fields (include inherited) with annotation {@link ReadOnly} for model class,
+     * Get all declared fields (include inherited) with annotation {@link ReadOnly} of model class,
      * cache by ConcurrentHashMap.
+     *
      * @param modelClass the model class
      * @return fields array, ensure all fields are always accessible
      */
@@ -30,7 +31,7 @@ public class ReadOnlyUtil {
     }
 
     /**
-     * Real implement of getting all declared fields (include inherited) with annotation {@link ReadOnly} for model class.
+     * Real implement of getting all declared fields (include inherited) with annotation {@link ReadOnly} of model class.
      */
     private static Field[] _getReadOnlyFields(Class<? extends BaseModel> modelClass) {
         Field[] fields = ReflectUtil.getAllDeclaredFieldsWithAnnotation(modelClass, ReadOnly.class);

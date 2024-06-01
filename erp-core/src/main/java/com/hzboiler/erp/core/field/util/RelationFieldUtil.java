@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Static utility class which supports methods for relation field Many2One, One2Many and Many2Many.
+ * Static utility class which supports methods for relation field of {@link Many2One}, {@link One2Many} and {@link Many2Many}.
  *
+ * @see Many2One
+ * @see One2Many
+ * @see Many2Many
+ * @see InverseField
  * @author gongshuiwen
  */
 public abstract class RelationFieldUtil {
@@ -74,7 +78,7 @@ public abstract class RelationFieldUtil {
     }
 
     /**
-     * Get Many2One fields of model class, cached by ConcurrentHashMap.
+     * Get all declared (include inherited) {@link Many2One} fields of model class, cached by ConcurrentHashMap.
      */
     public static Field[] getMany2OneFields(Class<? extends BaseModel> modelClass) {
         return many2OneFieldsCache.computeIfAbsent(modelClass, (clazz) ->
@@ -82,8 +86,7 @@ public abstract class RelationFieldUtil {
     }
 
     /**
-     * Get One2Many fields of model class, cached by ConcurrentHashMap.
-     *
+     * Get all declared (include inherited) {@link One2Many} fields of model class, cached by ConcurrentHashMap.
      */
     public static Field[] getOne2ManyFields(Class<? extends BaseModel> modelClass) {
         return one2ManyFieldsCache.computeIfAbsent(modelClass, (clazz) ->
@@ -91,7 +94,7 @@ public abstract class RelationFieldUtil {
     }
 
     /**
-     * Get Many2Many fields of model class, cached by ConcurrentHashMap.
+     * Get all declared (include inherited) {@link Many2Many} fields of model class, cached by ConcurrentHashMap.
      */
     public static Field[] getMany2ManyFields(Class<? extends BaseModel> modelClass) {
         return many2ManyFieldsCache.computeIfAbsent(modelClass, (clazz) ->
@@ -99,7 +102,7 @@ public abstract class RelationFieldUtil {
     }
 
     /**
-     * Real implement of getting relation fields of model class.
+     * Real implement of getting all declared (include inherited) relation fields of model class.
      */
     private static Field[] _getRelationFields(Class<? extends BaseModel> modelClass, Class<?> fieldType) {
         Field[] fields = ReflectUtil.getAllDeclaredFieldsWithType(modelClass, fieldType);
@@ -112,6 +115,7 @@ public abstract class RelationFieldUtil {
      *
      * @param field the relation field
      * @return the inverse field
+     * @throws RuntimeException InverseField annotation not exist
      * @throws RuntimeException inverse field not exist
      */
     public static Field getInverseField(Field field) {
