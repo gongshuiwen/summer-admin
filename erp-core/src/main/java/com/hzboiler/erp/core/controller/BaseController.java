@@ -166,7 +166,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
                 List<Long> targetIds = recordId2TargetIdsMap.get(record.getId());
                 List<? extends BaseModel> targetRecords = targetIds.stream()
                         .map(targetRecordsMap::get).collect(Collectors.toList());
-                field.set(record, Many2Many.ofValues(targetRecords));
+                field.set(record, Many2Many.ofRecords(targetRecords));
             }
         }
     }

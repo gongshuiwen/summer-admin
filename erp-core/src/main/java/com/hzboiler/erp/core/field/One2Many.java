@@ -1,32 +1,24 @@
 package com.hzboiler.erp.core.field;
 
 import com.hzboiler.erp.core.model.BaseModel;
-import lombok.Getter;
 
 import java.util.List;
 
 /**
  * @author gongshuiwen
  */
-@Getter
-public class One2Many<T extends BaseModel> {
+public class One2Many<T extends BaseModel> extends X2Many<T> {
 
-    private List<Command<T>> commands; // for update use
-    private List<T> values;
+    // prevent external instantiation
+    private One2Many(List<Command<T>> commands, List<T> records) {
+        super(commands, records);
+    }
 
     public static <T extends BaseModel> One2Many<T> ofCommands(List<Command<T>> commands) {
-        One2Many<T> One2Many = new One2Many<>();
-        One2Many.commands = commands;
-        return One2Many;
+        return new One2Many<>(commands, null);
     }
 
-    public static <T extends BaseModel> One2Many<T> ofValues(List<T> values) {
-        One2Many<T> One2Many = new One2Many<>();
-        One2Many.values = values;
-        return One2Many;
-    }
-
-    public List<T> get() {
-        return values;
+    public static <T extends BaseModel> One2Many<T> ofRecords(List<T> records) {
+        return new One2Many<>(null, records);
     }
 }

@@ -22,6 +22,6 @@ public class One2ManySerializer extends StdSerializer<One2Many<?>> {
 
     @Override
     public void serialize(One2Many<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeObject(value.get());
+        gen.writeObject(value.getRecords());
     }
 }
