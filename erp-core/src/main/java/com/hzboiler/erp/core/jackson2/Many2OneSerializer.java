@@ -23,6 +23,6 @@ public class Many2OneSerializer extends StdSerializer<Many2One<?>> {
 
     @Override
     public void serialize(Many2One<?> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeObject(value.get());
+        gen.writeObject(value.getRecord());
     }
 }

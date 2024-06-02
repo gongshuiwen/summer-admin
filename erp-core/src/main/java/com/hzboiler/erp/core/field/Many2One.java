@@ -9,29 +9,22 @@ import lombok.Getter;
 @Getter
 public class Many2One<T extends BaseModel> {
 
-    private Long id;
-    private String name;
-    private T value;
+    private final Long id; // id of record
+    private final String name; // name of record
+    private final T record;
+
+    // prevent external instantiation
+    private Many2One(Long id, String name, T record) {
+        this.id = id;
+        this.name = name;
+        this.record = record;
+    }
 
     public static <T extends BaseModel> Many2One<T> ofId(Long id) {
-        Many2One<T> many2One = new Many2One<>();
-        many2One.id = id;
-        return many2One;
+        return new Many2One<>(id, null, null);
     }
 
-    public static <T extends BaseModel> Many2One<T> ofValue(T value) {
-        Many2One<T> many2One = new Many2One<>();
-        many2One.id = value.getId();
-        many2One.name = value.getDisplayName();
-        many2One.value = value;
-        return many2One;
-    }
-
-    public T get() {
-        return value;
-    }
-
-    public void set(T value) {
-        this.value = value;
+    public static <T extends BaseModel> Many2One<T> ofRecord(T record) {
+        return new Many2One<>(record.getId(), record.getDisplayName(), record);
     }
 }

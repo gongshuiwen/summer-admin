@@ -135,7 +135,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
                 Many2One<BaseModel> many2One = (Many2One<BaseModel>) field.get(record);
                 Long targetId = many2One.getId();
                 if (targetId != null && targetId > 0) {
-                    many2One.set(targetRecordsMap.get(targetId));
+                    field.set(record, Many2One.ofRecord(targetRecordsMap.get(targetId)));
                 }
             }
         }
