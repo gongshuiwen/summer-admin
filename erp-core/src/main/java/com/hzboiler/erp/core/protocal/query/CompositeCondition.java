@@ -8,44 +8,61 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * CompositeCondition is used to combine multiple conditions.
+ *
  * @author gongshuiwen
  */
 @Getter
 public class CompositeCondition extends Condition {
 
-    public enum Operator {
-        AND,
-        OR,
-        NOT,
-    }
+    // string constants for composite operator
+    public static final String OPERATOR_AND = "and";
+    public static final String OPERATOR_OR = "or";
+    public static final String OPERATOR_NOT = "not";
 
     // sub conditions
     private final List<Condition> conditions;
 
     // prevent external instantiation
-    private CompositeCondition(Operator operator, List<Condition> conditions) {
-        super(operator.name().toLowerCase());
+    private CompositeCondition(String operator, List<Condition> conditions) {
+        super(operator);
         this.conditions = conditions;
     }
 
     public static CompositeCondition and(List<Condition> conditions) {
         checkConditions(conditions);
-        return new CompositeCondition(Operator.AND, conditions);
+        return new CompositeCondition(OPERATOR_AND, conditions);
     }
 
     public static CompositeCondition or(List<Condition> conditions) {
         checkConditions(conditions);
-        return new CompositeCondition(Operator.OR, conditions);
+        return new CompositeCondition(OPERATOR_OR, conditions);
     }
 
-    public static CompositeCondition not(List<Condition> conditions) {
-        checkConditions(conditions);
-        return new CompositeCondition(Operator.NOT, conditions);
+    public static CompositeCondition not(Condition condition) {
+        Objects.requireNonNull(condition, "condition of 'not' operator must not be null.");
+        return new CompositeCondition(OPERATOR_NOT, List.of(condition));
     }
 
-    public static CompositeCondition of(Operator operator, List<Condition> conditions) {
-        checkConditions(conditions);
-        return new CompositeCondition(operator, conditions);
+    public static CompositeCondition notAnd(List<Condition> conditions) {
+        return not(and(conditions));
+    }
+
+    public static CompositeCondition notOr(List<Condition> conditions) {
+        return not(or(conditions));
+    }
+
+    public static CompositeCondition of(String operator, List<Condition> conditions) {
+        if (OPERATOR_NOT.equals(operator)) {
+            if (conditions == null) throw new IllegalArgumentException("conditions must not be null.");
+            if (conditions.size() != 1)  throw new IllegalArgumentException("conditions of 'not' operator must be only one.");
+            return CompositeCondition.not(conditions.get(0));
+        } else if (OPERATOR_AND.equals(operator) || OPERATOR_OR.equals(operator)) {
+            checkConditions(conditions);
+            return new CompositeCondition(operator, conditions);
+        } else {
+            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for CompositeCondition.");
+        }
     }
 
     private static void checkConditions(List<Condition> conditions) {

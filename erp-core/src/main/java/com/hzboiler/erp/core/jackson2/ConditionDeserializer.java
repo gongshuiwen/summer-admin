@@ -37,14 +37,7 @@ public class ConditionDeserializer extends StdDeserializer<Condition> {
             for (JsonNode conditionNode : node.get("conditions")) {
                 conditions.add(mapper.treeToValue(conditionNode, Condition.class));
             }
-
-            if ("and".equalsIgnoreCase(operator)) {
-                return CompositeCondition.and(conditions);
-            } else if ("or".equalsIgnoreCase(operator)) {
-                return CompositeCondition.or(conditions);
-            } else if ("not".equalsIgnoreCase(operator)) {
-                return CompositeCondition.not(conditions);
-            }
+            return CompositeCondition.of(operator, conditions);
         }
 
         throw new IllegalArgumentException("Invalid JSON structure for Condition");
