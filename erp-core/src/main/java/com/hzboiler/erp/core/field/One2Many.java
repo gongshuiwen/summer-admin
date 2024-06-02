@@ -3,18 +3,13 @@ package com.hzboiler.erp.core.field;
 import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Getter;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author gongshuiwen
  */
 @Getter
 public class One2Many<T extends BaseModel> {
-
-    private static final Map<Field, Field> fieldInverseFieldCache = new ConcurrentHashMap<>();
 
     private List<Command<T>> commands; // for update use
     private List<T> values;
