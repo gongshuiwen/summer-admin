@@ -79,11 +79,11 @@ public class CompositeCondition extends Condition {
             throw new IllegalArgumentException("conditions can not be null or empty");
         }
 
-        if ("and".equals(getOperator())) {
+        if (OPERATOR_AND.equals(getOperator())) {
             conditions.forEach(condition -> queryWrapper.and(condition::applyToQueryWrapper));
-        } else if ("or".equals(getOperator())) {
+        } else if (OPERATOR_OR.equals(getOperator())) {
             conditions.forEach(condition -> queryWrapper.or(condition::applyToQueryWrapper));
-        } else if ("not".equals(getOperator())) {
+        } else if (OPERATOR_NOT.equals(getOperator())) {
             conditions.forEach(condition -> queryWrapper.not(condition::applyToQueryWrapper));
         } else {
             throw new IllegalArgumentException("Unsupported operator '" + getOperator() + "' for CompositeCondition.");
