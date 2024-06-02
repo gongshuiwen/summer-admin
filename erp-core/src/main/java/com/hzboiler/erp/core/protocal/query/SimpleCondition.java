@@ -65,14 +65,19 @@ public class SimpleCondition extends Condition {
 
     private static void checkField(String field) {
         Objects.requireNonNull(field, "field must not be null");
+        if (field.isBlank()) {
+            throw new IllegalArgumentException("field must not be blank");
+        }
     }
 
     private static void checkOperator(String operator) {
+        Objects.requireNonNull(operator, "operator must not be null");
+        if (operator.isBlank()) {
+            throw new IllegalArgumentException("operator must not be blank");
+        }
         if (!GeneralOperator.contains(operator) && !LikeOperator.contains(operator)) {
             throw new IllegalArgumentException("Unsupported operator: " + operator);
         }
-
-        // TODO: check value valid depends on field type
     }
 
     private static void checkValue(Object value) {
