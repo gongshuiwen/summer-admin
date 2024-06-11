@@ -13,6 +13,11 @@ public class Many2One<T extends BaseModel> {
     private final String name; // name of record
     private final T record;
 
+    // prevent external instantiation, just for deserialization
+    private Many2One() {
+        this(null, null, null);
+    }
+
     // prevent external instantiation
     private Many2One(Long id, String name, T record) {
         this.id = id;

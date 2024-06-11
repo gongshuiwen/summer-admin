@@ -9,6 +9,11 @@ import java.util.List;
  */
 public class One2Many<T extends BaseModel> extends X2Many<T> {
 
+    // prevent external instantiation, just for deserialization
+    private One2Many() {
+        super(null, null);
+    }
+
     // prevent external instantiation
     private One2Many(List<Command<T>> commands, List<T> records) {
         super(commands, records);
