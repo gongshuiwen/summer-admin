@@ -37,6 +37,15 @@
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
     </properties>
 
+    <dependencies>
+        <!--[scope provided]-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <!--[spring boot starters]-->
