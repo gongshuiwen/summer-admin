@@ -72,7 +72,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     @Operation(summary = "名称查询")
     @GetMapping("/nameSearch")
-    public Result<List<T>> nameSearch(@RequestParam @NotBlank String name) {
+    public Result<List<T>> nameSearch(@RequestParam String name) {
         List<T> records = service.nameSearch(name);
         return Result.success(records);
     }
