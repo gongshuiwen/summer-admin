@@ -6,7 +6,7 @@ package com.hzboiler.erp.core.exception;
  * @see BusinessExceptionEnum
  * @author gongshuiwen
  */
-public class CoreBusinessExceptionEnums {
+public final class CoreBusinessExceptionEnums {
 
     public static final String CORE_NAME_SPACE = "core";
 
