@@ -225,7 +225,7 @@ class TestAbstractBaseServiceOne2Many {
         wrapper.eq(Mock2::getMock1Id3, mock1.getId());
         List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
         assertEquals(0, mock2s.size());
-        assertNull(mock2Service.selectById(1L).getMock1Id3().get());
-        assertNull(mock2Service.selectById(2L).getMock1Id3().get());
+        assertNull(mock2Service.selectById(1L).getMock1Id3().getRecord());
+        assertNull(mock2Service.selectById(2L).getMock1Id3().getRecord());
     }
 }
