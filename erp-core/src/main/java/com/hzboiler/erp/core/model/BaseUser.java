@@ -16,10 +16,10 @@ import java.util.Set;
 public abstract class BaseUser extends BaseModel implements Serializable, UserDetails {
 
     @TableField(exist = false)
-    private Set<GrantedAuthority> authorities;
+    private Set<? extends GrantedAuthority> authorities;
 
     @Override
-    public Set<GrantedAuthority> getAuthorities() {
+    public Set<? extends GrantedAuthority> getAuthorities() {
         if (authorities == null) {
             return Set.of();
         }
