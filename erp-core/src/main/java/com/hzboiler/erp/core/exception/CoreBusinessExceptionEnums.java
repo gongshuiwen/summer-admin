@@ -18,6 +18,7 @@ public final class CoreBusinessExceptionEnums {
     public static final BusinessExceptionEnum ERROR_API_DEPRECATED = new BusinessExceptionEnum(CORE_NAME_SPACE, 90002, "API is deprecated!");
     public static final BusinessExceptionEnum ERROR_INVALID_ARGUMENTS = new BusinessExceptionEnum(CORE_NAME_SPACE, 90003, "Invalid arguments!");
     public static final BusinessExceptionEnum ERROR_INVALID_REQUEST_BODY = new BusinessExceptionEnum(CORE_NAME_SPACE, 90004, "Invalid request body!");
+    public static final BusinessExceptionEnum ERROR_VALIDATION_FAILED = new BusinessExceptionEnum(CORE_NAME_SPACE, 90005, "Validation failed!");
 
     public static final BusinessExceptionEnum ERROR_INTERNAL = new BusinessExceptionEnum(CORE_NAME_SPACE, 99999, "Server internal error!");
 
