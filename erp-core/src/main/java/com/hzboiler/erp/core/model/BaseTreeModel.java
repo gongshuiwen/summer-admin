@@ -39,21 +39,28 @@ public abstract class BaseTreeModel<T extends BaseTreeModel<?>> extends BaseMode
      */
     public static <T extends BaseTreeModel<T>> List<T> buildTree(List<T> records) {
         List<T> roots = new ArrayList<>();
-        Map<Long, T> recordMap = new HashMap<>(records.size());
+        Map<Long, T> recordsMap = new HashMap<>(records.size());
 
-        // Loop 1: Build record map using id as key
-        records.forEach(record -> recordMap.put(record.getId(), record));
+        // Loop 1: Build records map using id as key
+        records.forEach(record -> recordsMap.put(record.getId(), record));
 
         // Loop 2
         records.forEach(record -> {
-            if (record.getParentId() == null || record.getParentId() == 0) {
+            final Long parentId = record.getParentId();
+            if (parentId == null || parentId == 0) {
                 // Add root record to roots' list
                 roots.add(record);
             } else {
                 // Add leaf record to parent's children list
-                List<T> children = recordMap.get(record.getParentId()).getChildren();
+                T parent = recordsMap.get(parentId);
+                if (parent == null) {
+                    throw new IllegalArgumentException("Parent record with id '" + parentId + "' doesn't exist!");
+                }
+
+                List<T> children = parent.getChildren();
                 if (children == null) {
                     children = new ArrayList<>();
+                    parent.setChildren(children);
                 }
                 children.add(record);
             }
