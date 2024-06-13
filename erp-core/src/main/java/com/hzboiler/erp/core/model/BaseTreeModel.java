@@ -23,7 +23,7 @@ public abstract class BaseTreeModel<T extends BaseTreeModel<?>> extends BaseMode
     @Schema(description = "父级ID")
     private Long parentId;
 
-    @Schema(description = "祖级路径")
+    @Schema(description = "父级路径")
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String parentPath;
 
