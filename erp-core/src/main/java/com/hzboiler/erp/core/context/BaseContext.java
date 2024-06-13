@@ -1,11 +1,12 @@
 package com.hzboiler.erp.core.context;
 
 import com.hzboiler.erp.core.model.BaseUser;
+import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
+import com.hzboiler.erp.core.service.BaseUserService;
+import com.hzboiler.erp.core.util.SpringContextUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -62,16 +63,11 @@ public class BaseContext {
             return null;
         }
 
-        // Get user info from security context
-        // TODO: should load user info from database or cache
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()
-                && authentication.getPrincipal() instanceof BaseUser baseUser) {
-            user = baseUser;
-            return (T) baseUser;
-        }
-
-        return null;
+        // Get user info by BaseUserService
+        BaseUserService userService = SpringContextUtil.getBean(BaseUserService.class);
+        user = userService.getById(userId);
+        user.setAuthorities(getAuthorities());
+        return (T) user;
     }
 
     /**
@@ -88,17 +84,9 @@ public class BaseContext {
     }
 
     private Set<? extends GrantedAuthority> _getAuthorities() {
-        // Get authorities from security context
-        // TODO: should load authorities from database or cache
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() ) {
-            Collection<? extends GrantedAuthority> authorities1 = authentication.getAuthorities();
-            if (authorities1 != null && !authorities1.isEmpty()) {
-                return Set.copyOf(authorities1);
-            }
-        }
-
-        return EMPTY_AUTHORITIES;
+        // Get authorities by GrantedAuthoritiesService
+        GrantedAuthoritiesService grantedAuthoritiesService = SpringContextUtil.getBean(GrantedAuthoritiesService.class);
+        return grantedAuthoritiesService.getAuthoritiesByUserId(getUserId());
     }
 
     /**
