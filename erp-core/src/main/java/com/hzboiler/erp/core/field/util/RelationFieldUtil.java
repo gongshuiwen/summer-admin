@@ -10,6 +10,7 @@ import com.hzboiler.erp.core.util.ReflectUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class RelationFieldUtil {
 
     // cache for target model class of relation field
-    private static final Map<Field, Class<? extends BaseModel>> targetClassCache = new ConcurrentHashMap<>();
+    private static final Map<ModelFieldKey, Class<? extends BaseModel>> targetClassCache = new ConcurrentHashMap<>();
 
     // caches for relation fields of model class
     private static final Map<Class<? extends BaseModel>, Field[]> many2OneFieldsCache = new ConcurrentHashMap<>();
@@ -38,35 +39,63 @@ public abstract class RelationFieldUtil {
     /**
      * Get the target model class of relation field, cached by ConcurrentHashMap.
      *
-     * @param field relation field
+     * @param modelClass the model class
+     * @param field the relation field, can be the field of the super class of modelClass
      * @return target model class of relation field
      */
     @SuppressWarnings("unchecked")
-    public static <T extends BaseModel> Class<T> getTargetModelClass(Field field) {
-        return (Class<T>) targetClassCache.computeIfAbsent(field, RelationFieldUtil::_getTargetModelClass);
+    public static <T extends BaseModel> Class<T> getTargetModelClass(Class<? extends BaseModel> modelClass, Field field) {
+        ModelFieldKey modelFieldKey = new ModelFieldKey(modelClass, field);
+        return (Class<T>) targetClassCache.computeIfAbsent(modelFieldKey, RelationFieldUtil::_getTargetModelClass);
     }
 
     /**
      * Real implement of getting the target model class of relation field.
      *
-     * @param field relation field
+     * @param modelFieldKey key
      * @return target model class of relation field
      */
-    private static <T extends BaseModel> Class<T> _getTargetModelClass(Field field) {
+    private static Class<? extends BaseModel> _getTargetModelClass(ModelFieldKey modelFieldKey) {
+        Class<? extends BaseModel> modelClass = modelFieldKey.modelClass();
+        Field field = modelFieldKey.field();
+
         if (!isRelationField(field))
             throw new IllegalArgumentException("Field '" + _formatFieldName(field) + "' is not a relation field.");
 
         Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType pt) {
             Type[] actualTypes = pt.getActualTypeArguments();
-            if (actualTypes.length == 1 && actualTypes[0] instanceof Class) {
-                @SuppressWarnings("unchecked")
-                Class<T> targetClass = (Class<T>) actualTypes[0];
-                return targetClass;
+            if (actualTypes.length >= 1) {
+                if (actualTypes[0] instanceof Class) {
+                    @SuppressWarnings("unchecked")
+                    Class<? extends BaseModel> targetClass = (Class<? extends BaseModel>) actualTypes[0];
+                    return targetClass;
+                } else if (actualTypes[0] instanceof TypeVariable) {
+                    @SuppressWarnings("unchecked")
+                    TypeVariable<Class<?>> typeVariable = (TypeVariable<Class<?>>) actualTypes[0];
+                    @SuppressWarnings("unchecked")
+                    Class<? extends BaseModel> targetClass = (Class<? extends BaseModel>) resolveActualTypeOfTypeVariable(modelClass, typeVariable);
+                    if (targetClass != null) return targetClass;
+                }
             }
         }
 
         throw new RuntimeException("Cannot find target class for relation field '" + _formatFieldName(field) + "'.");
+    }
+
+    private static Class<?> resolveActualTypeOfTypeVariable(Class<?> subClass, TypeVariable<Class<?>> typeVariable) {
+        Class<?> superClass = typeVariable.getGenericDeclaration();
+        Type genericSuperclass = subClass.getGenericSuperclass();
+        if (genericSuperclass instanceof ParameterizedType pt && pt.getRawType() == superClass) {
+            TypeVariable<? extends Class<?>>[] typeVariables = superClass.getTypeParameters();
+            for (int i = 0; i < typeVariables.length; i++) {
+                if (typeVariables[i].equals(typeVariable)) {
+                    Type actualType = pt.getActualTypeArguments()[i];
+                    if (actualType instanceof Class) return (Class<?>) actualType;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -132,7 +161,7 @@ public abstract class RelationFieldUtil {
         }
 
         Field inverseField;
-        Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
+        Class<?> targetClass = RelationFieldUtil.getTargetModelClass((Class<? extends BaseModel>) field.getDeclaringClass(), field);
         try {
             inverseField = targetClass.getDeclaredField(inverseFieldAnnotation.value());
         } catch (NoSuchFieldException e) {

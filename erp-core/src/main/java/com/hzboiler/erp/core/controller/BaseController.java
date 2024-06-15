@@ -124,7 +124,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
             }
 
             // Get target records
-            BaseService<?> targetService = service.getService(RelationFieldUtil.getTargetModelClass(field));
+            BaseService<?> targetService = service.getService(RelationFieldUtil.getTargetModelClass(modelClass, field));
             List<? extends BaseModel> targetRecords = targetService.selectByIds(targetIds.stream().toList());
             Map<Long, ? extends BaseModel> targetRecordsMap = targetRecords.stream()
                     .collect(Collectors.toMap(BaseModel::getId, t -> t));
@@ -143,7 +143,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
 
     private void fetchMany2Many(List<T> records) throws IllegalAccessException {
         for (Field field : RelationFieldUtil.getMany2ManyFields(modelClass)) {
-            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(modelClass, field);
             RelationMapper relationMapper = RelationMapperRegistry.getMapper(modelClass, targetClass);
 
             // Get all target ids and the map of record id -> target ids

@@ -114,7 +114,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForCreate(List<T> records) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             Field inverseField = RelationFieldUtil.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             for (T record : records) {
@@ -150,7 +150,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForCreate(List<T> records) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             for (T record : records) {
                 Many2Many<BaseModel> filedValue;
                 try {
@@ -217,7 +217,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processOne2ManyForUpdate(List<Long> ids, T record) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             Field inverseField = RelationFieldUtil.getInverseField(field);
             BaseService<BaseModel> targetService = getService(targetClass);
             One2Many<BaseModel> filedValue;
@@ -261,7 +261,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForUpdate(List<Long> ids, T record) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             Many2Many<BaseModel> filedValue;
             try {
                 filedValue = (Many2Many<BaseModel>) field.get(record);
@@ -329,7 +329,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     private void processOne2manyForDelete(List<Long> ids) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             Field inverseField = RelationFieldUtil.getInverseField(field);
             AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
                     (AbstractBaseService<BaseMapper<BaseModel>, BaseModel>) getService(targetClass);
@@ -392,7 +392,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     private void processMany2manyForDelete(List<Long> ids) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(field);
+            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             for (Long sourceId : ids) {
                 RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
                 mapper.removeAll(entityClass, sourceId);
