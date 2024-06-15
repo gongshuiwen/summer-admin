@@ -3,6 +3,7 @@ package com.hzboiler.erp.core.field;
 import com.hzboiler.erp.core.field.annotations.InverseField;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.model.BaseModel;
+import com.hzboiler.erp.core.model.BaseTreeModel;
 import com.hzboiler.erp.core.util.ReflectUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ class TestRelationFieldUtil {
 
         @InverseField("field10")
         private One2Many<Mock> field2;
+
         private Many2Many<Mock> field3;
         private Many2One<?> field4;
         private Long field5;
@@ -37,14 +39,22 @@ class TestRelationFieldUtil {
         private Many2Many<Mock> field8;
     }
 
+    static class TreeMock extends BaseTreeModel<TreeMock> {
+    }
+
     @Test
     void testGetTargetModelClass() throws NoSuchFieldException {
-        assertEquals(Mock.class, RelationFieldUtil.getTargetModelClass(Mock.class.getDeclaredField("field1")));
-        assertEquals(Mock.class, RelationFieldUtil.getTargetModelClass(Mock.class.getDeclaredField("field2")));
-        assertEquals(Mock.class, RelationFieldUtil.getTargetModelClass(Mock.class.getDeclaredField("field3")));
+        assertEquals(Mock.class, RelationFieldUtil.getTargetModelClass(Mock.class, Mock.class.getDeclaredField("field1")));
+        assertEquals(Mock.class, RelationFieldUtil.getTargetModelClass(Mock.class, Mock.class.getDeclaredField("field2")));
+        assertEquals(Mock.class, RelationFieldUtil.getTargetModelClass(Mock.class, Mock.class.getDeclaredField("field3")));
 
-        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getTargetModelClass(Mock.class.getDeclaredField("field4")));
-        assertThrowsExactly(IllegalArgumentException.class, () -> RelationFieldUtil.getTargetModelClass(Mock.class.getDeclaredField("field5")));
+        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getTargetModelClass(Mock.class, Mock.class.getDeclaredField("field4")));
+        assertThrowsExactly(IllegalArgumentException.class, () -> RelationFieldUtil.getTargetModelClass(Mock.class, Mock.class.getDeclaredField("field5")));
+    }
+
+    @Test
+    void testGetTargetModelClassFromSuper() throws NoSuchFieldException {
+        assertEquals(TreeMock.class, RelationFieldUtil.getTargetModelClass(TreeMock.class, BaseTreeModel.class.getDeclaredField("parentId")));
     }
 
     @Test
