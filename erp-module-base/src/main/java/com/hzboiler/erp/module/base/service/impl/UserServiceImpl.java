@@ -1,9 +1,7 @@
 package com.hzboiler.erp.module.base.service.impl;
 
-import com.hzboiler.erp.module.base.model.Permission;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.model.User;
-import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.service.AbstractBaseService;
 import com.hzboiler.erp.module.base.mapper.UserMapper;
 import com.hzboiler.erp.module.base.service.PermissionService;
@@ -18,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.hzboiler.erp.core.security.Constants.CODE_BASE_USER;
 
@@ -42,17 +38,6 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
         if (user == null) {
             throw new UsernameNotFoundException("");
         }
-
-        // Get and Set roles
-        Set<Role> roles = roleService.getRolesByUserId(user.getId());
-        user.setRoles(Many2Many.ofValues(roles.stream().toList()));
-
-        // Get permissions
-        Set<Long> roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
-        Set<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
-
-        // Add authorities
-        user.addAuthoritiesWithRolesAndPermissions(roles, permissions);
         return user;
     }
 
