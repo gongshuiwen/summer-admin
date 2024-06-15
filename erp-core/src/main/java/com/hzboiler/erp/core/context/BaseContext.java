@@ -65,7 +65,7 @@ public class BaseContext {
 
         // Get user info by BaseUserService
         BaseUserService userService = SpringContextUtil.getBean(BaseUserService.class);
-        user = userService.getById(userId);
+        user = userService.selectById(userId);
         user.setAuthorities(getAuthorities());
         return (T) user;
     }

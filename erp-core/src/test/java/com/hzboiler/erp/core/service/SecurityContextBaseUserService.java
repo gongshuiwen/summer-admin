@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class SecurityContextBaseUserService implements BaseUserService {
 
     @Override
-    public BaseUser getById(Long userId) {
+    public BaseUser selectById(Long userId) {
         // Get user info from security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()

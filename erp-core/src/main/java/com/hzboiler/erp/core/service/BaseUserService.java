@@ -12,5 +12,5 @@ public interface BaseUserService {
      * @param userId id of user
      * @return {@link BaseUser}
      */
-    BaseUser getById(Long userId);
+    BaseUser selectById(Long userId);
 }
