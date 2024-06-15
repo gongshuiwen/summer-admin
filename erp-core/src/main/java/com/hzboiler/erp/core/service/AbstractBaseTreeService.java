@@ -96,7 +96,7 @@ public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends
 
             boolean res = super.updateByIds(ids, updateValues);
 
-            // update parent path of their children
+            // update parent path of their descendants
             oldRecords.forEach(oldRecord -> {
                 List<T> descendants = getDescendants(oldRecord);
                 descendants.forEach(descendant -> {
