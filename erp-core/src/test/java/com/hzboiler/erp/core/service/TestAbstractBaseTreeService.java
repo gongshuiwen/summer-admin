@@ -110,4 +110,54 @@ class TestAbstractBaseTreeService {
         assertEquals(1, children.size());
         assertEquals(5L, children.get(0).getId());
     }
+
+    @Test
+    @WithMockAdmin
+    void testUpdate1() {
+        assertEquals("", treeMockMapper.selectById(1L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(2L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(3L).getParentPath());
+        assertEquals("1/2", treeMockMapper.selectById(4L).getParentPath());
+
+        TreeMock updateValues = new TreeMock();
+        updateValues.setParentId(Many2One.ofId(0L));
+        treeMockService.updateById(2L, updateValues);
+
+        assertEquals("", treeMockMapper.selectById(1L).getParentPath());
+        assertEquals("", treeMockMapper.selectById(2L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(3L).getParentPath());
+        assertEquals("2", treeMockMapper.selectById(4L).getParentPath());
+    }
+
+    @Test
+    @WithMockAdmin
+    void testUpdate2() {
+        assertEquals("", treeMockMapper.selectById(1L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(2L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(3L).getParentPath());
+        assertEquals("1/2", treeMockMapper.selectById(4L).getParentPath());
+
+        TreeMock updateValues = new TreeMock();
+        updateValues.setParentId(Many2One.ofId(3L));
+        treeMockService.updateById(2L, updateValues);
+
+        assertEquals("", treeMockMapper.selectById(1L).getParentPath());
+        assertEquals("1/3", treeMockMapper.selectById(2L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(3L).getParentPath());
+        assertEquals("1/3/2", treeMockMapper.selectById(4L).getParentPath());
+    }
+
+    @Test
+    @WithMockAdmin
+    void testUpdate3() {
+        assertEquals("", treeMockMapper.selectById(1L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(2L).getParentPath());
+        assertEquals("1", treeMockMapper.selectById(3L).getParentPath());
+        assertEquals("1/2", treeMockMapper.selectById(4L).getParentPath());
+
+        TreeMock updateValues = new TreeMock();
+        updateValues.setParentId(Many2One.ofId(4L));
+        assertThrows(IllegalArgumentException.class, () -> treeMockService.updateById(2L, updateValues));
+    }
 }
+
