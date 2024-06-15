@@ -3,6 +3,9 @@ package com.hzboiler.erp.core.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.query.OrderBy;
 import com.hzboiler.erp.core.protocal.query.Condition;
@@ -108,7 +111,27 @@ public interface BaseService<T extends BaseModel> {
 
     Class<T> getModelClass();
 
-    BaseMapper<T> getMapper();
+    BaseMapper<T> getBaseMapper();
 
     <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass);
+
+    /**
+     * 链式查询 lambda 式
+     * <p>注意：不支持 Kotlin </p>
+     *
+     * @return LambdaQueryWrapper 的包装类
+     */
+    default LambdaQueryChainWrapper<T> lambdaQuery() {
+        return ChainWrappers.lambdaQueryChain(getBaseMapper(), getModelClass());
+    }
+
+    /**
+     * 链式更改 lambda 式
+     * <p>注意：不支持 Kotlin </p>
+     *
+     * @return LambdaUpdateWrapper 的包装类
+     */
+    default LambdaUpdateChainWrapper<T> lambdaUpdate() {
+        return ChainWrappers.lambdaUpdateChain(getBaseMapper());
+    }
 }
