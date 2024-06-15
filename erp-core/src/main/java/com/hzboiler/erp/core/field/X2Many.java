@@ -9,7 +9,7 @@ import java.util.List;
  * @author gongshuiwen
  */
 @Getter
-public abstract class X2Many<T extends BaseModel> {
+abstract class X2Many<T extends BaseModel> {
 
     private final List<Command<T>> commands; // for update use
     private final List<T> records;
