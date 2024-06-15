@@ -182,33 +182,34 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     @Transactional
-    public boolean updateById(Long id, T record) {
-        if (id == null || record == null) return false;
-        return updateByIds(List.of(id), record);
+    public boolean updateById(Long id, T updateValues) {
+        if (id == null || updateValues == null) return false;
+        return updateByIds(List.of(id), updateValues);
     }
 
     @Override
     @Transactional
-    @SuppressWarnings("unchecked")
-    public boolean updateByIds(List<Long> ids, T record) {
-        if (ids == null || ids.isEmpty() || record == null) return false;
+    public boolean updateByIds(List<Long> ids, T updateValues) {
+        if (ids == null || ids.isEmpty() || updateValues == null) return false;
+        if (updateValues.getId() != null)
+            throw new IllegalArgumentException("record's id must be null");
 
         // check authority for update
         DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.UPDATE);
 
         // construct LambdaUpdateWrapper
         LambdaUpdateWrapper<T> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.setEntityClass((Class<T>) record.getClass());
+        wrapper.setEntityClass(entityClass);
         wrapper.in(T::getId, ids);
 
         // do update
-        boolean res = update(record, wrapper);
+        boolean res = update(updateValues, wrapper);
 
         // process one2many fields
-        processOne2ManyForUpdate(ids, record);
+        processOne2ManyForUpdate(ids, updateValues);
 
         // process many2many fields
-        processMany2ManyForUpdate(ids, record);
+        processMany2ManyForUpdate(ids, updateValues);
 
         return res;
     }
