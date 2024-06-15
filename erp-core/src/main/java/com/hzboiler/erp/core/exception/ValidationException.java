@@ -23,16 +23,14 @@ public class ValidationException extends BusinessException {
      * <blockquote><pre>
      * boolean checkSomething(boolean throwsException) {
      *     if (someCheck1Fails) {
-     *         if (throwsException) {
+     *         if (throwsException)
      *             throw new ValidationException("error message1");
-     *         }
      *         return false;
      *     }
      *
      *     if (someCheck2Fails) {
-     *         if (throwsException) {
+     *         if (throwsException)
      *             throw new ValidationException("error message2" + someStrings);
-     *         }
      *         return false;
      *     }
      *     ...
@@ -42,21 +40,38 @@ public class ValidationException extends BusinessException {
      * In this case, we can use this method like this:
      * <blockquote><pre>
      * boolean checkSomething(boolean throwsException) {
-     *     if (someCheck1Fails) {
-     *         return ValidationException.returnFalseOrThrow(throwsException, () -> "error1 message");
-     *     }
+     *     if (someCheck1Fails)
+     *         return ValidationException.returnFalseOrThrow(throwsException, "error1 message");
      *
-     *     if (someCheck2Fails) {
-     *         return ValidationException.returnFalseOrThrow(throwsException, () -> "error message2" + someStrings);
-     *     }
+     *     if (someCheck2Fails)
+     *         return ValidationException.returnFalseOrThrow(throwsException, "error message2" + someStrings);
      *     ...
      *     return true;
      * }
      * </pre></blockquote>
-     * The use of {@link Supplier} is for lazy evaluation of the message which needs to be concatenated dynamically.
+     */
+    public static boolean returnFalseOrThrow(boolean throwsException, String message) {
+        if (throwsException)
+            throw new ValidationException(message);
+        return false;
+    }
+
+    /**
+     * <p>
+     * Same like {@link #returnFalseOrThrow(boolean, String)} but with {@link Supplier},
+     * for lazily evaluating the message which needs to be computed dynamically.
+     * <blockquote><pre>
+     * boolean checkSomething(boolean throwsException) {
+     *     if (someCheck1Fails)
+     *         return ValidationException.returnFalseOrThrow(throwsException, () -> "error message1" + someStrings);
+     *     ...
+     *     return true;
+     * }
+     * </pre></blockquote>
      */
     public static boolean returnFalseOrThrow(boolean throwsException, Supplier<String> messageSupplier) {
-        if (throwsException) throw new ValidationException(messageSupplier.get());
+        if (throwsException)
+            throw new ValidationException(messageSupplier.get());
         return false;
     }
 }
