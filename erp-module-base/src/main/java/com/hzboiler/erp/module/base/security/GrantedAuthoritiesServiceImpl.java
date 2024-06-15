@@ -1,7 +1,7 @@
 package com.hzboiler.erp.module.base.security;
 
 import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
-import com.hzboiler.erp.core.security.PooledGrantedAuthority;
+import com.hzboiler.erp.core.security.SimpleGrantedAuthorityPool;
 import com.hzboiler.erp.module.base.model.Permission;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.service.PermissionService;
@@ -31,14 +31,14 @@ public class GrantedAuthoritiesServiceImpl implements GrantedAuthoritiesService 
         // Get authorities from roles
         Set<Role> roles = roleService.getRolesByUserId(userId);
         roles.stream()
-                .map(role -> PooledGrantedAuthority.of(ROLE_PREFIX + role.getCode()))
+                .map(role -> SimpleGrantedAuthorityPool.of(ROLE_PREFIX + role.getCode()))
                 .forEach(authorities::add);
 
         // Get authorities from permissions
         Set<Long> roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
         Set<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
         permissions.stream()
-                .map(permission -> PooledGrantedAuthority.of(permission.getCode()))
+                .map(permission -> SimpleGrantedAuthorityPool.of(permission.getCode()))
                 .forEach(authorities::add);
 
         return Collections.unmodifiableSet(authorities);
