@@ -3,11 +3,13 @@ package com.hzboiler.erp.core.service;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.model.BaseTreeModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends BaseTreeModel<T>>
         extends AbstractBaseService<M, T>
         implements BaseTreeService<T> {
@@ -66,6 +68,57 @@ public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends
             }
         });
         return super.createBatch(records);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateByIds(List<Long> ids, T updateValues) {
+        Many2One<T> parentIdField = updateValues.getParentId();
+        if (parentIdField != null) {
+            // get old records before update
+            List<T> oldRecords = selectByIds(ids);
+
+            // update parent path of themselves
+            if (parentIdField.getId() == 0) {
+                updateValues.setParentPath("");
+            } else {
+                String parentPath = getParentPath(selectById(parentIdField.getId()));
+
+                // check circular reference
+                ids.forEach(id -> {
+                    if (Arrays.stream(parentPath.split("/")).anyMatch(id1 -> id1.equals(String.valueOf(id)))) {
+                        throw new IllegalArgumentException("circular reference");
+                    }
+                });
+
+                updateValues.setParentPath(parentPath);
+            }
+
+            boolean res = super.updateByIds(ids, updateValues);
+
+            // update parent path of their children
+            oldRecords.forEach(oldRecord -> {
+                List<T> descendants = getDescendants(oldRecord);
+                descendants.forEach(descendant -> {
+                    String oldParentPath = descendant.getParentPath();
+                    String newParentPath = oldParentPath.replace(oldRecord.getParentPath(), updateValues.getParentPath());
+
+                    // remove the first '/'
+                    if (updateValues.getParentPath().isEmpty())
+                        newParentPath = newParentPath.substring(1);
+
+                    if (log.isDebugEnabled()) {
+                        log.debug("update descendant {}'s parent path from {} to {}", descendant.getId(), oldParentPath, newParentPath);
+                    }
+
+                    System.out.println(oldParentPath + " -> " + newParentPath);
+                    lambdaUpdate().setEntityClass(entityClass).eq(T::getId, descendant.getId()).set(T::getParentPath, newParentPath).update();
+                });
+            });
+            return res;
+        }
+
+        return super.updateByIds(ids, updateValues);
     }
 
     private String getParentPath(T record) {
