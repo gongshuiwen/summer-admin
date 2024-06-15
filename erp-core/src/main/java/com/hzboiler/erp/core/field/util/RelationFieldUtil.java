@@ -17,36 +17,75 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Static utility class which supports methods for relation field of {@link Many2One}, {@link One2Many} and {@link Many2Many}.
  *
+ * @author gongshuiwen
  * @see Many2One
  * @see One2Many
  * @see Many2Many
  * @see InverseField
- * @author gongshuiwen
  */
 public final class RelationFieldUtil {
-
-    // prevent instantiation
-    private RelationFieldUtil() {}
-
-    // model class and field key of relation field, used as cache key of target model
-    private record ModelFieldKey(Class<? extends BaseModel> modelClass, Field field) {}
-
-    // cache for target model class of relation field
-    private static final Map<ModelFieldKey, Class<? extends BaseModel>> targetClassCache = new ConcurrentHashMap<>();
 
     // caches for relation fields of model class
     private static final Map<Class<? extends BaseModel>, Field[]> many2OneFieldsCache = new ConcurrentHashMap<>();
     private static final Map<Class<? extends BaseModel>, Field[]> one2ManyFieldsCache = new ConcurrentHashMap<>();
     private static final Map<Class<? extends BaseModel>, Field[]> many2ManyFieldsCache = new ConcurrentHashMap<>();
 
-    // cache for inverse field
+    // cache for target model class of relation field
+    private static final Map<ModelFieldKey, Class<? extends BaseModel>> targetClassCache = new ConcurrentHashMap<>();
+
+    // cache for inverse field of x2many field
     private static final Map<ModelFieldKey, Field> inverseFieldCache = new ConcurrentHashMap<>();
+
+    // prevent instantiation
+    private RelationFieldUtil() {
+    }
+
+    /**
+     * Determine whether a field is a relation field.
+     */
+    private static boolean isRelationField(Field field) {
+        Type type = field.getType();
+        return type == Many2One.class || type == Many2Many.class || type == One2Many.class;
+    }
+
+    /**
+     * Get all declared (include inherited) {@link Many2One} fields of model class, cached by ConcurrentHashMap.
+     */
+    public static Field[] getMany2OneFields(Class<? extends BaseModel> modelClass) {
+        return many2OneFieldsCache.computeIfAbsent(modelClass, (clazz) ->
+                RelationFieldUtil._getRelationFields(clazz, Many2One.class));
+    }
+
+    /**
+     * Get all declared (include inherited) {@link One2Many} fields of model class, cached by ConcurrentHashMap.
+     */
+    public static Field[] getOne2ManyFields(Class<? extends BaseModel> modelClass) {
+        return one2ManyFieldsCache.computeIfAbsent(modelClass, (clazz) ->
+                RelationFieldUtil._getRelationFields(clazz, One2Many.class));
+    }
+
+    /**
+     * Get all declared (include inherited) {@link Many2Many} fields of model class, cached by ConcurrentHashMap.
+     */
+    public static Field[] getMany2ManyFields(Class<? extends BaseModel> modelClass) {
+        return many2ManyFieldsCache.computeIfAbsent(modelClass, (clazz) ->
+                RelationFieldUtil._getRelationFields(clazz, Many2Many.class));
+    }
+
+    /**
+     * Real implement of getting all declared (include inherited) relation fields of model class.
+     */
+    private static Field[] _getRelationFields(Class<? extends BaseModel> modelClass, Class<?> fieldType) {
+        Field[] fields = ReflectUtil.getAllDeclaredFieldsWithType(modelClass, fieldType);
+        for (Field field : fields) field.setAccessible(true); // guarantee field is always accessible
+        return fields;
+    }
 
     /**
      * Get the target model class of relation field, cached by ConcurrentHashMap.
      *
      * @param modelClass the model class
-     * @param field the relation field, can be the field of the super class of modelClass
+     * @param field      the relation field, can be the field of the super class of modelClass
      * @return target model class of relation field
      */
     @SuppressWarnings("unchecked")
@@ -105,51 +144,10 @@ public final class RelationFieldUtil {
     }
 
     /**
-     * Determine whether a field is a relation field.
-     */
-    private static boolean isRelationField(Field field) {
-        Type type = field.getType();
-        return type == Many2One.class || type == Many2Many.class || type == One2Many.class;
-    }
-
-    /**
-     * Get all declared (include inherited) {@link Many2One} fields of model class, cached by ConcurrentHashMap.
-     */
-    public static Field[] getMany2OneFields(Class<? extends BaseModel> modelClass) {
-        return many2OneFieldsCache.computeIfAbsent(modelClass, (clazz) ->
-                RelationFieldUtil._getRelationFields(clazz, Many2One.class));
-    }
-
-    /**
-     * Get all declared (include inherited) {@link One2Many} fields of model class, cached by ConcurrentHashMap.
-     */
-    public static Field[] getOne2ManyFields(Class<? extends BaseModel> modelClass) {
-        return one2ManyFieldsCache.computeIfAbsent(modelClass, (clazz) ->
-                RelationFieldUtil._getRelationFields(clazz, One2Many.class));
-    }
-
-    /**
-     * Get all declared (include inherited) {@link Many2Many} fields of model class, cached by ConcurrentHashMap.
-     */
-    public static Field[] getMany2ManyFields(Class<? extends BaseModel> modelClass) {
-        return many2ManyFieldsCache.computeIfAbsent(modelClass, (clazz) ->
-                RelationFieldUtil._getRelationFields(clazz, Many2Many.class));
-    }
-
-    /**
-     * Real implement of getting all declared (include inherited) relation fields of model class.
-     */
-    private static Field[] _getRelationFields(Class<? extends BaseModel> modelClass, Class<?> fieldType) {
-        Field[] fields = ReflectUtil.getAllDeclaredFieldsWithType(modelClass, fieldType);
-        for (Field field : fields) field.setAccessible(true); // guarantee field is always accessible
-        return fields;
-    }
-
-    /**
      * Get inverse field of relation field, cached by ConcurrentHashMap.
      *
      * @param modelClass the model class
-     * @param field the relation field, can be the field of the super class of modelClass
+     * @param field      the relation field, can be the field of the super class of modelClass
      * @return the inverse field
      * @throws RuntimeException InverseField annotation not exist
      * @throws RuntimeException inverse field not exist
@@ -172,7 +170,7 @@ public final class RelationFieldUtil {
         }
 
         Class<?> targetClass = RelationFieldUtil.getTargetModelClass(modelClass, field);
-        Field inverseField = ReflectUtil.getField(targetClass,inverseFieldAnnotation.value());
+        Field inverseField = ReflectUtil.getField(targetClass, inverseFieldAnnotation.value());
         if (inverseField == null) {
             throw new RuntimeException("The inverse field '" + inverseFieldAnnotation.value() + "' of '" + _formatFieldName(field) + "'doesn't exist.");
         }
@@ -182,5 +180,9 @@ public final class RelationFieldUtil {
 
     private static String _formatFieldName(Field field) {
         return field.getDeclaringClass().getName() + '.' + field.getName();
+    }
+
+    // model class and field key of relation field, used as cache key of target model
+    private record ModelFieldKey(Class<? extends BaseModel> modelClass, Field field) {
     }
 }

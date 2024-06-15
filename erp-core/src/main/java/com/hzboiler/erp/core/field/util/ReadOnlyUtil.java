@@ -11,16 +11,17 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Static utility class which supports methods for read-only field.
  *
- * @see ReadOnly
  * @author gongshuiwen
+ * @see ReadOnly
  */
 public final class ReadOnlyUtil {
 
-    // prevent instantiation
-    private ReadOnlyUtil() {}
-
     // cache for read-only fields of model class
     private static final Map<Class<? extends BaseModel>, Field[]> readOnlyFieldsCache = new ConcurrentHashMap<>();
+
+    // prevent instantiation
+    private ReadOnlyUtil() {
+    }
 
     /**
      * Get all declared fields (include inherited) with annotation {@link ReadOnly} of model class,
