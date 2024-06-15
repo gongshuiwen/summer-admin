@@ -40,7 +40,7 @@ public final class RelationFieldUtil {
     private static final Map<Class<? extends BaseModel>, Field[]> many2ManyFieldsCache = new ConcurrentHashMap<>();
 
     // cache for inverse field
-    private static final Map<Field, Field> inverseFieldCache = new ConcurrentHashMap<>();
+    private static final Map<ModelFieldKey, Field> inverseFieldCache = new ConcurrentHashMap<>();
 
     /**
      * Get the target model class of relation field, cached by ConcurrentHashMap.
@@ -148,30 +148,33 @@ public final class RelationFieldUtil {
     /**
      * Get inverse field of relation field, cached by ConcurrentHashMap.
      *
-     * @param field the relation field
+     * @param modelClass the model class
+     * @param field the relation field, can be the field of the super class of modelClass
      * @return the inverse field
      * @throws RuntimeException InverseField annotation not exist
      * @throws RuntimeException inverse field not exist
      */
-    public static Field getInverseField(Field field) {
-        return inverseFieldCache.computeIfAbsent(field, RelationFieldUtil::_getInverseField);
+    public static Field getInverseField(Class<? extends BaseModel> modelClass, Field field) {
+        ModelFieldKey modelFieldKey = new ModelFieldKey(modelClass, field);
+        return inverseFieldCache.computeIfAbsent(modelFieldKey, RelationFieldUtil::_getInverseField);
     }
 
     /**
      * Real implement of getting inverse field of relation field.
      */
-    private static Field _getInverseField(Field field) {
+    private static Field _getInverseField(ModelFieldKey modelFieldKey) {
+        Class<? extends BaseModel> modelClass = modelFieldKey.modelClass();
+        Field field = modelFieldKey.field();
+
         InverseField inverseFieldAnnotation = field.getDeclaredAnnotation(InverseField.class);
         if (inverseFieldAnnotation == null) {
             throw new RuntimeException("Cannot get annotation @InverseField for field '" + _formatFieldName(field) + "'.");
         }
 
-        Field inverseField;
-        Class<?> targetClass = RelationFieldUtil.getTargetModelClass((Class<? extends BaseModel>) field.getDeclaringClass(), field);
-        try {
-            inverseField = targetClass.getDeclaredField(inverseFieldAnnotation.value());
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException("The inverse field '" + inverseFieldAnnotation.value() + "' of '" + _formatFieldName(field) + "' not exist.");
+        Class<?> targetClass = RelationFieldUtil.getTargetModelClass(modelClass, field);
+        Field inverseField = ReflectUtil.getField(targetClass,inverseFieldAnnotation.value());
+        if (inverseField == null) {
+            throw new RuntimeException("The inverse field '" + inverseFieldAnnotation.value() + "' of '" + _formatFieldName(field) + "'doesn't exist.");
         }
         inverseField.setAccessible(true);
         return inverseField;

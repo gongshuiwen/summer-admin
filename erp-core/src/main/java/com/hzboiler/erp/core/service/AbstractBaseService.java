@@ -115,7 +115,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processOne2ManyForCreate(List<T> records) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
-            Field inverseField = RelationFieldUtil.getInverseField(field);
+            Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
             BaseService<BaseModel> targetService = getService(targetClass);
             for (T record : records) {
                 One2Many<BaseModel> filedValue;
@@ -218,7 +218,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processOne2ManyForUpdate(List<Long> ids, T record) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
-            Field inverseField = RelationFieldUtil.getInverseField(field);
+            Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
             BaseService<BaseModel> targetService = getService(targetClass);
             One2Many<BaseModel> filedValue;
             try {
@@ -330,7 +330,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private void processOne2manyForDelete(List<Long> ids) {
         for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
-            Field inverseField = RelationFieldUtil.getInverseField(field);
+            Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
             AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
                     (AbstractBaseService<BaseMapper<BaseModel>, BaseModel>) getService(targetClass);
             OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
