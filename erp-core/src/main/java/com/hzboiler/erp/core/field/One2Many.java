@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author gongshuiwen
  */
-public class One2Many<T extends BaseModel> extends X2Many<T> {
+public final class One2Many<T extends BaseModel> extends X2Many<T> {
 
     // prevent external instantiation, just for deserialization
     private One2Many() {

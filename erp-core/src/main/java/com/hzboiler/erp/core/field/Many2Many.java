@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author gongshuiwen
  */
-public class Many2Many<T extends BaseModel> extends X2Many<T> {
+public final class Many2Many<T extends BaseModel> extends X2Many<T> {
 
     // prevent external instantiation, just for deserialization
     private Many2Many() {

@@ -9,7 +9,7 @@ import java.util.List;
  * @author gongshuiwen
  */
 @Getter
-public class Command<T extends BaseModel> {
+public final class Command<T extends BaseModel> {
 
     private CommandType commandType;
     private List<Long> ids;

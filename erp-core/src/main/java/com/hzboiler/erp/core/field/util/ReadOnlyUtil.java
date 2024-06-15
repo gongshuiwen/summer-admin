@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see ReadOnly
  * @author gongshuiwen
  */
-public class ReadOnlyUtil {
+public final class ReadOnlyUtil {
 
     // cache for read-only fields of model class
     private static final Map<Class<? extends BaseModel>, Field[]> readOnlyFieldsCache = new ConcurrentHashMap<>();

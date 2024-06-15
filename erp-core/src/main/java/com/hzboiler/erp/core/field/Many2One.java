@@ -7,7 +7,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public class Many2One<T extends BaseModel> {
+public final class Many2One<T extends BaseModel> {
 
     private final Long id; // id of record
     private final String name; // name of record
