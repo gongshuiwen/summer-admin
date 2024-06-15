@@ -58,4 +58,22 @@ public abstract class ReflectUtil {
         }
         return fieldList.toArray(new Field[0]);
     }
+
+    /**
+     * Get a field by name in the class or its superclasses.
+     *
+     * @param clazz the class to search for the field
+     * @param fieldName the name of the field to find
+     * @return the Field object representing the found field, or null if not found
+     */
+    public static Field getField(Class<?> clazz, String fieldName) {
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return null;
+    }
 }
