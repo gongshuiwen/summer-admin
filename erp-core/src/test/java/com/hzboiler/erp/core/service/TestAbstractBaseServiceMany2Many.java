@@ -72,7 +72,7 @@ class TestAbstractBaseServiceMany2Many {
     void testMany2ManyCreateOneCommandAdd() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
-        mock3Service.saveBatch(mock3List);
+        mock3Service.createBatch(mock3List);
 
         // create mock1 with adding mock3s
         Mock1 mock1 = new Mock1("mock1-1");
@@ -96,7 +96,7 @@ class TestAbstractBaseServiceMany2Many {
     void testMany2ManyUpdateByIdCommandAdd() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
-        mock3Service.saveBatch(mock3List);
+        mock3Service.createBatch(mock3List);
 
         // create mock1
         Mock1 mock1 = new Mock1("mock1-1");
@@ -125,7 +125,7 @@ class TestAbstractBaseServiceMany2Many {
     void testMany2ManyUpdateByIdCommandRemove() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
-        mock3Service.saveBatch(mock3List);
+        mock3Service.createBatch(mock3List);
 
         // create mock1 with adding mock3s
         Mock1 mock1 = new Mock1("mock1-1");
@@ -156,7 +156,7 @@ class TestAbstractBaseServiceMany2Many {
     void testMany2ManyUpdateByIdCommandReplace() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
-        mock3Service.saveBatch(mock3List);
+        mock3Service.createBatch(mock3List);
 
         // create mock1 with adding mock3s
         Mock1 mock1 = new Mock1("mock1-1");
@@ -188,7 +188,7 @@ class TestAbstractBaseServiceMany2Many {
     void testMany2ManyDeleteById() {
         // create mock3s
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
-        mock3Service.saveBatch(mock3List);
+        mock3Service.createBatch(mock3List);
 
         // create mock1 with adding mock3s
         Mock1 mock1 = new Mock1("mock1-1");
