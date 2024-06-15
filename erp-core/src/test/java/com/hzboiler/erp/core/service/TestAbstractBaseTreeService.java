@@ -1,5 +1,6 @@
 package com.hzboiler.erp.core.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.mapper.TreeMockMapper;
@@ -168,6 +169,27 @@ class TestAbstractBaseTreeService {
         assertNull(treeMockMapper.selectById(2L));
         assertNull(treeMockMapper.selectById(3L));
         assertNull(treeMockMapper.selectById(4L));
+    }
+
+    @Test
+    @WithMockAdmin
+    void testBuildTree() {
+        List<TreeMock> treeMocks = treeMockService.lambdaQuery().list();
+        List<TreeMock> tree = treeMockService.buildTree(treeMocks);
+
+        assertEquals(1, tree.size());
+        assertEquals(1L, tree.get(0).getId());
+
+        TreeMock root = tree.get(0);
+        List<TreeMock> children = root.getChildren().getRecords();
+        assertEquals(2, children.size());
+        assertEquals(2L, children.get(0).getId());
+        assertEquals(3L, children.get(1).getId());
+
+        TreeMock child = children.get(0);
+        List<TreeMock> grandChildren = child.getChildren().getRecords();
+        assertEquals(1, grandChildren.size());
+        assertEquals(4L, grandChildren.get(0).getId());
     }
 }
 
