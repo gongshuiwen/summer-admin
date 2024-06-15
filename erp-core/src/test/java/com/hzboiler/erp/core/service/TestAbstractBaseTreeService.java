@@ -159,5 +159,15 @@ class TestAbstractBaseTreeService {
         updateValues.setParentId(Many2One.ofId(4L));
         assertThrows(IllegalArgumentException.class, () -> treeMockService.updateById(2L, updateValues));
     }
+
+    @Test
+    @WithMockAdmin
+    void testDelete() {
+        treeMockService.deleteById(1L);
+        assertNull(treeMockMapper.selectById(1L));
+        assertNull(treeMockMapper.selectById(2L));
+        assertNull(treeMockMapper.selectById(3L));
+        assertNull(treeMockMapper.selectById(4L));
+    }
 }
 
