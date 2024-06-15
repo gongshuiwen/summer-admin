@@ -69,7 +69,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
                 .serializerByType(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)))
                 .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)))
-                .serializerByType(Many2One.class, new Many2OneSerializer())
                 .serializerByType(One2Many.class, new One2ManySerializer())
                 .serializerByType(Many2Many.class, new Many2ManySerializer())
                 .deserializerByType(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
