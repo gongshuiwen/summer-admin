@@ -83,10 +83,10 @@ class TestRelationFieldUtil {
 
     @Test
     void testGetInverseField() throws NoSuchFieldException {
-        Field inverseField = RelationFieldUtil.getInverseField(Mock.class.getDeclaredField("field1"));
+        Field inverseField = RelationFieldUtil.getInverseField(Mock.class, Mock.class.getDeclaredField("field1"));
         assertEquals(Mock.class.getDeclaredField("field2"), inverseField);
 
-        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class.getDeclaredField("field2")));
-        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class.getDeclaredField("field3")));
+        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class, Mock.class.getDeclaredField("field2")));
+        assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class, Mock.class.getDeclaredField("field3")));
     }
 }
