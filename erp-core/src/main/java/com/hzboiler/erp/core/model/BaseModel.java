@@ -70,13 +70,15 @@ public abstract class BaseModel implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof BaseModel)) return false;
-        return Objects.equals(this.id, ((BaseModel) o).getId());
+        if (o == this)
+            return true;
+        if (o instanceof BaseModel o1)
+            return Objects.equals(id, o1.id);
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.id);
+        return Objects.hashCode(id);
     }
 }
