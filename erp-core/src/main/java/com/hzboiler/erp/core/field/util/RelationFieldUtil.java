@@ -23,7 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see InverseField
  * @author gongshuiwen
  */
-public abstract class RelationFieldUtil {
+public final class RelationFieldUtil {
+
+    // prevent instantiation
+    private RelationFieldUtil() {}
+
+    // model class and field key of relation field, used as cache key of target model
+    private record ModelFieldKey(Class<? extends BaseModel> modelClass, Field field) {}
 
     // cache for target model class of relation field
     private static final Map<ModelFieldKey, Class<? extends BaseModel>> targetClassCache = new ConcurrentHashMap<>();
