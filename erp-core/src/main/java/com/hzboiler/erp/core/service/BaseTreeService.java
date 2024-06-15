@@ -29,4 +29,12 @@ public interface BaseTreeService<T extends BaseTreeModel<T>> extends BaseService
      * @return descendants list of the {@code record}
      */
     List<T> getDescendants(T record);
+
+    /**
+     * Build a flat record list to a hierarchical tree, return roots' list
+     *
+     * @param records flat record list
+     * @return roots' list
+     */
+    List<T> buildTree(List<T> records);
 }

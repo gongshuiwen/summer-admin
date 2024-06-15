@@ -2,6 +2,7 @@ package com.hzboiler.erp.core.service;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzboiler.erp.core.field.Many2One;
+import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.model.BaseTreeModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -131,5 +132,46 @@ public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends
         return record.getParentPath() == null || record.getParentPath().isEmpty() ?
                 record.getId().toString() :
                 record.getParentPath() + "/" + record.getId();
+    }
+
+    @Override
+    public List<T> buildTree(List<T> records) {
+        List<T> roots = new ArrayList<>();
+        Map<Long, T> recordsMap = new HashMap<>(records.size());
+        Map<Long, List<T>> childrenMap = new HashMap<>();
+
+        // Loop 1: build records map using id as key
+        records.forEach(record -> recordsMap.put(record.getId(), record));
+
+        // Loop 2: process hierarchy
+        records.forEach(record -> {
+            Many2One<T> parentIdField = record.getParentId();
+            Objects.requireNonNull(parentIdField, "The parentId of record must not be null!");
+
+            Long parentId = parentIdField.getId();
+            if (parentId == null || parentId == 0) {
+                // Add root record to roots' list
+                roots.add(record);
+            } else {
+                // Add leaf record to parent's children list
+                T parent = recordsMap.get(parentId);
+                if (parent == null) {
+                    throw new IllegalArgumentException("Parent record with id '" + parentId + "' doesn't exist!");
+                }
+
+                List<T> children = childrenMap.computeIfAbsent(parentId, k -> new ArrayList<>());
+                children.add(record);
+            }
+        });
+
+        // Loop 3: fill children field
+        records.forEach(record -> {
+            List<T> children = childrenMap.get(record.getId());
+            if (children != null) {
+                record.setChildren(One2Many.ofRecords(children));
+            }
+        });
+
+        return roots;
     }
 }
