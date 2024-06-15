@@ -1,6 +1,7 @@
 package com.hzboiler.erp.core.service;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
+import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.mapper.TreeMockMapper;
 import com.hzboiler.erp.core.model.TreeMock;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author gongshuiwen
  */
 @SpringBootTest
+@Sql(scripts = {"/sql/test/ddl/tree_mock.sql", "/sql/test/data/tree_mock.sql"})
 class TestAbstractBaseTreeService {
 
     @Autowired
@@ -25,7 +27,6 @@ class TestAbstractBaseTreeService {
     TreeMockService treeMockService;
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/tree_mock.sql", "/sql/test/data/tree_mock.sql"})
     @WithMockAdmin
     void testGetChildren() {
         TreeMock treeMock = treeMockMapper.selectById(1L);
@@ -36,7 +37,6 @@ class TestAbstractBaseTreeService {
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/tree_mock.sql", "/sql/test/data/tree_mock.sql"})
     @WithMockAdmin
     void testGetAncestors() {
         TreeMock treeMock = treeMockMapper.selectById(4L);
@@ -47,7 +47,6 @@ class TestAbstractBaseTreeService {
     }
 
     @Test
-    @Sql(scripts = {"/sql/test/ddl/tree_mock.sql", "/sql/test/data/tree_mock.sql"})
     @WithMockAdmin
     void testGetDescendants() {
         TreeMock treeMock = treeMockMapper.selectById(1L);
@@ -56,5 +55,59 @@ class TestAbstractBaseTreeService {
         assertEquals(2L, treeMocks.get(0).getId());
         assertEquals(3L, treeMocks.get(1).getId());
         assertEquals(4L, treeMocks.get(2).getId());
+    }
+
+    @Test
+    @WithMockAdmin
+    void testCreate1() {
+        TreeMock treeMock = new TreeMock();
+        treeMock.setParentId(Many2One.ofId(1L));
+        treeMockService.createOne(treeMock);
+
+        assertEquals(treeMock.getParentPath(), "1");
+
+        List<TreeMock> treeMocks = treeMockService.getAncestors(treeMock);
+        assertEquals(1, treeMocks.size());
+        assertEquals(1L, treeMocks.get(0).getId());
+
+        List<TreeMock> descendants = treeMockService.getDescendants(treeMockMapper.selectById(1L));
+        assertEquals(4, descendants.size());
+        assertEquals(2L, descendants.get(0).getId());
+        assertEquals(3L, descendants.get(1).getId());
+        assertEquals(5L, descendants.get(2).getId());
+        assertEquals(4L, descendants.get(3).getId());
+
+        List<TreeMock> children = treeMockService.getChildren(treeMockMapper.selectById(1L));
+        assertEquals(3, children.size());
+        assertEquals(2L, children.get(0).getId());
+        assertEquals(3L, children.get(1).getId());
+        assertEquals(5L, children.get(2).getId());
+    }
+
+    @Test
+    @WithMockAdmin
+    void testCreate2() {
+        TreeMock treeMock = new TreeMock();
+        treeMock.setParentId(Many2One.ofId(4L));
+        treeMockService.createOne(treeMock);
+
+        assertEquals(treeMock.getParentPath(), "1/2/4");
+
+        List<TreeMock> treeMocks = treeMockService.getAncestors(treeMock);
+        assertEquals(3, treeMocks.size());
+        assertEquals(1L, treeMocks.get(0).getId());
+        assertEquals(2L, treeMocks.get(1).getId());
+        assertEquals(4L, treeMocks.get(2).getId());
+
+        List<TreeMock> descendants = treeMockService.getDescendants(treeMockMapper.selectById(1L));
+        assertEquals(4, descendants.size());
+        assertEquals(2L, descendants.get(0).getId());
+        assertEquals(3L, descendants.get(1).getId());
+        assertEquals(4L, descendants.get(2).getId());
+        assertEquals(5L, descendants.get(3).getId());
+
+        List<TreeMock> children = treeMockService.getChildren(treeMockMapper.selectById(4L));
+        assertEquals(1, children.size());
+        assertEquals(5L, children.get(0).getId());
     }
 }
