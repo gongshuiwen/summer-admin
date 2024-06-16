@@ -116,6 +116,8 @@ public interface BaseService<T extends BaseModel> {
     <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass);
 
     /**
+     * copied from mybatis-plus {@link IService#lambdaQuery()}
+     * <p>
      * 链式查询 lambda 式
      * <p>注意：不支持 Kotlin </p>
      *
@@ -126,6 +128,8 @@ public interface BaseService<T extends BaseModel> {
     }
 
     /**
+     * copied from mybatis-plus {@link IService#lambdaUpdate()}
+     * <p>
      * 链式更改 lambda 式
      * <p>注意：不支持 Kotlin </p>
      *
