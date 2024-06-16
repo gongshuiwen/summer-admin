@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
+import com.hzboiler.erp.core.mapper.RelationMapper;
+import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.query.OrderBy;
 import com.hzboiler.erp.core.protocal.query.Condition;
@@ -112,6 +115,27 @@ public interface BaseService<T extends BaseModel> {
     Class<T> getModelClass();
 
     BaseMapper<T> getBaseMapper();
+
+    /**
+     * Returns a {@link RelationMapper} instance for the service's model class and the given target class
+     *
+     * @param targetClass the target class of the relation
+     * @return {@link RelationMapper} instance
+     */
+    default RelationMapper getRelationMapper(Class<? extends BaseModel> targetClass) {
+        return RelationMapperRegistry.getMapper(getModelClass(), targetClass);
+    }
+
+    /**
+     * Returns a {@link RelationMapper} instance for the two given classes
+     *
+     * @param class1 the first class
+     * @param class2 the second class
+     * @return {@link RelationMapper} instance
+     */
+    default RelationMapper getRelationMapper(Class<? extends BaseModel> class1, Class<? extends BaseModel> class2) {
+        return RelationMapperRegistry.getMapper(class1, class2);
+    }
 
     <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass);
 

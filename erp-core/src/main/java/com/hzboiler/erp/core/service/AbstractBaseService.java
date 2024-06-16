@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hzboiler.erp.core.field.*;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
-import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.Query;
 import com.hzboiler.erp.core.security.DataAccessAuthority;
@@ -152,7 +151,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForCreate(List<T> records) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             for (T record : records) {
                 Many2Many<BaseModel> filedValue;
                 try {
@@ -171,7 +170,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                         if (command.getIds() == null || command.getIds().isEmpty()) {
                             throw new IllegalArgumentException("The ids of Command ADD cannot be null or empty");
                         }
-                        RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+                        RelationMapper mapper = getRelationMapper(targetClass);
                         mapper.add(entityClass, record.getId(), command.getIds());
                     } else {
                         throw new IllegalArgumentException("The Command " + command.getCommandType()
@@ -264,7 +263,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SuppressWarnings("unchecked")
     private void processMany2ManyForUpdate(List<Long> ids, T record) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             Many2Many<BaseModel> filedValue;
             try {
                 filedValue = (Many2Many<BaseModel>) field.get(record);
@@ -281,17 +280,17 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                     if (command == null) break;
                     switch (command.getCommandType()) {
                         case ADD: {
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+                            RelationMapper mapper = getRelationMapper(targetClass);
                             mapper.add(entityClass, sourceId, command.getIds());
                             break;
                         }
                         case REMOVE: {
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+                            RelationMapper mapper = getRelationMapper(targetClass);
                             mapper.remove(entityClass, sourceId, command.getIds());
                             break;
                         }
                         case REPLACE: {
-                            RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+                            RelationMapper mapper = getRelationMapper(targetClass);
                             mapper.replace(entityClass, sourceId, command.getIds());
                             break;
                         }
@@ -395,9 +394,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     private void processMany2manyForDelete(List<Long> ids) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<?> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             for (Long sourceId : ids) {
-                RelationMapper mapper = RelationMapperRegistry.getMapper(entityClass, targetClass);
+                RelationMapper mapper = getRelationMapper(targetClass);
                 mapper.removeAll(entityClass, sourceId);
             }
         }
