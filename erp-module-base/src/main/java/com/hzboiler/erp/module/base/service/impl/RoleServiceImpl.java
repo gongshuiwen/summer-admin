@@ -1,6 +1,6 @@
 package com.hzboiler.erp.module.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hzboiler.erp.core.exception.ValidationException;
 import com.hzboiler.erp.module.base.mapper.UserRoleMapper;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.mapper.RoleMapper;
@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static com.hzboiler.erp.core.security.Constants.CODE_BASE_USER;
 
 @Slf4j
 @Service
@@ -40,6 +43,15 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
     public Role getRoleByCode(String code) {
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
         return roleMapper.selectOne(queryWrapper.eq(Role::getCode, code));
+    }
+
+    @Override
+    public List<Role> getDefaultRoles() {
+        Role baseRole = lambdaQuery().eq(Role::getCode, CODE_BASE_USER).one();
+        if (baseRole == null)
+            throw new ValidationException("默认角色不存在");
+
+        return List.of(baseRole);
     }
 
     @Override
