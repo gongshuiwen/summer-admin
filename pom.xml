@@ -20,6 +20,7 @@
         <module>erp-core</module>
         <module>erp-module-base</module>
         <module>erp-server</module>
+        <module>erp-test</module>
     </modules>
 
     <properties>
