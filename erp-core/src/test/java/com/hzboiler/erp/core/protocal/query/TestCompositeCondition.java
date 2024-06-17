@@ -130,4 +130,9 @@ class TestCompositeCondition {
         assertEquals("mock1", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
         assertEquals("mock2", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
     }
+
+    @Test
+    void testGetSql() {
+        // TODO
+    }
 }

@@ -95,4 +95,10 @@ class TestSimpleCondition {
         assertEquals("(name NOT LIKE #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals("mock%", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }
+
+    @Test
+    void testGetSql() {
+        Condition condition = SimpleCondition.of("name", "like", "mock");
+        assertEquals("name LIKE 'mock'", condition.getSql());
+    }
 }
