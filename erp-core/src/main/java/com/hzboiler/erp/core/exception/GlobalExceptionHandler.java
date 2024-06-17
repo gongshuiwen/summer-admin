@@ -28,7 +28,7 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.*;
  */
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
-public class GlobalExceptionHandler {
+public final class GlobalExceptionHandler {
 
     private static final String _BUSINESS_EXCEPTION_MESSAGE_TEMPLATE = "BusinessException [%s,%d]: %s";
 
