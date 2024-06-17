@@ -1,11 +1,14 @@
 package com.hzboiler.erp.core.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.exception.BusinessException;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
+import com.hzboiler.erp.core.method.util.MethodUtil;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.model.BaseModel;
@@ -19,20 +22,31 @@ import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
 
+/**
+ * @author gongshuiwen
+ */
+@Slf4j
 @Validated
 public abstract class BaseController<S extends BaseService<T>, T extends BaseModel> implements InitializingBean {
+
+    private static final Object[] EMPTY_ARGS = new Object[0];
+
+    @Autowired
+    @Qualifier("mappingJackson2HttpMessageConverterObjectMapper")
+    private ObjectMapper objectMapper;
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -103,6 +117,49 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @DeleteMapping
     public Result<Boolean> delete(@RequestParam @NotEmpty List<Long> ids) {
         return Result.success(service.deleteByIds(ids));
+    }
+
+    @Operation(summary = "Call Service Method")
+    @PostMapping("/{methodName}")
+    public Result<Object> callServiceMethod(@PathVariable String methodName, @RequestBody(required = false) List<String> params) {
+        log.info("Rpc request received: service={}, method={}, params={}", service.getClass().getSimpleName(), methodName, params);
+
+        Method method;
+        Object[] args;
+        if (params == null) {
+            method = MethodUtil.getPublicMethod(service, methodName, 0);
+            args = EMPTY_ARGS;
+        } else {
+            method = MethodUtil.getPublicMethod(service, methodName, params.size());
+            args = getArgs(method, params);
+        }
+
+        Object result;
+        try {
+            result = method.invoke(service, args);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        return Result.success(result);
+    }
+
+    private Object[] getArgs(Method method, List<String> params) {
+        Object[] args = new Object[params.size()];
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (parameterTypes[i] == String.class) {
+                args[i] = params.get(i);
+            }
+
+            try {
+                args[i] = objectMapper.readValue(params.get(i), parameterTypes[i]);
+            } catch (JsonProcessingException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+
+        return args;
     }
 
     protected BaseContext getBaseContext() {
