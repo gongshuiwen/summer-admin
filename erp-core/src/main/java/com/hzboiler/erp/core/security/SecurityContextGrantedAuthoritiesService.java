@@ -1,6 +1,6 @@
-package com.hzboiler.erp.core.service;
+package com.hzboiler.erp.core.security;
 
-import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @Component
+@Profile("test")
 public class SecurityContextGrantedAuthoritiesService implements GrantedAuthoritiesService {
 
     @Override

@@ -1,11 +1,13 @@
-package com.hzboiler.erp.core.service;
+package com.hzboiler.erp.core.security;
 
 import com.hzboiler.erp.core.model.BaseUser;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("test")
 public class SecurityContextBaseUserService implements BaseUserService {
 
     @Override
