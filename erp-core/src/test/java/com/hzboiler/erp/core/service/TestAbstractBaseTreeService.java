@@ -1,6 +1,5 @@
 package com.hzboiler.erp.core.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.mapper.TreeMockMapper;
