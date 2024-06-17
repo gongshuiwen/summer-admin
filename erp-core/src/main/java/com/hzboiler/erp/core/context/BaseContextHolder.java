@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @see BaseContext
  * @author gongshuiwen
  */
-public class BaseContextHolder {
+public final class BaseContextHolder {
 
     private static final ThreadLocal<BaseContext> _local = new ThreadLocal<>();
 

@@ -23,7 +23,7 @@ import static com.hzboiler.erp.core.security.Constants.GRANTED_AUTHORITY_ROLE_SY
  * it is created when required, discarded after each request and never shared between threads and requests.
  * @author gongshuiwen
  */
-public class BaseContext {
+public final class BaseContext {
 
     private static final Set<? extends GrantedAuthority> EMPTY_AUTHORITIES = Set.of();
 
