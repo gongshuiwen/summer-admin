@@ -86,7 +86,7 @@ public final class BaseContext {
     private Set<? extends GrantedAuthority> _getAuthorities() {
         // Get authorities by GrantedAuthoritiesService
         GrantedAuthoritiesService grantedAuthoritiesService = SpringContextUtil.getBean(GrantedAuthoritiesService.class);
-        return grantedAuthoritiesService.getAuthoritiesByUserId(getUserId());
+        return Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getUserId()));
     }
 
     /**
@@ -97,7 +97,7 @@ public final class BaseContext {
      */
     public boolean isAdmin() {
         if (admin == null) {
-            Collection<? extends GrantedAuthority> authorities = getAuthorities();
+            Set<? extends GrantedAuthority> authorities = getAuthorities();
             admin = authorities != null && authorities.contains(GRANTED_AUTHORITY_ROLE_SYS_ADMIN);
         }
         return admin;
