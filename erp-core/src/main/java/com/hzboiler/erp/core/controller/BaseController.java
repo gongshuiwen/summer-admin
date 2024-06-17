@@ -92,7 +92,9 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     public Result<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid T> updateDtoList) {
         checkReadOnlyForDtoList(updateDtoList);
         for (T t : updateDtoList) {
-            service.updateById(t.getId(), t);
+            Long id = t.getId();
+            t.setId(null);
+            service.updateById(id, t);
         }
         return Result.success(true);
     }
