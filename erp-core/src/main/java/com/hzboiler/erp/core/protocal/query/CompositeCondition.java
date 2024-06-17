@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * CompositeCondition is used to combine multiple conditions.
@@ -95,5 +96,16 @@ public class CompositeCondition extends Condition {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         this.applyToQueryWrapper(queryWrapper);
         return queryWrapper;
+    }
+
+    @Override
+    public String getSql() {
+        if (Objects.equals(getOperator(), OPERATOR_NOT)) {
+            return OPERATOR_NOT.toUpperCase() + " " + conditions.get(0).getSql();
+        }
+
+        return conditions.stream()
+                .map(Condition::getSql)
+                .collect(Collectors.joining(" " + getOperator().toUpperCase() + " ", "( ", " )"));
     }
 }

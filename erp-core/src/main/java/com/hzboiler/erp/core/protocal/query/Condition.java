@@ -19,4 +19,6 @@ public abstract class Condition {
     public abstract void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper);
 
     public abstract <T extends BaseModel> QueryWrapper<T> toQueryWrapper(Class<T> clazz);
+
+    public abstract String getSql();
 }

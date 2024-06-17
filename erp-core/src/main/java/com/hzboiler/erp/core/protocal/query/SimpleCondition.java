@@ -102,6 +102,15 @@ public class SimpleCondition extends Condition {
         return queryWrapper;
     }
 
+    @Override
+    public String getSql() {
+        // TODO: SQL injection protection
+        if (value instanceof String) {
+            return field + " " + getOperator().toUpperCase() + " '" + value + "'";
+        }
+        return field + " " + getOperator().toUpperCase() + " " + value;
+    }
+
     private boolean isGeneral() {
         return GeneralOperator.contains(getOperator());
     }
