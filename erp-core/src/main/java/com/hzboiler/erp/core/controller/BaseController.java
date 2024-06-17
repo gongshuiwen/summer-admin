@@ -103,7 +103,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         return Result.success(service.deleteByIds(ids));
     }
 
-    protected BaseContext getContext() {
+    protected BaseContext getBaseContext() {
         return BaseContextHolder.getContext();
     }
 
