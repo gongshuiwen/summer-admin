@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.service;
+package com.hzboiler.erp.core.security;
 
 import com.hzboiler.erp.core.model.BaseUser;
 

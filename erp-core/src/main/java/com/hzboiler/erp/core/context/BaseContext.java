@@ -2,7 +2,7 @@ package com.hzboiler.erp.core.context;
 
 import com.hzboiler.erp.core.model.BaseUser;
 import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
-import com.hzboiler.erp.core.service.BaseUserService;
+import com.hzboiler.erp.core.security.BaseUserService;
 import com.hzboiler.erp.core.util.SpringContextUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
