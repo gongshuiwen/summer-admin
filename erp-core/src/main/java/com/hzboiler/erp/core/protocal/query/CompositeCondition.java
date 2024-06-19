@@ -84,18 +84,14 @@ public final class CompositeCondition extends Condition {
 
     @Override
     public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
-        if (conditions == null || conditions.isEmpty()) {
-            throw new IllegalArgumentException("conditions can not be null or empty");
-        }
-
-        if (OPERATOR_AND.equals(getOperator())) {
+        if (OPERATOR_AND.equals(operator)) {
             conditions.forEach(condition -> queryWrapper.and(condition::applyToQueryWrapper));
-        } else if (OPERATOR_OR.equals(getOperator())) {
+        } else if (OPERATOR_OR.equals(operator)) {
             conditions.forEach(condition -> queryWrapper.or(condition::applyToQueryWrapper));
-        } else if (OPERATOR_NOT.equals(getOperator())) {
+        } else if (OPERATOR_NOT.equals(operator)) {
             conditions.forEach(condition -> queryWrapper.not(condition::applyToQueryWrapper));
         } else {
-            throw new IllegalArgumentException("Unsupported operator '" + getOperator() + "' for CompositeCondition.");
+            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for CompositeCondition.");
         }
     }
 
