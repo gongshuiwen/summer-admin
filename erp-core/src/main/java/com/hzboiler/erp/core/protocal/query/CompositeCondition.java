@@ -59,8 +59,12 @@ public final class CompositeCondition extends Condition {
 
     public static CompositeCondition of(String operator, List<Condition> conditions) {
         if (OPERATOR_NOT.equals(operator)) {
-            if (conditions == null) throw new IllegalArgumentException("conditions must not be null.");
-            if (conditions.size() != 1)  throw new IllegalArgumentException("conditions of 'not' operator must be only one.");
+            if (conditions == null)
+                throw new IllegalArgumentException("conditions of 'not' operator must not be null.");
+            if (conditions.size() != 1)
+                throw new IllegalArgumentException("conditions of 'not' operator must be only one.");
+            if (conditions.get(0) == null)
+                throw new IllegalArgumentException("condition of 'not' operator must not be null.");
             return CompositeCondition.not(conditions.get(0));
         } else if (OPERATOR_AND.equals(operator) || OPERATOR_OR.equals(operator)) {
             checkConditions(conditions);
