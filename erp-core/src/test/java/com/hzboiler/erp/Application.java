@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core;
+package com.hzboiler.erp;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
