@@ -14,12 +14,16 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Getter
-public class CompositeCondition extends Condition {
+public final class CompositeCondition extends Condition {
 
     // string constants for composite operator
     public static final String OPERATOR_AND = "and";
     public static final String OPERATOR_OR = "or";
     public static final String OPERATOR_NOT = "not";
+
+    public static final String DELIMITER_AND = " AND ";
+    public static final String DELIMITER_OR = " OR ";
+    public static final String DELIMITER_NOT = "NOT ";
 
     // sub conditions
     private final List<Condition> conditions;
@@ -100,12 +104,19 @@ public class CompositeCondition extends Condition {
 
     @Override
     public String getSql() {
-        if (Objects.equals(getOperator(), OPERATOR_NOT)) {
-            return OPERATOR_NOT.toUpperCase() + " " + conditions.get(0).getSql();
+        String delimiter;
+        if (OPERATOR_AND.equals(operator)) {
+            delimiter = DELIMITER_AND;
+        } else if (OPERATOR_OR.equals(operator)) {
+            delimiter = DELIMITER_OR;
+        } else if (OPERATOR_NOT.equals(operator)) {
+            return DELIMITER_NOT + conditions.get(0).getSql();
+        } else {
+            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for CompositeCondition.");
         }
 
         return conditions.stream()
                 .map(Condition::getSql)
-                .collect(Collectors.joining(" " + getOperator().toUpperCase() + " ", "( ", " )"));
+                .collect(Collectors.joining(delimiter, "( ", " )"));
     }
 }
