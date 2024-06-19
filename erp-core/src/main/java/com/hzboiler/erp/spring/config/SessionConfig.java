@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.config;
+package com.hzboiler.erp.spring.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

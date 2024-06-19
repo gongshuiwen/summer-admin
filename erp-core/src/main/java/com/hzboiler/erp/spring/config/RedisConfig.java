@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.config;
+package com.hzboiler.erp.spring.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

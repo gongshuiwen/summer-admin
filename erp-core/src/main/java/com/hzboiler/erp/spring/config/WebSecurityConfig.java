@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.config;
+package com.hzboiler.erp.spring.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.security.access.CustomAccessDeniedHandler;

@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.config;
+package com.hzboiler.erp.spring.config;
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.hzboiler.erp.core.field.Many2One;

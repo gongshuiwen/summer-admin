@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.interceptor;
+package com.hzboiler.erp.spring.web;
 
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * @author gongshuiwen
  */
-public class BaseInterceptor implements HandlerInterceptor {
+public final class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
