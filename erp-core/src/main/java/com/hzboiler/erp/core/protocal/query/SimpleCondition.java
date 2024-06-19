@@ -15,7 +15,7 @@ import java.util.Objects;
  * @author gongshuiwen
  */
 @Getter
-public class SimpleCondition extends Condition {
+public final class SimpleCondition extends Condition {
 
     // cache method addCondition and likeValue of AbstractWrapper
     private static final Method methodAddCondition;
