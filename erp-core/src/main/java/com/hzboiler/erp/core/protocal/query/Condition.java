@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public abstract class Condition {
 
-    private final String operator;
+    final String operator;
 
     Condition(String operator) {
         this.operator = operator;
