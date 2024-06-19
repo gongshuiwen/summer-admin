@@ -63,13 +63,6 @@ public final class SimpleCondition extends Condition {
         return new SimpleCondition(field, operator, value);
     }
 
-    private static void checkField(String field) {
-        Objects.requireNonNull(field, "field must not be null");
-        if (field.isBlank()) {
-            throw new IllegalArgumentException("field must not be blank");
-        }
-    }
-
     private static void checkOperator(String operator) {
         Objects.requireNonNull(operator, "operator must not be null");
         if (operator.isBlank()) {

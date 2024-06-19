@@ -16,6 +16,11 @@ public abstract class Condition {
         this.operator = operator;
     }
 
+    static void checkField(String field) {
+        if (field == null || field.isBlank())
+            throw new IllegalArgumentException("The field must not be null or blank.");
+    }
+
     public <T extends BaseModel> QueryWrapper<T> toQueryWrapper(Class<T> clazz) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         queryWrapper.setEntityClass(clazz);
