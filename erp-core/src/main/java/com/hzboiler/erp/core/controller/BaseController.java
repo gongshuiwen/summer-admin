@@ -51,11 +51,12 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected S service;
+
     protected Class<T> modelClass;
 
     @Operation(summary = "ID查询")
     @GetMapping
-    public Result<List<T>> select(@RequestParam @NotEmpty List<Long> ids) throws IllegalAccessException {
+    public Result<List<T>> select(@RequestParam @NotEmpty @Size(max = 1000) List<Long> ids) throws IllegalAccessException {
         List<T> records = service.selectByIds(ids);
         if (records != null && !records.isEmpty()) {
             fetchMany2One(records);
