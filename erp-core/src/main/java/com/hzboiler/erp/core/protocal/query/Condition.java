@@ -16,9 +16,14 @@ public abstract class Condition {
         this.operator = operator;
     }
 
-    public abstract void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper);
+    public <T extends BaseModel> QueryWrapper<T> toQueryWrapper(Class<T> clazz) {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        queryWrapper.setEntityClass(clazz);
+        applyToQueryWrapper(queryWrapper);
+        return queryWrapper;
+    }
 
-    public abstract <T extends BaseModel> QueryWrapper<T> toQueryWrapper(Class<T> clazz);
+    public abstract void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper);
 
     public abstract String getSql();
 }

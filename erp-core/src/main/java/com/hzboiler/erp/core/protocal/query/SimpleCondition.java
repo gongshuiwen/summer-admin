@@ -96,13 +96,6 @@ public class SimpleCondition extends Condition {
     }
 
     @Override
-    public <T extends BaseModel> QueryWrapper<T> toQueryWrapper(Class<T> clazz) {
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        this.applyToQueryWrapper(queryWrapper);
-        return queryWrapper;
-    }
-
-    @Override
     public String getSql() {
         // TODO: SQL injection protection
         if (value instanceof String) {
