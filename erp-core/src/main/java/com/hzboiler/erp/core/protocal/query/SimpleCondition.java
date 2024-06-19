@@ -91,7 +91,7 @@ public final class SimpleCondition extends Condition {
         } else if (isLike()) {
             applyLike(queryWrapper);
         } else {
-            throw new IllegalArgumentException("Unsupported operator '" + getOperator() + "' for SimpleCondition.");
+            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for SimpleCondition.");
         }
     }
 
@@ -99,21 +99,21 @@ public final class SimpleCondition extends Condition {
     public String getSql() {
         // TODO: SQL injection protection
         if (value instanceof String) {
-            return field + " " + getOperator().toUpperCase() + " '" + value + "'";
+            return field + " " + operator.toUpperCase() + " '" + value + "'";
         }
-        return field + " " + getOperator().toUpperCase() + " " + value;
+        return field + " " + operator.toUpperCase() + " " + value;
     }
 
     private boolean isGeneral() {
-        return GeneralOperator.contains(getOperator());
+        return GeneralOperator.contains(operator);
     }
 
     private boolean isLike() {
-        return LikeOperator.contains(getOperator());
+        return LikeOperator.contains(operator);
     }
 
     private void applyGeneral(QueryWrapper<?> queryWrapper) {
-        SqlKeyword sqlKeyword = GeneralOperator.get(getOperator()).getSqlKeyword();
+        SqlKeyword sqlKeyword = GeneralOperator.get(operator).getSqlKeyword();
         try {
             methodAddCondition.invoke(queryWrapper, true, field, sqlKeyword, value);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -123,7 +123,7 @@ public final class SimpleCondition extends Condition {
     }
 
     private void applyLike(QueryWrapper<?> queryWrapper) {
-        LikeOperator likeOperator = LikeOperator.of(getOperator());
+        LikeOperator likeOperator = LikeOperator.of(operator);
         try {
             methodLikeValue.invoke(queryWrapper, true, likeOperator.getSqlKeyword(), field, value, likeOperator.getSqlLike());
         } catch (InvocationTargetException | IllegalAccessException e) {
