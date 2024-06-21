@@ -23,6 +23,11 @@ public class Constants {
     public static final String AUTHORITY_UPDATE = "UPDATE";
     public static final String AUTHORITY_DELETE = "DELETE";
 
+    public static final String AUTHORITY_SELECT_CODE_PREFIX = "S:";
+    public static final String AUTHORITY_CREATE_CODE_PREFIX = "C:";
+    public static final String AUTHORITY_UPDATE_CODE_PREFIX = "U:";
+    public static final String AUTHORITY_DELETE_CODE_PREFIX = "D:";
+
     // prevent instantiation
     private Constants() {}
 }
