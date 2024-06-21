@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.hzboiler.erp.core.field.*;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
@@ -423,7 +424,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     public LambdaQueryChainWrapper<T> lambdaQuery() {
-        return super.lambdaQuery();
+        ModelAccessCheckUtils.checkSelect(entityClass);
+        return ChainWrappers.lambdaQueryChain(baseMapper);
     }
 
     @Override
