@@ -5,22 +5,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.context.BaseContextContainer;
 import com.hzboiler.erp.core.exception.BusinessException;
-import com.hzboiler.erp.core.field.util.RelationFieldUtil;
-import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
-import com.hzboiler.erp.core.method.util.MethodUtil;
-import com.hzboiler.erp.core.protocal.query.Condition;
-import com.hzboiler.erp.core.validation.CreateValidationGroup;
-import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
+import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
+import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
+import com.hzboiler.erp.core.method.util.MethodUtil;
+import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.Result;
+import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.service.BaseService;
+import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +32,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,6 +45,7 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_I
  * @author gongshuiwen
  */
 @Slf4j
+@Getter
 @Validated
 public abstract class BaseController<S extends BaseService<T>, T extends BaseModel>
         implements InitializingBean, BaseContextContainer {
@@ -45,14 +53,14 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     private static final Object[] EMPTY_ARGS = new Object[0];
 
     @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    private S service;
+
+    @Autowired
     @Qualifier("mappingJackson2HttpMessageConverterObjectMapper")
     private ObjectMapper objectMapper;
 
-    @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    protected S service;
-
-    protected Class<T> modelClass;
+    private Class<T> modelClass;
 
     @Operation(summary = "ID查询")
     @GetMapping
