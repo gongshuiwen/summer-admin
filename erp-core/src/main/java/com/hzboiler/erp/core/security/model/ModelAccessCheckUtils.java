@@ -85,6 +85,6 @@ public final class ModelAccessCheckUtils {
     }
 
     private static GrantedAuthority getAuthority(Class<? extends BaseModel> modelClass, ModelAccessType authority) {
-        return SimpleGrantedAuthorityPool.of(authority.getPrefix() + modelClass.getSimpleName());
+        return SimpleGrantedAuthorityPool.getAuthority(authority.getPrefix() + modelClass.getSimpleName());
     }
 }

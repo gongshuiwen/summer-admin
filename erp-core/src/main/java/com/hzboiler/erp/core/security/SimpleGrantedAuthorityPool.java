@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Static utility class which supports method for obtain shared {@link SimpleGrantedAuthority} instance.
+ * Static utility class for getting shared {@link SimpleGrantedAuthority} objects.
  *
  * @author gongshuiwen
  */
@@ -15,12 +15,14 @@ public final class SimpleGrantedAuthorityPool {
     // pool
     private static final Map<String, SimpleGrantedAuthority> pool = new ConcurrentHashMap<>();
 
-    // prevent instantiation
+    // prevent external instantiation
     private SimpleGrantedAuthorityPool() {
     }
 
-    public static SimpleGrantedAuthority of(String authority) {
-        authority = authority.intern();
-        return pool.computeIfAbsent(authority, SimpleGrantedAuthority::new);
+    public static SimpleGrantedAuthority getAuthority(String authority) {
+        // TODO: jmh to different implementation
+        // return pool.computeIfAbsent(authority, k -> new SimpleGrantedAuthority(k))
+        // return pool.computeIfAbsent(authority, k -> new SimpleGrantedAuthority(k.intern()))
+        return pool.computeIfAbsent(authority.intern(), SimpleGrantedAuthority::new);
     }
 }
