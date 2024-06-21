@@ -1,6 +1,5 @@
-package com.hzboiler.erp.core.field;
+package com.hzboiler.erp.core.field.util;
 
-import com.hzboiler.erp.core.field.util.FieldUtils;
 import com.hzboiler.erp.core.model.Mock;
 import org.junit.jupiter.api.Test;
 

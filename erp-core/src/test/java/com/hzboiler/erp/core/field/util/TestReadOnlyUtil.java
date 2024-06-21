@@ -1,7 +1,6 @@
-package com.hzboiler.erp.core.field;
+package com.hzboiler.erp.core.field.util;
 
 import com.hzboiler.erp.core.field.annotations.ReadOnly;
-import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
 import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Getter;
 import lombok.Setter;

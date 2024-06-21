@@ -1,7 +1,9 @@
-package com.hzboiler.erp.core.field;
+package com.hzboiler.erp.core.field.util;
 
+import com.hzboiler.erp.core.field.Many2Many;
+import com.hzboiler.erp.core.field.Many2One;
+import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.field.annotations.InverseField;
-import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.model.BaseTreeModel;
 import com.hzboiler.erp.core.util.ReflectUtil;
