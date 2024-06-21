@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hzboiler.erp.core.context.BaseContext;
-import com.hzboiler.erp.core.context.BaseContextHolder;
+import com.hzboiler.erp.core.context.BaseContextContainer;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.model.BaseModel;
@@ -15,7 +14,7 @@ import com.hzboiler.erp.core.protocal.query.Condition;
 
 import java.util.List;
 
-public interface BaseService<T extends BaseModel> {
+public interface BaseService<T extends BaseModel> extends BaseContextContainer {
 
     T selectById(Long id);
 
@@ -111,15 +110,6 @@ public interface BaseService<T extends BaseModel> {
     boolean deleteById(Long id);
 
     boolean deleteByIds(List<Long> ids);
-
-    /**
-     * Get current {@link BaseContext}
-     *
-     * @return {@link BaseContext}
-     */
-    default BaseContext getBaseContext() {
-        return BaseContextHolder.getContext();
-    }
 
     Class<T> getModelClass();
 

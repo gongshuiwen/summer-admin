@@ -3,8 +3,7 @@ package com.hzboiler.erp.core.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hzboiler.erp.core.context.BaseContext;
-import com.hzboiler.erp.core.context.BaseContextHolder;
+import com.hzboiler.erp.core.context.BaseContextContainer;
 import com.hzboiler.erp.core.exception.BusinessException;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.field.util.ReadOnlyUtil;
@@ -40,7 +39,8 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_I
  */
 @Slf4j
 @Validated
-public abstract class BaseController<S extends BaseService<T>, T extends BaseModel> implements InitializingBean {
+public abstract class BaseController<S extends BaseService<T>, T extends BaseModel>
+        implements InitializingBean, BaseContextContainer {
 
     private static final Object[] EMPTY_ARGS = new Object[0];
 
@@ -161,10 +161,6 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         }
 
         return args;
-    }
-
-    protected BaseContext getBaseContext() {
-        return BaseContextHolder.getContext();
     }
 
     @SuppressWarnings("unchecked")
