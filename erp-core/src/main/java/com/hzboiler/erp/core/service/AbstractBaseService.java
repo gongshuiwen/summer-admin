@@ -15,10 +15,9 @@ import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.Query;
-import com.hzboiler.erp.core.security.DataAccessAuthority;
-import com.hzboiler.erp.core.security.DataAccessAuthorityChecker;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
+import com.hzboiler.erp.core.security.model.ModelAccessCheckUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,32 +42,32 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Override
     public List<T> selectByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        ModelAccessCheckUtils.checkSelect(entityClass);
         return listByIds(ids);
     }
 
     @Override
     public IPage<T> page(Long pageNum, Long pageSize, String sorts, Condition condition) {
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        ModelAccessCheckUtils.checkSelect(entityClass);
         Query<T> query = new Query<>(entityClass, pageNum, pageSize, sorts, condition);
         return super.page(query.getPage(), query.getQueryWrapper());
     }
 
     @Override
     public Long count(QueryWrapper<T> queryWrapper) {
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        ModelAccessCheckUtils.checkSelect(entityClass);
         return super.count(queryWrapper);
     }
 
     @Override
     public List<T> selectList(QueryWrapper<T> queryWrapper) {
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        ModelAccessCheckUtils.checkSelect(entityClass);
         return super.list(queryWrapper);
     }
 
     @Override
     public List<T> nameSearch(String name) {
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.SELECT);
+        ModelAccessCheckUtils.checkSelect(entityClass);
         Page<T> page = new Page<>(1, 7);
 
         if (name == null || name.isEmpty() || name.isBlank()) return list(page);
@@ -98,7 +97,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (records == null || records.isEmpty()) return false;
 
         // check authority for create
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.CREATE);
+        ModelAccessCheckUtils.checkCreate(entityClass);
 
         // do create
         boolean res = saveBatch(records);
@@ -196,7 +195,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
             throw new IllegalArgumentException("record's id must be null");
 
         // check authority for update
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.UPDATE);
+        ModelAccessCheckUtils.checkUpdate(entityClass);
 
         // construct LambdaUpdateWrapper
         LambdaUpdateWrapper<T> wrapper = new LambdaUpdateWrapper<>();
@@ -316,7 +315,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (ids == null || ids.isEmpty()) return false;
 
         // check authority for delete
-        DataAccessAuthorityChecker.check(entityClass, DataAccessAuthority.DELETE);
+        ModelAccessCheckUtils.checkDelete(entityClass);
 
         // do delete
         boolean res = removeByIds(ids);
