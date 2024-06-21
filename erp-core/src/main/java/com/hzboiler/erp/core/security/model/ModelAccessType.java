@@ -6,7 +6,7 @@ import lombok.Getter;
 import static com.hzboiler.erp.core.security.Constants.*;
 
 /**
- * Model access authority enumerations
+ * Model access type enumerations
  *
  * @author gongshuiwen
  */

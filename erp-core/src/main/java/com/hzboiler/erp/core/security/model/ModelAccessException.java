@@ -5,6 +5,8 @@ import com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums;
 import com.hzboiler.erp.core.model.BaseModel;
 
 /**
+ * Model access exception
+ *
  * @author gongshuiwen
  */
 public final class ModelAccessException extends BusinessException {
