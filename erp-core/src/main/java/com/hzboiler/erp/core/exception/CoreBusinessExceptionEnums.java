@@ -3,8 +3,8 @@ package com.hzboiler.erp.core.exception;
 /**
  * Static utility class to define the {@link BusinessExceptionEnum} constants of namespace 'core'.
  *
- * @see BusinessExceptionEnum
  * @author gongshuiwen
+ * @see BusinessExceptionEnum
  */
 public final class CoreBusinessExceptionEnums {
 
@@ -22,6 +22,7 @@ public final class CoreBusinessExceptionEnums {
 
     public static final BusinessExceptionEnum ERROR_INTERNAL = new BusinessExceptionEnum(CORE_NAME_SPACE, 99999, "Server internal error!");
 
-    // prevent instantiation
-    private CoreBusinessExceptionEnums() {}
+    // prevent external instantiation
+    private CoreBusinessExceptionEnums() {
+    }
 }

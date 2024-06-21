@@ -16,28 +16,26 @@ import java.util.concurrent.ConcurrentHashMap;
  *     // prevent instantiation
  *     private BusinessExceptionEnums() {}
  * }</pre></blockquote>
- *
+ * <p>
  * Usage example:
  * <blockquote><pre>
  * throw new BusinessException(CoreBusinessExceptionEnums.ERROR_TEST);
  * </pre></blockquote>
- *
+ * <p>
  * Or use static import:
  * <blockquote><pre>
  * throw new BusinessException(ERROR_TEST);
  * </pre></blockquote>
  *
+ * @param namespace exception namespace
+ * @param code      exception code
+ * @param message   exception message
+ * @author gongshuiwen
  * @see BusinessException
  * @see CoreBusinessExceptionEnums
- * @author gongshuiwen
- *
- * @param namespace exception namespace
- * @param code exception code
- * @param message exception message
  */
 public record BusinessExceptionEnum(String namespace, int code, String message) {
 
-    private record Key(String namespace, int code) {}
     private static final Map<Key, BusinessExceptionEnum> REGISTRY = new ConcurrentHashMap<>();
 
     public BusinessExceptionEnum {
@@ -49,5 +47,8 @@ public record BusinessExceptionEnum(String namespace, int code, String message) 
         }
 
         REGISTRY.put(key, this);
+    }
+
+    private record Key(String namespace, int code) {
     }
 }

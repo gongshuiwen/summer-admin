@@ -9,13 +9,14 @@ import lombok.Getter;
  * <blockquote><pre>
  * throw new BusinessException(ERROR_TEST);
  * </pre></blockquote>
- *
+ * <p>
  * Custom message example:
  * <blockquote><pre>
  * throw new BusinessException(ERROR_TEST, "error message");
  * </pre></blockquote>
- * @see BusinessExceptionEnum
+ *
  * @author gongshuiwen
+ * @see BusinessExceptionEnum
  */
 @Getter
 public class BusinessException extends RuntimeException {
