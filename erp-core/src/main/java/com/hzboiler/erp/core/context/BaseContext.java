@@ -1,8 +1,8 @@
 package com.hzboiler.erp.core.context;
 
 import com.hzboiler.erp.core.model.BaseUser;
-import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
 import com.hzboiler.erp.core.security.BaseUserService;
+import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
 import com.hzboiler.erp.core.util.SpringContextUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -11,18 +11,20 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static com.hzboiler.erp.core.security.Constants.GRANTED_AUTHORITY_ROLE_SYS_ADMIN;
 
 /**
  * BaseContext stores common data for every request of the application,
  * it is created when required, discarded after each request and never shared between threads and requests.
+ *
  * @author gongshuiwen
  */
 public final class BaseContext {
-
-    private static final Set<? extends GrantedAuthority> EMPTY_AUTHORITIES = Set.of();
 
     @Getter
     private final Long userId;
@@ -103,8 +105,8 @@ public final class BaseContext {
     /**
      * Retrieves the value associated with the given key from the attributes map.
      *
-     * @param  key  the key whose associated value is to be returned
-     * @return      the value to which the specified key is mapped, or null if the map contains no mapping for the key
+     * @param key the key whose associated value is to be returned
+     * @return the value to which the specified key is mapped, or null if the map contains no mapping for the key
      */
     public Object getAttribute(String key) {
         if (attributes == null) {
@@ -118,9 +120,9 @@ public final class BaseContext {
      * initialized as a new HashMap. Returns the previous value associated with the key, or null if there was no
      * mapping for the key.
      *
-     * @param  key   the key with which the specified value is to be set
-     * @param  value the value to be set
-     * @return       the previous value associated with the key, or null if there was no mapping for the key
+     * @param key   the key with which the specified value is to be set
+     * @param value the value to be set
+     * @return the previous value associated with the key, or null if there was no mapping for the key
      */
     public Object setAttribute(String key, Object value) {
         if (attributes == null) {
@@ -132,8 +134,8 @@ public final class BaseContext {
     /**
      * Removes the value associated with the given key from the attributes map.
      *
-     * @param  key  the key whose associated value is to be removed
-     * @return      the value that was associated with the key, or null if the map contained no mapping for the key
+     * @param key the key whose associated value is to be removed
+     * @return the value that was associated with the key, or null if the map contained no mapping for the key
      */
     public Object removeAttribute(String key) {
         if (attributes == null) {
@@ -145,7 +147,7 @@ public final class BaseContext {
     /**
      * Retrieves the attributes map. If the attributes map is null, a new HashMap is created and assigned to the attributes field.
      *
-     * @return  the attributes map
+     * @return the attributes map
      */
     public Map<String, Object> getAttributes() {
         if (attributes == null) {
