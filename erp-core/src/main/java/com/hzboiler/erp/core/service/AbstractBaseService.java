@@ -20,6 +20,7 @@ import com.hzboiler.erp.core.field.annotations.OnDelete;
 import com.hzboiler.erp.core.security.model.ModelAccessCheckUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
@@ -30,6 +31,10 @@ import java.util.Objects;
 public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseModel>
         extends ServiceImpl<M, T>
         implements BaseService<T>, InitializingBean {
+
+    @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    private M baseMapper;
 
     @Override
     public T selectById(Long id) {
