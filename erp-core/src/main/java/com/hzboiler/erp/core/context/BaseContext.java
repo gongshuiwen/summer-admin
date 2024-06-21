@@ -157,7 +157,7 @@ public final class BaseContext {
     /**
      * Retrieves the {@link jakarta.servlet.http.HttpServletRequest} associated with the current thread's request context.
      * If the request is already cached, it is returned directly. Otherwise, the request is obtained
-     * from the current request context and cached for future use.
+     * from the {@link RequestContextHolder} and cached for future use.
      *
      * @return the {@link jakarta.servlet.http.HttpServletRequest} associated with the current thread's request context
      */
