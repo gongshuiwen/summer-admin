@@ -2,22 +2,30 @@ package com.hzboiler.erp.core.context;
 
 import com.hzboiler.erp.core.model.BaseUser;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * BaseContextHolder is utility class to get BaseContext instance,
- * and the BaseContext instance is lazily initialized and stored in ThreadLocal.
+ * BaseContextHolder is an utility class to get {@link BaseContext} instance,
+ * which is lazily initialized and stored in {@link ThreadLocal}.
  *
- * @see BaseContext
  * @author gongshuiwen
+ * @see BaseContext
  */
 public final class BaseContextHolder {
 
+    // thread local for BaseContext
     private static final ThreadLocal<BaseContext> _local = new ThreadLocal<>();
 
+    // prevent external instantiation
+    private BaseContextHolder() {
+    }
+
     /**
-     * Get the BaseContext of current thread.
-     * If the BaseContext not exist yet, initialize and store it in ThreadLocal.
+     * Get the {@link BaseContext} of current thread.
+     * If the {@link BaseContext} not exist yet, initialize and store it in {@link ThreadLocal}.
+     *
+     * @return {@link BaseContext}
      */
     public static BaseContext getContext() {
         BaseContext baseContext = _local.get();
@@ -29,8 +37,8 @@ public final class BaseContextHolder {
     }
 
     /**
-     * Create and initialize a new BaseContext instance.
-     * The user info of the BaseContext is loaded from SecurityContext.
+     * Create and initialize a new {@link BaseContext} instance.
+     * The user info of the {@link BaseContext} is loaded from {@link SecurityContext}.
      */
     private static BaseContext initBaseContext() {
         BaseContext baseContext;
@@ -45,13 +53,10 @@ public final class BaseContextHolder {
     }
 
     /**
-     * Clear the BaseContext of current thread.
+     * Clear the {@link BaseContext} of current thread.
      * It should always be called when a request is finished.
      */
     public static void clearContext() {
         _local.remove();
     }
-
-    // prevent instantiation
-    private BaseContextHolder() {}
 }
