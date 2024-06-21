@@ -19,10 +19,10 @@ abstract class MockControllerTestBase extends ControllerTestBase {
 
     static final String MOCK_PATH = "/mock";
     static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_SELECT = MOCK_ENTITY_NAME + ":" + AUTHORITY_SELECT;
-    static final String MOCK_AUTHORITY_CREATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_CREATE;
-    static final String MOCK_AUTHORITY_UPDATE = MOCK_ENTITY_NAME + ":" + AUTHORITY_UPDATE;
-    static final String MOCK_AUTHORITY_DELETE = MOCK_ENTITY_NAME + ":" + AUTHORITY_DELETE;
+    static final String MOCK_AUTHORITY_SELECT = AUTHORITY_SELECT_CODE_PREFIX + MOCK_ENTITY_NAME;
+    static final String MOCK_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK_ENTITY_NAME;
+    static final String MOCK_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK_ENTITY_NAME;
+    static final String MOCK_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK_ENTITY_NAME;
 
     @Autowired
     MockMapper mockMapper;

@@ -16,8 +16,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
+/**
+ * @author gongshuiwen
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public abstract class ControllerTestBase {
