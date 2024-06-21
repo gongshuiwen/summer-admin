@@ -123,7 +123,7 @@ public interface BaseService<T extends BaseModel> {
 
     Class<T> getModelClass();
 
-    BaseMapper<T> getBaseMapper();
+    BaseMapper<T> getMapper();
 
     /**
      * Returns a {@link RelationMapper} instance for the service's model class and the given target class

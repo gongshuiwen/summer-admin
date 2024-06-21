@@ -412,7 +412,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public M getBaseMapper() {
+    public M getMapper() {
         return baseMapper;
     }
 
