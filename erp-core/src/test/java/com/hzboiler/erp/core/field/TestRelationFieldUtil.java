@@ -14,33 +14,10 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author gongshuiwen
+ */
 class TestRelationFieldUtil {
-
-    @Getter
-    @Setter
-    static class Mock extends BaseModel {
-
-        @InverseField("field2")
-        private Many2One<Mock> field1;
-
-        @InverseField("field10")
-        private One2Many<Mock> field2;
-
-        private Many2Many<Mock> field3;
-        private Many2One<?> field4;
-        private Long field5;
-    }
-
-    @Getter
-    @Setter
-    static class Mock2 extends Mock {
-        private Many2One<Mock> field6;
-        private One2Many<Mock> field7;
-        private Many2Many<Mock> field8;
-    }
-
-    static class TreeMock extends BaseTreeModel<TreeMock> {
-    }
 
     @Test
     void testGetTargetModelClass() throws NoSuchFieldException {
@@ -88,5 +65,31 @@ class TestRelationFieldUtil {
 
         assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class, Mock.class.getDeclaredField("field2")));
         assertThrowsExactly(RuntimeException.class, () -> RelationFieldUtil.getInverseField(Mock.class, Mock.class.getDeclaredField("field3")));
+    }
+
+    @Getter
+    @Setter
+    static class Mock extends BaseModel {
+
+        @InverseField("field2")
+        private Many2One<Mock> field1;
+
+        @InverseField("field10")
+        private One2Many<Mock> field2;
+
+        private Many2Many<Mock> field3;
+        private Many2One<?> field4;
+        private Long field5;
+    }
+
+    @Getter
+    @Setter
+    static class Mock2 extends Mock {
+        private Many2One<Mock> field6;
+        private One2Many<Mock> field7;
+        private Many2Many<Mock> field8;
+    }
+
+    static class TreeMock extends BaseTreeModel<TreeMock> {
     }
 }

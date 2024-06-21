@@ -12,27 +12,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * @author gongshuiwen
+ */
 class TestReadOnlyUtil {
 
-    @Getter
-    @Setter
-    static class Class1 extends BaseModel {
-
-        @ReadOnly
-        private String field1;
-    }
-
-    @Getter
-    @Setter
-    static class Class2 extends Class1 {
-
-        @ReadOnly
-        private String field2;
-    }
-
     static final List<Field> readonlyFields = new ArrayList<>();
+
     static {
         try {
             readonlyFields.add(Class2.class.getDeclaredField("field2"));
@@ -51,5 +40,21 @@ class TestReadOnlyUtil {
         Field[] readOnlyFields = ReadOnlyUtil.getReadOnlyFields(Class2.class);
         assertArrayEquals(readonlyFields.toArray(), readOnlyFields);
         assertTrue(Arrays.stream(readOnlyFields).allMatch((field) -> field.canAccess(new Class2())));
+    }
+
+    @Getter
+    @Setter
+    static class Class1 extends BaseModel {
+
+        @ReadOnly
+        private String field1;
+    }
+
+    @Getter
+    @Setter
+    static class Class2 extends Class1 {
+
+        @ReadOnly
+        private String field2;
     }
 }
