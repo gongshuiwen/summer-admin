@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
@@ -158,14 +157,4 @@ public interface BaseService<T extends BaseModel> {
      * @return LambdaQueryWrapper 的包装类
      */
     LambdaQueryChainWrapper<T> lambdaQuery();
-
-    /**
-     * copied from mybatis-plus {@link IService#lambdaUpdate()}
-     * <p>
-     * 链式更改 lambda 式
-     * <p>注意：不支持 Kotlin </p>
-     *
-     * @return LambdaUpdateWrapper 的包装类
-     */
-    LambdaUpdateChainWrapper<T> lambdaUpdate();
 }
