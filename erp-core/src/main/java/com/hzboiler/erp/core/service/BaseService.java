@@ -147,7 +147,7 @@ public interface BaseService<T extends BaseModel> {
         return RelationMapperRegistry.getMapper(class1, class2);
     }
 
-    <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass);
+    <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass);
 
     /**
      * copied from mybatis-plus {@link IService#lambdaQuery()}

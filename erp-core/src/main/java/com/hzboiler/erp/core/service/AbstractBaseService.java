@@ -413,6 +413,12 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass) {
+        return (S) BaseServiceRegistry.getService(modelClass);
+    }
+
+    @Override
     public LambdaQueryChainWrapper<T> lambdaQuery() {
         return super.lambdaQuery();
     }
@@ -420,11 +426,6 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Override
     public LambdaUpdateChainWrapper<T> lambdaUpdate() {
         return super.lambdaUpdate();
-    }
-
-    @Override
-    public <AT extends BaseModel> BaseService<AT> getService(Class<AT> modelClass) {
-        return BaseServiceRegistry.getService(modelClass);
     }
 
     @Override
