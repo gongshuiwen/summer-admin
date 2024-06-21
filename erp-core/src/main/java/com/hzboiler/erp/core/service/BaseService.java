@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.mapper.RelationMapper;
@@ -158,9 +157,7 @@ public interface BaseService<T extends BaseModel> {
      *
      * @return LambdaQueryWrapper 的包装类
      */
-    default LambdaQueryChainWrapper<T> lambdaQuery() {
-        return ChainWrappers.lambdaQueryChain(getBaseMapper(), getModelClass());
-    }
+    LambdaQueryChainWrapper<T> lambdaQuery();
 
     /**
      * copied from mybatis-plus {@link IService#lambdaUpdate()}
@@ -170,7 +167,5 @@ public interface BaseService<T extends BaseModel> {
      *
      * @return LambdaUpdateWrapper 的包装类
      */
-    default LambdaUpdateChainWrapper<T> lambdaUpdate() {
-        return ChainWrappers.lambdaUpdateChain(getBaseMapper());
-    }
+    LambdaUpdateChainWrapper<T> lambdaUpdate();
 }
