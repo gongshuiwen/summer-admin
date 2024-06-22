@@ -22,7 +22,7 @@ import java.util.List;
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
 class TestBaseControllerPage extends MockControllerTestBase {
 
-    ResultActions doPage(Long pageNum, Long pageSize, String sorts, Condition condition) throws Exception {
+    ResultActions doPage(Long pageNum, Long pageSize, String orderBys, Condition condition) throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(MOCK_PATH + "/page");
         builder.contentType(MediaType.APPLICATION_JSON);
         if (pageNum != null) {
@@ -31,8 +31,8 @@ class TestBaseControllerPage extends MockControllerTestBase {
         if (pageSize != null) {
             builder.param("pageSize", pageSize.toString());
         }
-        if (sorts != null) {
-            builder.param("sorts", sorts);
+        if (orderBys != null) {
+            builder.param("orderBys", orderBys);
         }
         if (condition != null) {
             builder.content(objectMapper.writeValueAsBytes(condition));
@@ -86,7 +86,7 @@ class TestBaseControllerPage extends MockControllerTestBase {
 
     @Test
     @WithMockAdmin
-    void testSortsIdDesc() throws Exception {
+    void testOrderByIdDesc() throws Exception {
         List<Long> ids = List.of(1L, 2L);
         List<Mock> mocks = mockMapper.selectBatchIds(ids);
 
