@@ -1,38 +1,50 @@
 package com.hzboiler.erp.core.protocal.query;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author gongshuiwen
  */
 @Getter
-@Setter
-public class OrderBy<T> {
+public class OrderBy {
 
-    private String column;
-    private Type type;
+    private final String field;
+    private final OrderByType type;
 
-    public void applyToQueryWrapper(QueryWrapper<T> queryWrapper) {
-        checkColumn();
-        if (type == null || type == Type.ASC) {
-            queryWrapper.orderByAsc(column);
+    // prevent external instantiation
+    private OrderBy(String field, OrderByType type) {
+        this.field = field;
+        this.type = type;
+    }
+
+    public static OrderBy asc(String field) {
+        checkField(field);
+        return new OrderBy(field, OrderByType.ASC);
+    }
+
+    public static OrderBy desc(String field) {
+        checkField(field);
+        return new OrderBy(field, OrderByType.DESC);
+    }
+
+    public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
+        if (type == OrderByType.ASC) {
+            queryWrapper.orderByAsc(field);
+        } else if (type == OrderByType.DESC) {
+            queryWrapper.orderByDesc(field);
         } else {
-            queryWrapper.orderByDesc(column);
+            throw new IllegalArgumentException("Invalid order by type: " + type);
         }
     }
 
-    private void checkColumn() {
-        if (column == null) {
-            throw new IllegalArgumentException("Invalid column: column cannot be null");
-        }
-
-        // TODO: implement check column existing in entity class with cache
+    private static void checkField(String field) {
+        if (field == null || field.isBlank())
+            throw new IllegalArgumentException("The field must not be null or blank.");
     }
 
-    enum Type {
+    private enum OrderByType {
         ASC,
         DESC
     }

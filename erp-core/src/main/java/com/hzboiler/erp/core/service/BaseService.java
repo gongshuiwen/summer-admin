@@ -44,11 +44,11 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         return selectOne(condition, null);
     }
 
-    default T selectOne(Condition condition, List<OrderBy<T>> orderBys) {
+    default T selectOne(Condition condition, List<OrderBy> orderBys) {
         QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
 
         if (orderBys != null && !orderBys.isEmpty()) {
-            for (OrderBy<T> orderBy : orderBys) {
+            for (OrderBy orderBy : orderBys) {
                 orderBy.applyToQueryWrapper(queryWrapper);
             }
         }
@@ -72,7 +72,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         return selectList(condition, limit, offset, null);
     };
 
-    default List<T> selectList(Condition condition, Long limit, Long offset, List<OrderBy<T>> orderBys) {
+    default List<T> selectList(Condition condition, Long limit, Long offset, List<OrderBy> orderBys) {
         if (limit == null || limit < 0)
             throw new IllegalArgumentException("limit must not be null or < 0!");
         if (offset == null || offset < 0)
@@ -87,7 +87,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         }
 
         if (orderBys != null && !orderBys.isEmpty()) {
-            for (OrderBy<T> orderBy : orderBys) {
+            for (OrderBy orderBy : orderBys) {
                 orderBy.applyToQueryWrapper(queryWrapper);
             }
         }
