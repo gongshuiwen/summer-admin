@@ -8,7 +8,11 @@ import java.util.Collection;
 /**
  * @author gongshuiwen
  */
-public class GrantedAuthorityCheckUtils {
+public final class GrantedAuthorityCheckUtils {
+
+    // prevent instantiation
+    private GrantedAuthorityCheckUtils() {
+    }
 
     public static boolean isAdmin() {
         return BaseContextHolder.getContext().isAdmin();
@@ -23,7 +27,7 @@ public class GrantedAuthorityCheckUtils {
         return authorities.stream().anyMatch(userAuthorities::contains);
     }
 
-    public static boolean containsAll(Collection<GrantedAuthority> authorities) {
+    public static boolean containsAll(Collection<? extends GrantedAuthority> authorities) {
         Collection<? extends GrantedAuthority> userAuthorities = getUserAuthorities();
         return userAuthorities.containsAll(authorities);
     }
