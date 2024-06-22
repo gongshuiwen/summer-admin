@@ -14,6 +14,10 @@ import com.hzboiler.erp.core.protocal.query.OrderBys;
 
 import java.util.List;
 
+/**
+ * @param <T> type extends {@link BaseModel}
+ * @author gongshuiwen
+ */
 public interface BaseService<T extends BaseModel> extends BaseContextContainer {
 
     T selectById(Long id);
@@ -66,7 +70,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
 
     default List<T> selectList(Condition condition, Long limit, Long offset) {
         return selectList(condition, limit, offset, null);
-    };
+    }
 
     default List<T> selectList(Condition condition, Long limit, Long offset, OrderBys orderBys) {
         if (limit == null || limit < 0)
@@ -92,17 +96,33 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
 
     List<T> nameSearch(String name);
 
+    // ====================
+    // Create methods
+    // ====================
+
     boolean createOne(T record);
 
     boolean createBatch(List<T> records);
+
+    // ====================
+    // Update methods
+    // ====================
 
     boolean updateById(Long id, T record);
 
     boolean updateByIds(List<Long> ids, T record);
 
+    // ====================
+    // Delete methods
+    // ====================
+
     boolean deleteById(Long id);
 
     boolean deleteByIds(List<Long> ids);
+
+    // ====================
+    // Other methods
+    // ====================
 
     Class<T> getModelClass();
 
