@@ -3,7 +3,6 @@ package com.hzboiler.erp.spring.web;
 import com.hzboiler.erp.core.exception.BusinessException;
 import com.hzboiler.erp.core.protocal.Error;
 import com.hzboiler.erp.core.protocal.Result;
-import com.hzboiler.erp.core.security.DataAccessException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -46,11 +45,6 @@ public final class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public Result<String> handleAccessDeniedException(Exception e) {
-        return Result.error(ERROR_ACCESS_DENIED);
-    }
-
-    @ExceptionHandler(DataAccessException.class)
-    public Result<String> handleDataAccessException(Exception e) {
         return Result.error(ERROR_ACCESS_DENIED);
     }
 
