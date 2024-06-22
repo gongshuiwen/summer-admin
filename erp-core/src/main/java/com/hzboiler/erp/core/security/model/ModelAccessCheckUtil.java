@@ -13,10 +13,10 @@ import java.util.Objects;
  *
  * @author gongshuiwen
  */
-public final class ModelAccessCheckUtils {
+public final class ModelAccessCheckUtil {
 
     // prevent external instantiation
-    private ModelAccessCheckUtils() {
+    private ModelAccessCheckUtil() {
     }
 
     /**
