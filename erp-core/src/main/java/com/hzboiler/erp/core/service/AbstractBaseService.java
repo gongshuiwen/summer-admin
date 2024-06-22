@@ -14,7 +14,7 @@ import com.hzboiler.erp.core.field.*;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.protocal.query.Condition;
-import com.hzboiler.erp.core.protocal.query.Query;
+import com.hzboiler.erp.core.protocal.query.OrderBys;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
 import com.hzboiler.erp.core.security.model.ModelAccessCheckUtils;
@@ -52,10 +52,14 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    public IPage<T> page(Long pageNum, Long pageSize, String sorts, Condition condition) {
+    public IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
         ModelAccessCheckUtils.checkSelect(entityClass);
-        Query<T> query = new Query<>(entityClass, pageNum, pageSize, sorts, condition);
-        return super.page(query.getPage(), query.getQueryWrapper());
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        if (condition != null)
+            condition.applyToQueryWrapper(queryWrapper);
+        if (orderBys != null)
+            orderBys.applyToQueryWrapper(queryWrapper);
+        return super.page(new Page<>(pageNum, pageSize), queryWrapper);
     }
 
     @Override

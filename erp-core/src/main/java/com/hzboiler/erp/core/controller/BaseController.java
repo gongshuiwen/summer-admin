@@ -15,6 +15,7 @@ import com.hzboiler.erp.core.method.util.MethodUtil;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.Result;
 import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.OrderBys;
 import com.hzboiler.erp.core.service.BaseService;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
@@ -76,9 +77,10 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<IPage<T>> page(@RequestParam @Positive @Max(1000) Long pageNum, @RequestParam @Positive @Max(1000) Long pageSize,
-                                 @RequestParam(required = false) String sorts,
+                                 @RequestParam(required = false) String orderBys,
                                  @RequestBody(required = false) Condition condition) throws IllegalAccessException {
-        IPage<T> page = service.page(pageNum, pageSize, sorts, condition);
+        OrderBys orderBys1 = orderBys != null ? OrderBys.parse(orderBys) : null;
+        IPage<T> page = service.page(pageNum, pageSize, condition, orderBys1);
         List<T> records = page.getRecords();
         if (records != null && !records.isEmpty()) {
             fetchMany2One(records);

@@ -24,11 +24,11 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         return page(pageNum, pageSize, null, null);
     }
 
-    default IPage<T> page(Long pageNum, Long pageSize, String sort) {
-        return page(pageNum, pageSize, sort, null);
+    default IPage<T> page(Long pageNum, Long pageSize, Condition condition) {
+        return page(pageNum, pageSize, condition, null);
     }
 
-    IPage<T> page(Long pageNum, Long pageSize, String sorts, Condition condition);
+    IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys);
 
     default Long count(Condition condition) {
         if (condition == null)
