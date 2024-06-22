@@ -5,6 +5,7 @@ import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.model.Mock;
 import com.hzboiler.erp.core.mapper.MockMapper;
 import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.OrderBys;
 import com.hzboiler.erp.core.protocal.query.SimpleCondition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -80,7 +81,7 @@ public class TestAbstractBaseService {
         assertEquals(2L, results.get(1).getId());
         assertEquals("mock2", results.get(1).getName());
 
-        pageResult = mockService.page(1L, 20L,"_id");
+        pageResult = mockService.page(1L, 20L, null, OrderBys.of("_id"));
         assertEquals(1, pageResult.getPages());
         assertEquals(2, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
@@ -95,7 +96,7 @@ public class TestAbstractBaseService {
 
         Condition condition = SimpleCondition.of("id", "=", 1L);
 
-        pageResult = mockService.page(1L, 20L, "_id", condition);
+        pageResult = mockService.page(1L, 20L, condition, OrderBys.of("_id"));
         assertEquals(1, pageResult.getPages());
         assertEquals(1, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
@@ -106,7 +107,7 @@ public class TestAbstractBaseService {
         assertEquals(1L, results.get(0).getId());
         assertEquals("mock1", results.get(0).getName());
 
-        pageResult = mockService.page(1L, 20L, null, condition);
+        pageResult = mockService.page(1L, 20L, condition);
         assertEquals(1, pageResult.getPages());
         assertEquals(1, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
