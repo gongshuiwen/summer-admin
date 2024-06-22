@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
  *
  * @author gongshuiwen
  */
-public final class FieldUtils {
+public final class FieldUtil {
 
     // field names cache
     private static final Map<Class<? extends BaseModel>, Set<String>> fieldNamesCache = new ConcurrentHashMap<>();
 
     // prevent external instantiation
-    private FieldUtils() {
+    private FieldUtil() {
     }
 
     /**
