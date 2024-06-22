@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public class OrderBys {
+public class OrderBys implements QueryWrapperAdapter {
 
     private final OrderBy[] orderBys;
 
@@ -42,6 +42,7 @@ public class OrderBys {
         return of(orderByStrings);
     }
 
+    @Override
     public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
         for (OrderBy orderBy : orderBys)
             orderBy.applyToQueryWrapper(queryWrapper);

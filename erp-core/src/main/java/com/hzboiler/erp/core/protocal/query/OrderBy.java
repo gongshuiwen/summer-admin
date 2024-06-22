@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public class OrderBy {
+public class OrderBy implements QueryWrapperAdapter {
 
     private final String field;
     private final OrderByType type;
@@ -29,6 +29,12 @@ public class OrderBy {
         return new OrderBy(field, OrderByType.DESC);
     }
 
+    private static void checkField(String field) {
+        if (field == null || field.isBlank())
+            throw new IllegalArgumentException("The field must not be null or blank.");
+    }
+
+    @Override
     public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
         if (type == OrderByType.ASC) {
             queryWrapper.orderByAsc(field);
@@ -37,11 +43,6 @@ public class OrderBy {
         } else {
             throw new IllegalArgumentException("Invalid order by type: " + type);
         }
-    }
-
-    private static void checkField(String field) {
-        if (field == null || field.isBlank())
-            throw new IllegalArgumentException("The field must not be null or blank.");
     }
 
     private enum OrderByType {

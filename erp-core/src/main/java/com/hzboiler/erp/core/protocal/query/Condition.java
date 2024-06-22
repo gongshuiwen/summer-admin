@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public abstract class Condition {
+public abstract class Condition implements QueryWrapperAdapter {
 
     final String operator;
 
@@ -20,15 +20,6 @@ public abstract class Condition {
         if (field == null || field.isBlank())
             throw new IllegalArgumentException("The field must not be null or blank.");
     }
-
-    public <T extends BaseModel> QueryWrapper<T> toQueryWrapper(Class<T> clazz) {
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        queryWrapper.setEntityClass(clazz);
-        applyToQueryWrapper(queryWrapper);
-        return queryWrapper;
-    }
-
-    public abstract void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper);
 
     public abstract String getSql();
 }
