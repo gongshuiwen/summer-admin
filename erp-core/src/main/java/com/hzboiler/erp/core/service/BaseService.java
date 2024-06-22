@@ -9,8 +9,8 @@ import com.hzboiler.erp.core.context.BaseContextContainer;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.model.BaseModel;
-import com.hzboiler.erp.core.protocal.query.OrderBy;
 import com.hzboiler.erp.core.protocal.query.Condition;
+import com.hzboiler.erp.core.protocal.query.OrderBys;
 
 import java.util.List;
 
@@ -44,14 +44,10 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         return selectOne(condition, null);
     }
 
-    default T selectOne(Condition condition, List<OrderBy> orderBys) {
+    default T selectOne(Condition condition, OrderBys orderBys) {
         QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
-
-        if (orderBys != null && !orderBys.isEmpty()) {
-            for (OrderBy orderBy : orderBys) {
-                orderBy.applyToQueryWrapper(queryWrapper);
-            }
-        }
+        if (orderBys != null)
+            orderBys.applyToQueryWrapper(queryWrapper);
         return selectOne(queryWrapper);
     }
 
@@ -72,7 +68,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         return selectList(condition, limit, offset, null);
     };
 
-    default List<T> selectList(Condition condition, Long limit, Long offset, List<OrderBy> orderBys) {
+    default List<T> selectList(Condition condition, Long limit, Long offset, OrderBys orderBys) {
         if (limit == null || limit < 0)
             throw new IllegalArgumentException("limit must not be null or < 0!");
         if (offset == null || offset < 0)
@@ -86,11 +82,8 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
             }
         }
 
-        if (orderBys != null && !orderBys.isEmpty()) {
-            for (OrderBy orderBy : orderBys) {
-                orderBy.applyToQueryWrapper(queryWrapper);
-            }
-        }
+        if (orderBys != null)
+            orderBys.applyToQueryWrapper(queryWrapper);
 
         return selectList(queryWrapper);
     }
