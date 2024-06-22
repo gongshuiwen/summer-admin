@@ -23,6 +23,25 @@ public class OrderBys {
         return new OrderBys(orderBys);
     }
 
+    public static OrderBys of(String... orderByStrings) {
+        OrderBy[] orderBys = new OrderBy[orderByStrings.length];
+        for (int i = 0; i < orderByStrings.length; i++) {
+            if (orderByStrings[i].startsWith("_")) {
+                orderBys[i] = OrderBy.desc(orderByStrings[i].substring(1));
+            } else {
+                orderBys[i] = OrderBy.asc(orderByStrings[i]);
+            }
+        }
+        return new OrderBys(orderBys);
+    }
+
+    public static OrderBys parse(String orderBysString) {
+        if (orderBysString == null || orderBysString.isEmpty())
+            throw new IllegalArgumentException("The orderBys cannot be null or empty.");
+        String[] orderByStrings = orderBysString.split(",");
+        return of(orderByStrings);
+    }
+
     public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
         for (OrderBy orderBy : orderBys)
             orderBy.applyToQueryWrapper(queryWrapper);
