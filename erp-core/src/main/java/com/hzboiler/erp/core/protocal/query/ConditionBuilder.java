@@ -51,6 +51,54 @@ public final class ConditionBuilder {
         return builder;
     }
 
+    public static ConditionBuilder eq(String field, Object value) {
+        return simple(field, GeneralOperator.EQ.getName(), value);
+    }
+
+    public static ConditionBuilder ne(String field, Object value) {
+        return simple(field, GeneralOperator.NE.getName(), value);
+    }
+
+    public static ConditionBuilder lt(String field, Object value) {
+        return simple(field, GeneralOperator.LT.getName(), value);
+    }
+
+    public static ConditionBuilder le(String field, Object value) {
+        return simple(field, GeneralOperator.LE.getName(), value);
+    }
+
+    public static ConditionBuilder gt(String field, Object value) {
+        return simple(field, GeneralOperator.GT.getName(), value);
+    }
+
+    public static ConditionBuilder ge(String field, Object value) {
+        return simple(field, GeneralOperator.GE.getName(), value);
+    }
+
+    public static ConditionBuilder like(String field, Object value) {
+        return simple(field, LikeOperator.LIKE.getName(), value);
+    }
+
+    public static ConditionBuilder likeLeft(String field, Object value) {
+        return simple(field, LikeOperator.LIKE_LEFT.getName(), value);
+    }
+
+    public static ConditionBuilder likeRight(String field, Object value) {
+        return simple(field, LikeOperator.LIKE_RIGHT.getName(), value);
+    }
+
+    public static ConditionBuilder notLike(String field, Object value) {
+        return simple(field, LikeOperator.NOT_LIKE.getName(), value);
+    }
+
+    public static ConditionBuilder notLikeLeft(String field, Object value) {
+        return simple(field, LikeOperator.NOT_LIKE_LEFT.getName(), value);
+    }
+
+    public static ConditionBuilder notLikeRight(String field, Object value) {
+        return simple(field, LikeOperator.NOT_LIKE_RIGHT.getName(), value);
+    }
+
     public Condition build() {
         if (OPERATOR_NOT.equals(operator)) {
             return CompositeCondition.not(conditions.get(0));
