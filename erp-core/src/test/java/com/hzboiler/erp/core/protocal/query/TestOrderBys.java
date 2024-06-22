@@ -17,4 +17,25 @@ class TestOrderBys {
         OrderBys.of(OrderBy.asc("name"), OrderBy.desc("id")).applyToQueryWrapper(mockQueryWrapper);
         assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
     }
+
+    @Test
+    void testStaticMethodOf1() {
+        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
+        OrderBys.of(OrderBy.asc("name"), OrderBy.desc("id")).applyToQueryWrapper(mockQueryWrapper);
+        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+    }
+
+    @Test
+    void testStaticMethodOf2() {
+        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
+        OrderBys.of("name", "_id").applyToQueryWrapper(mockQueryWrapper);
+        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+    }
+
+    @Test
+    void testStaticMethodParse() {
+        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
+        OrderBys.parse("name,_id").applyToQueryWrapper(mockQueryWrapper);
+        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+    }
 }
