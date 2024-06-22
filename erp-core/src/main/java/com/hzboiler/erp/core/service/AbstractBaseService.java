@@ -429,7 +429,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Override
     public LambdaQueryChainWrapper<T> lambdaQuery() {
         ModelAccessCheckUtil.checkSelect(entityClass);
-        return ChainWrappers.lambdaQueryChain(baseMapper);
+        return ChainWrappers.lambdaQueryChain(baseMapper, entityClass);
     }
 
     @Override
