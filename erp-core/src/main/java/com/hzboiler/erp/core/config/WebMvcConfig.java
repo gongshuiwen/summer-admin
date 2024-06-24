@@ -1,4 +1,4 @@
-package com.hzboiler.erp.spring.config;
+package com.hzboiler.erp.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,7 @@ import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.jackson2.*;
 import com.hzboiler.erp.core.protocal.query.Condition;
-import com.hzboiler.erp.spring.web.BaseInterceptor;
+import com.hzboiler.erp.core.web.BaseInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

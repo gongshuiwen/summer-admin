@@ -1,4 +1,4 @@
-package com.hzboiler.erp.spring.config;
+package com.hzboiler.erp.core.config;
 
 import com.hzboiler.erp.core.mapper.MapperBeanPostProcessor;
 import com.hzboiler.erp.core.util.SpringContextUtil;

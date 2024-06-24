@@ -1,4 +1,4 @@
-package com.hzboiler.erp.spring.config;
+package com.hzboiler.erp.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.security.access.CustomAccessDeniedHandler;
@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 /**

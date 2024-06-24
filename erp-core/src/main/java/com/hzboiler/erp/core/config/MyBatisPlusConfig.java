@@ -1,4 +1,4 @@
-package com.hzboiler.erp.spring.config;
+package com.hzboiler.erp.core.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
