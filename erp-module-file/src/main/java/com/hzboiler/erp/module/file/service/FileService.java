@@ -1,9 +1,9 @@
-package com.hzboiler.erp.module.base.storage;
+package com.hzboiler.erp.module.file.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface StorageService {
+public interface FileService {
 
     void init() throws Exception;
 

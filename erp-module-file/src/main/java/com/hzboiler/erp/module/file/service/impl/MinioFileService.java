@@ -1,4 +1,4 @@
-package com.hzboiler.erp.module.base.storage;
+package com.hzboiler.erp.module.file.service.impl;
 
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
@@ -21,7 +21,7 @@ import java.io.InputStream;
 @Slf4j
 @Service
 @Profile(value = {"prod"})
-public class MinioStorageService extends AbstractStorageService {
+public class MinioFileService extends AbstractFileService {
 
     @Getter
     @Setter

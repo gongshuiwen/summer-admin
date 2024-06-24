@@ -1,12 +1,13 @@
-package com.hzboiler.erp.module.base.storage;
+package com.hzboiler.erp.module.file.service.impl;
 
+import com.hzboiler.erp.module.file.service.FileService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-public class AbstractStorageService implements StorageService, InitializingBean {
+public class AbstractFileService implements FileService, InitializingBean {
 
     @Override
     public void init() throws Exception {

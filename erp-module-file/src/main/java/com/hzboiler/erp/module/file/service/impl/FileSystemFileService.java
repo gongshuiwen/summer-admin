@@ -1,4 +1,4 @@
-package com.hzboiler.erp.module.base.storage;
+package com.hzboiler.erp.module.file.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 @Service
 @Profile(value = {"dev", "test"})
-public class FileStorageService extends AbstractStorageService {
+public class FileSystemFileService extends AbstractFileService {
 
     private File basePath;
 
