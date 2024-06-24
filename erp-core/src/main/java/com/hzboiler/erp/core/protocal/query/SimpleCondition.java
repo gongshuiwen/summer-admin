@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import com.baomidou.mybatisplus.core.enums.SqlLike;
 import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +15,7 @@ import java.util.Objects;
 /**
  * @author gongshuiwen
  */
+@Slf4j
 @Getter
 public final class SimpleCondition extends Condition {
 
@@ -91,6 +93,8 @@ public final class SimpleCondition extends Condition {
     @Override
     public String getSql() {
         // TODO: SQL injection protection
+        log.warn("!!! This is an experimental feature, which can lead to SQL injection risks, " +
+                "so please use it with a clear understanding of how to avoid that risk.");
         if (value instanceof String) {
             return field + " " + operator.toUpperCase() + " '" + value + "'";
         }
