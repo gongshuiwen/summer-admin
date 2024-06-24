@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.jackson2;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.hzboiler.erp.core.field.Many2Many;
 

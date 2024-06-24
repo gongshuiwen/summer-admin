@@ -2,11 +2,8 @@ package com.hzboiler.erp.core.mapper;
 
 import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-
-import static com.hzboiler.erp.core.mapper.RelationMapper.*;
 
 /**
  * @author gongshuiwen
@@ -35,11 +32,11 @@ public class MapperBeanPostProcessor implements BeanPostProcessor {
             }
 
             // cache table, field1, class1, filed2, class2
-            mapperTables.put(mapperInterface, mapperRelation.table());
-            mapperField1.put(mapperInterface, mapperRelation.field1());
-            mapperClass1.put(mapperInterface, mapperRelation.class1());
-            mapperField2.put(mapperInterface, mapperRelation.field2());
-            mapperClass2.put(mapperInterface, mapperRelation.class2());
+            RelationMapper.mapperTables.put(mapperInterface, mapperRelation.table());
+            RelationMapper.mapperField1.put(mapperInterface, mapperRelation.field1());
+            RelationMapper.mapperClass1.put(mapperInterface, mapperRelation.class1());
+            RelationMapper.mapperField2.put(mapperInterface, mapperRelation.field2());
+            RelationMapper.mapperClass2.put(mapperInterface, mapperRelation.class2());
 
             // register RelationMapper
             try {

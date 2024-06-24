@@ -1,6 +1,5 @@
-package com.hzboiler.erp.spring.web;
+package com.hzboiler.erp.core.exception;
 
-import com.hzboiler.erp.core.exception.BusinessException;
 import com.hzboiler.erp.core.protocal.Error;
 import com.hzboiler.erp.core.protocal.Result;
 import jakarta.validation.ConstraintViolation;

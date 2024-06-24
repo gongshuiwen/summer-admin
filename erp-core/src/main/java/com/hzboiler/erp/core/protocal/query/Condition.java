@@ -1,7 +1,5 @@
 package com.hzboiler.erp.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Getter;
 
 /**

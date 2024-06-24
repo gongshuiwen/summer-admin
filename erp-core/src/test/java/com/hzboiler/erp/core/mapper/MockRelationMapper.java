@@ -1,7 +1,5 @@
 package com.hzboiler.erp.core.mapper;
 
-import com.hzboiler.erp.core.mapper.MapperRelation;
-import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.model.Mock1;
 import com.hzboiler.erp.core.model.Mock3;
 import org.apache.ibatis.annotations.Mapper;

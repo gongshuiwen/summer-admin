@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.field.annotations.InverseField;
-import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.NullOrNotBlank;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;

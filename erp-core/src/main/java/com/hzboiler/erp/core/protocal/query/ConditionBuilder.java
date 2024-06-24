@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.hzboiler.erp.core.protocal.query.CompositeCondition.*;
-
 /**
  * @author gongshuiwen
  */
@@ -20,19 +18,19 @@ public final class ConditionBuilder {
     }
 
     public static ConditionBuilder and(ConditionBuilder... conditions) {
-        ConditionBuilder builder = new ConditionBuilder(OPERATOR_AND);
+        ConditionBuilder builder = new ConditionBuilder(CompositeCondition.OPERATOR_AND);
         Arrays.stream(conditions).forEach(c -> builder.conditions.add(c.build()));
         return builder;
     }
 
     public static ConditionBuilder or(ConditionBuilder... conditions) {
-        ConditionBuilder builder = new ConditionBuilder(OPERATOR_OR);
+        ConditionBuilder builder = new ConditionBuilder(CompositeCondition.OPERATOR_OR);
         Arrays.stream(conditions).forEach(c -> builder.conditions.add(c.build()));
         return builder;
     }
 
     public static ConditionBuilder not(ConditionBuilder condition) {
-        ConditionBuilder builder = new ConditionBuilder(OPERATOR_NOT);
+        ConditionBuilder builder = new ConditionBuilder(CompositeCondition.OPERATOR_NOT);
         builder.conditions.add(condition.build());
         return builder;
     }
@@ -100,11 +98,11 @@ public final class ConditionBuilder {
     }
 
     public Condition build() {
-        if (OPERATOR_NOT.equals(operator)) {
+        if (CompositeCondition.OPERATOR_NOT.equals(operator)) {
             return CompositeCondition.not(conditions.get(0));
-        } else if (OPERATOR_AND.equals(operator)) {
+        } else if (CompositeCondition.OPERATOR_AND.equals(operator)) {
             return CompositeCondition.and(conditions);
-        } else if (OPERATOR_OR.equals(operator)) {
+        } else if (CompositeCondition.OPERATOR_OR.equals(operator)) {
             return CompositeCondition.or(conditions);
         } else {
             return conditions.get(0);

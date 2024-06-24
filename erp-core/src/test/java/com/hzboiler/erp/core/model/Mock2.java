@@ -2,7 +2,6 @@ package com.hzboiler.erp.core.model;
 
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
-import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.NullOrNotBlank;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;

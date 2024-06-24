@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.field.Command;
 import com.hzboiler.erp.core.field.CommandType;
 import com.hzboiler.erp.core.field.One2Many;
+import com.hzboiler.erp.core.model.BaseModel;
 
 import java.io.IOException;
 import java.util.ArrayList;

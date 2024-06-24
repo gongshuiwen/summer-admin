@@ -5,14 +5,13 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.hzboiler.erp.core.context.BaseContextHolder;
-import com.hzboiler.erp.core.security.GrantedAuthorityCheckUtils;
 import com.hzboiler.erp.core.model.BaseModel;
+import com.hzboiler.erp.core.security.Constants;
+import com.hzboiler.erp.core.security.GrantedAuthorityCheckUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.*;
-
-import static com.hzboiler.erp.core.security.Constants.ROLE_PREFIX;
-import static com.hzboiler.erp.core.security.Constants.ROLE_SYS_ADMIN;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author gongshuiwen
@@ -36,16 +35,16 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
             return true;
         } else if (allowedForAdminAnnotation == null) {
             return checkAllowedForRoles(allowedForRolesAnnotation);
-        }else if (allowedForRolesAnnotation == null) {
+        } else if (allowedForRolesAnnotation == null) {
             return checkAllowedForAdmin(allowedForAdminAnnotation);
-        }  else {
+        } else {
             return checkAllowedForAdmin(allowedForAdminAnnotation) || checkAllowedForRoles(allowedForRolesAnnotation);
         }
     }
 
     private boolean checkAllowedForAdmin(AllowedForAdmin allowedForAdminAnnotation) {
         if (allowedForAdminAnnotation != null) {
-            return GrantedAuthorityCheckUtils.contains(new SimpleGrantedAuthority(ROLE_SYS_ADMIN));
+            return GrantedAuthorityCheckUtils.contains(new SimpleGrantedAuthority(Constants.ROLE_SYS_ADMIN));
         }
         return true;
     }
@@ -56,7 +55,7 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
                 && allowedForRolesAnnotation.value().length > 0) {
             return GrantedAuthorityCheckUtils.containsAny(
                     Arrays.stream(allowedForRolesAnnotation.value())
-                            .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role))
+                            .map(role -> new SimpleGrantedAuthority(Constants.ROLE_PREFIX + role))
                             .toList());
         }
         return true;

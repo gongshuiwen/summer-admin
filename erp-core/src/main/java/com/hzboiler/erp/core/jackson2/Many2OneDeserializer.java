@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.jackson2;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.hzboiler.erp.core.field.Many2One;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * @author gongshuiwen
  */
-public class Many2OneDeserializer extends StdDeserializer<Many2One<?>>{
+public class Many2OneDeserializer extends StdDeserializer<Many2One<?>> {
 
     public Many2OneDeserializer() {
         this(null);
