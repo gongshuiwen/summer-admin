@@ -161,6 +161,7 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         for (int i = 0; i < parameterTypes.length; i++) {
             if (parameterTypes[i] == String.class) {
                 args[i] = params.get(i);
+                continue;
             }
 
             try {
