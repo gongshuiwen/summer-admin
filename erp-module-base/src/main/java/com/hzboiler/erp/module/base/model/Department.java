@@ -5,10 +5,9 @@ import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
 

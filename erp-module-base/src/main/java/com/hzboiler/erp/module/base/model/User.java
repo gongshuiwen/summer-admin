@@ -1,37 +1,27 @@
 package com.hzboiler.erp.module.base.model;
 
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hzboiler.erp.core.model.BaseUser;
-import com.hzboiler.erp.core.jackson2.AllowedForAdmin;
 import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
+import com.hzboiler.erp.core.jackson2.AllowedForAdmin;
+import com.hzboiler.erp.core.model.BaseUser;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.hzboiler.erp.core.security.Constants.ROLE_PREFIX;
 
 @Getter
 @Setter
 @Schema(description = "用户信息")
-public class User extends BaseUser implements Serializable {
+public class User extends BaseUser {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -91,17 +81,6 @@ public class User extends BaseUser implements Serializable {
     @Schema(description = "角色")
     @TableField(exist = false)
     private Many2Many<Role> roles;
-
-    public void addAuthoritiesWithRolesAndPermissions(Collection<Role> roles, Collection<Permission> permissions) {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        roles.stream()
-                .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.getCode()))
-                .forEach(authorities::add);
-        permissions.stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.getCode()))
-                .forEach(authorities::add);
-        setAuthorities(Collections.unmodifiableSet(authorities));
-    }
 
     @Override
     @JsonIgnore
