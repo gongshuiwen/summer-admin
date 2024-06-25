@@ -15,8 +15,7 @@ public abstract class Condition implements QueryWrapperAdapter {
     }
 
     static void checkField(String field) {
-        if (field == null || field.isBlank())
-            throw new IllegalArgumentException("The field must not be null or blank.");
+        FieldNameCheckUtil.checkFieldName(field);
     }
 
     public abstract String getSql();

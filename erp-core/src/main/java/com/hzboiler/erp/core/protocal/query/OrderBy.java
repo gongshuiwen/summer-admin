@@ -20,18 +20,13 @@ public class OrderBy implements QueryWrapperAdapter {
     }
 
     public static OrderBy asc(String field) {
-        checkField(field);
+        FieldNameCheckUtil.checkFieldName(field);
         return new OrderBy(field, OrderByType.ASC);
     }
 
     public static OrderBy desc(String field) {
-        checkField(field);
+        FieldNameCheckUtil.checkFieldName(field);
         return new OrderBy(field, OrderByType.DESC);
-    }
-
-    private static void checkField(String field) {
-        if (field == null || field.isBlank())
-            throw new IllegalArgumentException("The field must not be null or blank.");
     }
 
     @Override
