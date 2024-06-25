@@ -10,6 +10,9 @@ import lombok.Getter;
 @Getter
 public class OrderBys implements QueryWrapperAdapter {
 
+    private static final String SEPARATOR = ",";
+    private static final String DESC_PREFIX = "_";
+
     private final OrderBy[] orderBys;
 
     // prevent external instantiation
@@ -19,14 +22,14 @@ public class OrderBys implements QueryWrapperAdapter {
 
     public static OrderBys of(OrderBy... orderBys) {
         if (orderBys == null || orderBys.length == 0)
-            throw new IllegalArgumentException("The orderBys cannot be null or empty.");
+            throw new IllegalArgumentException("The orderBys must not be null or empty.");
         return new OrderBys(orderBys);
     }
 
     public static OrderBys of(String... orderByStrings) {
         OrderBy[] orderBys = new OrderBy[orderByStrings.length];
         for (int i = 0; i < orderByStrings.length; i++) {
-            if (orderByStrings[i].startsWith("_")) {
+            if (orderByStrings[i].startsWith(DESC_PREFIX)) {
                 orderBys[i] = OrderBy.desc(orderByStrings[i].substring(1));
             } else {
                 orderBys[i] = OrderBy.asc(orderByStrings[i]);
@@ -37,8 +40,8 @@ public class OrderBys implements QueryWrapperAdapter {
 
     public static OrderBys parse(String orderBysString) {
         if (orderBysString == null || orderBysString.isEmpty())
-            throw new IllegalArgumentException("The orderBys cannot be null or empty.");
-        String[] orderByStrings = orderBysString.split(",");
+            throw new IllegalArgumentException("The orderBys must not be null or empty.");
+        String[] orderByStrings = orderBysString.split(SEPARATOR);
         return of(orderByStrings);
     }
 
