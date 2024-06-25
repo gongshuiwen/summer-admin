@@ -18,10 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import static com.hzboiler.erp.core.security.Constants.CODE_BASE_USER;
+import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
 
 @Slf4j
 @Service
@@ -58,13 +59,10 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
 
         boolean result = super.createOne(user);
 
-        // Add BASE_USER role
-        Role baseUserRole = roleService.getRoleByCode(CODE_BASE_USER);
-        if (baseUserRole == null) {
-            throw new RuntimeException("BASE_USER role not found");
-        }
+        // Add default roles
+        List<Role> defaultRoles = roleService.getDefaultRoles();
+        roleService.addUserRoles(user.getId(), defaultRoles.stream().map(Role::getId).collect(Collectors.toSet()));
 
-        roleService.addUserRoles(user.getId(), new HashSet<>(List.of(baseUserRole.getId())));
         return result;
     }
 
