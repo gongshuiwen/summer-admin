@@ -19,8 +19,8 @@ class TestCompositeCondition {
 
     static final List<Condition> SIMPLE_QUERY_CONDITIONS = Arrays.asList(
             SimpleCondition.of("name", "=", "mock"),
-            SimpleCondition.of("createTime", ">=", CREATE_TIME),
-            SimpleCondition.of("createUser", "=", 1)
+            SimpleCondition.of("create_time", ">=", CREATE_TIME),
+            SimpleCondition.of("create_user", "=", 1)
     );
 
     @Test
@@ -31,9 +31,9 @@ class TestCompositeCondition {
         assertEquals("(" +
                 "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "AND " +
-                "(createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
+                "(create_time >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "AND " +
-                "(createUser = #{ew.paramNameValuePairs.MPGENVAL3}))", mockQueryWrapper.getSqlSegment());
+                "(create_user = #{ew.paramNameValuePairs.MPGENVAL3}))", mockQueryWrapper.getSqlSegment());
         assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
         assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
         assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
@@ -47,9 +47,9 @@ class TestCompositeCondition {
         assertEquals("(" +
                 "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "OR " +
-                "(createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
+                "(create_time >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "OR " +
-                "(createUser = #{ew.paramNameValuePairs.MPGENVAL3}))", mockQueryWrapper.getSqlSegment());
+                "(create_user = #{ew.paramNameValuePairs.MPGENVAL3}))", mockQueryWrapper.getSqlSegment());
         assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
         assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
         assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
@@ -73,9 +73,9 @@ class TestCompositeCondition {
                 "NOT (" +
                 "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "AND " +
-                "(createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
+                "(create_time >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "AND " +
-                "(createUser = #{ew.paramNameValuePairs.MPGENVAL3})))", mockQueryWrapper.getSqlSegment());
+                "(create_user = #{ew.paramNameValuePairs.MPGENVAL3})))", mockQueryWrapper.getSqlSegment());
         assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
         assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
         assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
@@ -90,9 +90,9 @@ class TestCompositeCondition {
                 "NOT (" +
                 "(name = #{ew.paramNameValuePairs.MPGENVAL1}) " +
                 "OR " +
-                "(createTime >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
+                "(create_time >= #{ew.paramNameValuePairs.MPGENVAL2}) " +
                 "OR " +
-                "(createUser = #{ew.paramNameValuePairs.MPGENVAL3})))", mockQueryWrapper.getSqlSegment());
+                "(create_user = #{ew.paramNameValuePairs.MPGENVAL3})))", mockQueryWrapper.getSqlSegment());
         assertEquals("mock", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
         assertEquals(CREATE_TIME, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
         assertEquals(1, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL3"));
@@ -106,11 +106,11 @@ class TestCompositeCondition {
         ));
 
         CompositeCondition subCondition2 = CompositeCondition.and(List.of(
-                SimpleCondition.of("createTime", ">", LocalDateTime.of(2020, 1, 1, 0, 0, 0)),
-                SimpleCondition.of("createTime", "<", LocalDateTime.of(2022, 1, 1, 0, 0, 0))
+                SimpleCondition.of("create_time", ">", LocalDateTime.of(2020, 1, 1, 0, 0, 0)),
+                SimpleCondition.of("create_time", "<", LocalDateTime.of(2022, 1, 1, 0, 0, 0))
         ));
 
-        SimpleCondition subCondition3 = SimpleCondition.of("createUser", "!=", 1);
+        SimpleCondition subCondition3 = SimpleCondition.of("create_user", "!=", 1);
 
         Condition condition = CompositeCondition.and(List.of(subCondition1, subCondition2, subCondition3));
 
@@ -124,12 +124,12 @@ class TestCompositeCondition {
                 ") " +
                 "AND " +
                 "(" +
-                "(createTime > #{ew.paramNameValuePairs.MPGENVAL3}) " +
+                "(create_time > #{ew.paramNameValuePairs.MPGENVAL3}) " +
                 "AND " +
-                "(createTime < #{ew.paramNameValuePairs.MPGENVAL4})" +
+                "(create_time < #{ew.paramNameValuePairs.MPGENVAL4})" +
                 ") " +
                 "AND " +
-                "(createUser <> #{ew.paramNameValuePairs.MPGENVAL5}))", mockQueryWrapper.getSqlSegment());
+                "(create_user <> #{ew.paramNameValuePairs.MPGENVAL5}))", mockQueryWrapper.getSqlSegment());
         assertEquals("mock1", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
         assertEquals("mock2", mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL2"));
     }
@@ -138,25 +138,25 @@ class TestCompositeCondition {
     void testGetSql() {
         String sql = "( " +
                 "( name = 'mock1' OR name = 'mock2' ) " +
-                "AND ( createTime > '2020-01-01 00:00:00' AND createTime < '2024-01-01 00:00:00' ) " +
-                "AND NOT ( createUser = 1 OR createUser = 2 ) " +
-                "AND NOT ( id = 1 AND createUser = 3 ) " +
+                "AND ( create_time > '2020-01-01 00:00:00' AND create_time < '2024-01-01 00:00:00' ) " +
+                "AND NOT ( create_user = 1 OR create_user = 2 ) " +
+                "AND NOT ( id = 1 AND create_user = 3 ) " +
                 "AND NOT is_deleted = true )";
 
         SimpleCondition simpleCondition1 = SimpleCondition.of("name", "=", "mock1");
         SimpleCondition simpleCondition2 = SimpleCondition.of("name", "=", "mock2");
         CompositeCondition compositeCondition1 = CompositeCondition.or(List.of(simpleCondition1, simpleCondition2));
 
-        SimpleCondition simpleCondition3 = SimpleCondition.of("createTime", ">", "2020-01-01 00:00:00");
-        SimpleCondition simpleCondition4 = SimpleCondition.of("createTime", "<", "2024-01-01 00:00:00");
+        SimpleCondition simpleCondition3 = SimpleCondition.of("create_time", ">", "2020-01-01 00:00:00");
+        SimpleCondition simpleCondition4 = SimpleCondition.of("create_time", "<", "2024-01-01 00:00:00");
         CompositeCondition compositeCondition2 = CompositeCondition.and(List.of(simpleCondition3, simpleCondition4));
 
-        SimpleCondition simpleCondition5 = SimpleCondition.of("createUser", "=", 1);
-        SimpleCondition simpleCondition6 = SimpleCondition.of("createUser", "=", 2);
+        SimpleCondition simpleCondition5 = SimpleCondition.of("create_user", "=", 1);
+        SimpleCondition simpleCondition6 = SimpleCondition.of("create_user", "=", 2);
         CompositeCondition compositeCondition3 = CompositeCondition.notOr(List.of(simpleCondition5, simpleCondition6));
 
         SimpleCondition simpleCondition7 = SimpleCondition.of("id", "=", 1);
-        SimpleCondition simpleCondition8 = SimpleCondition.of("createUser", "=", 3);
+        SimpleCondition simpleCondition8 = SimpleCondition.of("create_user", "=", 3);
         CompositeCondition compositeCondition4 = CompositeCondition.notAnd(List.of(simpleCondition7, simpleCondition8));
 
         SimpleCondition simpleCondition9 = SimpleCondition.of("is_deleted", "=", true);
