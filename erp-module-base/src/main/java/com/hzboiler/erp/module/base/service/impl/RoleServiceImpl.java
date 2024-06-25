@@ -1,19 +1,21 @@
 package com.hzboiler.erp.module.base.service.impl;
 
 import com.hzboiler.erp.core.exception.ValidationException;
+import com.hzboiler.erp.core.service.AbstractBaseService;
+import com.hzboiler.erp.module.base.mapper.RoleMapper;
 import com.hzboiler.erp.module.base.mapper.UserRoleMapper;
 import com.hzboiler.erp.module.base.model.Role;
-import com.hzboiler.erp.module.base.mapper.RoleMapper;
-import com.hzboiler.erp.core.service.AbstractBaseService;
+import com.hzboiler.erp.module.base.model.User;
 import com.hzboiler.erp.module.base.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.hzboiler.erp.core.security.Constants.CODE_BASE_USER;
 
@@ -22,27 +24,23 @@ import static com.hzboiler.erp.core.security.Constants.CODE_BASE_USER;
 public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> implements RoleService {
 
     @Autowired
-    RoleMapper roleMapper;
-
-    @Autowired
     UserRoleMapper userRoleMapper;
 
     @Override
+    @Transactional
     public Set<Role> getRolesByUserId(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException();
-        }
-        Set<Long> roleIds = userRoleMapper.getRoleIdsByUserId(userId);
-        if (roleIds == null || roleIds.isEmpty()) {
-            return new HashSet<>();
-        }
-        return new HashSet<>(baseMapper.selectBatchIds(roleIds));
+        Objects.requireNonNull(userId, "userId must not be null");
+
+        List<Long> roleIds = userRoleMapper.getTargetIds(User.class, List.of(userId));
+        if (roleIds == null || roleIds.isEmpty())
+            return Set.of();
+
+        return getMapper().selectBatchIds(roleIds).stream().collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
     public Role getRoleByCode(String code) {
-        LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
-        return roleMapper.selectOne(queryWrapper.eq(Role::getCode, code));
+        return lambdaQuery().eq(Role::getCode, code).one();
     }
 
     @Override
