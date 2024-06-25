@@ -4,6 +4,9 @@ import com.hzboiler.erp.core.model.BaseTreeModel;
 
 import java.util.List;
 
+/**
+ * @author gongshuiwen
+ */
 public interface BaseTreeService<T extends BaseTreeModel<T>> extends BaseService<T> {
 
     /**

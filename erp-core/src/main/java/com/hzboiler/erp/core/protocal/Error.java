@@ -20,8 +20,8 @@ import lombok.Getter;
  *     .build()
  * </pre></blockquote>
  *
- * @see BusinessExceptionEnum
  * @author gongshuiwen
+ * @see BusinessExceptionEnum
  */
 @Getter
 public class Error {

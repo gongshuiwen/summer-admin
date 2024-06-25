@@ -34,9 +34,9 @@ import java.util.Map;
  * );
  * </pre></blockquote>
  *
- * @see BusinessExceptionEnum
- * @author gongshuiwen
  * @param <T> The type of the data.
+ * @author gongshuiwen
+ * @see BusinessExceptionEnum
  */
 @Getter
 public class Result<T> {

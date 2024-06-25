@@ -29,6 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author gongshuiwen
+ */
 public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseModel>
         extends ServiceImpl<M, T>
         implements BaseService<T>, InitializingBean {
@@ -349,7 +352,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
             Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
             AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
-                    (AbstractBaseService<BaseMapper<BaseModel>, BaseModel>) getService(targetClass);
+                    getService(targetClass);
             OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
             OnDelete onDelete = inverseField.getDeclaredAnnotation(OnDelete.class);
             if (onDelete != null) onDeleteType = onDelete.value();

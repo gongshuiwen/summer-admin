@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author gongshuiwen
+ */
 @Slf4j
 public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends BaseTreeModel<T>>
         extends AbstractBaseService<M, T>

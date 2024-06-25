@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * @author gongshuiwen
+ */
 @Component
 @Profile("test")
 public class SecurityContextGrantedAuthoritiesService implements GrantedAuthoritiesService {
