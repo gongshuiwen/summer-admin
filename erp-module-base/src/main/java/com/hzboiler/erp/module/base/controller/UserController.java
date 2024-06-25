@@ -1,23 +1,14 @@
 package com.hzboiler.erp.module.base.controller;
 
-import com.hzboiler.erp.module.base.model.User;
 import com.hzboiler.erp.core.controller.BaseController;
-import com.hzboiler.erp.core.protocal.Result;
+import com.hzboiler.erp.module.base.model.User;
 import com.hzboiler.erp.module.base.service.UserService;
-import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotEmpty;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-
-import java.util.List;
-import java.util.Objects;
-
-import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
-
-@Tag(name = "用户接口")
 @RestController
+@Tag(name = "用户接口")
 @RequestMapping("/user")
 public class UserController extends BaseController<UserService, User> {
 
