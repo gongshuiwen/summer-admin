@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -51,9 +52,13 @@ public final class BaseContextHolder {
             baseContext = new BaseContext(user.getId());
         } else if (authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof User user) {
-            Long userId = ((BaseUser) SpringContextUtil.getBean(UserDetailsService.class)
-                    .loadUserByUsername(user.getUsername())).getId();
-            baseContext = new BaseContext(userId);
+            UserDetails userDetails = SpringContextUtil.getBean(UserDetailsService.class)
+                    .loadUserByUsername(user.getUsername());
+            if (userDetails instanceof BaseUser baseUser) {
+                baseContext = new BaseContext(baseUser.getId());
+            } else {
+                baseContext = new BaseContext(0L);
+            }
         } else {
             baseContext = new BaseContext(0L);
         }
