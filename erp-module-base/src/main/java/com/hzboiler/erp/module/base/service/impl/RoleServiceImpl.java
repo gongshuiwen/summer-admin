@@ -35,6 +35,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
         if (roleIds == null || roleIds.isEmpty())
             return Set.of();
 
+        // bypass model access check by using mapper
         return getMapper().selectBatchIds(roleIds).stream().collect(Collectors.toUnmodifiableSet());
     }
 
