@@ -70,6 +70,11 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
     public boolean updateById(Long id, User user) {
         if (user == null) return false;
 
+        // Current user can only update info of himself
+        BaseContext context = getContext();
+        if (!context.isAdmin() && !Objects.equals(id, context.getUserId()))
+            throw new BusinessException(ERROR_ACCESS_DENIED);
+
         // Encode password
         if (user.getPassword() != null)
             user.setPassword(passwordEncoder.encode(user.getPassword()));
