@@ -37,6 +37,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     private M baseMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public T selectById(Long id) {
         if (id == null) return null;
 
@@ -45,6 +46,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<T> selectByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
         ModelAccessCheckUtil.checkSelect(entityClass);
@@ -52,6 +54,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
         ModelAccessCheckUtil.checkSelect(entityClass);
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
@@ -63,18 +66,21 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long count(QueryWrapper<T> queryWrapper) {
         ModelAccessCheckUtil.checkSelect(entityClass);
         return super.count(queryWrapper);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<T> selectList(QueryWrapper<T> queryWrapper) {
         ModelAccessCheckUtil.checkSelect(entityClass);
         return super.list(queryWrapper);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<T> nameSearch(String name) {
         ModelAccessCheckUtil.checkSelect(entityClass);
         Page<T> page = new Page<>(1, 7);
@@ -94,14 +100,14 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean createOne(T record) {
         if (record == null) return false;
         return createBatch(List.of(record));
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean createBatch(List<T> records) {
         if (records == null || records.isEmpty()) return false;
 
@@ -190,14 +196,14 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateById(Long id, T updateValues) {
         if (id == null || updateValues == null) return false;
         return updateByIds(List.of(id), updateValues);
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateByIds(List<Long> ids, T updateValues) {
         if (ids == null || ids.isEmpty() || updateValues == null) return false;
         if (updateValues.getId() != null)
@@ -312,14 +318,14 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteById(Long id) {
         if (id == null) return false;
         return deleteByIds(List.of(id));
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return false;
 
