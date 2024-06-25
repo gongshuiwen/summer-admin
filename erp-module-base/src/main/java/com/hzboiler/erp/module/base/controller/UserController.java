@@ -11,19 +11,4 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "用户接口")
 @RequestMapping("/user")
 public class UserController extends BaseController<UserService, User> {
-
-    @Override
-    public Result<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid User> updateDtoList) {
-        // SYS_ADMIN can update any user
-        if (getContext().isAdmin()) {
-            return super.update(updateDtoList);
-        }
-
-        // Current user can only update info of himself
-        if (updateDtoList.size() != 1 || !Objects.equals(updateDtoList.get(0).getId(), getContext().getUserId())) {
-            return Result.error(ERROR_ACCESS_DENIED);
-        }
-
-        return super.update(updateDtoList);
-    }
 }
