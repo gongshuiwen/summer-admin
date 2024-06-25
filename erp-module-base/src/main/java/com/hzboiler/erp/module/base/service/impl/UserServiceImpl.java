@@ -1,5 +1,9 @@
 package com.hzboiler.erp.module.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hzboiler.erp.core.context.BaseContext;
+import com.hzboiler.erp.core.exception.BusinessException;
+import com.hzboiler.erp.core.method.annotations.Public;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.model.User;
 import com.hzboiler.erp.core.service.AbstractBaseService;
@@ -34,10 +38,13 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = lambdaQuery().eq(User::getUsername, username).one();
-        if (user == null) {
+        // bypass model access check by using mapper
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getUsername, username);
+        User user = getMapper().selectOne(lambdaQueryWrapper);
+        if (user == null)
             throw new UsernameNotFoundException("");
-        }
+
         return user;
     }
 
