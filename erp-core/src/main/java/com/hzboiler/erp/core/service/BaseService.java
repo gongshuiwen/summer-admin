@@ -12,6 +12,7 @@ import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.OrderBys;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
 
     T selectById(Long id);
 
-    List<T> selectByIds(List<Long> ids);
+    List<T> selectByIds(Collection<Long> ids);
 
     default IPage<T> page(Long pageNum, Long pageSize) {
         return page(pageNum, pageSize, null, null);
