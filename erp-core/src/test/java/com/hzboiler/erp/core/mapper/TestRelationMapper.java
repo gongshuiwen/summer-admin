@@ -27,7 +27,7 @@ class TestRelationMapper {
 
     @Test
     void testGetTargetIds() {
-        List<Long> mock2Ids = mapper.getTargetIds(Mock1.class, List.of(1L));
+        List<Long> mock2Ids = mapper.getTargetIds(Mock1.class, 1L);
         assertEquals(2, mock2Ids.size());
         assertEquals(1, mock2Ids.get(0));
         assertEquals(2, mock2Ids.get(1));
@@ -44,6 +44,10 @@ class TestRelationMapper {
         mapper.removeAll(Mock1.class, 1L);
         assertEquals(0, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
 
+        mapper.add(Mock1.class, 1L, List.of(1L));
+        assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
+        assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));
+
         mapper.add(Mock1.class, 1L, List.of(1L, 2L));
         assertEquals(2, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));
@@ -55,10 +59,17 @@ class TestRelationMapper {
         mapper.remove(Mock1.class, 1L, List.of(1L));
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
         assertEquals(2, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));
+
+        mapper.remove(Mock1.class, 1L, List.of(1L));
+        assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
+        assertEquals(2, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));
     }
 
     @Test
     void testRemoveAll() {
+        mapper.removeAll(Mock1.class, 1L);
+        assertEquals(0, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
+
         mapper.removeAll(Mock1.class, 1L);
         assertEquals(0, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
     }
@@ -68,5 +79,8 @@ class TestRelationMapper {
         mapper.replace(Mock1.class, 1L, List.of(1L));
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
         assertEquals(1, mapper.getTargetIds(Mock1.class, List.of(1L)).get(0));
+
+        mapper.replace(Mock1.class, 1L, List.of());
+        assertEquals(0, mapper.getTargetIds(Mock1.class, List.of(1L)).size());
     }
 }

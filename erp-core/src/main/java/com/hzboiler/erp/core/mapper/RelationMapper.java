@@ -4,9 +4,10 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -14,171 +15,177 @@ import java.util.stream.Collectors;
  */
 public interface RelationMapper {
 
-    Map<Class<?>, String> mapperTables = new HashMap<>();
-    Map<Class<?>, String> mapperField1 = new HashMap<>();
-    Map<Class<?>, String> mapperField2 = new HashMap<>();
-    Map<Class<?>, Class<?>> mapperClass1 = new HashMap<>();
-    Map<Class<?>, Class<?>> mapperClass2 = new HashMap<>();
+    // Cache for RelationMapper's MapperRelation annotation
+    Map<Class<?>, MapperRelation> mapperRelationCache = new ConcurrentHashMap<>();
 
     @Select("SELECT ${targetField} FROM ${table} WHERE ${sourceField} = #{sourceId}")
     List<Long> _getTargetIdsById(String table, String sourceField, String targetField, Long sourceId);
 
     default List<Long> getTargetIds(Class<?> sourceClass, Long sourceId) {
-        if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null!");
-        }
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        Objects.requireNonNull(sourceId, "sourceId must not be null");
 
-        if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null!");
-        }
-
-        // Get mapper interface
+        // Get the mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
-        // Get table name
-        String table = mapperTables.get(mapperInterface);
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
 
-        // Get the source field and target field
-        Map<String, String> fieldInfo = getFieldInfo(mapperInterface, sourceClass);
-        String sourceField = fieldInfo.get("sourceField");
-        String targetField = fieldInfo.get("targetField");
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
 
-        return _getTargetIdsById(table, sourceField, targetField, sourceId);
+        return _getTargetIdsById(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId);
     }
 
     @Select("SELECT ${targetField} FROM ${table} WHERE ${sourceField} IN (${sourceIds})")
     List<Long> _getTargetIdsByIds(String table, String sourceField, String targetField, String sourceIds);
 
     default List<Long> getTargetIds(Class<?> sourceClass, List<Long> sourceIds) {
-        if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null!");
-        }
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        if (sourceIds == null || sourceIds.isEmpty())
+            throw new IllegalArgumentException("sourceIds must not be null or empty");
 
-        if (sourceIds == null || sourceIds.isEmpty()) {
-            throw new RuntimeException("sourceIds must not be null or empty!");
-        }
-
-        // Get mapper interface
+        // Get the mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
-        // Get table name
-        String table = mapperTables.get(mapperInterface);
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
 
-        // Get the source field and target field
-        Map<String, String> fieldInfo = getFieldInfo(mapperInterface, sourceClass);
-        String sourceField = fieldInfo.get("sourceField");
-        String targetField = fieldInfo.get("targetField");
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
 
-        String sourceIdsString = sourceIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-        return _getTargetIdsByIds(table, sourceField, targetField, sourceIdsString);
+        String sourceIdsString = sourceIds.stream().distinct().map(String::valueOf).collect(Collectors.joining(","));
+        return _getTargetIdsByIds(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceIdsString);
     }
 
     @Insert("INSERT INTO ${table} (${sourceField}, ${targetField}) VALUES ${values}")
     void _add(String table, String sourceField, String targetField, String values);
 
+    @SuppressWarnings("Duplicates")
     default void add(Class<?> sourceClass, Long sourceId, List<Long> targetIds) {
-        if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null!");
-        }
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        Objects.requireNonNull(sourceId, "sourceId must not be null");
+        if (targetIds == null || targetIds.isEmpty())
+            throw new IllegalArgumentException("targetIds must not be null or empty");
 
-        if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null!");
-        }
-
-        if (targetIds == null || targetIds.isEmpty()) {
-            throw new RuntimeException("targetIds must not be null or empty!");
-        }
-
-        // Get mapper interface
+        // Get the mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
-        // Get table name
-        String table = mapperTables.get(mapperInterface);
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
 
-        // Get the source field and target field
-        Map<String, String> fieldInfo = getFieldInfo(mapperInterface, sourceClass);
-        String sourceField = fieldInfo.get("sourceField");
-        String targetField = fieldInfo.get("targetField");
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
 
-        StringBuilder sb = new StringBuilder();
-        targetIds.forEach(targetId -> sb.append("(").append(sourceId).append(", ").append(targetId).append("),"));
-        sb.deleteCharAt(sb.length() - 1);
-        _add(table, sourceField, targetField, sb.toString());
+        // Get existing targetIds
+        List<Long> existingTargetIds = _getTargetIdsById(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId);
+
+        // Filter targetIds
+        targetIds = targetIds.stream().filter(roleId -> !existingTargetIds.contains(roleId)).toList();
+
+        // Add new rows if targetIds is not empty
+        if (!targetIds.isEmpty())
+            _add(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
+    }
+
+    @SuppressWarnings("Duplicates")
+    default void unsafeAdd(Class<?> sourceClass, Long sourceId, List<Long> targetIds) {
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        Objects.requireNonNull(sourceId, "sourceId must not be null");
+        if (targetIds == null || targetIds.isEmpty())
+            throw new IllegalArgumentException("targetIds must not be null or empty");
+
+        // Get the mapper interface
+        Class<?> mapperInterface = this.getClass().getInterfaces()[0];
+
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+
+        _add(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
     }
 
     @Delete("DELETE FROM ${table} WHERE ${sourceField} = #{sourceId} and ${targetField} IN (${targetIdsString})")
     void _remove(String table, String sourceField, String targetField, Long sourceId, String targetIdsString);
 
+    @SuppressWarnings("Duplicates")
     default void remove(Class<?> sourceClass, Long sourceId, List<Long> targetIds) {
-        if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null!");
-        }
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        Objects.requireNonNull(sourceId, "sourceId must not be null");
+        if (targetIds == null || targetIds.isEmpty())
+            throw new IllegalArgumentException("targetIds must not be null or empty");
 
-        if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null!");
-        }
-
-        if (targetIds == null || targetIds.isEmpty()) {
-            throw new RuntimeException("targetIds must not be null or empty!");
-        }
-
-        // Get mapper interface
+        // Get the mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
-        // Get table name
-        String table = mapperTables.get(mapperInterface);
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
 
-        // Get the source field and target field
-        Map<String, String> fieldInfo = getFieldInfo(mapperInterface, sourceClass);
-        String sourceField = fieldInfo.get("sourceField");
-        String targetField = fieldInfo.get("targetField");
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
 
         String targetIdsString = targetIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-        _remove(table, sourceField, targetField, sourceId, targetIdsString);
+        _remove(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId, targetIdsString);
     }
 
     @Delete("DELETE FROM ${table} WHERE ${sourceField} = #{sourceId}")
     void _removeAll(String table, String sourceField, Long sourceId);
 
     default void removeAll(Class<?> sourceClass, Long sourceId) {
-        if (sourceClass == null) {
-            throw new RuntimeException("sourceClass must not be null!");
-        }
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        Objects.requireNonNull(sourceId, "sourceId must not be null");
 
-        if (sourceId == null) {
-            throw new RuntimeException("sourceId must not be null!");
-        }
-
-        // Get mapper interface
+        // Get the mapper interface
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
-        // Get table name
-        String table = mapperTables.get(mapperInterface);
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
 
-        // Get the source field and target field
-        Map<String, String> fieldInfo = getFieldInfo(mapperInterface, sourceClass);
-        String sourceField = fieldInfo.get("sourceField");
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
 
-        _removeAll(table, sourceField, sourceId);
+        _removeAll(mapperRelation.table(), fieldInfo.sourceField(), sourceId);
     }
 
+    @SuppressWarnings("Duplicates")
     default void replace(Class<?> sourceClass, Long sourceId, List<Long> targetIds) {
-        // TODO: improve this implement
-        removeAll(sourceClass, sourceId);
-        add(sourceClass, sourceId, targetIds);
+        Objects.requireNonNull(sourceClass, "sourceClass must not be null");
+        Objects.requireNonNull(sourceId, "sourceId must not be null");
+        Objects.requireNonNull(targetIds, "targetIds must not be null");
+
+        // Get the mapper interface
+        Class<?> mapperInterface = this.getClass().getInterfaces()[0];
+
+        // Get the MapperRelation
+        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+
+        // Get the source field and target field info
+        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+
+        // Remove all
+        _removeAll(mapperRelation.table(), fieldInfo.sourceField(), sourceId);
+
+        // Add new rows if targetIds is not empty
+        if (!targetIds.isEmpty())
+            _add(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
     }
 
-    private Map<String, String> getFieldInfo(Class<?> mapperInterface, Class<?> sourceClass) {
-        Map<String, String> map = new HashMap<>();
-        if (sourceClass == mapperClass1.get(mapperInterface)) {
-            map.put("sourceField", mapperField1.get(mapperInterface));
-            map.put("targetField", mapperField2.get(mapperInterface));
-        } else if (sourceClass == mapperClass2.get(mapperInterface)) {
-            map.put("sourceField", mapperField2.get(mapperInterface));
-            map.put("targetField", mapperField1.get(mapperInterface));
+    private String buildValues(Long sourceId, List<Long> targetIds) {
+        return targetIds.stream().distinct().map((t) -> "(" + sourceId + "," + t + ")").collect(Collectors.joining(","));
+    }
+
+    private FieldInfo getFieldInfo(MapperRelation mapperRelation, Class<?> sourceClass) {
+        if (sourceClass == mapperRelation.class1()) {
+            return new FieldInfo(mapperRelation.field1(), mapperRelation.field2());
+        } else if (sourceClass == mapperRelation.class2()) {
+            return new FieldInfo(mapperRelation.field2(), mapperRelation.field1());
         } else {
-            throw new RuntimeException("The sourceClass '" + sourceClass + "' is invalid for RelationMapper '" + mapperInterface + "'!");
+            throw new IllegalArgumentException("The sourceClass '" + sourceClass + "' is invalid!");
         }
-        return map;
+    }
+
+    record FieldInfo(String sourceField, String targetField) {
     }
 }

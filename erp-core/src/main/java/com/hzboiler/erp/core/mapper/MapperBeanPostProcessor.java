@@ -31,12 +31,8 @@ public class MapperBeanPostProcessor implements BeanPostProcessor {
                 return bean;
             }
 
-            // cache table, field1, class1, filed2, class2
-            RelationMapper.mapperTables.put(mapperInterface, mapperRelation.table());
-            RelationMapper.mapperField1.put(mapperInterface, mapperRelation.field1());
-            RelationMapper.mapperClass1.put(mapperInterface, mapperRelation.class1());
-            RelationMapper.mapperField2.put(mapperInterface, mapperRelation.field2());
-            RelationMapper.mapperClass2.put(mapperInterface, mapperRelation.class2());
+            // cache mapperRelation
+            RelationMapper.mapperRelationCache.put(mapperInterface, mapperRelation);
 
             // register RelationMapper
             try {
