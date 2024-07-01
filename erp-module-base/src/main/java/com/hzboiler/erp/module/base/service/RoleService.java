@@ -1,7 +1,7 @@
 package com.hzboiler.erp.module.base.service;
 
-import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.core.service.BaseService;
+import com.hzboiler.erp.module.base.model.Role;
 
 import java.util.List;
 import java.util.Set;

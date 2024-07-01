@@ -1,8 +1,8 @@
 package com.hzboiler.erp.module.base.service;
 
 import com.hzboiler.erp.core.security.BaseUserService;
-import com.hzboiler.erp.module.base.model.User;
 import com.hzboiler.erp.core.service.BaseService;
+import com.hzboiler.erp.module.base.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
