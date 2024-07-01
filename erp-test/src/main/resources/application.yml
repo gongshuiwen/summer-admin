@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: erp
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+    banner-mode: off
+  mvc:
+    servlet:
+      load-on-startup: 1
+  profiles:
+    active: test
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: AUTO
+    banner: false
