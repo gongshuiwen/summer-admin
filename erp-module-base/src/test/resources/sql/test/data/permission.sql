@@ -2,22 +2,22 @@
 -- Permission Data
 -- ----------------------------
 INSERT INTO `permission`
-(id, code, name)
+(id, create_time, update_time, code, name)
 VALUES
-(1, 'User:SELECT', '用户查询'),
-(2, 'User:CREATE', '用户创建'),
-(3, 'User:UPDATE', '用户更新'),
-(4, 'User:DELETE', '用户删除'),
-(5, 'Menu:SELECT', '菜单查询'),
-(6, 'Menu:CREATE', '菜单创建'),
-(7, 'Menu:UPDATE', '菜单更新'),
-(8, 'Menu:DELETE', '菜单删除'),
-(9, 'Department:SELECT', '部门查询'),
-(10, 'Department:CREATE', '部门创建'),
-(11, 'Department:UPDATE', '部门更新'),
-(12, 'Department:DELETE', '部门删除'),
-(13, 'Role:SELECT', '角色查询'),
-(14, 'Role:CREATE', '角色创建'),
-(15, 'Role:UPDATE', '角色更新'),
-(16, 'Role:DELETE', '角色删除')
+(1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'S:User', '用户查询'),
+(2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'C:User', '用户创建'),
+(3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'U:User', '用户更新'),
+(4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'D:User', '用户删除'),
+(5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'S:Menu', '菜单查询'),
+(6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'C:Menu', '菜单创建'),
+(7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'U:Menu', '菜单更新'),
+(8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'D:Menu', '菜单删除'),
+(9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'S:Department', '部门查询'),
+(10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'C:Department', '部门创建'),
+(11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'U:Department', '部门更新'),
+(12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'D:Department', '部门删除'),
+(13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'S:Role', '角色查询'),
+(14, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'C:Role', '角色创建'),
+(15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'U:Role', '角色更新'),
+(16, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'D:Role', '角色删除')
 ;
