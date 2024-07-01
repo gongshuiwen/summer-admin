@@ -56,32 +56,26 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
     @Override
     @Transactional
     public void addUserRoles(Long userId, Set<Long> roleIds) {
-        if (userId == null || roleIds == null || roleIds.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        roleIds.removeAll(userRoleMapper.getRoleIdsByUserId(userId));
-        if (roleIds.isEmpty()) {
-            return;
-        }
-        userRoleMapper.addUserRoles(userId, roleIds);
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(roleIds, "roleIds must not be null");
+        if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
+        userRoleMapper.add(User.class, userId, roleIds.stream().toList());
     }
 
     @Override
     @Transactional
     public void removeUserRoles(Long userId, Set<Long> roleIds) {
-        if (userId == null || roleIds == null || roleIds.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        userRoleMapper.removeUserRoles(userId, roleIds);
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(roleIds, "roleIds must not be null");
+        if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
+        userRoleMapper.remove(User.class, userId, roleIds.stream().toList());
     }
 
     @Override
     @Transactional
     public void replaceUserRoles(Long userId, Set<Long> roleIds) {
-        if (userId == null || roleIds == null || roleIds.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        userRoleMapper.removeUserRolesAll(userId);
-        userRoleMapper.addUserRoles(userId, roleIds);
+        Objects.requireNonNull(userId, "userId must not be null");
+        Objects.requireNonNull(roleIds, "roleIds must not be null");
+        userRoleMapper.replace(User.class, userId, roleIds.stream().toList());
     }
 }
