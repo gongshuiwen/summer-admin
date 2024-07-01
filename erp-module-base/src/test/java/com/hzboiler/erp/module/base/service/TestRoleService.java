@@ -1,15 +1,18 @@
 package com.hzboiler.erp.module.base.service;
 
+import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.module.base.model.Role;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.*;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Sql(scripts = {
@@ -25,30 +28,50 @@ class TestRoleService {
     @Autowired
     RoleService roleService;
 
+    @BeforeEach
+    void beforeEach() {
+        assertEquals(Set.of(1L, 2L), getRoleIdsByUserId(1L));
+    }
+
+    @AfterEach
+    void afterEach() {
+        BaseContextHolder.clearContext();
+    }
+
     @Test
     void testGetRolesByUserId() {
-        assertEquals(Set.of(), roleService.getRolesByUserId(0L).stream().map(Role::getId).collect(Collectors.toSet()));
-        assertEquals(Set.of(1L, 2L), roleService.getRolesByUserId(1L).stream().map(Role::getId).collect(Collectors.toSet()));
+        assertEquals(Set.of(), getRoleIdsByUserId(0L));
+        assertEquals(Set.of(1L, 2L), getRoleIdsByUserId(1L));
     }
 
     @Test
     void testAddUserRoles() {
-        roleService.addUserRoles(1L, new HashSet<>(List.of(1L, 2L, 101L, 102L)));
-        Set<Role> roles = roleService.getRolesByUserId(1L);
-        assertEquals(Set.of(1L, 2L, 101L, 102L), roles.stream().map(Role::getId).collect(Collectors.toSet()));
+        roleService.addUserRoles(1L, Set.of(1L, 2L));
+        assertEquals(Set.of(1L, 2L), getRoleIdsByUserId(1L));
+
+        roleService.addUserRoles(1L, Set.of(1L, 2L, 101L, 102L));
+        assertEquals(Set.of(1L, 2L, 101L, 102L), getRoleIdsByUserId(1L));
     }
 
     @Test
     void testRemoveUserRoles() {
-        roleService.removeUserRoles(1L, Set.of(1L, 2L, 101L, 102L));
-        Set<Role> roles = roleService.getRolesByUserId(1L);
-        assertEquals(Set.of(), roles.stream().map(Role::getCode).collect(Collectors.toSet()));
+        roleService.removeUserRoles(1L, Set.of(1L));
+        assertEquals(Set.of(2L), getRoleIdsByUserId(1L));
+
+        roleService.removeUserRoles(1L, Set.of(1L, 2L));
+        assertEquals(Set.of(), getRoleIdsByUserId(1L));
     }
 
     @Test
     void testReplaceUserRoles() {
         roleService.replaceUserRoles(1L, Set.of(1L, 2L, 101L, 102L));
-        Set<Role> roles = roleService.getRolesByUserId(1L);
-        assertEquals(Set.of(1L, 2L, 101L, 102L), roles.stream().map(Role::getId).collect(Collectors.toSet()));
+        assertEquals(Set.of(1L, 2L, 101L, 102L), getRoleIdsByUserId(1L));
+
+        roleService.replaceUserRoles(1L, Set.of());
+        assertEquals(Set.of(), getRoleIdsByUserId(1L));
+    }
+    
+    private Set<Long> getRoleIdsByUserId(Long userId) {
+        return roleService.getRolesByUserId(userId).stream().map(Role::getId).collect(Collectors.toSet());
     }
 }
