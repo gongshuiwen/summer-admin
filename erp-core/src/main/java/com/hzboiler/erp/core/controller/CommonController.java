@@ -2,6 +2,7 @@ package com.hzboiler.erp.core.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.context.BaseContextContainer;
 import com.hzboiler.erp.core.exception.BusinessException;
@@ -17,26 +18,28 @@ import com.hzboiler.erp.core.protocal.Result;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.OrderBys;
 import com.hzboiler.erp.core.service.BaseService;
+import com.hzboiler.erp.core.service.BaseServiceRegistry;
 import com.hzboiler.erp.core.validation.CreateValidationGroup;
 import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,75 +50,131 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_I
  */
 @Slf4j
 @Getter
-@Validated
-public abstract class BaseController<S extends BaseService<T>, T extends BaseModel>
-        implements InitializingBean, BaseContextContainer {
+@RestController
+@Tag(name = "通用接口")
+@RequestMapping("/common")
+public class CommonController implements BaseContextContainer {
 
     private static final Object[] EMPTY_ARGS = new Object[0];
 
-    @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    private S service;
+    private final ObjectMapper objectMapper;
+    private final Validator validator;
 
-    @Autowired
-    @Qualifier("mappingJackson2HttpMessageConverterObjectMapper")
-    private ObjectMapper objectMapper;
+    public CommonController(
+            @Qualifier("mappingJackson2HttpMessageConverterObjectMapper") ObjectMapper objectMapper,
+            Validator validator) {
+        this.objectMapper = objectMapper;
+        this.validator = validator;
+    }
 
-    private Class<T> modelClass;
-
-    @Operation(summary = "ID查询")
-    @GetMapping
-    public Result<List<T>> select(@RequestParam @NotEmpty @Size(max = 1000) List<Long> ids) throws IllegalAccessException {
+    @Operation(summary = "Select by IDs")
+    @GetMapping("/{modelName}")
+    public <T extends BaseModel> Result<List<?>> select(
+            @PathVariable @NotEmpty String modelName,
+            @RequestParam @NotEmpty @Size(max = 1000) List<Long> ids
+    ) throws IllegalAccessException {
+        BaseService<T> service = BaseServiceRegistry.getByModelName(modelName);
         List<T> records = service.selectByIds(ids);
         if (records != null && !records.isEmpty()) {
-            fetchMany2One(records);
-            fetchMany2Many(records);
+            fetchMany2One(service, records);
+            fetchMany2Many(service, records);
         }
         return Result.success(records);
     }
 
-    @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<IPage<T>> page(@RequestParam @Positive @Max(1000) Long pageNum, @RequestParam @Positive @Max(1000) Long pageSize,
-                                 @RequestParam(required = false) String orderBys,
-                                 @RequestBody(required = false) Condition condition) throws IllegalAccessException {
+    @Operation(summary = "Page Query")
+    @GetMapping("/{modelName}/page")
+    public <T extends BaseModel> Result<IPage<?>> page(
+            @PathVariable @NotEmpty String modelName,
+            @RequestParam @Positive @Max(1000) Long pageNum,
+            @RequestParam @Positive @Max(1000) Long pageSize,
+            @RequestParam(required = false) String orderBys,
+            @RequestBody(required = false) Condition condition
+    ) throws IllegalAccessException {
+        BaseService<T> service = BaseServiceRegistry.getByModelName(modelName);
         OrderBys orderBys1 = orderBys != null ? OrderBys.parse(orderBys) : null;
         IPage<T> page = service.page(pageNum, pageSize, condition, orderBys1);
         List<T> records = page.getRecords();
         if (records != null && !records.isEmpty()) {
-            fetchMany2One(records);
-            fetchMany2Many(records);
+            fetchMany2One(service, records);
+            fetchMany2Many(service, records);
         }
         return Result.success(page);
     }
 
-    @Operation(summary = "计数查询")
-    @GetMapping("/count")
-    public Result<Long> count(@RequestBody(required = false) Condition condition) {
+    @Operation(summary = "Count Query")
+    @GetMapping("/{modelName}/count")
+    public Result<Long> count(
+            @PathVariable @NotEmpty String modelName,
+            @RequestBody(required = false) Condition condition
+    ) {
+        BaseService<?> service = BaseServiceRegistry.getByModelName(modelName);
         return Result.success(service.count(condition));
     }
 
-    @Operation(summary = "名称查询")
-    @GetMapping("/nameSearch")
-    public Result<List<T>> nameSearch(@RequestParam String name) {
-        List<T> records = service.nameSearch(name);
+    @Operation(summary = "Name Search")
+    @GetMapping("/{modelName}/nameSearch")
+    public Result<List<?>> nameSearch(
+            @PathVariable @NotEmpty String modelName,
+            @RequestParam String name
+    ) {
+        BaseService<?> service = BaseServiceRegistry.getByModelName(modelName);
+        List<?> records = service.nameSearch(name);
         return Result.success(records);
     }
 
-    @Operation(summary = "创建记录")
-    @PostMapping
+    @Operation(summary = "Create Records")
+    @PostMapping("/{modelName}")
     @Validated(CreateValidationGroup.class)
-    public Result<List<T>> create(@RequestBody @NotEmpty(groups = CreateValidationGroup.class) List<@Valid T> createDtoList) {
-        checkReadOnlyForDtoList(createDtoList);
+    public <T extends BaseModel> Result<List<?>> create(
+            @PathVariable @NotEmpty String modelName,
+            @RequestBody @NotEmpty String createDtoListData
+    ) throws IOException {
+        BaseService<T> service = BaseServiceRegistry.getByModelName(modelName);
+        Class<T> modelClass = service.getModelClass();
+
+        // Deserialize createDtoList
+        JavaType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, modelClass);
+        List<T> createDtoList = objectMapper.readValue(createDtoListData, listType);
+
+        // Validate createDtoList
+        Set<ConstraintViolation<DtoListValidateWrapper>> violations =
+                validator.validate(new DtoListValidateWrapper(createDtoList), CreateValidationGroup.class);
+        if (!violations.isEmpty())
+            throw new BusinessException(ERROR_INVALID_ARGUMENTS);
+
+        // Validate read-only fields
+        checkReadOnlyForDtoList(service, createDtoList);
+
+        // Do create
         service.createBatch(createDtoList);
         return Result.success(createDtoList);
     }
 
-    @Operation(summary = "更新记录")
-    @PutMapping
+    @Operation(summary = "Update Records")
+    @PutMapping("/{modelName}")
     @Validated(UpdateValidationGroup.class)
-    public Result<Boolean> update(@RequestBody @NotEmpty(groups = UpdateValidationGroup.class) List<@Valid T> updateDtoList) {
-        checkReadOnlyForDtoList(updateDtoList);
+    public <T extends BaseModel> Result<Boolean> update(
+            @PathVariable @NotEmpty String modelName,
+            @RequestBody @NotEmpty String updateDtoListData
+    ) throws IOException {
+        BaseService<T> service = BaseServiceRegistry.getByModelName(modelName);
+        Class<T> modelClass = service.getModelClass();
+
+        // Deserialize updateDtoList
+        JavaType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, modelClass);
+        List<T> updateDtoList = objectMapper.readValue(updateDtoListData, listType);
+
+        // Validate updateDtoList
+        Set<ConstraintViolation<DtoListValidateWrapper>> violations =
+                validator.validate(new DtoListValidateWrapper(updateDtoList), UpdateValidationGroup.class);
+        if (!violations.isEmpty())
+            throw new BusinessException(ERROR_INVALID_ARGUMENTS);
+
+        // Validate read-only fields
+        checkReadOnlyForDtoList(service, updateDtoList);
+
+        // Do update
         for (T t : updateDtoList) {
             Long id = t.getId();
             t.setId(null);
@@ -124,15 +183,24 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         return Result.success(true);
     }
 
-    @Operation(summary = "删除记录")
-    @DeleteMapping
-    public Result<Boolean> delete(@RequestParam @NotEmpty List<Long> ids) {
+    @Operation(summary = "Delete Records")
+    @DeleteMapping("/{modelName}")
+    public Result<Boolean> delete(
+            @PathVariable @NotEmpty String modelName,
+            @RequestParam @NotEmpty List<Long> ids
+    ) {
+        BaseService<?> service = BaseServiceRegistry.getByModelName(modelName);
         return Result.success(service.deleteByIds(ids));
     }
 
     @Operation(summary = "Call Service Method")
-    @PostMapping("/{methodName}")
-    public Result<Object> callServiceMethod(@PathVariable String methodName, @RequestBody(required = false) List<String> params) {
+    @PostMapping("/{modelName}/{methodName}")
+    public Result<Object> callServiceMethod(
+            @PathVariable @NotEmpty String modelName,
+            @PathVariable @NotEmpty String methodName,
+            @RequestBody(required = false) List<String> params
+    ) {
+        BaseService<?> service = BaseServiceRegistry.getByModelName(modelName);
         log.info("Rpc request received: service={}, method={}, params={}", service.getClass().getSimpleName(), methodName, params);
 
         Method method;
@@ -174,12 +242,9 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         return args;
     }
 
-    @SuppressWarnings("unchecked")
-    public void afterPropertiesSet() {
-        this.modelClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-    }
+    private <T extends BaseModel> void fetchMany2One(BaseService<T> service, List<T> records) throws IllegalAccessException {
+        Class<T> modelClass = service.getModelClass();
 
-    private void fetchMany2One(List<T> records) throws IllegalAccessException {
         for (Field field : RelationFieldUtil.getMany2OneFields(modelClass)) {
             // Get target ids
             Set<Long> targetIds = new HashSet<>();
@@ -208,7 +273,8 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         }
     }
 
-    private void fetchMany2Many(List<T> records) throws IllegalAccessException {
+    private <T extends BaseModel> void fetchMany2Many(BaseService<T> service, List<T> records) throws IllegalAccessException {
+        Class<T> modelClass = service.getModelClass();
         for (Field field : RelationFieldUtil.getMany2ManyFields(modelClass)) {
             Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(modelClass, field);
             RelationMapper relationMapper = RelationMapperRegistry.getMapper(modelClass, targetClass);
@@ -238,18 +304,21 @@ public abstract class BaseController<S extends BaseService<T>, T extends BaseMod
         }
     }
 
-    private void checkReadOnlyForDtoList(List<T> dtoList) {
+    private <T extends BaseModel> void checkReadOnlyForDtoList(BaseService<T> service, List<T> dtoList) {
+        Class<T> modelClass = service.getModelClass();
         for (Field field : ReadOnlyUtil.getReadOnlyFields(modelClass)) {
             for (T dto : dtoList) {
                 try {
-                    if (field.get(dto) != null) {
+                    if (field.get(dto) != null)
                         throw new BusinessException(ERROR_INVALID_ARGUMENTS);
-                    }
                 } catch (IllegalAccessException e) {
                     // this should never happen
                     throw new RuntimeException(e);
                 }
             }
         }
+    }
+
+    private record DtoListValidateWrapper(@NotEmpty List<@Valid ? extends BaseModel> dtoList) {
     }
 }
