@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerDelete extends MockControllerTestBase {
+class TestCommonControllerDelete extends CommonControllerTestBase {
 
     ResultActions doDelete(List<Long> ids) throws Exception {
         return mockMvc.perform(

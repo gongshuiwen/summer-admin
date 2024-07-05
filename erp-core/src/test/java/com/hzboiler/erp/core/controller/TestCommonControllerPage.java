@@ -20,7 +20,7 @@ import java.util.List;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerPage extends MockControllerTestBase {
+class TestCommonControllerPage extends CommonControllerTestBase {
 
     ResultActions doPage(Long pageNum, Long pageSize, String orderBys, Condition condition) throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(MOCK_PATH + "/page");

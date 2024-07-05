@@ -15,7 +15,7 @@ import static com.hzboiler.erp.core.security.Constants.*;
 /**
  * @author gongshuiwen
  */
-abstract class MockControllerTestBase extends ControllerTestBase {
+abstract class CommonControllerTestBase extends ControllerTestBase {
 
     static final String MOCK_PATH = "/common/mock";
     static final String MOCK_MODEL_NAME = "Mock";

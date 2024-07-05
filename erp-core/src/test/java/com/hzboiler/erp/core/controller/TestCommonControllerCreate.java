@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql"})
-class TestBaseControllerCreate extends MockControllerTestBase {
+class TestCommonControllerCreate extends CommonControllerTestBase {
 
     static final List<Mock> MOCKS = List.of(new Mock("mock1"), new Mock("mock2"));
 

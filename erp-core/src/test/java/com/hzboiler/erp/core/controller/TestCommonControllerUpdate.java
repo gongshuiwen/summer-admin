@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerUpdate extends MockControllerTestBase {
+class TestCommonControllerUpdate extends CommonControllerTestBase {
 
     ResultActions doUpdate(List<Mock> mocks) throws Exception {
         return mockMvc.perform(

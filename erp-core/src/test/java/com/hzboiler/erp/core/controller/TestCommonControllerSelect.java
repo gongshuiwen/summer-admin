@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerSelect extends MockControllerTestBase {
+class TestCommonControllerSelect extends CommonControllerTestBase {
 
     ResultActions doSelect(List<Long> ids) throws Exception {
         return mockMvc.perform(

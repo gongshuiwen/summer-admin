@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
  * @author gongshuiwen
  */
 @Sql(scripts = {"/sql/test/ddl/mock.sql", "/sql/test/data/mock.sql"})
-class TestBaseControllerCount extends MockControllerTestBase {
+class TestCommonControllerCount extends CommonControllerTestBase {
 
     ResultActions doCount(Condition condition) throws Exception {
         return mockMvc.perform(
