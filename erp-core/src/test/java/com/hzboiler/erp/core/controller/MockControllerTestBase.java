@@ -17,12 +17,12 @@ import static com.hzboiler.erp.core.security.Constants.*;
  */
 abstract class MockControllerTestBase extends ControllerTestBase {
 
-    static final String MOCK_PATH = "/mock";
-    static final String MOCK_ENTITY_NAME = "Mock";
-    static final String MOCK_AUTHORITY_SELECT = AUTHORITY_SELECT_CODE_PREFIX + MOCK_ENTITY_NAME;
-    static final String MOCK_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK_ENTITY_NAME;
-    static final String MOCK_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK_ENTITY_NAME;
-    static final String MOCK_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK_ENTITY_NAME;
+    static final String MOCK_PATH = "/common/mock";
+    static final String MOCK_MODEL_NAME = "Mock";
+    static final String MOCK_AUTHORITY_SELECT = AUTHORITY_SELECT_CODE_PREFIX + MOCK_MODEL_NAME;
+    static final String MOCK_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK_MODEL_NAME;
+    static final String MOCK_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK_MODEL_NAME;
+    static final String MOCK_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK_MODEL_NAME;
 
     @Autowired
     MockMapper mockMapper;
