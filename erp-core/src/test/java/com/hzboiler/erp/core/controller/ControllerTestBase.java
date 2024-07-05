@@ -2,7 +2,6 @@ package com.hzboiler.erp.core.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzboiler.erp.core.exception.BusinessExceptionEnum;
-import com.hzboiler.erp.core.protocal.Result;
 import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,9 +14,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 /**
  * @author gongshuiwen
@@ -36,32 +32,24 @@ public abstract class ControllerTestBase {
     protected void checkResultActionsSuccess(ResultActions resultActions) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-
-        // check the error field is null
-        assertThrowsExactly(AssertionError.class, () ->
-                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.error", nullValue())));
-        Result<?> result = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Result.class);
-        assertNull(result.getError());
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").doesNotExist());
     }
 
     protected void checkResultActionsSuccess(ResultActions resultActions, Object value) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(value)));
-
-        // check the error field is null
-        assertThrowsExactly(AssertionError.class, () ->
-                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.error", nullValue())));
-        Result<?> result = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), Result.class);
-        assertNull(result.getError());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data", Is.is(value)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.error").doesNotExist());
     }
 
     protected void checkResultActionsException(ResultActions resultActions, BusinessExceptionEnum businessExceptionEnum) throws Exception {
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").doesNotExist())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error.namespace", Is.is(businessExceptionEnum.namespace())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error.code", Is.is(businessExceptionEnum.code())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error.message", Is.is(businessExceptionEnum.message())));
