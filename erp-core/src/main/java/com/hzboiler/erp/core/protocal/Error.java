@@ -3,6 +3,8 @@ package com.hzboiler.erp.core.protocal;
 import com.hzboiler.erp.core.exception.BusinessExceptionEnum;
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * Generic API Response Error.
  * <p>
@@ -11,10 +13,10 @@ import lombok.Getter;
  * Error.builder(CoreBusinessExceptionEnums.ERROR_TEST).build()
  * </pre></blockquote>
  * <p>
- * Construct by builder, with all parameters example:
+ * Construct by builder, the all parameters example:
  * <blockquote><pre>
  * Error.builder(CoreBusinessExceptionEnums.ERROR_TEST)
- *     .message("")
+ *     .message("message to replace the default")
  *     .details(object)
  *     .stackTrace(stackTrace)
  *     .build()
@@ -24,7 +26,7 @@ import lombok.Getter;
  * @see BusinessExceptionEnum
  */
 @Getter
-public class Error {
+public final class Error {
 
     private final String namespace;
     private final int code;
@@ -33,18 +35,16 @@ public class Error {
     private final StackTraceElement[] stackTrace;
 
     // prevent external instantiation
-    private Error(BusinessExceptionEnum businessExceptionEnum, String message, Object details, StackTraceElement[] stackTrace) {
-        this.namespace = businessExceptionEnum.namespace();
-        this.code = businessExceptionEnum.code();
-
-        // If message is not null, use it to replace the default message of the businessExceptionEnum
-        this.message = message != null ? message : businessExceptionEnum.message();
-
+    private Error(String namespace, int code, String message, Object details, StackTraceElement[] stackTrace) {
+        this.namespace = namespace;
+        this.code = code;
+        this.message = message;
         this.details = details;
         this.stackTrace = stackTrace;
     }
 
     public static Builder builder(BusinessExceptionEnum businessExceptionEnum) {
+        Objects.requireNonNull(businessExceptionEnum);
         return new Builder(businessExceptionEnum);
     }
 
@@ -58,6 +58,9 @@ public class Error {
         // prevent external instantiation
         private Builder(BusinessExceptionEnum businessExceptionEnum) {
             this.businessExceptionEnum = businessExceptionEnum;
+
+            // use the message of the businessExceptionEnum as the default message
+            this.message = businessExceptionEnum.message();
         }
 
         public Builder message(String message) {
@@ -76,7 +79,7 @@ public class Error {
         }
 
         public Error build() {
-            return new Error(businessExceptionEnum, message, details, stackTrace);
+            return new Error(businessExceptionEnum.namespace(), businessExceptionEnum.code(), message, details, stackTrace);
         }
     }
 }

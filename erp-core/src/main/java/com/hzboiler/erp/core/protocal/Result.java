@@ -4,6 +4,7 @@ import com.hzboiler.erp.core.exception.BusinessExceptionEnum;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Generic API Response Result.
@@ -20,14 +21,14 @@ import java.util.Map;
  * <p>
  * Construct error result with {@code BusinessExceptionEnum} and custom message example:
  * <blockquote><pre>
- * Result.error(CoreBusinessExceptionEnums.ERROR_TEST, "error message");
+ * Result.error(CoreBusinessExceptionEnums.ERROR_TEST, "message to replace the default");
  * </pre></blockquote>
  * <p>
  * Construct error result with custom {@code Error} :
  * <blockquote><pre>
  * Result.error(
  *     Error.builder(CoreBusinessExceptionEnums.ERROR_TEST)
- *         .message("")
+ *         .message("message to replace the default")
  *         .details(object)
  *         .stackTrace(stackTrace)
  *         .build()
@@ -37,9 +38,10 @@ import java.util.Map;
  * @param <T> The type of the data.
  * @author gongshuiwen
  * @see BusinessExceptionEnum
+ * @see Error
  */
 @Getter
-public class Result<T> {
+public final class Result<T> {
 
     private final T data;
     private final Error error;
@@ -67,6 +69,7 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error(Error error) {
+        Objects.requireNonNull(error);
         return new Result<>(null, error, null);
     }
 }
