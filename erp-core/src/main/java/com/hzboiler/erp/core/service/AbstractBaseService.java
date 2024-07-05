@@ -433,7 +433,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Override
     @SuppressWarnings("unchecked")
     public <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass) {
-        return (S) BaseServiceRegistry.getService(modelClass);
+        return (S) BaseServiceRegistry.getByModelClass(modelClass);
     }
 
     @Override
