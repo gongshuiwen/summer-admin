@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
@@ -75,6 +76,11 @@ public final class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public Result<String> handleMethodArgumentTypeMismatchException(Exception e) {
+        return Result.error(ERROR_INVALID_ARGUMENTS);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public Result<String> handleHandlerMethodValidationException(Exception e) {
         return Result.error(ERROR_INVALID_ARGUMENTS);
     }
 
