@@ -1,11 +1,10 @@
-package com.hzboiler.erp.module.base.service.impl;
+package com.hzboiler.erp.module.base.service;
 
 import com.hzboiler.erp.core.service.AbstractBaseService;
 import com.hzboiler.erp.module.base.mapper.PermissionMapper;
 import com.hzboiler.erp.module.base.mapper.RolePermissionMapper;
 import com.hzboiler.erp.module.base.model.Permission;
 import com.hzboiler.erp.module.base.model.Role;
-import com.hzboiler.erp.module.base.service.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

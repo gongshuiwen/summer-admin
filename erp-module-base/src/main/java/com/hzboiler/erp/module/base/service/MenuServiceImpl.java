@@ -1,10 +1,9 @@
-package com.hzboiler.erp.module.base.service.impl;
+package com.hzboiler.erp.module.base.service;
 
 import com.hzboiler.erp.core.method.annotations.Public;
 import com.hzboiler.erp.core.service.AbstractBaseTreeService;
 import com.hzboiler.erp.module.base.mapper.MenuMapper;
 import com.hzboiler.erp.module.base.model.Menu;
-import com.hzboiler.erp.module.base.service.MenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

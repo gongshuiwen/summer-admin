@@ -1,4 +1,4 @@
-package com.hzboiler.erp.module.base.service.impl;
+package com.hzboiler.erp.module.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hzboiler.erp.core.context.BaseContext;
@@ -7,9 +7,6 @@ import com.hzboiler.erp.core.service.AbstractBaseService;
 import com.hzboiler.erp.module.base.mapper.UserMapper;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.model.User;
-import com.hzboiler.erp.module.base.service.PermissionService;
-import com.hzboiler.erp.module.base.service.RoleService;
-import com.hzboiler.erp.module.base.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
