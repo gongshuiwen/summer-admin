@@ -11,6 +11,7 @@ import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.OrderBys;
+import org.mybatis.spring.SqlSessionTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -124,10 +125,17 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     // ====================
     // Other methods
     // ====================
+    SqlSessionTemplate getSqlSessionTemplate();
 
     Class<T> getModelClass();
 
-    BaseMapper<T> getMapper();
+    Class<BaseMapper<T>> getBaseMapperClass();
+
+    BaseMapper<T> getBaseMapper();
+
+    <AT extends BaseModel> BaseMapper<AT> getBaseMapper(Class<AT> modelClass);
+
+    <M extends BaseMapper<T>> M getMapper(Class<M> mapperInterface);
 
     /**
      * Returns a {@link RelationMapper} instance for the service's model class and the given target class

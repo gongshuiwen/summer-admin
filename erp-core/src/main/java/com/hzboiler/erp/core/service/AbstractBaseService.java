@@ -4,26 +4,34 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.hzboiler.erp.core.field.*;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
 import com.hzboiler.erp.core.field.util.RelationFieldUtil;
+import com.hzboiler.erp.core.mapper.BaseMapperRegistry;
 import com.hzboiler.erp.core.mapper.RelationMapper;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.OrderBys;
 import com.hzboiler.erp.core.security.model.ModelAccessCheckUtil;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,20 +40,35 @@ import java.util.Objects;
 /**
  * @author gongshuiwen
  */
-public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends BaseModel>
-        extends ServiceImpl<M, T>
+@Slf4j
+public abstract class AbstractBaseService<T extends BaseModel>
         implements BaseService<T>, InitializingBean {
 
+    private static final int DEFAULT_BATCH_SIZE = 1000;
+
+    protected final Log mybatisLog = LogFactory.getLog(getClass());
+
     @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    private M baseMapper;
+    private SqlSessionTemplate sqlSessionTemplate;
+
+    // cache for modelClass
+    private volatile Class<T> modelClass;
+    private final Object modelClassLock = new Object();
+
+    // cache for baseMapperClass
+    private volatile Class<BaseMapper<T>> baseMapperClass;
+    private final Object baseMapperClassLock = new Object();
+
+    // cache for BaseMapper<T>
+    private volatile BaseMapper<T> baseMapper;
+    private final Object baseMapperLock = new Object();
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public T selectById(Long id) {
         if (id == null) return null;
 
-        List<T> records = selectByIds(List.of(id));
+        List<T> records = getBaseMapper().selectBatchIds(List.of(id));
         return records.isEmpty() ? null : records.get(0);
     }
 
@@ -53,54 +76,54 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @Transactional(rollbackFor = Exception.class)
     public List<T> selectByIds(Collection<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
-        ModelAccessCheckUtil.checkSelect(entityClass);
-        return listByIds(ids);
+        ModelAccessCheckUtil.checkSelect(getModelClass());
+        return getBaseMapper().selectBatchIds(ids);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
-        ModelAccessCheckUtil.checkSelect(entityClass);
+        ModelAccessCheckUtil.checkSelect(getModelClass());
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (condition != null)
             condition.applyToQueryWrapper(queryWrapper);
         if (orderBys != null)
             orderBys.applyToQueryWrapper(queryWrapper);
-        return super.page(new Page<>(pageNum, pageSize), queryWrapper);
+        return getBaseMapper().selectPage(new Page<>(pageNum, pageSize), queryWrapper);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long count(QueryWrapper<T> queryWrapper) {
-        ModelAccessCheckUtil.checkSelect(entityClass);
-        return super.count(queryWrapper);
+        ModelAccessCheckUtil.checkSelect(getModelClass());
+        return SqlHelper.retCount(getBaseMapper().selectCount(queryWrapper));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<T> selectList(QueryWrapper<T> queryWrapper) {
-        ModelAccessCheckUtil.checkSelect(entityClass);
-        return super.list(queryWrapper);
+        ModelAccessCheckUtil.checkSelect(getModelClass());
+        return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<T> nameSearch(String name) {
-        ModelAccessCheckUtil.checkSelect(entityClass);
+        ModelAccessCheckUtil.checkSelect(getModelClass());
         Page<T> page = new Page<>(1, 7);
 
-        if (name == null || name.isEmpty() || name.isBlank()) return list(page);
+        if (name == null || name.isEmpty() || name.isBlank()) return getBaseMapper().selectList(page, Wrappers.emptyWrapper());
 
         // TODO: optimize performance by cache
         try {
-            entityClass.getDeclaredField("name");
+            getModelClass().getDeclaredField("name");
         } catch (NoSuchFieldException e) {
             return Collections.emptyList();
         }
 
-        LambdaQueryWrapper<T> wrapper = new LambdaQueryWrapper<>(entityClass);
-        wrapper.like(T::getName, name.trim());
-        return list(page, wrapper);
+        LambdaQueryWrapper<T> queryWrapper = new LambdaQueryWrapper<>(getModelClass());
+        queryWrapper.like(T::getName, name.trim());
+        return getBaseMapper().selectList(page, queryWrapper);
     }
 
     @Override
@@ -116,7 +139,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (records == null || records.isEmpty()) return false;
 
         // check authority for create
-        ModelAccessCheckUtil.checkCreate(entityClass);
+        ModelAccessCheckUtil.checkCreate(getModelClass());
 
         // do create
         boolean res = saveBatch(records);
@@ -129,12 +152,20 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         return res;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    protected boolean saveBatch(Collection<T> entityList) {
+        String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
+        return SqlHelper.executeBatch(
+                getSqlSessionTemplate().getSqlSessionFactory(), mybatisLog, entityList, DEFAULT_BATCH_SIZE,
+                (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+    }
+
     @SneakyThrows(IllegalAccessException.class)
     @SuppressWarnings("unchecked")
     private void processOne2ManyForCreate(List<T> records) {
-        for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
-            Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
+        for (Field field : RelationFieldUtil.getOne2ManyFields(getModelClass())) {
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
+            Field inverseField = RelationFieldUtil.getInverseField(getModelClass(), field);
             BaseService<BaseModel> targetService = getService(targetClass);
             for (T record : records) {
                 One2Many<BaseModel> filedValue;
@@ -168,8 +199,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @SuppressWarnings("unchecked")
     private void processMany2ManyForCreate(List<T> records) {
-        for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
+        for (Field field : RelationFieldUtil.getMany2ManyFields(getModelClass())) {
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
             for (T record : records) {
                 Many2Many<BaseModel> filedValue;
                 try {
@@ -189,7 +220,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                             throw new IllegalArgumentException("The ids of Command ADD cannot be null or empty");
                         }
                         RelationMapper mapper = getRelationMapper(targetClass);
-                        mapper.add(entityClass, record.getId(), command.getIds());
+                        mapper.add(getModelClass(), record.getId(), command.getIds());
                     } else {
                         throw new IllegalArgumentException("The Command " + command.getCommandType()
                                 + " is not supported for many2many field in create method");
@@ -214,15 +245,15 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
             throw new IllegalArgumentException("record's id must be null");
 
         // check authority for update
-        ModelAccessCheckUtil.checkUpdate(entityClass);
+        ModelAccessCheckUtil.checkUpdate(getModelClass());
 
         // construct LambdaUpdateWrapper
-        LambdaUpdateWrapper<T> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.setEntityClass(entityClass);
-        wrapper.in(T::getId, ids);
+        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.setEntityClass(getModelClass());
+        updateWrapper.in(T::getId, ids);
 
         // do update
-        boolean res = update(updateValues, wrapper);
+        boolean res = SqlHelper.retBool(getBaseMapper().update(updateValues, updateWrapper));
 
         // process one2many fields
         processOne2ManyForUpdate(ids, updateValues);
@@ -236,9 +267,9 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     @SneakyThrows(IllegalAccessException.class)
     @SuppressWarnings("unchecked")
     private void processOne2ManyForUpdate(List<Long> ids, T record) {
-        for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
-            Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
+        for (Field field : RelationFieldUtil.getOne2ManyFields(getModelClass())) {
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
+            Field inverseField = RelationFieldUtil.getInverseField(getModelClass(), field);
             BaseService<BaseModel> targetService = getService(targetClass);
             One2Many<BaseModel> filedValue;
             try {
@@ -280,8 +311,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @SuppressWarnings("unchecked")
     private void processMany2ManyForUpdate(List<Long> ids, T record) {
-        for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
+        for (Field field : RelationFieldUtil.getMany2ManyFields(getModelClass())) {
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
             Many2Many<BaseModel> filedValue;
             try {
                 filedValue = (Many2Many<BaseModel>) field.get(record);
@@ -299,17 +330,17 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                     switch (command.getCommandType()) {
                         case ADD: {
                             RelationMapper mapper = getRelationMapper(targetClass);
-                            mapper.add(entityClass, sourceId, command.getIds());
+                            mapper.add(getModelClass(), sourceId, command.getIds());
                             break;
                         }
                         case REMOVE: {
                             RelationMapper mapper = getRelationMapper(targetClass);
-                            mapper.remove(entityClass, sourceId, command.getIds());
+                            mapper.remove(getModelClass(), sourceId, command.getIds());
                             break;
                         }
                         case REPLACE: {
                             RelationMapper mapper = getRelationMapper(targetClass);
-                            mapper.replace(entityClass, sourceId, command.getIds());
+                            mapper.replace(getModelClass(), sourceId, command.getIds());
                             break;
                         }
                         default: {
@@ -334,10 +365,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
         if (ids == null || ids.isEmpty()) return false;
 
         // check authority for delete
-        ModelAccessCheckUtil.checkDelete(entityClass);
+        ModelAccessCheckUtil.checkDelete(getModelClass());
 
         // do delete
-        boolean res = removeByIds(ids);
+        boolean res = SqlHelper.retBool(getBaseMapper().deleteBatchIds(ids));
 
         // process one2many fields
         processOne2manyForDelete(ids);
@@ -348,11 +379,10 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     private void processOne2manyForDelete(List<Long> ids) {
-        for (Field field : RelationFieldUtil.getOne2ManyFields(entityClass)) {
-            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
-            Field inverseField = RelationFieldUtil.getInverseField(entityClass, field);
-            AbstractBaseService<BaseMapper<BaseModel>, BaseModel> targetService =
-                    getService(targetClass);
+        for (Field field : RelationFieldUtil.getOne2ManyFields(getModelClass())) {
+            Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
+            Field inverseField = RelationFieldUtil.getInverseField(getModelClass(), field);
+            AbstractBaseService<BaseModel> targetService = getService(targetClass);
             OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
             OnDelete onDelete = inverseField.getDeclaredAnnotation(OnDelete.class);
             if (onDelete != null) onDeleteType = onDelete.value();
@@ -360,7 +390,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
                 case RESTRICT: {
                     if (targetService.countByMany2OneIds(inverseField, ids) > 0) {
                         // TODO: optimize exception type
-                        throw new RuntimeException("Records can't be deleted, because the " + field.getName() + "field is not empty.");
+                        throw new RuntimeException("Records can't be deleted, because the " + field.getName() + " field is not empty.");
                     }
                 }
                 case CASCADE: {
@@ -386,24 +416,24 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     protected long countByMany2OneIds(Field field, List<Long> ids) {
         if (ids == null || ids.isEmpty()) return 0;
-        QueryWrapper<T> wrapper = new QueryWrapper<>();
-        wrapper.in(toColumnName(field), ids);
-        return count(wrapper);
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(toColumnName(field), ids);
+        return count(queryWrapper);
     }
 
     protected List<Long> selectIdsByMany2OneIds(Field field, List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
-        QueryWrapper<T> wrapper = new QueryWrapper<>();
-        wrapper.in(toColumnName(field), ids);
-        return list(wrapper).stream().map(BaseModel::getId).toList();
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in(toColumnName(field), ids);
+        return getBaseMapper().selectList(queryWrapper).stream().map(BaseModel::getId).toList();
     }
 
     protected void updateMany2OneToNullByIds(Field field, List<Long> ids) {
         if (ids == null || ids.isEmpty()) return;
-        UpdateWrapper<T> wrapper = new UpdateWrapper<>();
-        wrapper.in("id", ids);
-        wrapper.set(toColumnName(field), null);
-        update(wrapper);
+        UpdateWrapper<T> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", ids);
+        updateWrapper.set(toColumnName(field), null);
+        getBaseMapper().update(null, updateWrapper);
     }
 
     private String toColumnName(Field field) {
@@ -411,23 +441,72 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
     }
 
     private void processMany2manyForDelete(List<Long> ids) {
-        for (Field field : RelationFieldUtil.getMany2ManyFields(entityClass)) {
-            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(entityClass, field);
+        for (Field field : RelationFieldUtil.getMany2ManyFields(getModelClass())) {
+            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
             for (Long sourceId : ids) {
                 RelationMapper mapper = getRelationMapper(targetClass);
-                mapper.removeAll(entityClass, sourceId);
+                mapper.removeAll(getModelClass(), sourceId);
             }
         }
     }
 
     @Override
-    public Class<T> getModelClass() {
-        return super.getEntityClass();
+    public SqlSessionTemplate getSqlSessionTemplate() {
+        return sqlSessionTemplate;
     }
 
     @Override
-    public M getMapper() {
+    public Class<T> getModelClass() {
+        // Double-checked locking for thread-safely lazy loading
+        if (modelClass == null) {
+            synchronized (modelClassLock) {
+                if (modelClass == null) {
+                    @SuppressWarnings("unchecked")
+                    Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+                    modelClass = clazz;
+                }
+            }
+        }
+        return modelClass;
+    }
+
+    @Override
+    public Class<BaseMapper<T>> getBaseMapperClass() {
+        // Double-checked locking for thread-safely lazy loading
+        if (baseMapperClass == null) {
+            synchronized (baseMapperClassLock) {
+                if (baseMapperClass == null) {
+                    @SuppressWarnings("unchecked")
+                    Class<BaseMapper<T>> baseMapperClass1 = (Class<BaseMapper<T>>) getBaseMapper().getClass().getInterfaces()[0];
+                    baseMapperClass = baseMapperClass1;
+                }
+            }
+        }
+
+        return baseMapperClass;
+    }
+
+    @Override
+    public BaseMapper<T> getBaseMapper() {
+        // Double-checked locking for thread-safely lazy loading
+        if (baseMapper == null) {
+            synchronized (baseMapperLock) {
+                if (baseMapper == null) {
+                    baseMapper = BaseMapperRegistry.getBaseMapper(sqlSessionTemplate, getModelClass());
+                }
+            }
+        }
         return baseMapper;
+    }
+
+    @Override
+    public <AT extends BaseModel> BaseMapper<AT> getBaseMapper(Class<AT> modelClass) {
+        return BaseMapperRegistry.getBaseMapper(sqlSessionTemplate, modelClass);
+    }
+
+    @Override
+    public <M extends BaseMapper<T>> M getMapper(Class<M> mapperInterface) {
+        return getSqlSessionTemplate().getMapper(mapperInterface);
     }
 
     @Override
@@ -438,8 +517,8 @@ public abstract class AbstractBaseService<M extends BaseMapper<T>, T extends Bas
 
     @Override
     public LambdaQueryChainWrapper<T> lambdaQuery() {
-        ModelAccessCheckUtil.checkSelect(entityClass);
-        return ChainWrappers.lambdaQueryChain(baseMapper, entityClass);
+        ModelAccessCheckUtil.checkSelect(getModelClass());
+        return ChainWrappers.lambdaQueryChain(getBaseMapper(), getModelClass());
     }
 
     @Override

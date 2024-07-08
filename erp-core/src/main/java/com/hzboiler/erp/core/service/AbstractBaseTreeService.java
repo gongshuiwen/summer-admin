@@ -1,6 +1,6 @@
 package com.hzboiler.erp.core.service;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.model.BaseTreeModel;
@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Slf4j
-public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends BaseTreeModel<T>>
-        extends AbstractBaseService<M, T>
+public abstract class AbstractBaseTreeService<T extends BaseTreeModel<T>>
+        extends AbstractBaseService<T>
         implements BaseTreeService<T> {
 
     @Override
@@ -111,12 +111,13 @@ public abstract class AbstractBaseTreeService<M extends BaseMapper<T>, T extends
                     if (updateValues.getParentPath().isEmpty())
                         newParentPath = newParentPath.substring(1);
 
-                    if (log.isDebugEnabled()) {
+                    if (log.isDebugEnabled())
                         log.debug("update descendant {}'s parent path from {} to {}", descendant.getId(), oldParentPath, newParentPath);
-                    }
 
-                    System.out.println(oldParentPath + " -> " + newParentPath);
-                    lambdaUpdate().setEntityClass(entityClass).eq(T::getId, descendant.getId()).set(T::getParentPath, newParentPath).update();
+                    LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>(getModelClass());
+                    updateWrapper.set(T::getParentPath, newParentPath);
+                    updateWrapper.eq(T::getId, descendant.getId());
+                    getBaseMapper().update(updateWrapper);
                 });
             });
             return res;
