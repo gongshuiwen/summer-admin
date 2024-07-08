@@ -41,7 +41,7 @@ class TestCommonControllerCreate extends CommonControllerTestBase {
     @Test
     @WithMockUser(authorities = MOCK_AUTHORITY_CREATE)
     void testAuthorized() throws Exception {
-        assertEquals(0, mockMapper.selectCount(null));
+        assertEquals(0, mockService.getBaseMapper().selectCount(null));
 
         ResultActions resultActions = doCreate(MOCKS);
         checkResultActionsSuccess(resultActions);
@@ -52,14 +52,14 @@ class TestCommonControllerCreate extends CommonControllerTestBase {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[1].name", Is.is(MOCKS.get(1).getName())))
         ;
 
-        assertEquals(2, mockMapper.selectCount(null));
+        assertEquals(2, mockService.getBaseMapper().selectCount(null));
 
-        Mock mock1 = mockMapper.selectById(1);
+        Mock mock1 = mockService.getBaseMapper().selectById(1);
         assertEquals(MOCKS.get(0).getName(), mock1.getName());
         assertEquals(0, mock1.getCreateUser());
         assertEquals(0, mock1.getUpdateUser());
 
-        Mock mock2 = mockMapper.selectById(2);
+        Mock mock2 = mockService.getBaseMapper().selectById(2);
         assertEquals(MOCKS.get(1).getName(), mock2.getName());
         assertEquals(0, mock2.getCreateUser());
         assertEquals(0, mock2.getUpdateUser());

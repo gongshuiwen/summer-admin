@@ -38,12 +38,12 @@ class TestCommonControllerDelete extends CommonControllerTestBase {
     @WithMockUser(authorities = MOCK_AUTHORITY_DELETE)
     void testAuthorized() throws Exception {
         List<Long> deleteIds = Arrays.asList(1L, 2L);
-        deleteIds.forEach(id -> assertNotNull(mockMapper.selectById(id)));
+        deleteIds.forEach(id -> assertNotNull(mockService.getBaseMapper().selectById(id)));
 
         ResultActions resultActions = doDelete(deleteIds);
 
         checkResultActionsSuccess(resultActions, true);
-        deleteIds.forEach(deleteId -> assertNull(mockMapper.selectById(deleteId)));
+        deleteIds.forEach(deleteId -> assertNull(mockService.getBaseMapper().selectById(deleteId)));
     }
 
     @Test

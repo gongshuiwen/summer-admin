@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.controller;
 
 import com.hzboiler.erp.core.annotaion.WithMockAdmin;
-import com.hzboiler.erp.core.mapper.MockMapper;
+import com.hzboiler.erp.core.service.MockService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -25,7 +25,7 @@ abstract class CommonControllerTestBase extends ControllerTestBase {
     static final String MOCK_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK_MODEL_NAME;
 
     @Autowired
-    MockMapper mockMapper;
+    MockService mockService;
 
     @Test
     @WithAnonymousUser

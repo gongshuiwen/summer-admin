@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.field.Command;
 import com.hzboiler.erp.core.field.One2Many;
-import com.hzboiler.erp.core.mapper.Mock1Mapper;
-import com.hzboiler.erp.core.mapper.Mock2Mapper;
 import com.hzboiler.erp.core.mapper.MockRelationMapper;
 import com.hzboiler.erp.core.model.Mock1;
 import com.hzboiler.erp.core.model.Mock2;
@@ -44,12 +42,6 @@ class TestAbstractBaseServiceOne2Many {
     static final String MOCK2_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK2_ENTITY_NAME;
 
     @Autowired
-    Mock1Mapper mock1Mapper;
-
-    @Autowired
-    Mock2Mapper mock2Mapper;
-
-    @Autowired
     MockRelationMapper mockRelationMapper;
 
     @Autowired
@@ -74,7 +66,7 @@ class TestAbstractBaseServiceOne2Many {
 
         LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Mock2::getMock1Id1, mock1.getId());
-        List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
+        List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper);
         assertEquals(2, mock2s.size());
         assertEquals("mock2-1", mock2s.get(0).getName());
         assertEquals("mock2-2", mock2s.get(1).getName());
@@ -94,7 +86,7 @@ class TestAbstractBaseServiceOne2Many {
 
         LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Mock2::getMock1Id1, mock1.getId());
-        List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
+        List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper);
         assertEquals(2, mock2s.size());
         assertEquals("mock2-1", mock2s.get(0).getName());
         assertEquals("mock2-2", mock2s.get(1).getName());
@@ -117,14 +109,14 @@ class TestAbstractBaseServiceOne2Many {
 
         LambdaQueryWrapper<Mock2> wrapper1 = new LambdaQueryWrapper<>();
         wrapper1.eq(Mock2::getMock1Id1, mock1.getId());
-        List<Long> mock2Ids = mock2Mapper.selectList(wrapper1).stream().map(Mock2::getId).toList();
+        List<Long> mock2Ids = mock2Service.getBaseMapper().selectList(wrapper1).stream().map(Mock2::getId).toList();
         Mock1 mock1Update = new Mock1();
         mock1Update.setMock2s1(One2Many.ofCommands(List.of(Command.delete(mock2Ids))));
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         LambdaQueryWrapper<Mock2> wrapper2 = new LambdaQueryWrapper<>();
         wrapper2.eq(Mock2::getMock1Id1, mock1.getId());
-        List<Mock2> mock2s = mock2Mapper.selectList(wrapper2);
+        List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper2);
         assertEquals(0, mock2s.size());
     }
 
@@ -145,14 +137,14 @@ class TestAbstractBaseServiceOne2Many {
 
         LambdaQueryWrapper<Mock2> wrapper1 = new LambdaQueryWrapper<>();
         wrapper1.eq(Mock2::getMock1Id1, mock1.getId());
-        List<Long> mock2Ids = mock2Mapper.selectList(wrapper1).stream().map(Mock2::getId).toList();
+        List<Long> mock2Ids = mock2Service.getBaseMapper().selectList(wrapper1).stream().map(Mock2::getId).toList();
         Mock1 mock1Update = new Mock1();
         mock1Update.setMock2s1(One2Many.ofCommands(List.of(Command.update(mock2Ids.get(0), new Mock2("mock2")))));
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         LambdaQueryWrapper<Mock2> wrapper2 = new LambdaQueryWrapper<>();
         wrapper2.eq(Mock2::getMock1Id1, mock1.getId());
-        List<Mock2> mock2s = mock2Mapper.selectList(wrapper2);
+        List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper2);
         assertEquals(2, mock2s.size());
         assertEquals("mock2", mock2s.get(0).getName());
         assertEquals("mock2-2", mock2s.get(1).getName());
@@ -197,7 +189,7 @@ class TestAbstractBaseServiceOne2Many {
 
         LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Mock2::getMock1Id2, mock1.getId());
-        List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
+        List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper);
         assertEquals(0, mock2s.size());
         assertNull(mock2Service.selectById(1L));
         assertNull(mock2Service.selectById(2L));
@@ -223,7 +215,7 @@ class TestAbstractBaseServiceOne2Many {
 
         LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Mock2::getMock1Id3, mock1.getId());
-        List<Mock2> mock2s = mock2Mapper.selectList(wrapper);
+        List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper);
         assertEquals(0, mock2s.size());
         assertNull(mock2Service.selectById(1L).getMock1Id3().getRecord());
         assertNull(mock2Service.selectById(2L).getMock1Id3().getRecord());

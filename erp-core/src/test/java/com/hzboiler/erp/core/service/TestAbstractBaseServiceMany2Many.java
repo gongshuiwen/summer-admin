@@ -3,8 +3,6 @@ package com.hzboiler.erp.core.service;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.field.Command;
 import com.hzboiler.erp.core.field.Many2Many;
-import com.hzboiler.erp.core.mapper.Mock1Mapper;
-import com.hzboiler.erp.core.mapper.Mock3Mapper;
 import com.hzboiler.erp.core.mapper.MockRelationMapper;
 import com.hzboiler.erp.core.model.Mock1;
 import com.hzboiler.erp.core.model.Mock3;
@@ -43,12 +41,6 @@ class TestAbstractBaseServiceMany2Many {
     static final String MOCK3_ENTITY_NAME = "Mock3";
     static final String MOCK3_AUTHORITY_SELECT = AUTHORITY_SELECT_CODE_PREFIX + MOCK3_ENTITY_NAME;
     static final String MOCK3_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK3_ENTITY_NAME;
-
-    @Autowired
-    Mock1Mapper mock1Mapper;
-
-    @Autowired
-    Mock3Mapper mock3Mapper;
 
     @Autowired
     MockRelationMapper mockRelationMapper;

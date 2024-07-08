@@ -43,13 +43,13 @@ class TestCommonControllerUpdate extends CommonControllerTestBase {
         Mock mock2 = Mock.of(2L, updateName);
 
         List<Long> updateIds = Arrays.asList(1L, 2L);
-        updateIds.forEach(id -> assertNotEquals(updateName, mockMapper.selectById(id).getName()));
+        updateIds.forEach(id -> assertNotEquals(updateName, mockService.getBaseMapper().selectById(id).getName()));
 
         ResultActions resultActions = doUpdate(List.of(mock1, mock2));
 
         checkResultActionsSuccess(resultActions, true);
         for (Long updateId : updateIds) {
-            Mock mock = mockMapper.selectById(updateId);
+            Mock mock = mockService.getBaseMapper().selectById(updateId);
             assertEquals(updateName, mock.getName());
             assertEquals(0, mock.getCreateUser());
             assertEquals(0, mock.getUpdateUser());
@@ -71,12 +71,12 @@ class TestCommonControllerUpdate extends CommonControllerTestBase {
     @Test
     @WithMockAdmin
     void testNameNull() throws Exception {
-        String oldName = mockMapper.selectById(1L).getName();
+        String oldName = mockService.getBaseMapper().selectById(1L).getName();
 
         ResultActions resultActions = doUpdate(List.of(Mock.of(1L, null)));
         checkResultActionsSuccess(resultActions, true);
 
-        assertEquals(oldName, mockMapper.selectById(1L).getName());
+        assertEquals(oldName, mockService.getBaseMapper().selectById(1L).getName());
     }
 
     @Test

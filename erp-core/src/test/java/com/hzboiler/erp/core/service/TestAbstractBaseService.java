@@ -2,7 +2,6 @@ package com.hzboiler.erp.core.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hzboiler.erp.core.context.BaseContextHolder;
-import com.hzboiler.erp.core.mapper.MockMapper;
 import com.hzboiler.erp.core.model.Mock;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.OrderBys;
@@ -30,9 +29,6 @@ public class TestAbstractBaseService {
     static final String MOCK_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK_ENTITY_NAME;
     static final String MOCK_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK_ENTITY_NAME;
     static final String MOCK_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK_ENTITY_NAME;
-
-    @Autowired
-    MockMapper mockMapper;
 
     @Autowired
     MockService mockService;
@@ -137,7 +133,7 @@ public class TestAbstractBaseService {
     void testCreateOne() {
         Mock mock = new Mock("mock");
         mockService.createOne(mock);
-        assertEquals(1, mockMapper.selectList(null).size());
+        assertEquals(1, mockService.getBaseMapper().selectList(null).size());
 
         assertEquals(1L, mock.getId());
         assertEquals("mock", mock.getName());
@@ -146,7 +142,7 @@ public class TestAbstractBaseService {
         assertNotNull(mock.getCreateTime());
         assertNotNull(mock.getUpdateTime());
 
-        Mock result = mockMapper.selectById(mock.getId());
+        Mock result = mockService.getBaseMapper().selectById(mock.getId());
         assertEquals(mock.getId(), result.getId());
         assertEquals(mock.getName(), result.getName());
         assertEquals(mock.getCreateUser(), result.getCreateUser());
@@ -161,7 +157,7 @@ public class TestAbstractBaseService {
     void testCreateBatch() {
         List<Mock> mocks = List.of(new Mock("mock1"), new Mock("mock2"));
         mockService.createBatch(mocks);
-        assertEquals(2, mockMapper.selectList(null).size());
+        assertEquals(2, mockService.getBaseMapper().selectList(null).size());
 
         for (int i = 0; i < mocks.size(); i++) {
             Mock mock = mocks.get(i);
@@ -172,7 +168,7 @@ public class TestAbstractBaseService {
             assertNotNull(mock.getCreateTime());
             assertNotNull(mock.getUpdateTime());
 
-            Mock result = mockMapper.selectById(mock.getId());
+            Mock result = mockService.getBaseMapper().selectById(mock.getId());
             assertEquals(mock.getId(), result.getId());
             assertEquals(mock.getName(), result.getName());
             assertEquals(mock.getCreateUser(), result.getCreateUser());
@@ -190,7 +186,7 @@ public class TestAbstractBaseService {
         Mock mock = new Mock("mock");
         mockService.updateById(id, mock);
 
-        Mock result = mockMapper.selectById(id);
+        Mock result = mockService.getBaseMapper().selectById(id);
         assertEquals(mock.getName(), result.getName());
     }
 
@@ -202,7 +198,7 @@ public class TestAbstractBaseService {
         Mock mock = new Mock("mock");
         mockService.updateByIds(ids, mock);
 
-        List<Mock> results = mockMapper.selectBatchIds(ids);
+        List<Mock> results = mockService.getBaseMapper().selectBatchIds(ids);
         for (Mock result : results) {
             assertEquals(mock.getName(), result.getName());
         }
@@ -213,9 +209,9 @@ public class TestAbstractBaseService {
     @WithMockUser(authorities = {MOCK_AUTHORITY_DELETE})
     void testDeleteById() {
         Long id = 1L;
-        assertNotNull(mockMapper.selectById(id));
+        assertNotNull(mockService.getBaseMapper().selectById(id));
         mockService.deleteById(id);
-        assertNull(mockMapper.selectById(id));
+        assertNull(mockService.getBaseMapper().selectById(id));
     }
 
     @Test
@@ -223,8 +219,8 @@ public class TestAbstractBaseService {
     @WithMockUser(authorities = {MOCK_AUTHORITY_DELETE})
     void testDeleteByIds() {
         List<Long> ids = List.of(1L, 2L);
-        assertEquals(2, mockMapper.selectBatchIds(ids).size());
+        assertEquals(2, mockService.getBaseMapper().selectBatchIds(ids).size());
         mockService.deleteByIds(ids);
-        assertEquals(0, mockMapper.selectBatchIds(ids).size());
+        assertEquals(0, mockService.getBaseMapper().selectBatchIds(ids).size());
     }
 }

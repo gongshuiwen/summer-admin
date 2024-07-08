@@ -49,7 +49,7 @@ class TestCommonControllerPage extends CommonControllerTestBase {
     @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testAuthorized() throws Exception {
         List<Long> ids = List.of(1L, 2L);
-        List<Mock> mocks = mockMapper.selectBatchIds(ids);
+        List<Mock> mocks = mockService.getBaseMapper().selectBatchIds(ids);
 
         ResultActions resultActions = doPage(1L, 20L, null, null);
 
@@ -88,7 +88,7 @@ class TestCommonControllerPage extends CommonControllerTestBase {
     @WithMockAdmin
     void testOrderByIdDesc() throws Exception {
         List<Long> ids = List.of(1L, 2L);
-        List<Mock> mocks = mockMapper.selectBatchIds(ids);
+        List<Mock> mocks = mockService.getBaseMapper().selectBatchIds(ids);
 
         ResultActions resultActions = doPage(1L, 20L, "_id", null);
 

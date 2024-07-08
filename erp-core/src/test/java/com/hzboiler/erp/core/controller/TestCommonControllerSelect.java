@@ -37,7 +37,7 @@ class TestCommonControllerSelect extends CommonControllerTestBase {
     @WithMockUser(authorities = MOCK_AUTHORITY_SELECT)
     void testAuthorized() throws Exception {
         List<Long> ids = List.of(1L, 2L);
-        List<Mock> mocks = mockMapper.selectBatchIds(ids);
+        List<Mock> mocks = mockService.getBaseMapper().selectBatchIds(ids);
 
         ResultActions resultActions = doSelect(ids);
 
