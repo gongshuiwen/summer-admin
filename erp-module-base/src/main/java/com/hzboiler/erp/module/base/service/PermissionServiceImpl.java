@@ -1,7 +1,6 @@
 package com.hzboiler.erp.module.base.service;
 
 import com.hzboiler.erp.core.service.AbstractBaseService;
-import com.hzboiler.erp.module.base.mapper.PermissionMapper;
 import com.hzboiler.erp.module.base.mapper.RolePermissionMapper;
 import com.hzboiler.erp.module.base.model.Permission;
 import com.hzboiler.erp.module.base.model.Role;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class PermissionServiceImpl extends AbstractBaseService<PermissionMapper, Permission> implements PermissionService {
+public class PermissionServiceImpl extends AbstractBaseService<Permission> implements PermissionService {
 
     @Autowired
     RolePermissionMapper rolePermissionMapper;

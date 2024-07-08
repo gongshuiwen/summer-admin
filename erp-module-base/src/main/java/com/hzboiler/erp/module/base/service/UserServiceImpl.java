@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.exception.BusinessException;
 import com.hzboiler.erp.core.service.AbstractBaseService;
-import com.hzboiler.erp.module.base.mapper.UserMapper;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import static com.hzboiler.erp.core.exception.CoreBusinessExceptionEnums.ERROR_A
 
 @Slf4j
 @Service
-public class UserServiceImpl extends AbstractBaseService<UserMapper, User> implements UserService {
+public class UserServiceImpl extends AbstractBaseService<User> implements UserService {
 
     @Autowired
     RoleService roleService;
@@ -38,7 +37,7 @@ public class UserServiceImpl extends AbstractBaseService<UserMapper, User> imple
         // bypass model access check by using mapper
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getUsername, username);
-        User user = getMapper().selectOne(lambdaQueryWrapper);
+        User user = getBaseMapper().selectOne(lambdaQueryWrapper);
         if (user == null)
             throw new UsernameNotFoundException("");
 

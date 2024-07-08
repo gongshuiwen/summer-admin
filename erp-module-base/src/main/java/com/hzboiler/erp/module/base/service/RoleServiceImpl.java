@@ -2,7 +2,6 @@ package com.hzboiler.erp.module.base.service;
 
 import com.hzboiler.erp.core.exception.ValidationException;
 import com.hzboiler.erp.core.service.AbstractBaseService;
-import com.hzboiler.erp.module.base.mapper.RoleMapper;
 import com.hzboiler.erp.module.base.mapper.UserRoleMapper;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.model.User;
@@ -20,7 +19,7 @@ import static com.hzboiler.erp.core.security.Constants.CODE_BASE_USER;
 
 @Slf4j
 @Service
-public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> implements RoleService {
+public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleService {
 
     @Autowired
     UserRoleMapper userRoleMapper;
@@ -35,7 +34,7 @@ public class RoleServiceImpl extends AbstractBaseService<RoleMapper, Role> imple
             return Set.of();
 
         // bypass model access check by using mapper
-        return getMapper().selectBatchIds(roleIds).stream().collect(Collectors.toUnmodifiableSet());
+        return getBaseMapper().selectBatchIds(roleIds).stream().collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
