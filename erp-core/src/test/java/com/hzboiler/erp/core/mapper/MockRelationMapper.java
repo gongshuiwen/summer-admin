@@ -4,6 +4,9 @@ import com.hzboiler.erp.core.model.Mock1;
 import com.hzboiler.erp.core.model.Mock3;
 import org.apache.ibatis.annotations.Mapper;
 
+/**
+ * @author gongshuiwen
+ */
 @Mapper
 @MapperRelation(table = "mock_relation",
         field1 = "mock1_id", class1 = Mock1.class,

@@ -11,6 +11,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author gongshuiwen
+ */
 @SpringBootTest
 @Sql(scripts = {
         "/sql/test/ddl/mock1.sql",

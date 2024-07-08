@@ -23,6 +23,9 @@ import static com.hzboiler.erp.core.jackson2.SecurityBeanPropertyFilter.INSTANCE
 import static com.hzboiler.erp.core.security.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author gongshuiwen
+ */
 class TestSecurityBeanPropertyFilter {
 
     @Getter
