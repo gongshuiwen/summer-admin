@@ -9,9 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author gongshuiwen
  */
-public class RelationMapperRegistry {
+public final class RelationMapperRegistry {
 
     private static final Map<Key, MapperFactoryBean<?>> registry = new ConcurrentHashMap<>();
+
+    // prevent external instantiation
+    private RelationMapperRegistry() {
+    }
 
     public static void register(Class<?> class1, Class<?> class2, MapperFactoryBean<?> mapperFactoryBean) {
         Key key = new Key(class1, class2);
