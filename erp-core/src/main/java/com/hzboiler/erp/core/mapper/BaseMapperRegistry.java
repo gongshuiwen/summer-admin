@@ -1,6 +1,5 @@
 package com.hzboiler.erp.core.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzboiler.erp.core.model.BaseModel;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.type.TypeDescription;
