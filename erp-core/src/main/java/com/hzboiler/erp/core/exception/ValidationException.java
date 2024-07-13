@@ -1,5 +1,6 @@
 package com.hzboiler.erp.core.exception;
 
+import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
@@ -11,6 +12,26 @@ public class ValidationException extends BusinessException {
 
     public ValidationException(String message) {
         super(CoreBusinessExceptionEnums.ERROR_VALIDATION_FAILED, message);
+    }
+
+    public static <T> T requireNonNull(T obj, String message) {
+        if (obj == null)
+            throw new ValidationException(message);
+        return obj;
+    }
+
+    public static <T> T requireNonNull(T obj, Supplier<String> messageSupplier) {
+        return requireNonNull(obj, messageSupplier.get());
+    }
+
+    public static <T extends Collection<?>> T requireNonEmpty(T obj, String message) {
+        if (obj == null || obj.isEmpty())
+            throw new ValidationException(message);
+        return obj;
+    }
+
+    public static <T extends Collection<?>> T requireNonEmpty(T obj, Supplier<String> messageSupplier) {
+        return requireNonEmpty(obj, messageSupplier.get());
     }
 
     /**
@@ -74,4 +95,5 @@ public class ValidationException extends BusinessException {
             throw new ValidationException(messageSupplier.get());
         return false;
     }
+
 }
