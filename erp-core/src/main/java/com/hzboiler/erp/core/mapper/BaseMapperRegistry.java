@@ -26,6 +26,7 @@ public final class BaseMapperRegistry {
         Configuration configuration = sqlSessionTemplate.getConfiguration();
         Class<BaseMapper<T>> mapperInterface = getMapperInterface(modelClass);
 
+        // add mapper to mybatis configuration
         if (!configuration.hasMapper(mapperInterface))
             configuration.addMapper(mapperInterface);
 
