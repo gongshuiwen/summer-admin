@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.context;
 
 /**
- * Interface that provides <code>getContext</code> method to get the current {@link BaseContext}.
+ * Interface that provides <code>getContext</code> method to get the {@link BaseContext} instance of the current request.
  *
  * @author gongshuiwen
  * @see BaseContext
@@ -10,9 +10,9 @@ package com.hzboiler.erp.core.context;
 public interface BaseContextContainer {
 
     /**
-     * Get the current {@link BaseContext}
+     * Get the {@link BaseContext} instance of the current request.
      *
-     * @return {@link BaseContext}
+     * @return {@link BaseContext} instance of the current request
      */
     default BaseContext getContext() {
         return BaseContextHolder.getContext();
