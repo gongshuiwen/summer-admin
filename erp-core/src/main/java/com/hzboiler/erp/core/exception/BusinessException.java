@@ -5,14 +5,24 @@ import lombok.Getter;
 /**
  * Custom business exception class, should be constructed by {@link BusinessExceptionEnum}
  * <p>
- * Simple usage example:
+ * Simple usage:
  * <blockquote><pre>
  * throw new BusinessException(ERROR_TEST);
  * </pre></blockquote>
  * <p>
- * Custom message example:
+ * Custom message:
  * <blockquote><pre>
  * throw new BusinessException(ERROR_TEST, "error message");
+ * </pre></blockquote>
+ * <p>
+ * Custom cause:
+ * <blockquote><pre>
+ * throw new BusinessException(ERROR_TEST, cause);
+ * </pre></blockquote>
+ * <p>
+ * Custom message and cause:
+ * <blockquote><pre>
+ * throw new BusinessException(ERROR_TEST, "error message", cause);
  * </pre></blockquote>
  *
  * @author gongshuiwen
@@ -30,6 +40,16 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(BusinessExceptionEnum exceptionEnum, String message) {
         super(message);
+        this.businessExceptionEnum = exceptionEnum;
+    }
+
+    public BusinessException(BusinessExceptionEnum exceptionEnum, Throwable cause) {
+        super(cause);
+        this.businessExceptionEnum = exceptionEnum;
+    }
+
+    public BusinessException(BusinessExceptionEnum exceptionEnum, String message, Throwable cause) {
+        super(message, cause);
         this.businessExceptionEnum = exceptionEnum;
     }
 }
