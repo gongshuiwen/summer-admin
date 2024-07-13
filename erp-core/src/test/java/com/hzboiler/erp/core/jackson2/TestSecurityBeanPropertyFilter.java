@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
+import com.hzboiler.erp.core.context.BaseContextImpl;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.model.BaseUser;
 import lombok.Getter;
@@ -83,13 +84,13 @@ class TestSecurityBeanPropertyFilter {
 
     static void setBaseContextWithUser(BaseUser user) throws NoSuchFieldException, IllegalAccessException {
         BaseContext baseContext = BaseContextHolder.getContext();
-        Field field = BaseContext.class.getDeclaredField("user");
+        Field field = BaseContextImpl.class.getDeclaredField("user");
         field.setAccessible(true);
         field.set(baseContext, user);
-        field = BaseContext.class.getDeclaredField("userId");
+        field = BaseContextImpl.class.getDeclaredField("userId");
         field.setAccessible(true);
         field.set(baseContext, user.getId());
-        field = BaseContext.class.getDeclaredField("authorities");
+        field = BaseContextImpl.class.getDeclaredField("authorities");
         field.setAccessible(true);
         field.set(baseContext, user.getAuthorities());
     }
