@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
- * A generic validation exception to be thrown when validation fails.
+ * Generic validation exception to be thrown when validation fails.
  *
  * @author gongshuiwen
  */
