@@ -156,7 +156,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
     protected boolean saveBatch(Collection<T> entityList) {
         String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
         return SqlHelper.executeBatch(
-                getSqlSessionTemplate().getSqlSessionFactory(), mybatisLog, entityList, DEFAULT_BATCH_SIZE,
+                getSqlSession().getSqlSessionFactory(), mybatisLog, entityList, DEFAULT_BATCH_SIZE,
                 (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
     }
 
@@ -451,7 +451,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
     }
 
     @Override
-    public SqlSessionTemplate getSqlSessionTemplate() {
+    public SqlSessionTemplate getSqlSession() {
         return sqlSessionTemplate;
     }
 
@@ -506,7 +506,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
 
     @Override
     public <M extends BaseMapper<T>> M getMapper(Class<M> mapperInterface) {
-        return getSqlSessionTemplate().getMapper(mapperInterface);
+        return getSqlSession().getMapper(mapperInterface);
     }
 
     @Override

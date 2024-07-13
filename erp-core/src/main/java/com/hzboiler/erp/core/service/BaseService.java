@@ -11,7 +11,7 @@ import com.hzboiler.erp.core.mapper.RelationMapperRegistry;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.protocal.query.Condition;
 import com.hzboiler.erp.core.protocal.query.OrderBys;
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.session.SqlSession;
 
 import java.util.Collection;
 import java.util.List;
@@ -125,7 +125,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     // ====================
     // Other methods
     // ====================
-    SqlSessionTemplate getSqlSessionTemplate();
+    SqlSession getSqlSession();
 
     Class<T> getModelClass();
 
