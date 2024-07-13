@@ -69,7 +69,7 @@ public class CommonController implements BaseContextContainer {
 
     @Operation(summary = "Select by IDs")
     @GetMapping("/{modelName}")
-    public <T extends BaseModel> Result<List<?>> select(
+    public <T extends BaseModel> Result<List<T>> select(
             @PathVariable @NotEmpty String modelName,
             @RequestParam @NotEmpty @Size(max = 1000) List<Long> ids
     ) throws IllegalAccessException {
@@ -84,7 +84,7 @@ public class CommonController implements BaseContextContainer {
 
     @Operation(summary = "Page Query")
     @GetMapping("/{modelName}/page")
-    public <T extends BaseModel> Result<IPage<?>> page(
+    public <T extends BaseModel> Result<IPage<T>> page(
             @PathVariable @NotEmpty String modelName,
             @RequestParam @Positive @Max(1000) Long pageNum,
             @RequestParam @Positive @Max(1000) Long pageSize,
@@ -114,19 +114,19 @@ public class CommonController implements BaseContextContainer {
 
     @Operation(summary = "Name Search")
     @GetMapping("/{modelName}/nameSearch")
-    public Result<List<?>> nameSearch(
+    public <T extends BaseModel> Result<List<T>> nameSearch(
             @PathVariable @NotEmpty String modelName,
             @RequestParam String name
     ) {
-        BaseService<?> service = BaseServiceRegistry.getByModelName(modelName);
-        List<?> records = service.nameSearch(name);
+        BaseService<T> service = BaseServiceRegistry.getByModelName(modelName);
+        List<T> records = service.nameSearch(name);
         return Result.success(records);
     }
 
     @Operation(summary = "Create Records")
     @PostMapping("/{modelName}")
     @Validated(CreateValidationGroup.class)
-    public <T extends BaseModel> Result<List<?>> create(
+    public <T extends BaseModel> Result<List<T>> create(
             @PathVariable @NotEmpty String modelName,
             @RequestBody @NotEmpty String createDtoListData
     ) throws IOException {
