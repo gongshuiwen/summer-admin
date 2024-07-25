@@ -60,7 +60,6 @@
         <dependency>
             <groupId>com.hzboiler</groupId>
             <artifactId>erp-test</artifactId>
-            <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

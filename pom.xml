@@ -13,7 +13,7 @@
 
     <groupId>com.hzboiler</groupId>
     <artifactId>erp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${project.version}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -29,6 +29,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.version>1.0-SNAPSHOT</project.version>
 
         <!--[versions of dependencies]-->
         <common-pool2.version>2.12.0</common-pool2.version>
@@ -50,6 +51,38 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--[projects]-->
+            <dependency>
+                <groupId>com.hzboiler</groupId>
+                <artifactId>erp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzboiler</groupId>
+                <artifactId>erp-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzboiler</groupId>
+                <artifactId>erp-module-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzboiler.erp</groupId>
+                <artifactId>erp-module-file</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzboiler</groupId>
+                <artifactId>erp-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzboiler</groupId>
+                <artifactId>erp-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!--[spring boot starters]-->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -92,20 +125,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
