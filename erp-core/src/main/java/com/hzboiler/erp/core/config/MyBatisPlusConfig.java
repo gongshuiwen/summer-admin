@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
@@ -36,17 +37,30 @@ public class MyBatisPlusConfig {
             @Override
             public void insertFill(MetaObject metaObject) {
                 LocalDateTime now = LocalDateTime.now();
-                Long userId = BaseContextHolder.getContext().getUserId();
-                metaObject.setValue(CREATE_TIME_FIELD_NAME, now);
-                metaObject.setValue(UPDATE_TIME_FIELD_NAME, now);
-                metaObject.setValue(CREATE_USER_FIELD_NAME, userId);
-                metaObject.setValue(UPDATE_USER_FIELD_NAME, userId);
+                if (metaObject.hasSetter(CREATE_TIME_FIELD_NAME))
+                    metaObject.setValue(CREATE_TIME_FIELD_NAME, now);
+                if (metaObject.hasSetter(UPDATE_TIME_FIELD_NAME))
+                    metaObject.setValue(UPDATE_TIME_FIELD_NAME, now);
+
+                Long userId = getUserId();
+                if (metaObject.hasSetter(CREATE_USER_FIELD_NAME))
+                    metaObject.setValue(CREATE_USER_FIELD_NAME, userId);
+                if (metaObject.hasSetter(UPDATE_USER_FIELD_NAME))
+                    metaObject.setValue(UPDATE_USER_FIELD_NAME, userId);
             }
 
             @Override
             public void updateFill(MetaObject metaObject) {
-                metaObject.setValue(UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
-                metaObject.setValue(UPDATE_USER_FIELD_NAME, BaseContextHolder.getContext().getUserId());
+                if (metaObject.hasSetter(UPDATE_TIME_FIELD_NAME))
+                    metaObject.setValue(UPDATE_TIME_FIELD_NAME, LocalDateTime.now());
+
+                if (metaObject.hasSetter(UPDATE_USER_FIELD_NAME))
+                    metaObject.setValue(UPDATE_USER_FIELD_NAME, getUserId());
+            }
+
+            private long getUserId() {
+                BaseContext baseContext = BaseContextHolder.getContext();
+                return baseContext != null ? baseContext.getUserId() : 0L;
             }
         };
     }
