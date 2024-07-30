@@ -25,9 +25,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
@@ -49,7 +51,11 @@ public abstract class AbstractBaseService<T extends BaseModel>
     protected final Log mybatisLog = LogFactory.getLog(getClass());
 
     @Autowired
-    private SqlSessionTemplate sqlSessionTemplate;
+    private SqlSessionFactory sqlSessionFactory;
+
+    @Autowired
+    @Qualifier("sqlSessionTemplate")
+    private SqlSession sqlSession;
 
     // cache for modelClass
     private volatile Class<T> modelClass;
@@ -155,8 +161,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
     @Transactional(rollbackFor = Exception.class)
     protected boolean saveBatch(Collection<T> entityList) {
         String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
-        return SqlHelper.executeBatch(
-                getSqlSession().getSqlSessionFactory(), mybatisLog, entityList, DEFAULT_BATCH_SIZE,
+        return SqlHelper.executeBatch(sqlSessionFactory, mybatisLog, entityList, DEFAULT_BATCH_SIZE,
                 (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
     }
 
@@ -451,8 +456,8 @@ public abstract class AbstractBaseService<T extends BaseModel>
     }
 
     @Override
-    public SqlSessionTemplate getSqlSession() {
-        return sqlSessionTemplate;
+    public SqlSession getSqlSession() {
+        return sqlSession;
     }
 
     @Override
@@ -492,7 +497,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
         if (baseMapper == null) {
             synchronized (baseMapperLock) {
                 if (baseMapper == null) {
-                    baseMapper = BaseMapperRegistry.getBaseMapper(sqlSessionTemplate, getModelClass());
+                    baseMapper = BaseMapperRegistry.getBaseMapper(sqlSession, getModelClass());
                 }
             }
         }
@@ -501,7 +506,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
 
     @Override
     public <AT extends BaseModel> BaseMapper<AT> getBaseMapper(Class<AT> modelClass) {
-        return BaseMapperRegistry.getBaseMapper(sqlSessionTemplate, modelClass);
+        return BaseMapperRegistry.getBaseMapper(sqlSession, modelClass);
     }
 
     @Override
