@@ -36,8 +36,8 @@
         <knife4j.version>4.4.0</knife4j.version>
         <lombok.version>1.18.34</lombok.version>
         <minio.version>8.5.4</minio.version>
-        <mysql.version>8.0.33</mysql.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mysql-connector-j.version>8.3.0</mysql-connector-j.version>
     </properties>
 
     <dependencies>
@@ -114,7 +114,7 @@
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
-                <version>${mysql.version}</version>
+                <version>${mysql-connector-j.version}</version>
                 <scope>runtime</scope>
             </dependency>
             <dependency>
