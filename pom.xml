@@ -42,6 +42,7 @@
         <minio.version>8.5.4</minio.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <mysql-connector-j.version>8.3.0</mysql-connector-j.version>
+        <swagger-annotations-jakarta.version>2.2.19</swagger-annotations-jakarta.version>
     </properties>
 
     <dependencies>
@@ -99,6 +100,16 @@
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations-jakarta</artifactId>
+                <version>${swagger-annotations-jakarta.version}</version>
             </dependency>
 
             <!--[scope provided]-->
