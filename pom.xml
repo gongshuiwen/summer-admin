@@ -32,7 +32,7 @@
         <project.version>1.0-SNAPSHOT</project.version>
 
         <!--[versions of dependencies]-->
-        <common-pool2.version>2.12.0</common-pool2.version>
+        <commons-pool2.version>2.12.0</commons-pool2.version>
         <knife4j.version>4.4.0</knife4j.version>
         <lombok.version>1.18.34</lombok.version>
         <minio.version>8.5.4</minio.version>
