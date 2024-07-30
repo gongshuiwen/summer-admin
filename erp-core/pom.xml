@@ -12,15 +12,6 @@
 
     <artifactId>erp-core</artifactId>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--[versions of dependencies]-->
-        <swagger-annotations-jakarta.version>2.2.19</swagger-annotations-jakarta.version>
-        <byte-buddy.version>1.14.17</byte-buddy.version>
-    </properties>
-
     <dependencies>
         <!--[spring boot starters]-->
         <dependency>
