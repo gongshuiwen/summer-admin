@@ -6,7 +6,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.apache.ibatis.session.Configuration;
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.session.SqlSession;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,15 +22,15 @@ public final class BaseMapperRegistry {
     private BaseMapperRegistry() {
     }
 
-    public static <T extends BaseModel> BaseMapper<T> getBaseMapper(SqlSessionTemplate sqlSessionTemplate, Class<T> modelClass) {
-        Configuration configuration = sqlSessionTemplate.getConfiguration();
+    public static <T extends BaseModel> BaseMapper<T> getBaseMapper(SqlSession sqlSession, Class<T> modelClass) {
+        Configuration configuration = sqlSession.getConfiguration();
         Class<BaseMapper<T>> mapperInterface = getMapperInterface(modelClass);
 
         // add mapper to mybatis configuration
         if (!configuration.hasMapper(mapperInterface))
             configuration.addMapper(mapperInterface);
 
-        return sqlSessionTemplate.getMapper(mapperInterface);
+        return sqlSession.getMapper(mapperInterface);
     }
 
     @SuppressWarnings("unchecked")
