@@ -81,11 +81,6 @@
                 <artifactId>erp-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.hzboiler</groupId>
-                <artifactId>erp-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <!--[spring boot starters]-->
             <dependency>
