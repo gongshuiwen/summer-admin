@@ -72,7 +72,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hzboiler.erp</groupId>
+                <groupId>com.hzboiler</groupId>
                 <artifactId>erp-module-file</artifactId>
                 <version>${project.version}</version>
             </dependency>
