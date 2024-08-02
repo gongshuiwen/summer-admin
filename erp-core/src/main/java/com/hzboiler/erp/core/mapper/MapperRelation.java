@@ -1,7 +1,5 @@
 package com.hzboiler.erp.core.mapper;
 
-import com.hzboiler.erp.core.model.BaseModel;
-
 import java.lang.annotation.*;
 
 /**
@@ -16,9 +14,9 @@ public @interface MapperRelation {
 
     String field1();
 
-    Class<? extends BaseModel> class1();
+    Class<?> class1();
 
     String field2();
 
-    Class<? extends BaseModel> class2();
+    Class<?> class2();
 }
