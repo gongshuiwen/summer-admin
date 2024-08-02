@@ -1,6 +1,5 @@
 package com.hzboiler.erp.core.mapper;
 
-import com.hzboiler.erp.core.model.BaseModel;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -16,13 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class BaseMapperRegistry {
 
+    // cache mapper interface, key: model class, value: mapper interface
     private static final Map<Class<?>, Class<?>> baseMapperInterfaceCache = new ConcurrentHashMap<>();
 
     // prevent external instantiation
     private BaseMapperRegistry() {
     }
 
-    public static <T extends BaseModel> BaseMapper<T> getBaseMapper(SqlSession sqlSession, Class<T> modelClass) {
+    public static <T> BaseMapper<T> getBaseMapper(SqlSession sqlSession, Class<T> modelClass) {
         Configuration configuration = sqlSession.getConfiguration();
         Class<BaseMapper<T>> mapperInterface = getMapperInterface(modelClass);
 
@@ -34,7 +34,7 @@ public final class BaseMapperRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends BaseModel> Class<BaseMapper<T>> getMapperInterface(Class<T> modelClass) {
+    private static <T> Class<BaseMapper<T>> getMapperInterface(Class<T> modelClass) {
         return (Class<BaseMapper<T>>) baseMapperInterfaceCache.computeIfAbsent(modelClass, BaseMapperRegistry::buildMapperInterface);
     }
 
