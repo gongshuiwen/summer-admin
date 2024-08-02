@@ -5,7 +5,6 @@ import com.hzboiler.erp.core.protocal.Result;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -54,9 +53,7 @@ public final class GlobalExceptionHandler {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         Map<String, String> errors = new HashMap<>();
         for (ConstraintViolation<?> violation : violations) {
-            String fieldName = violation.getPropertyPath() instanceof PathImpl path
-                    ? path.getLeafNode().getName()
-                    : violation.getPropertyPath().toString();
+            String fieldName = violation.getPropertyPath().toString();
             errors.put(fieldName, violation.getMessage());
         }
         return Result.error(Error.builder(ERROR_INVALID_ARGUMENTS).details(errors).build());
