@@ -1,8 +1,10 @@
 package com.hzboiler.erp.core.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hzboiler.erp.core.model.Mock1;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -13,7 +15,17 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
+@SpringBootTest
 class TestBaseMapperRegistry {
+
+    @Autowired
+    SqlSession sqlSession;
+
+    @Test
+    void testGetBaseMapper() {
+        BaseMapper<Mock1> mapper = BaseMapperRegistry.getBaseMapper(sqlSession, Mock1.class);
+        assertNotNull(mapper);
+    }
 
     @Test
     void testBuildMapperInterface() throws ClassNotFoundException {
