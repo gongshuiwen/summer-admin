@@ -41,6 +41,7 @@
         <lombok.version>1.18.34</lombok.version>
         <minio.version>8.5.4</minio.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <mysql-connector-j.version>8.3.0</mysql-connector-j.version>
         <swagger-annotations-jakarta.version>2.2.19</swagger-annotations-jakarta.version>
     </properties>
@@ -105,6 +106,16 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus</artifactId>
                 <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot-autoconfigure</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
