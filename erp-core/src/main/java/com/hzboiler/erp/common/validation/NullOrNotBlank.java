@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.validation;
+package com.hzboiler.erp.common.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

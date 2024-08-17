@@ -1,12 +1,12 @@
 package com.hzboiler.erp.core.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.hzboiler.erp.common.validation.CreateValidationGroup;
+import com.hzboiler.erp.common.validation.UpdateValidationGroup;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.One2Many;
 import com.hzboiler.erp.core.field.annotations.InverseField;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
-import com.hzboiler.erp.core.validation.CreateValidationGroup;
-import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Null;
 import lombok.Getter;

@@ -3,13 +3,13 @@ package com.hzboiler.erp.module.base.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hzboiler.erp.common.validation.CreateValidationGroup;
+import com.hzboiler.erp.common.validation.NullOrNotBlank;
 import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
 import com.hzboiler.erp.core.jackson2.AllowedForAdmin;
 import com.hzboiler.erp.core.model.BaseUser;
-import com.hzboiler.erp.core.validation.CreateValidationGroup;
-import com.hzboiler.erp.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -82,7 +82,6 @@ public class User extends BaseUser {
     @TableField(exist = false)
     private Many2Many<Role> roles;
 
-    @Override
     @JsonIgnore
     public boolean isEnabled() {
         return status == 1;

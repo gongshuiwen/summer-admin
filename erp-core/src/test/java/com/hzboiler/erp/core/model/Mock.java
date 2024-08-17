@@ -1,9 +1,9 @@
 package com.hzboiler.erp.core.model;
 
+import com.hzboiler.erp.common.validation.CreateValidationGroup;
+import com.hzboiler.erp.common.validation.NullOrNotBlank;
+import com.hzboiler.erp.common.validation.UpdateValidationGroup;
 import com.hzboiler.erp.core.field.annotations.ReadOnly;
-import com.hzboiler.erp.core.validation.CreateValidationGroup;
-import com.hzboiler.erp.core.validation.NullOrNotBlank;
-import com.hzboiler.erp.core.validation.UpdateValidationGroup;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

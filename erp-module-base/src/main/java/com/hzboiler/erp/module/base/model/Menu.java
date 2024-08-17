@@ -1,8 +1,8 @@
 package com.hzboiler.erp.module.base.model;
 
+import com.hzboiler.erp.common.validation.CreateValidationGroup;
+import com.hzboiler.erp.common.validation.NullOrNotBlank;
 import com.hzboiler.erp.core.model.BaseTreeModel;
-import com.hzboiler.erp.core.validation.CreateValidationGroup;
-import com.hzboiler.erp.core.validation.NullOrNotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
