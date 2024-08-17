@@ -1,8 +1,8 @@
 package com.hzboiler.erp.core.field.util;
 
+import com.hzboiler.erp.common.util.ReflectUtil;
 import com.hzboiler.erp.core.field.annotations.ReadOnly;
 import com.hzboiler.erp.core.model.BaseModel;
-import com.hzboiler.erp.core.util.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.Map;

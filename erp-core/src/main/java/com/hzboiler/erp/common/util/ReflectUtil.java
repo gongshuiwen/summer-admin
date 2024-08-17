@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.util;
+package com.hzboiler.erp.common.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

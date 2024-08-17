@@ -1,7 +1,7 @@
 package com.hzboiler.erp.core.field.util;
 
+import com.hzboiler.erp.common.util.ReflectUtil;
 import com.hzboiler.erp.core.model.BaseModel;
-import com.hzboiler.erp.core.util.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public final class FieldUtil {
      * Check if the field exists in the modelClass of {@link BaseModel}, include inherited fields.
      *
      * @param modelClass the model class
-     * @param fieldName the field name
+     * @param fieldName  the field name
      * @return true if the field exists, otherwise false
      */
     public static boolean checkFieldExists(Class<? extends BaseModel> modelClass, String fieldName) {
