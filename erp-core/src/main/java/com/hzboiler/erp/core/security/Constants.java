@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 /**
  * @author gongshuiwen
  */
-public class Constants {
+public final class Constants {
 
     public static final String CODE_SYS_ADMIN = "SYS_ADMIN";
     public static final String CODE_BASE_USER = "BASE_USER";
