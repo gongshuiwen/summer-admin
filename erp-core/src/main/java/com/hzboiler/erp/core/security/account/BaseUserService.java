@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.security;
+package com.hzboiler.erp.core.security.account;
 
 import com.hzboiler.erp.core.model.BaseUser;
 import org.springframework.security.core.userdetails.UserDetailsService;

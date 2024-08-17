@@ -5,7 +5,7 @@ import com.hzboiler.erp.core.context.supplier.GrantedAuthoritiesServiceSupplier;
 import com.hzboiler.erp.core.context.supplier.HttpServletRequestSupplier;
 import com.hzboiler.erp.core.context.supplier.SqlSessionSupplier;
 import com.hzboiler.erp.core.model.BaseUser;
-import com.hzboiler.erp.core.security.BaseUserService;
+import com.hzboiler.erp.core.security.account.BaseUserService;
 import com.hzboiler.erp.core.security.authorization.GrantedAuthoritiesService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
