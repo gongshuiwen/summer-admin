@@ -1,6 +1,5 @@
-package com.hzboiler.erp.core.security;
+package com.hzboiler.erp.core.security.authorization;
 
-import com.hzboiler.erp.core.security.authorization.SimpleGrantedAuthorityPool;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;
