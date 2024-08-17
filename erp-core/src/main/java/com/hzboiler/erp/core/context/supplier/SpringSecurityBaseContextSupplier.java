@@ -2,7 +2,7 @@ package com.hzboiler.erp.core.context.supplier;
 
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextImpl;
-import com.hzboiler.erp.core.model.BaseUser;
+import com.hzboiler.erp.core.security.account.BaseUser;
 import com.hzboiler.erp.core.util.SpringContextUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

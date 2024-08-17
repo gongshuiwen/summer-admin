@@ -1,6 +1,5 @@
 package com.hzboiler.erp.core.security.account;
 
-import com.hzboiler.erp.core.model.BaseUser;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

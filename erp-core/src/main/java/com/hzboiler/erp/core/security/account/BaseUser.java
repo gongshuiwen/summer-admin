@@ -1,7 +1,8 @@
-package com.hzboiler.erp.core.model;
+package com.hzboiler.erp.core.security.account;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hzboiler.erp.core.model.BaseModel;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

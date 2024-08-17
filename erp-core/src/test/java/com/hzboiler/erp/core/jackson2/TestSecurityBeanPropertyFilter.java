@@ -8,7 +8,7 @@ import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.context.BaseContextImpl;
 import com.hzboiler.erp.core.model.BaseModel;
-import com.hzboiler.erp.core.model.BaseUser;
+import com.hzboiler.erp.core.security.account.BaseUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

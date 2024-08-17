@@ -1,6 +1,6 @@
 package com.hzboiler.erp.core.context;
 
-import com.hzboiler.erp.core.model.BaseUser;
+import com.hzboiler.erp.core.security.account.BaseUser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.security.core.GrantedAuthority;

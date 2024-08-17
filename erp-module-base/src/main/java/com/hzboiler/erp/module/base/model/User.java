@@ -9,7 +9,7 @@ import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
 import com.hzboiler.erp.core.jackson2.AllowedForAdmin;
-import com.hzboiler.erp.core.model.BaseUser;
+import com.hzboiler.erp.core.security.account.BaseUser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
