@@ -1,7 +1,6 @@
 package com.hzboiler.erp.module.base.service;
 
 import com.hzboiler.erp.module.base.model.Permission;
-import com.hzboiler.erp.module.base.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
