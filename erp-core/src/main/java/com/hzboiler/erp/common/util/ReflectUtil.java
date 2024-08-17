@@ -11,7 +11,11 @@ import java.util.List;
  *
  * @author gongshuiwen
  */
-public abstract class ReflectUtil {
+public final class ReflectUtil {
+
+    // prevent instantiation
+    private ReflectUtil() {
+    }
 
     /**
      * Get all declared fields (include inherited) of class
