@@ -1,6 +1,6 @@
 package com.hzboiler.erp.core.context;
 
-import com.hzboiler.erp.core.context.support.BaseContextSupplier;
+import com.hzboiler.erp.core.context.supplier.BaseContextSupplier;
 
 /**
  * A static utility class to get the {@link BaseContext} instance of current request environment,

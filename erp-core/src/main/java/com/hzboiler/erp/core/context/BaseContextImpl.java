@@ -1,9 +1,9 @@
 package com.hzboiler.erp.core.context;
 
-import com.hzboiler.erp.core.context.support.BaseUserServiceSupplier;
-import com.hzboiler.erp.core.context.support.GrantedAuthoritiesServiceSupplier;
-import com.hzboiler.erp.core.context.support.HttpServletRequestSupplier;
-import com.hzboiler.erp.core.context.support.SqlSessionSupplier;
+import com.hzboiler.erp.core.context.supplier.BaseUserServiceSupplier;
+import com.hzboiler.erp.core.context.supplier.GrantedAuthoritiesServiceSupplier;
+import com.hzboiler.erp.core.context.supplier.HttpServletRequestSupplier;
+import com.hzboiler.erp.core.context.supplier.SqlSessionSupplier;
 import com.hzboiler.erp.core.model.BaseUser;
 import com.hzboiler.erp.core.security.BaseUserService;
 import com.hzboiler.erp.core.security.authorization.GrantedAuthoritiesService;

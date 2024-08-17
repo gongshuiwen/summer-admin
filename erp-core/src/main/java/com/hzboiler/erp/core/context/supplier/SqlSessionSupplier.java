@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.context.support;
+package com.hzboiler.erp.core.context.supplier;
 
 import org.apache.ibatis.session.SqlSession;
 
