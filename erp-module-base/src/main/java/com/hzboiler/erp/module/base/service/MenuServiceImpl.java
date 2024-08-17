@@ -13,6 +13,7 @@ import java.util.List;
 public class MenuServiceImpl extends AbstractBaseTreeService<Menu> implements MenuService {
 
     @Public
+    @Override
     public List<Menu> getMenusTree() {
         return buildTree(lambdaQuery().orderByAsc(Menu::getOrderNum).list());
     }
