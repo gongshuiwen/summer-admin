@@ -68,7 +68,7 @@ public class BaseContextImpl implements BaseContext {
         if (authorities == null) {
             GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
             // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
-            authorities =  Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getUserId()));
+            authorities = Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getUserId()));
         }
         return authorities;
     }
