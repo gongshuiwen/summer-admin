@@ -6,7 +6,7 @@ import com.hzboiler.erp.core.context.support.HttpServletRequestSupplier;
 import com.hzboiler.erp.core.context.support.SqlSessionSupplier;
 import com.hzboiler.erp.core.model.BaseUser;
 import com.hzboiler.erp.core.security.BaseUserService;
-import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
+import com.hzboiler.erp.core.security.authorization.GrantedAuthoritiesService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;

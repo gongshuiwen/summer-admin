@@ -1,6 +1,6 @@
 package com.hzboiler.erp.core.context.support;
 
-import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
+import com.hzboiler.erp.core.security.authorization.GrantedAuthoritiesService;
 
 import java.util.function.Supplier;
 

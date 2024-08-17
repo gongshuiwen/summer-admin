@@ -1,4 +1,4 @@
-package com.hzboiler.erp.core.security;
+package com.hzboiler.erp.core.security.authorization;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
