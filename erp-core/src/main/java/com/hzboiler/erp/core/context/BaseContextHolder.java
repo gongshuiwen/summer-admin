@@ -3,7 +3,7 @@ package com.hzboiler.erp.core.context;
 import com.hzboiler.erp.core.context.support.BaseContextSupplier;
 
 /**
- * An utility class to get the {@link BaseContext} instance of current request environment,
+ * A static utility class to get the {@link BaseContext} instance of current request environment,
  * which is lazily initialized and stored in {@link ThreadLocal}.
  *
  * @author gongshuiwen
