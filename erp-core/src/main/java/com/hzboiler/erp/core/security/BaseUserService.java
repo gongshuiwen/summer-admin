@@ -1,16 +1,21 @@
 package com.hzboiler.erp.core.security;
 
 import com.hzboiler.erp.core.model.BaseUser;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * @author gongshuiwen
  */
-public interface BaseUserService {
+public interface BaseUserService extends UserDetailsService {
 
     /**
-     * Get {@link BaseUser} by user id.
+     * Load {@link BaseUser} by user id.
      * @param userId id of user
      * @return {@link BaseUser}
      */
-    BaseUser selectById(Long userId);
+    BaseUser loadUserByUserId(Long userId);
+
+    @Override
+    BaseUser loadUserByUsername(String username) throws UsernameNotFoundException;
 }

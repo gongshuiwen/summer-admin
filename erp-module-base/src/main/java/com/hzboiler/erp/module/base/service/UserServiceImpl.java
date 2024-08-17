@@ -33,6 +33,12 @@ public class UserServiceImpl extends AbstractBaseService<User> implements UserSe
     PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
+    public User loadUserByUserId(Long userId) {
+        return selectById(userId);
+    }
+
+    @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         // bypass model access check by using mapper
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();

@@ -58,7 +58,7 @@ public class BaseContextImpl implements BaseContext {
 
         // Get user info by BaseUserService
         BaseUserService userService = BaseUserServiceSupplier.getBaseUserService();
-        user = userService.selectById(userId);
+        user = userService.loadUserByUserId(userId);
         user.setAuthorities(getAuthorities());
         return (T) user;
     }
