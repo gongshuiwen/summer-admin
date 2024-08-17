@@ -1,7 +1,7 @@
 package com.hzboiler.erp.module.base.security;
 
-import com.hzboiler.erp.core.security.GrantedAuthoritiesService;
 import com.hzboiler.erp.core.security.SimpleGrantedAuthorityPool;
+import com.hzboiler.erp.core.security.authorization.GrantedAuthoritiesService;
 import com.hzboiler.erp.module.base.model.Permission;
 import com.hzboiler.erp.module.base.model.Role;
 import com.hzboiler.erp.module.base.service.PermissionService;
