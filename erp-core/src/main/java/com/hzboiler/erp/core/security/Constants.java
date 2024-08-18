@@ -8,10 +8,11 @@ import org.springframework.security.core.GrantedAuthority;
  */
 public final class Constants {
 
+    public static final String ROLE_PREFIX = "ROLE_";
+
     public static final String CODE_SYS_ADMIN = "SYS_ADMIN";
     public static final String CODE_BASE_USER = "BASE_USER";
 
-    public static final String ROLE_PREFIX = "ROLE_";
     public static final String ROLE_SYS_ADMIN = ROLE_PREFIX + CODE_SYS_ADMIN;
     public static final String ROLE_BASE_USER = ROLE_PREFIX + CODE_BASE_USER;
 
@@ -29,5 +30,6 @@ public final class Constants {
     public static final String AUTHORITY_DELETE_CODE_PREFIX = "D:";
 
     // prevent instantiation
-    private Constants() {}
+    private Constants() {
+    }
 }
