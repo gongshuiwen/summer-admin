@@ -8,7 +8,7 @@ import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.security.Constants;
 import com.hzboiler.erp.core.security.GrantedAuthorityCheckUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.hzboiler.erp.core.security.authorization.SimpleGrantedAuthority;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -44,7 +44,7 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
 
     private boolean checkAllowedForAdmin(AllowedForAdmin allowedForAdminAnnotation) {
         if (allowedForAdminAnnotation != null) {
-            return GrantedAuthorityCheckUtils.contains(new SimpleGrantedAuthority(Constants.ROLE_SYS_ADMIN));
+            return GrantedAuthorityCheckUtils.contains(SimpleGrantedAuthority.of(Constants.ROLE_SYS_ADMIN));
         }
         return true;
     }
@@ -55,7 +55,7 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
                 && allowedForRolesAnnotation.value().length > 0) {
             return GrantedAuthorityCheckUtils.containsAny(
                     Arrays.stream(allowedForRolesAnnotation.value())
-                            .map(role -> new SimpleGrantedAuthority(Constants.ROLE_PREFIX + role))
+                            .map(role -> SimpleGrantedAuthority.of(Constants.ROLE_PREFIX + role))
                             .toList());
         }
         return true;
