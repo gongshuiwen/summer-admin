@@ -3,7 +3,7 @@ package com.hzboiler.erp.core.security.model;
 import com.hzboiler.erp.core.context.BaseContext;
 import com.hzboiler.erp.core.context.BaseContextHolder;
 import com.hzboiler.erp.core.model.BaseModel;
-import com.hzboiler.erp.core.security.authorization.SimpleGrantedAuthorityPool;
+import com.hzboiler.erp.core.security.authorization.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
@@ -85,6 +85,6 @@ public final class ModelAccessCheckUtil {
     }
 
     private static GrantedAuthority getAuthority(Class<? extends BaseModel> modelClass, ModelAccessType authority) {
-        return SimpleGrantedAuthorityPool.getAuthority(authority.getPrefix() + modelClass.getSimpleName());
+        return SimpleGrantedAuthority.of(authority.getPrefix() + modelClass.getSimpleName());
     }
 }

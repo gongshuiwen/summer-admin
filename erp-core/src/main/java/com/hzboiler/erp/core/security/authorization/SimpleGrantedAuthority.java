@@ -3,6 +3,8 @@ package com.hzboiler.erp.core.security.authorization;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Basic concrete implementation of a {@link GrantedAuthority}.
@@ -17,12 +19,22 @@ public final class SimpleGrantedAuthority implements GrantedAuthority {
     @Serial
     private static final long serialVersionUID = 1234567890L;
 
+    // pool
+    private static final Map<String, SimpleGrantedAuthority> pool = new ConcurrentHashMap<>();
+
     private final String role;
 
-    public SimpleGrantedAuthority(String role) {
+    private SimpleGrantedAuthority(String role) {
         if (role == null || role.isBlank())
             throw new IllegalArgumentException("Role string cannot be null or blank");
         this.role = role;
+    }
+
+    public static SimpleGrantedAuthority of(String role) {
+        // TODO: jmh to different implementation
+        // return pool.computeIfAbsent(authority, k -> new SimpleGrantedAuthority(k))
+        // return pool.computeIfAbsent(authority, k -> new SimpleGrantedAuthority(k.intern()))
+        return pool.computeIfAbsent(role.intern(), SimpleGrantedAuthority::new);
     }
 
     @Override
