@@ -5,23 +5,29 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hzboiler.erp.common.validation.CreateValidationGroup;
 import com.hzboiler.erp.common.validation.NullOrNotBlank;
+import com.hzboiler.erp.core.context.supplier.GrantedAuthoritiesServiceSupplier;
 import com.hzboiler.erp.core.field.Many2Many;
 import com.hzboiler.erp.core.field.Many2One;
 import com.hzboiler.erp.core.field.annotations.OnDelete;
 import com.hzboiler.erp.core.jackson2.AllowedForAdmin;
+import com.hzboiler.erp.core.model.BaseModel;
 import com.hzboiler.erp.core.security.account.BaseUser;
+import com.hzboiler.erp.core.security.authorization.GrantedAuthoritiesService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Set;
 
 @Getter
 @Setter
 @Schema(description = "用户信息")
-public class User extends BaseUser {
+public class User extends BaseModel implements BaseUser {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -81,6 +87,35 @@ public class User extends BaseUser {
     @Schema(description = "角色")
     @TableField(exist = false)
     private Many2Many<Role> roles;
+
+    @TableField(exist = false)
+    private Set<? extends GrantedAuthority> authorities;
+
+    @Override
+    public Set<? extends GrantedAuthority> getAuthorities() {
+        if (authorities == null) {
+            GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
+
+            // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
+            authorities = Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getId()));
+        }
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
 
     @JsonIgnore
     public boolean isEnabled() {

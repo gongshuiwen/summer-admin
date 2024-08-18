@@ -1,5 +1,6 @@
 package com.hzboiler.erp.core.jackson2;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.hzboiler.erp.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
@@ -64,7 +66,21 @@ class TestSecurityBeanPropertyFilter {
         }
     }
 
-    static class User extends BaseUser {
+    @Setter
+    static class User extends BaseModel implements BaseUser {
+
+        @TableField(exist = false)
+        private Set<? extends GrantedAuthority> authorities;
+
+        public User(Long id, Set<GrantedAuthority> authorities) {
+            setId(id);
+            setAuthorities(authorities);
+        }
+
+        @Override
+        public Set<? extends GrantedAuthority> getAuthorities() {
+            return Objects.requireNonNullElseGet(authorities, Set::of);
+        }
 
         @Override
         public String getPassword() {
@@ -76,9 +92,24 @@ class TestSecurityBeanPropertyFilter {
             return "";
         }
 
-        public User(Long id, Set<GrantedAuthority> authorities) {
-            setId(id);
-            setAuthorities(authorities);
+        @Override
+        public boolean isAccountNonExpired() {
+            return false;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return false;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return false;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return false;
         }
     }
 

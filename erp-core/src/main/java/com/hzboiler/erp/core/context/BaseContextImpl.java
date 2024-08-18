@@ -59,16 +59,20 @@ public class BaseContextImpl implements BaseContext {
         // Get user info by BaseUserService
         BaseUserService userService = BaseUserServiceSupplier.getBaseUserService();
         user = userService.loadUserByUserId(userId);
-        user.setAuthorities(getAuthorities());
         return (T) user;
     }
 
     @Override
     public Set<? extends GrantedAuthority> getAuthorities() {
         if (authorities == null) {
-            GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
-            // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
-            authorities = Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getUserId()));
+            user = getUser();
+            if (user != null) {
+                user.getAuthorities();
+            } else {
+                GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
+                // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
+                authorities = Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getUserId()));
+            }
         }
         return authorities;
     }
