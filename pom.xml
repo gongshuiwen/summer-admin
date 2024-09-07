@@ -11,17 +11,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.hzboiler</groupId>
-    <artifactId>erp</artifactId>
+    <groupId>io.summernova</groupId>
+        <artifactId>summer-admin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>erp-core</module>
-        <module>erp-module-base</module>
-        <module>erp-module-file</module>
-        <module>erp-server</module>
-        <module>erp-test</module>
+        <module>admin-core</module>
+        <module>admin-test</module>
+        <module>admin-server</module>
+        <module>module-base</module>
+        <module>module-file</module>
     </modules>
 
     <properties>
@@ -60,28 +60,23 @@
         <dependencies>
             <!--[project modules]-->
             <dependency>
-                <groupId>com.hzboiler</groupId>
-                <artifactId>erp</artifactId>
+                <groupId>io.summernova</groupId>
+                <artifactId>admin-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hzboiler</groupId>
-                <artifactId>erp-core</artifactId>
+                <groupId>io.summernova</groupId>
+                <artifactId>admin-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hzboiler</groupId>
-                <artifactId>erp-module-base</artifactId>
+                <groupId>io.summernova</groupId>
+                <artifactId>module-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hzboiler</groupId>
-                <artifactId>erp-module-file</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.hzboiler</groupId>
-                <artifactId>erp-test</artifactId>
+                <groupId>io.summernova</groupId>
+                <artifactId>module-file</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

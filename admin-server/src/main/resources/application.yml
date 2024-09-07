@@ -1,0 +1,42 @@
+server:
+  servlet:
+    session:
+      timeout: 604800 # 7 days
+spring:
+  application:
+    name: erp
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+    banner-mode: off
+  mvc:
+    servlet:
+      load-on-startup: 1
+  session:
+    redis:
+      repository-type: indexed
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: AUTO
+    banner: false
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: io.summernova
+  swagger-ui:
+    enabled: true
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
