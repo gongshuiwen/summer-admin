@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author gongshuiwen
@@ -23,7 +24,10 @@ public class SecurityContextGrantedAuthoritiesService implements GrantedAuthorit
         if (authentication != null && authentication.isAuthenticated() ) {
             Collection<? extends GrantedAuthority> authorities1 = authentication.getAuthorities();
             if (authorities1 != null && !authorities1.isEmpty()) {
-                return Set.copyOf(authorities1);
+                return authorities1.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .map(SimpleGrantedAuthority::of)
+                        .collect(Collectors.toUnmodifiableSet());
             }
         }
 
