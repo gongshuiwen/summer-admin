@@ -6,5 +6,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author gongshuiwen
  */
 @SpringBootApplication
-public class Application {
+public class TestApplication {
 }
