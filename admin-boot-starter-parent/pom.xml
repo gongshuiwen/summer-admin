@@ -19,6 +19,10 @@
             <groupId>io.summernova</groupId>
             <artifactId>module-base</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.summernova</groupId>
+            <artifactId>module-file</artifactId>
+        </dependency>
 
         <!--[spring boot starters]-->
         <dependency>
