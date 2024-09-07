@@ -13,6 +13,7 @@
     <artifactId>admin-core</artifactId>
 
     <dependencies>
+        <!--[project dependencies]-->
         <dependency>
             <groupId>io.summernova</groupId>
             <artifactId>admin-common</artifactId>
