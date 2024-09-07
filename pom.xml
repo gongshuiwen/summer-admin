@@ -12,11 +12,12 @@
     </parent>
 
     <groupId>io.summernova</groupId>
-        <artifactId>summer-admin</artifactId>
+    <artifactId>summer-admin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
+        <module>admin-boot-starter-parent</module>
         <module>admin-common</module>
         <module>admin-core</module>
         <module>admin-test</module>
