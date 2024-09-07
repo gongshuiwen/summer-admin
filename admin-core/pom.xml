@@ -74,6 +74,11 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
         </dependency>
+        <dependency> <!-- To fix 'Byte Buddy Agent could not be loaded' error from Mockito when use module-info.java -->
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!--[scope test]-->
         <dependency>
