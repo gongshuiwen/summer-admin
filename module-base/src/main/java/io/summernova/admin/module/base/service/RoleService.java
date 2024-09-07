@@ -6,6 +6,9 @@ import io.summernova.admin.module.base.model.Role;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author gongshuiwen
+ */
 public interface RoleService extends BaseService<Role> {
 
     Set<Role> getRolesByUserId(Long userId);

@@ -14,6 +14,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author gongshuiwen
+ */
 @Slf4j
 @Service
 public class PermissionServiceImpl extends AbstractBaseService<Permission> implements PermissionService {

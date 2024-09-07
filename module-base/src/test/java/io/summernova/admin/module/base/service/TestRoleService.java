@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author gongshuiwen
+ */
 @SpringBootTest
 @Sql(scripts = {
         "/sql/ddl/role.sql",

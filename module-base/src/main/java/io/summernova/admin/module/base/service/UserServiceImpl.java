@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 
 import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
 
+/**
+ * @author gongshuiwen
+ */
 @Slf4j
 @Service
 public class UserServiceImpl extends AbstractBaseService<User> implements UserService {

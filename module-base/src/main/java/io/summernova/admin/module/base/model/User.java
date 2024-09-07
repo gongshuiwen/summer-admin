@@ -24,6 +24,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @Setter
 @Schema(description = "用户信息")

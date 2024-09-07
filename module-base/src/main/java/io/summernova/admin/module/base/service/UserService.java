@@ -5,6 +5,9 @@ import io.summernova.admin.core.service.BaseService;
 import io.summernova.admin.module.base.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+/**
+ * @author gongshuiwen
+ */
 public interface UserService extends BaseService<User>, BaseUserService {
 
     @Override

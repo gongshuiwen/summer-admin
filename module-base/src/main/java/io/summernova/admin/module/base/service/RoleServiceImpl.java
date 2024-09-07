@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 
 import static io.summernova.admin.core.security.Constants.CODE_BASE_USER;
 
+/**
+ * @author gongshuiwen
+ */
 @Slf4j
 @Service
 public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleService {

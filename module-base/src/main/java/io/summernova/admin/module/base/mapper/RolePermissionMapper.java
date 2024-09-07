@@ -6,6 +6,9 @@ import io.summernova.admin.module.base.model.Permission;
 import io.summernova.admin.module.base.model.Role;
 import org.apache.ibatis.annotations.Mapper;
 
+/**
+ * @author gongshuiwen
+ */
 @Mapper
 @MapperRelation(table = "role_permission",
         field1 = "role_id", class1 = Role.class,

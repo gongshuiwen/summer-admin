@@ -5,6 +5,9 @@ import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.model.Parameter;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author gongshuiwen
+ */
 @Service
 public class ParameterServiceImpl extends AbstractBaseService<Parameter> implements ParameterService {
 

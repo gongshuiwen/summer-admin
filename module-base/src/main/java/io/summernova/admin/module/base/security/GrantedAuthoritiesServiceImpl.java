@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 
 import static io.summernova.admin.core.security.Constants.ROLE_PREFIX;
 
+/**
+ * @author gongshuiwen
+ */
 @Service
 @RequiredArgsConstructor
 @Profile("!test")

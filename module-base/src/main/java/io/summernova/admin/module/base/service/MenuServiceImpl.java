@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author gongshuiwen
+ */
 @Slf4j
 @Service
 public class MenuServiceImpl extends AbstractBaseTreeService<Menu> implements MenuService {

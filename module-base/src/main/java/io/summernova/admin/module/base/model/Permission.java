@@ -11,6 +11,9 @@ import lombok.Setter;
 
 import java.io.Serial;
 
+/**
+ * @author gongshuiwen
+ */
 @Getter
 @Setter
 @Schema(description = "权限信息")

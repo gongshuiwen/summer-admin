@@ -5,6 +5,9 @@ import io.summernova.admin.module.base.model.Permission;
 
 import java.util.Set;
 
+/**
+ * @author gongshuiwen
+ */
 public interface PermissionService extends BaseService<Permission> {
 
     Set<Permission> getPermissionsByRoleId(Long roleId);
