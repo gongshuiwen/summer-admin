@@ -1,6 +1,8 @@
 package io.summernova.admin.core.service;
 
 import io.summernova.admin.core.model.Mock;
+import org.springframework.stereotype.Service;
 
-public interface MockService extends BaseService<Mock> {
+@Service
+public class MockService extends AbstractBaseService<Mock> implements BaseService<Mock> {
 }
