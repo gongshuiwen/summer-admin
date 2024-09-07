@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>admin-common</module>
         <module>admin-core</module>
         <module>admin-test</module>
         <module>admin-server</module>
@@ -59,6 +60,11 @@
     <dependencyManagement>
         <dependencies>
             <!--[project modules]-->
+            <dependency>
+                <groupId>io.summernova</groupId>
+                <artifactId>admin-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.summernova</groupId>
                 <artifactId>admin-core</artifactId>

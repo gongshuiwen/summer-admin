@@ -13,14 +13,9 @@
     <artifactId>admin-core</artifactId>
 
     <dependencies>
-        <!--[scope compile: jakarta apis]-->
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
+            <groupId>io.summernova</groupId>
+            <artifactId>admin-common</artifactId>
         </dependency>
 
         <!--[scope compile: spring framework]-->
