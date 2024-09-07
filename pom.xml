@@ -21,9 +21,9 @@
         <module>admin-common</module>
         <module>admin-core</module>
         <module>admin-test</module>
-        <module>admin-server</module>
         <module>module-base</module>
         <module>module-file</module>
+        <module>server</module>
     </modules>
 
     <properties>

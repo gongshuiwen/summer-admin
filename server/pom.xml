@@ -10,5 +10,5 @@
         <relativePath>../admin-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>admin-server</artifactId>
+    <artifactId>server</artifactId>
 </project>

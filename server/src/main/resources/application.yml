@@ -4,7 +4,7 @@ server:
       timeout: 604800 # 7 days
 spring:
   application:
-    name: erp
+    name: summer-admin
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true
@@ -28,7 +28,7 @@ springdoc:
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
-      packages-to-scan: io.summernova
+      packages-to-scan: io.summernova.admin
   swagger-ui:
     enabled: true
 knife4j:

@@ -2,9 +2,9 @@
   <configuration default="false" name="Application(dev)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev" />
     <option name="HIDE_BANNER" value="true" />
-    <module name="admin-server" />
+    <module name="server" />
     <option name="SHORTEN_COMMAND_LINE" value="MANIFEST" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="io.summernova.admin.server.Application" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.summernova.admin.Application" />
     <option name="VM_PARAMETERS" value="-Dserver.port=18000 -Xms512m -Xmx512m" />
     <method v="2">
       <option name="Make" enabled="true" />
