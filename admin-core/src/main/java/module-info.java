@@ -44,9 +44,11 @@ module summernova.admin.core {
     // other
     requires static transitive lombok;
     requires transitive org.slf4j;
-    requires io.swagger.v3.oas.annotations;
     requires net.bytebuddy;
     requires net.bytebuddy.agent;
+
+    // automatic
+    requires io.swagger.v3.oas.annotations;
 
     // exports
     exports io.summernova.admin.core.config;
