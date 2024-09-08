@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @SpringBootTest
 @Sql(scripts = {
-        "/sql/ddl/role.sql",
-        "/sql/ddl/user.sql",
-        "/sql/ddl/user_role.sql",
+        "/io/summernova/admin/module/base/sql/ddl/role.sql",
+        "/io/summernova/admin/module/base/sql/ddl/user.sql",
+        "/io/summernova/admin/module/base/sql/ddl/user_role.sql",
         "/sql/test/data/role.sql",
         "/sql/test/data/user.sql",
         "/sql/test/data/user_role.sql",
