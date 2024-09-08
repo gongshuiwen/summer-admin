@@ -31,9 +31,11 @@ public final class SimpleGrantedAuthority implements GrantedAuthority {
     }
 
     public static SimpleGrantedAuthority of(String role) {
-        // TODO: jmh to different implementation
-        // return pool.computeIfAbsent(authority, k -> new SimpleGrantedAuthority(k))
-        // return pool.computeIfAbsent(authority, k -> new SimpleGrantedAuthority(k.intern()))
+        // there are some different implementations, should be tested by jmh
+        // return new SimpleGrantedAuthority(role);
+        // return new SimpleGrantedAuthority(role.intern());
+        // return pool.computeIfAbsent(role, k -> new SimpleGrantedAuthority(k))
+        // return pool.computeIfAbsent(role, k -> new SimpleGrantedAuthority(k.intern()))
         return pool.computeIfAbsent(role.intern(), SimpleGrantedAuthority::new);
     }
 
