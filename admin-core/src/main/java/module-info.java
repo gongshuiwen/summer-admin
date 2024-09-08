@@ -42,18 +42,23 @@ module summernova.admin.core {
     requires spring.security.web;
 
     // other
-    requires static lombok;
+    requires static transitive lombok;
+    requires transitive org.slf4j;
     requires io.swagger.v3.oas.annotations;
     requires net.bytebuddy;
     requires net.bytebuddy.agent;
-    requires org.slf4j;
 
     // exports
     exports io.summernova.admin.core.config;
+    exports io.summernova.admin.core.context;
+    exports io.summernova.admin.core.context.supplier;
     exports io.summernova.admin.core.controller;
     exports io.summernova.admin.core.exception;
     exports io.summernova.admin.core.field;
+    exports io.summernova.admin.core.field.annotations;
+    exports io.summernova.admin.core.jackson2;
     exports io.summernova.admin.core.mapper;
+    exports io.summernova.admin.core.method.annotations;
     exports io.summernova.admin.core.model;
     exports io.summernova.admin.core.protocal;
     exports io.summernova.admin.core.protocal.query;
