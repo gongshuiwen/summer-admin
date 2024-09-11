@@ -48,7 +48,7 @@ public final class Error {
         return new Builder(businessExceptionEnum);
     }
 
-    public static class Builder {
+    public final static class Builder {
 
         private final BusinessExceptionEnum businessExceptionEnum;
         private String message;
