@@ -1,7 +1,7 @@
 package io.summernova.admin.core.security.access;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.summernova.admin.core.protocal.Result;
+import io.summernova.admin.common.protocal.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -11,7 +11,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
 
 /**
  * @author gongshuiwen

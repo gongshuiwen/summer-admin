@@ -1,4 +1,4 @@
-package io.summernova.admin.core.exception;
+package io.summernova.admin.common.exception;
 
 import lombok.Getter;
 

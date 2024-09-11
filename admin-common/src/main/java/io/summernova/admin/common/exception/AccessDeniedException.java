@@ -1,4 +1,4 @@
-package io.summernova.admin.core.exception;
+package io.summernova.admin.common.exception;
 
 /**
  * Generic access denied exception to be thrown when access is denied.

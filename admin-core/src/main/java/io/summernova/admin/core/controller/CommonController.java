@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.summernova.admin.common.exception.BusinessException;
+import io.summernova.admin.common.protocal.Result;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.UpdateValidationGroup;
 import io.summernova.admin.core.context.BaseContextContainer;
-import io.summernova.admin.core.exception.BusinessException;
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.util.ReadOnlyUtil;
@@ -16,7 +17,6 @@ import io.summernova.admin.core.mapper.RelationMapper;
 import io.summernova.admin.core.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.method.util.MethodUtil;
 import io.summernova.admin.core.model.BaseModel;
-import io.summernova.admin.core.protocal.Result;
 import io.summernova.admin.core.protocal.query.Condition;
 import io.summernova.admin.core.protocal.query.OrderBys;
 import io.summernova.admin.core.service.BaseService;
@@ -43,7 +43,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
 
 /**
  * @author gongshuiwen

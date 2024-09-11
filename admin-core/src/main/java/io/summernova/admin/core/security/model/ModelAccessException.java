@@ -1,7 +1,7 @@
 package io.summernova.admin.core.security.model;
 
-import io.summernova.admin.core.exception.BusinessException;
-import io.summernova.admin.core.exception.CoreBusinessExceptionEnums;
+import io.summernova.admin.common.exception.BusinessException;
+import io.summernova.admin.common.exception.CoreBusinessExceptionEnums;
 import io.summernova.admin.core.model.BaseModel;
 
 /**

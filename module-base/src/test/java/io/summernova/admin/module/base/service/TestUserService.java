@@ -1,7 +1,7 @@
 package io.summernova.admin.module.base.service;
 
+import io.summernova.admin.common.exception.BusinessException;
 import io.summernova.admin.core.context.BaseContextHolder;
-import io.summernova.admin.core.exception.BusinessException;
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
 import io.summernova.admin.test.annotation.WithMockAdmin;

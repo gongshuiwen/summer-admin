@@ -1,6 +1,6 @@
-package io.summernova.admin.core.protocal;
+package io.summernova.admin.common.protocal;
 
-import io.summernova.admin.core.exception.BusinessExceptionEnum;
+import io.summernova.admin.common.exception.BusinessExceptionEnum;
 import lombok.Getter;
 
 import java.util.Objects;

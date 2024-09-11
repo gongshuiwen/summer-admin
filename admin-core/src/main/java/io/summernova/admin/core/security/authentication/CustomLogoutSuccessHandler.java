@@ -1,7 +1,7 @@
 package io.summernova.admin.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.summernova.admin.core.protocal.Result;
+import io.summernova.admin.common.protocal.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;

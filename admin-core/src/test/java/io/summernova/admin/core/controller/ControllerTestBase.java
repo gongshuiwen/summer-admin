@@ -1,7 +1,7 @@
 package io.summernova.admin.core.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.summernova.admin.core.exception.BusinessExceptionEnum;
+import io.summernova.admin.common.exception.BusinessExceptionEnum;
 import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_INVALID_ARGUMENTS;
 
 /**
  * @author gongshuiwen

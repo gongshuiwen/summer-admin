@@ -1,8 +1,8 @@
 package io.summernova.admin.core.web;
 
-import io.summernova.admin.core.exception.BusinessException;
-import io.summernova.admin.core.protocal.Error;
-import io.summernova.admin.core.protocal.Result;
+import io.summernova.admin.common.exception.BusinessException;
+import io.summernova.admin.common.protocal.Error;
+import io.summernova.admin.common.protocal.Result;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.*;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.*;
 
 /**
  * @author gongshuiwen

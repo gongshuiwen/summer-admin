@@ -1,8 +1,8 @@
 package io.summernova.admin.module.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.summernova.admin.common.exception.BusinessException;
 import io.summernova.admin.core.context.BaseContext;
-import io.summernova.admin.core.exception.BusinessException;
 import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
 
 /**
  * @author gongshuiwen

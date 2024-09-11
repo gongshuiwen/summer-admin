@@ -1,8 +1,8 @@
 package io.summernova.admin.core.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.summernova.admin.common.protocal.Result;
 import io.summernova.admin.core.context.BaseContextHolder;
-import io.summernova.admin.core.protocal.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -12,7 +12,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_AUTHENTICATION_FAILED;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_AUTHENTICATION_FAILED;
 
 /**
  * @author gongshuiwen

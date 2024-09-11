@@ -1,4 +1,4 @@
-package io.summernova.admin.core.exception;
+package io.summernova.admin.common.exception;
 
 /**
  * Static class to define the {@link BusinessExceptionEnum} constants of namespace {@code core}.

@@ -1,6 +1,6 @@
 package io.summernova.admin.module.base.service;
 
-import io.summernova.admin.core.exception.ValidationException;
+import io.summernova.admin.common.exception.ValidationException;
 import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.mapper.UserRoleMapper;
 import io.summernova.admin.module.base.model.Role;

@@ -8,8 +8,8 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
-import static io.summernova.admin.core.exception.CoreBusinessExceptionEnums.ERROR_AUTHENTICATION_FAILED;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_ACCESS_DENIED;
+import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ERROR_AUTHENTICATION_FAILED;
 import static io.summernova.admin.core.security.Constants.*;
 
 /**

@@ -1,6 +1,6 @@
 package io.summernova.admin.module.file.controller;
 
-import io.summernova.admin.core.protocal.Result;
+import io.summernova.admin.common.protocal.Result;
 import io.summernova.admin.module.file.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
