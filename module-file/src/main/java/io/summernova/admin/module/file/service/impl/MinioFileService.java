@@ -23,20 +23,6 @@ import java.io.InputStream;
 @Profile(value = {"prod"})
 public class MinioFileService extends AbstractFileService {
 
-    @Getter
-    @Setter
-    @Configuration
-    @ConfigurationProperties(prefix = "minio")
-    public static class MinioConfig {
-
-        private String endpoint;
-        private int port = 9000;
-        private boolean useSSL = true;
-        private String accessKey;
-        private String secretKey;
-        private String bucketName;
-    }
-
     private MinioClient minioClient;
     private String bucketName;
 
@@ -55,7 +41,7 @@ public class MinioFileService extends AbstractFileService {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         log.info("MinioStorageService initialized.");
     }
 
@@ -71,7 +57,7 @@ public class MinioFileService extends AbstractFileService {
                             .stream(inputStream, inputStream.available(), -1)
                             .contentType(contentType)
                             .build());
-        };
+        }
         return filename;
     }
 
@@ -82,5 +68,19 @@ public class MinioFileService extends AbstractFileService {
                         .bucket(bucketName)
                         .object(filename)
                         .build()));
+    }
+
+    @Getter
+    @Setter
+    @Configuration
+    @ConfigurationProperties(prefix = "minio")
+    public static class MinioConfig {
+
+        private String endpoint;
+        private int port = 9000;
+        private boolean useSSL = true;
+        private String accessKey;
+        private String secretKey;
+        private String bucketName;
     }
 }
