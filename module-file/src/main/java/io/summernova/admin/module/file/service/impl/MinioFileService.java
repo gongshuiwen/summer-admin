@@ -30,6 +30,8 @@ public class MinioFileService extends AbstractFileService {
     public static class MinioConfig {
 
         private String endpoint;
+        private int port = 9000;
+        private boolean useSSL = true;
         private String accessKey;
         private String secretKey;
         private String bucketName;
@@ -42,7 +44,7 @@ public class MinioFileService extends AbstractFileService {
     public void setMinioClient(MinioConfig minioConfig) throws Exception {
         minioClient =
                 MinioClient.builder()
-                        .endpoint(minioConfig.getEndpoint())
+                        .endpoint(minioConfig.getEndpoint(), minioConfig.getPort(), minioConfig.isUseSSL())
                         .credentials(minioConfig.getAccessKey(), minioConfig.getSecretKey())
                         .build();
 

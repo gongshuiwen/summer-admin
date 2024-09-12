@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-public class AbstractFileService implements FileService, InitializingBean {
+public abstract class AbstractFileService implements FileService, InitializingBean {
 
     @Override
     public void init() throws Exception {
