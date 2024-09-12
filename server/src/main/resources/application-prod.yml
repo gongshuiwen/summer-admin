@@ -13,3 +13,10 @@ spring:
       lettuce:
         pool:
           enabled: true
+minio:
+  endpoint: ${MINIO_HOST}
+  port: ${MINIO_PORT:-9000}
+  useSSL: ${MINIO_USE_SSL:-false}
+  accessKey: ${MINIO_ACCESS_KEY}
+  secretKey: ${MINIO_SECRET_KEY}
+  bucketName: ${MINIO_BUCKET_NAME:-summer-admin}
