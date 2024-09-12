@@ -59,13 +59,6 @@ public interface BaseContext {
     HttpServletRequest getHttpServletRequest();
 
     /**
-     * Get the bound {@link Thread} of the current request.
-     *
-     * @return the bound {@link Thread} of the current request
-     */
-    Thread getBoundThread();
-
-    /**
      * Get the {@link SqlSession} of the current request.
      *
      * @return the {@link SqlSession} of the current request

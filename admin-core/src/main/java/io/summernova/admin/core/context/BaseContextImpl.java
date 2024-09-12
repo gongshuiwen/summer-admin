@@ -29,9 +29,6 @@ public class BaseContextImpl implements BaseContext {
     @Getter
     private final Long userId;
 
-    @Getter
-    private final Thread boundThread;
-
     private BaseUser user;
     private Set<? extends GrantedAuthority> authorities;
     private Boolean superAdmin;
@@ -42,7 +39,6 @@ public class BaseContextImpl implements BaseContext {
 
     public BaseContextImpl(Long userId) {
         this.userId = userId;
-        this.boundThread = Thread.currentThread();
     }
 
     @Override
