@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,11 +22,6 @@ public class SecurityContextBaseUserService implements BaseUserService {
                 && authentication.getPrincipal() instanceof BaseUser baseUser) {
             return baseUser;
         }
-        return null;
-    }
-
-    @Override
-    public BaseUser loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
     }
 }
