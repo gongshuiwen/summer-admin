@@ -16,7 +16,7 @@
         <!--[project dependencies]-->
         <dependency>
             <groupId>io.summernova</groupId>
-            <artifactId>admin-core</artifactId>
+            <artifactId>admin-spring</artifactId>
         </dependency>
 
         <!--[scope test]-->

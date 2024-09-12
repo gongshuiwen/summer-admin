@@ -17,6 +17,10 @@
         <!--[project modules]-->
         <dependency>
             <groupId>io.summernova</groupId>
+            <artifactId>admin-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.summernova</groupId>
             <artifactId>module-base</artifactId>
         </dependency>
         <dependency>

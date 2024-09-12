@@ -7,27 +7,41 @@
         <groupId>io.summernova</groupId>
         <artifactId>summer-admin</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>module-file</artifactId>
+    <artifactId>admin-spring</artifactId>
 
     <dependencies>
         <!--[project dependencies]-->
         <dependency>
             <groupId>io.summernova</groupId>
-            <artifactId>admin-spring</artifactId>
+            <artifactId>admin-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.summernova</groupId>
+            <artifactId>admin-core</artifactId>
         </dependency>
 
-        <!--[scope compile]-->
+        <!--[scope compile: spring framework]-->
         <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <optional>true</optional>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
 
         <!--[scope test]-->
