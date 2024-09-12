@@ -27,10 +27,8 @@ public final class BaseContextHolder {
      */
     public static BaseContext getContext() {
         BaseContext baseContext = _local.get();
-        if (baseContext == null) {
-            baseContext = BaseContextSupplier.getBaseContext();
-            _local.set(baseContext);
-        }
+        if (baseContext == null)
+            _local.set(baseContext = getBaseContext());
         return baseContext;
     }
 
@@ -41,5 +39,9 @@ public final class BaseContextHolder {
      */
     public static void clearContext() {
         _local.remove();
+    }
+
+    private static BaseContext getBaseContext() {
+        return BaseContextSupplier.getBaseContext();
     }
 }
