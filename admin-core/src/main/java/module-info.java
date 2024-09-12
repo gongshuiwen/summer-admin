@@ -2,13 +2,6 @@ module summernova.admin.core {
     // summernova
     requires transitive summernova.admin.common;
 
-    // java
-    requires java.sql;
-
-    // jakarta
-    requires jakarta.servlet;
-    requires jakarta.validation;
-
     // jackson
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
