@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1.7-labs
-# Stage 1: Build the application
+
+# Stage 1: Build application
 FROM eclipse-temurin:17-jdk-alpine as builder
 
-# Set the working directory
+# Set working directory
 WORKDIR /builder
 
 # Set environment variables for Maven Wrapper (see mvnw)
@@ -30,7 +31,7 @@ RUN --mount=type=cache,target=/root/.m2 \
     echo '</mirrors>' >> /root/.m2/settings.xml && \
     echo '</settings>' >> /root/.m2/settings.xml
 
-# Copy the necessary files
+# Copy necessary files
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
@@ -38,8 +39,10 @@ COPY pom.xml .
 # Add executable privilege to mvnw
 RUN chmod +x ./mvnw
 
-# Copy the source code
-COPY --parents erp-* .
+# Copy source code
+COPY --parents server .
+COPY --parents admin-* .
+COPY --parents module-* .
 
 # Download dependencies
 RUN --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline
@@ -47,30 +50,32 @@ RUN --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline
 # Build application jar
 RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests
 
-# Extract the layers
-RUN java -Djarmode=layertools -jar erp-server/target/*.jar extract --destination extracted
+# Extract layers
+RUN java -Djarmode=layertools -jar server/target/*.jar extract --destination extracted
 
-# Stage 2: Create the runtime image
+# Stage 2: Create runtime image
 FROM eclipse-temurin:17-jre-alpine
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the layers
+# Copy layers
 ARG EXTRACTED=/builder/extracted
 COPY --from=builder $EXTRACTED/dependencies/ ./
 COPY --from=builder $EXTRACTED/snapshot-dependencies/ ./
 COPY --from=builder $EXTRACTED/application/ ./
 
-# Create a non-root user in a more secure way
+# Create non-root user
 RUN addgroup -g 1000 spring && adduser -u 1000 -G spring -s /bin/sh -D spring
 USER spring:spring
 
-# Set the environment variables
+# Set environment variables
 ENV SPRING_PROFILES_ACTIVE=prod
+ENV JAVA_MAIN_CLASS=io.summernova.admin.Application
+ENV JAVA_OPTS=""
 
-# Set the entrypoint
-ENTRYPOINT ["sh", "-c", "exec java -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE} ${JAVA_OPTS} -cp BOOT-INF/classes:BOOT-INF/lib/* ${MAIN_CLASS}"]
+# Set entrypoint
+ENTRYPOINT ["sh", "-c", "exec java -cp BOOT-INF/classes:BOOT-INF/lib/* -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE} ${JAVA_OPTS} ${JAVA_MAIN_CLASS}"]
 
 # Set default CMD arguments
 CMD []
