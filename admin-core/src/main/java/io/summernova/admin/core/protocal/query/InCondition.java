@@ -2,12 +2,14 @@ package io.summernova.admin.core.protocal.query;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.summernova.admin.core.model.BaseModel;
+import lombok.Getter;
 
 import java.util.List;
 
 /**
  * @author gongshuiwen
  */
+@Getter
 public final class InCondition extends Condition {
 
     public static final String OPERATOR_IN = "in";
