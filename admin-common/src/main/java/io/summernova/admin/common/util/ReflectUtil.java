@@ -26,7 +26,7 @@ public final class ReflectUtil {
         List<Field> fieldList = new ArrayList<>();
         Class<?> currentClass = clazz;
         while (currentClass != null){
-            fieldList.addAll(List.of(clazz.getDeclaredFields()));
+            fieldList.addAll(List.of(currentClass.getDeclaredFields()));
             currentClass = currentClass.getSuperclass();
         }
         return fieldList.toArray(new Field[0]);
