@@ -14,6 +14,12 @@ public interface ConditionQueryWrapperAdapter<T extends Condition> extends Query
     NullConditionQueryWrapperAdapter NULL_CONDITION_QUERY_WRAPPER_ADAPTER = new NullConditionQueryWrapperAdapter();
     SimpleConditionQueryWrapperAdapter SIMPLE_CONDITION_QUERY_WRAPPER_ADAPTER = new SimpleConditionQueryWrapperAdapter();
 
+    static <M> QueryWrapper<M> transformConditionToQueryWrapper(Condition condition, Class<M> modelClass) {
+        QueryWrapper<M> queryWrapper = new QueryWrapper<>();
+        applyConditionToQueryWrapper(condition, queryWrapper);
+        return queryWrapper;
+    }
+
     static void applyConditionToQueryWrapper(Condition condition, QueryWrapper<?> queryWrapper) {
         if (condition == null) {
             return;
@@ -33,4 +39,5 @@ public interface ConditionQueryWrapperAdapter<T extends Condition> extends Query
             throw new IllegalArgumentException("Unsupported condition type: " + condition.getClass().getName());
         }
     }
+
 }

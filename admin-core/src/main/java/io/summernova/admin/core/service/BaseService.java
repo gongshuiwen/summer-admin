@@ -53,7 +53,8 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     }
 
     default T selectOne(Condition condition, OrderBys orderBys) {
-        QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
+        QueryWrapper<T> queryWrapper = ConditionQueryWrapperAdapter
+                .transformConditionToQueryWrapper(condition, getModelClass());
         if (orderBys != null)
             OrderBysQueryWrapperAdapter.applyOrderBysToQueryWrapper(orderBys, queryWrapper);
         return selectOne(queryWrapper);
@@ -82,7 +83,8 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         if (offset == null || offset < 0)
             throw new IllegalArgumentException("offset must not be null or < 0!");
 
-        QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
+        QueryWrapper<T> queryWrapper = ConditionQueryWrapperAdapter
+                .transformConditionToQueryWrapper(condition, getModelClass());
         if (limit > 0) {
             queryWrapper.last("limit " + limit);
             if (offset > 0) {
