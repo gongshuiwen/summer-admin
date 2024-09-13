@@ -11,8 +11,8 @@ import io.summernova.admin.core.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.OrderBys;
-import io.summernova.admin.core.protocal.query.adapter.ConditionQueryWrapperAdapter;
-import io.summernova.admin.core.protocal.query.adapter.OrderBysQueryWrapperAdapter;
+import io.summernova.admin.core.query.adapter.ConditionQueryWrapperAdapter;
+import io.summernova.admin.core.query.adapter.OrderBysQueryWrapperAdapter;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Collection;
