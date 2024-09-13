@@ -11,6 +11,8 @@ import io.summernova.admin.core.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.protocal.query.Condition;
 import io.summernova.admin.core.protocal.query.OrderBys;
+import io.summernova.admin.core.protocal.query.adapter.ConditionQueryWrapperAdapter;
+import io.summernova.admin.core.protocal.query.adapter.OrderBysQueryWrapperAdapter;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Collection;
@@ -40,7 +42,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         if (condition == null)
             return count((QueryWrapper<T>) null);
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        condition.applyToQueryWrapper(queryWrapper);
+        ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(condition, queryWrapper);
         return count(queryWrapper);
     }
 
@@ -53,7 +55,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     default T selectOne(Condition condition, OrderBys orderBys) {
         QueryWrapper<T> queryWrapper = condition.toQueryWrapper(getModelClass());
         if (orderBys != null)
-            orderBys.applyToQueryWrapper(queryWrapper);
+            OrderBysQueryWrapperAdapter.applyOrderBysToQueryWrapper(orderBys, queryWrapper);
         return selectOne(queryWrapper);
     }
 
@@ -89,7 +91,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
         }
 
         if (orderBys != null)
-            orderBys.applyToQueryWrapper(queryWrapper);
+            OrderBysQueryWrapperAdapter.applyOrderBysToQueryWrapper(orderBys, queryWrapper);
 
         return selectList(queryWrapper);
     }

@@ -20,6 +20,8 @@ import io.summernova.admin.core.mapper.RelationMapper;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.protocal.query.Condition;
 import io.summernova.admin.core.protocal.query.OrderBys;
+import io.summernova.admin.core.protocal.query.adapter.ConditionQueryWrapperAdapter;
+import io.summernova.admin.core.protocal.query.adapter.OrderBysQueryWrapperAdapter;
 import io.summernova.admin.core.security.model.ModelAccessCheckUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -92,9 +94,9 @@ public abstract class AbstractBaseService<T extends BaseModel>
         ModelAccessCheckUtil.checkSelect(getModelClass());
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (condition != null)
-            condition.applyToQueryWrapper(queryWrapper);
+            ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(condition, queryWrapper);
         if (orderBys != null)
-            orderBys.applyToQueryWrapper(queryWrapper);
+            OrderBysQueryWrapperAdapter.applyOrderBysToQueryWrapper(orderBys, queryWrapper);
         return getBaseMapper().selectPage(new Page<>(pageNum, pageSize), queryWrapper);
     }
 
