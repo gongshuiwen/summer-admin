@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintValidatorContext;
  */
 final class NullOrNotBlankValidator implements ConstraintValidator<NullOrNotBlank, String> {
 
+    @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         return value == null || !value.isBlank();
     }
