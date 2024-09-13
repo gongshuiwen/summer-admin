@@ -15,7 +15,7 @@ public interface ConditionQueryWrapperAdapter<T extends Condition> extends Query
     SimpleConditionQueryWrapperAdapter SIMPLE_CONDITION_QUERY_WRAPPER_ADAPTER = new SimpleConditionQueryWrapperAdapter();
 
     static <M> QueryWrapper<M> transformConditionToQueryWrapper(Condition condition, Class<M> modelClass) {
-        QueryWrapper<M> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<M> queryWrapper = new QueryWrapper<>(modelClass);
         applyConditionToQueryWrapper(condition, queryWrapper);
         return queryWrapper;
     }
