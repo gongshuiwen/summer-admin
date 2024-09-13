@@ -6,7 +6,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public abstract class Condition implements QueryWrapperAdapter {
+public abstract class Condition {
 
     final String operator;
 

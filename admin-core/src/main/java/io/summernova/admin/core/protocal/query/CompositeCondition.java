@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.BaseModel;
 import lombok.Getter;
 
 import java.util.List;
@@ -80,19 +78,6 @@ public final class CompositeCondition extends Condition {
 
         // check items
         conditions.forEach((condition) -> Objects.requireNonNull(condition, "The item of conditions must not be null."));
-    }
-
-    @Override
-    public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
-        if (OPERATOR_AND.equals(operator)) {
-            conditions.forEach(condition -> queryWrapper.and(condition::applyToQueryWrapper));
-        } else if (OPERATOR_OR.equals(operator)) {
-            conditions.forEach(condition -> queryWrapper.or(condition::applyToQueryWrapper));
-        } else if (OPERATOR_NOT.equals(operator)) {
-            conditions.forEach(condition -> queryWrapper.not(condition::applyToQueryWrapper));
-        } else {
-            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for CompositeCondition.");
-        }
     }
 
     @Override

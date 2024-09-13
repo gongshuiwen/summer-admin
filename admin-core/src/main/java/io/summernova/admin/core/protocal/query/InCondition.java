@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.BaseModel;
 import lombok.Getter;
 
 import java.util.List;
@@ -40,16 +38,6 @@ public final class InCondition extends Condition {
     private static void checkValues(List<Object> values) {
         if (values == null || values.isEmpty())
             throw new IllegalArgumentException("Values cannot be null or empty.");
-    }
-
-    public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
-        if (OPERATOR_IN.equals(operator)) {
-            queryWrapper.in(field, values);
-        } else if (OPERATOR_NOT_IN.equals(operator)) {
-            queryWrapper.notIn(field, values);
-        } else {
-            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for InCondition.");
-        }
     }
 
     public String getSql() {

@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.BaseModel;
 import lombok.Getter;
 
 /**
@@ -28,17 +26,6 @@ public final class NullCondition extends Condition {
     public static NullCondition isNotNull(String field) {
         checkField(field);
         return new NullCondition(OPERATOR_IS_NOT_NULL, field);
-    }
-
-    @Override
-    public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
-        if (OPERATOR_IS_NULL.equals(operator)) {
-            queryWrapper.isNull(field);
-        } else if (OPERATOR_IS_NOT_NULL.equals(operator)) {
-            queryWrapper.isNotNull(field);
-        } else {
-            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for NullCondition.");
-        }
     }
 
     @Override

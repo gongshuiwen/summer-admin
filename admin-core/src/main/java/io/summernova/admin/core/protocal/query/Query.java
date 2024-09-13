@@ -10,7 +10,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public class Query implements QueryWrapperAdapter {
+public class Query {
 
     private final Long pageNum;
     private final Long pageSize;
@@ -31,13 +31,5 @@ public class Query implements QueryWrapperAdapter {
 
     public <T extends BaseModel> IPage<T> getPage() {
         return new Page<>(pageNum, pageSize);
-    }
-
-    @Override
-    public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
-        if (condition != null)
-            condition.applyToQueryWrapper(queryWrapper);
-        if (orderBys != null)
-            orderBys.applyToQueryWrapper(queryWrapper);
     }
 }

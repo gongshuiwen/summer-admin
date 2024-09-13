@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.BaseModel;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -11,7 +9,7 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Getter
-public class OrderBys implements QueryWrapperAdapter {
+public class OrderBys {
 
     public static final String SEPARATOR = ",";
     public static final String DESC_PREFIX = "_";
@@ -46,12 +44,6 @@ public class OrderBys implements QueryWrapperAdapter {
             }
         }
         return new OrderBys(orderBys);
-    }
-
-    @Override
-    public void applyToQueryWrapper(QueryWrapper<? extends BaseModel> queryWrapper) {
-        for (OrderBy orderBy : orderBys)
-            orderBy.applyToQueryWrapper(queryWrapper);
     }
 
     @Override
