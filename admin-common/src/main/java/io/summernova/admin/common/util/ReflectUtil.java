@@ -24,9 +24,10 @@ public final class ReflectUtil {
      */
     public static Field[] getAllDeclaredFields(Class<?> clazz) {
         List<Field> fieldList = new ArrayList<>();
-        while (clazz != null){
+        Class<?> currentClass = clazz;
+        while (currentClass != null){
             fieldList.addAll(List.of(clazz.getDeclaredFields()));
-            clazz = clazz.getSuperclass();
+            currentClass = currentClass.getSuperclass();
         }
         return fieldList.toArray(new Field[0]);
     }
@@ -38,11 +39,12 @@ public final class ReflectUtil {
      */
     public static Field[] getAllDeclaredFieldsWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotation) {
         List<Field> fieldList = new ArrayList<>();
-        while (clazz != null) {
-            Arrays.stream(clazz.getDeclaredFields())
+        Class<?> currentClass = clazz;
+        while (currentClass != null) {
+            Arrays.stream(currentClass.getDeclaredFields())
                     .filter(field -> field.isAnnotationPresent(annotation))
                     .forEach(fieldList::add);
-            clazz = clazz.getSuperclass();
+            currentClass = currentClass.getSuperclass();
         }
         return fieldList.toArray(new Field[0]);
     }
@@ -54,11 +56,12 @@ public final class ReflectUtil {
      */
     public static Field[] getAllDeclaredFieldsWithType(Class<?> clazz, Class<?> fieldType) {
         List<Field> fieldList = new ArrayList<>();
-        while (clazz != null) {
-            Arrays.stream(clazz.getDeclaredFields())
+        Class<?> currentClass = clazz;
+        while (currentClass != null) {
+            Arrays.stream(currentClass.getDeclaredFields())
                     .filter(field -> field.getType() == fieldType)
                     .forEach(fieldList::add);
-            clazz = clazz.getSuperclass();
+            currentClass = currentClass.getSuperclass();
         }
         return fieldList.toArray(new Field[0]);
     }
@@ -71,11 +74,12 @@ public final class ReflectUtil {
      * @return the Field object representing the found field, or null if not found
      */
     public static Field getField(Class<?> clazz, String fieldName) {
-        while (clazz != null) {
+        Class<?> currentClass = clazz;
+        while (currentClass != null) {
             try {
-                return clazz.getDeclaredField(fieldName);
+                return currentClass.getDeclaredField(fieldName);
             } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
+                currentClass = currentClass.getSuperclass();
             }
         }
         return null;
