@@ -50,4 +50,9 @@ public class OrderBys implements QueryWrapperAdapter {
         for (OrderBy orderBy : orderBys)
             orderBy.applyToQueryWrapper(queryWrapper);
     }
+
+    @Override
+    public String toString() {
+        return Arrays.stream(orderBys).map(OrderBy::toString).collect(Collectors.joining(SEPARATOR));
+    }
 }

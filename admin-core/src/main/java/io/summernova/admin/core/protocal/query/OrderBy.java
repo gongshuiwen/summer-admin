@@ -40,6 +40,11 @@ public class OrderBy implements QueryWrapperAdapter {
         }
     }
 
+    @Override
+    public String toString() {
+        return field + " " + type;
+    }
+
     public enum OrderByType {
         ASC,
         DESC
