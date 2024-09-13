@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.summernova.admin.core.model.BaseModel;
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * @author gongshuiwen
  */
@@ -17,13 +20,20 @@ public class OrderBys implements QueryWrapperAdapter {
 
     // prevent external instantiation
     private OrderBys(OrderBy[] orderBys) {
+        if (orderBys == null || orderBys.length == 0)
+            throw new IllegalArgumentException("The orderBys must not be null or empty.");
         this.orderBys = orderBys;
     }
 
     public static OrderBys of(OrderBy... orderBys) {
-        if (orderBys == null || orderBys.length == 0)
-            throw new IllegalArgumentException("The orderBys must not be null or empty.");
         return new OrderBys(orderBys);
+    }
+
+    public static OrderBys of(String orderBysString) {
+        if (orderBysString == null || orderBysString.isEmpty())
+            throw new IllegalArgumentException("The orderBys must not be null or empty.");
+        String[] orderByStrings = orderBysString.split(SEPARATOR);
+        return of(orderByStrings);
     }
 
     public static OrderBys of(String... orderByStrings) {
@@ -36,13 +46,6 @@ public class OrderBys implements QueryWrapperAdapter {
             }
         }
         return new OrderBys(orderBys);
-    }
-
-    public static OrderBys parse(String orderBysString) {
-        if (orderBysString == null || orderBysString.isEmpty())
-            throw new IllegalArgumentException("The orderBys must not be null or empty.");
-        String[] orderByStrings = orderBysString.split(SEPARATOR);
-        return of(orderByStrings);
     }
 
     @Override
