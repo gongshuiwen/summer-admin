@@ -10,8 +10,8 @@ import lombok.Getter;
 @Getter
 public final class NullCondition extends Condition {
 
-    private static final String OPERATOR_IS_NULL = "isNull";
-    private static final String OPERATOR_IS_NOT_NULL = "isNotNull";
+    public static final String OPERATOR_IS_NULL = "isNull";
+    public static final String OPERATOR_IS_NOT_NULL = "isNotNull";
 
     private final String field;
 

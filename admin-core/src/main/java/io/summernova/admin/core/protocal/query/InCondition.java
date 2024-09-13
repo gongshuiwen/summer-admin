@@ -10,8 +10,8 @@ import java.util.List;
  */
 public final class InCondition extends Condition {
 
-    private static final String OPERATOR_IN = "in";
-    private static final String OPERATOR_NOT_IN = "notIn";
+    public static final String OPERATOR_IN = "in";
+    public static final String OPERATOR_NOT_IN = "notIn";
 
     private final String field;
     private final List<Object> values;

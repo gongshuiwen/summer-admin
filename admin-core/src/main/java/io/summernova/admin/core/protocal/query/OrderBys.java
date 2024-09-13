@@ -10,8 +10,8 @@ import lombok.Getter;
 @Getter
 public class OrderBys implements QueryWrapperAdapter {
 
-    private static final String SEPARATOR = ",";
-    private static final String DESC_PREFIX = "_";
+    public static final String SEPARATOR = ",";
+    public static final String DESC_PREFIX = "_";
 
     private final OrderBy[] orderBys;
 

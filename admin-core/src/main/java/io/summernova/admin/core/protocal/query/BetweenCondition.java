@@ -12,8 +12,8 @@ import java.util.Objects;
 @Getter
 public final class BetweenCondition extends Condition {
 
-    private static final String OPERATOR_BETWEEN = "between";
-    private static final String OPERATOR_NOT_BETWEEN = "notBetween";
+    public static final String OPERATOR_BETWEEN = "between";
+    public static final String OPERATOR_NOT_BETWEEN = "notBetween";
 
     private final String field;
     private final Object value1;
