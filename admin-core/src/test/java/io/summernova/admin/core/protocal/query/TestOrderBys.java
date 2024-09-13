@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.Mock;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,30 +10,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestOrderBys {
 
     @Test
-    void testApplyToQueryWrapper() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBys.of(OrderBy.asc("name"), OrderBy.desc("id")).applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
-    }
-
-    @Test
     void testStaticMethodOf1() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBys.of(OrderBy.asc("name"), OrderBy.desc("id")).applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+        OrderBys orderBys = OrderBys.of(OrderBy.asc("name"), OrderBy.desc("id"));
+        assertEquals("name ASC,id DESC", orderBys.toString());
     }
 
     @Test
     void testStaticMethodOf2() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBys.of("name", "_id").applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+        OrderBys orderBys = OrderBys.of("_id");
+        assertEquals("id DESC", orderBys.toString());
     }
 
     @Test
-    void testStaticMethodParse() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBys.parse("name,_id").applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+    void testStaticMethodOf3() {
+        OrderBys orderBys = OrderBys.of("name,_id");
+        assertEquals("name ASC,id DESC", orderBys.toString());
+    }
+
+    @Test
+    void testStaticMethodOf4() {
+        OrderBys orderBys = OrderBys.of("name", "_id");
+        assertEquals("name ASC,id DESC", orderBys.toString());
     }
 }

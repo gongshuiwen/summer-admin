@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.Mock;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,24 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestOrderBy {
 
     @Test
-    void testApplyToQueryWrapperAsc() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBy.asc("name").applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name ASC", mockQueryWrapper.getSqlSegment());
+    void testAsc() {
+        assertEquals("name ASC", OrderBy.asc("name").toString());
     }
 
     @Test
-    void testApplyToQueryWrapperDesc() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBy.desc("name").applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name DESC", mockQueryWrapper.getSqlSegment());
-    }
-
-    @Test
-    void testApplyToQueryWrapperComposition() {
-        QueryWrapper<Mock> mockQueryWrapper = new QueryWrapper<>();
-        OrderBy.asc("name").applyToQueryWrapper(mockQueryWrapper);
-        OrderBy.desc("id").applyToQueryWrapper(mockQueryWrapper);
-        assertEquals(" ORDER BY name ASC,id DESC", mockQueryWrapper.getSqlSegment());
+    void testDesc() {
+        assertEquals("name DESC", OrderBy.desc("name").toString());
     }
 }
