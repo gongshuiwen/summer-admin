@@ -1,6 +1,6 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
-import io.summernova.admin.core.protocal.query.NullCondition;
+import io.summernova.admin.common.query.NullCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

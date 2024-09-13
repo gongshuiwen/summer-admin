@@ -7,6 +7,7 @@ module summernova.admin.common {
 
     exports io.summernova.admin.common.exception;
     exports io.summernova.admin.common.protocal;
+    exports io.summernova.admin.common.query;
     exports io.summernova.admin.common.util;
     exports io.summernova.admin.common.validation;
 

@@ -1,6 +1,6 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
-import io.summernova.admin.core.protocal.query.OrderBy;
+import io.summernova.admin.common.query.OrderBy;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

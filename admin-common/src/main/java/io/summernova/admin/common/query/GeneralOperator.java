@@ -1,4 +1,4 @@
-package io.summernova.admin.core.protocal.query;
+package io.summernova.admin.common.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,25 +11,24 @@ import java.util.Map;
  */
 @Getter
 @AllArgsConstructor
-public enum LikeOperator {
-
-    LIKE("like"),
-    LIKE_LEFT("likeLeft"),
-    LIKE_RIGHT("likeRight"),
-    NOT_LIKE("notLike"),
-    NOT_LIKE_LEFT("notLikeLeft"),
-    NOT_LIKE_RIGHT("notLikeRight")
+public enum GeneralOperator {
+    EQ("="),
+    LT("<"),
+    GT(">"),
+    NE("!="),
+    LE("<="),
+    GE(">="),
     ;
 
-    private static final Map<String, LikeOperator> lookup = new HashMap<>();
+    private static final Map<String, GeneralOperator> lookup = new HashMap<>();
     static {
-        for (LikeOperator operator : LikeOperator.values()) {
+        for (GeneralOperator operator : GeneralOperator.values()) {
             lookup.put(operator.name, operator);
         }
     }
 
-    public static LikeOperator of(String name) {
-        LikeOperator operator = lookup.get(name);
+    public static GeneralOperator get(String name) {
+        GeneralOperator operator = lookup.get(name);
         if (operator == null) {
             throw new IllegalArgumentException("No operator named " + name);
         }

@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import io.summernova.admin.core.protocal.query.CompositeCondition;
-import io.summernova.admin.core.protocal.query.Condition;
-import io.summernova.admin.core.protocal.query.SimpleCondition;
+import io.summernova.admin.common.query.CompositeCondition;
+import io.summernova.admin.common.query.Condition;
+import io.summernova.admin.common.query.SimpleCondition;
 
 import java.io.IOException;
 import java.util.ArrayList;

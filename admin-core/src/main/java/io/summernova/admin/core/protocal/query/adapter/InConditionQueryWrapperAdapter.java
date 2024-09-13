@@ -1,11 +1,11 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.protocal.query.InCondition;
+import io.summernova.admin.common.query.InCondition;
 import lombok.Getter;
 
-import static io.summernova.admin.core.protocal.query.InCondition.OPERATOR_IN;
-import static io.summernova.admin.core.protocal.query.InCondition.OPERATOR_NOT_IN;
+import static io.summernova.admin.common.query.InCondition.OPERATOR_IN;
+import static io.summernova.admin.common.query.InCondition.OPERATOR_NOT_IN;
 
 /**
  * @author gongshuiwen

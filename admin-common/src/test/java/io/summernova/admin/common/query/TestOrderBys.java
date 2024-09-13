@@ -1,4 +1,4 @@
-package io.summernova.admin.core.protocal.query;
+package io.summernova.admin.common.query;
 
 import org.junit.jupiter.api.Test;
 

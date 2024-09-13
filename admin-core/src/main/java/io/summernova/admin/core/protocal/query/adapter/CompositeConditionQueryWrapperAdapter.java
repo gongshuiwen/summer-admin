@@ -1,13 +1,13 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.protocal.query.CompositeCondition;
-import io.summernova.admin.core.protocal.query.Condition;
+import io.summernova.admin.common.query.CompositeCondition;
+import io.summernova.admin.common.query.Condition;
 import lombok.Getter;
 
 import java.util.List;
 
-import static io.summernova.admin.core.protocal.query.CompositeCondition.*;
+import static io.summernova.admin.common.query.CompositeCondition.*;
 
 /**
  * @author gongshuiwen

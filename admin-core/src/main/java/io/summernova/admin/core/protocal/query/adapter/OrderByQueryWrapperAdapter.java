@@ -1,7 +1,7 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.protocal.query.OrderBy;
+import io.summernova.admin.common.query.OrderBy;
 
 /**
  * @author gongshuiwen

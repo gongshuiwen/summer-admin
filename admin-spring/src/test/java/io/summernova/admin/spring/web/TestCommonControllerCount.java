@@ -1,7 +1,7 @@
 package io.summernova.admin.spring.web;
 
-import io.summernova.admin.core.protocal.query.Condition;
-import io.summernova.admin.core.protocal.query.SimpleCondition;
+import io.summernova.admin.common.query.Condition;
+import io.summernova.admin.common.query.SimpleCondition;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;

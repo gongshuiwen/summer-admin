@@ -1,6 +1,6 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
-import io.summernova.admin.core.protocal.query.InCondition;
+import io.summernova.admin.common.query.InCondition;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

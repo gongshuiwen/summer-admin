@@ -14,7 +14,7 @@ import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.One2Many;
 import io.summernova.admin.core.jackson2.*;
-import io.summernova.admin.core.protocal.query.Condition;
+import io.summernova.admin.common.query.Condition;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

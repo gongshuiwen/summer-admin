@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import com.baomidou.mybatisplus.core.enums.SqlLike;
-import io.summernova.admin.core.protocal.query.GeneralOperator;
-import io.summernova.admin.core.protocal.query.LikeOperator;
-import io.summernova.admin.core.protocal.query.SimpleCondition;
+import io.summernova.admin.common.query.GeneralOperator;
+import io.summernova.admin.common.query.LikeOperator;
+import io.summernova.admin.common.query.SimpleCondition;
 import lombok.Getter;
 
 import java.lang.reflect.InvocationTargetException;

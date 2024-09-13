@@ -3,9 +3,9 @@ package io.summernova.admin.core.jackson2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import io.summernova.admin.core.protocal.query.CompositeCondition;
-import io.summernova.admin.core.protocal.query.Condition;
-import io.summernova.admin.core.protocal.query.SimpleCondition;
+import io.summernova.admin.common.query.CompositeCondition;
+import io.summernova.admin.common.query.Condition;
+import io.summernova.admin.common.query.SimpleCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

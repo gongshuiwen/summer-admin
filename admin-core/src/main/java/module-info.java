@@ -46,7 +46,6 @@ module summernova.admin.core {
     exports io.summernova.admin.core.method.util;
     exports io.summernova.admin.core.model;
     exports io.summernova.admin.core.mybatis;
-    exports io.summernova.admin.core.protocal.query;
     exports io.summernova.admin.core.security;
     exports io.summernova.admin.core.security.account;
     exports io.summernova.admin.core.security.authorization;

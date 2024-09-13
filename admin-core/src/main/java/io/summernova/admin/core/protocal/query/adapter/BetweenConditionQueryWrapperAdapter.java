@@ -1,11 +1,11 @@
 package io.summernova.admin.core.protocal.query.adapter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.protocal.query.BetweenCondition;
+import io.summernova.admin.common.query.BetweenCondition;
 import lombok.Getter;
 
-import static io.summernova.admin.core.protocal.query.BetweenCondition.OPERATOR_BETWEEN;
-import static io.summernova.admin.core.protocal.query.BetweenCondition.OPERATOR_NOT_BETWEEN;
+import static io.summernova.admin.common.query.BetweenCondition.OPERATOR_BETWEEN;
+import static io.summernova.admin.common.query.BetweenCondition.OPERATOR_NOT_BETWEEN;
 
 /**
  * @author gongshuiwen
