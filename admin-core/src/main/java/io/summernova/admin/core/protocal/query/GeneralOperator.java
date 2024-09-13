@@ -1,6 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,12 +12,12 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public enum GeneralOperator {
-    EQ("=", SqlKeyword.EQ),
-    LT("<", SqlKeyword.LT),
-    GT(">", SqlKeyword.GT),
-    NE("!=", SqlKeyword.NE),
-    LE("<=", SqlKeyword.LE),
-    GE(">=", SqlKeyword.GE),
+    EQ("="),
+    LT("<"),
+    GT(">"),
+    NE("!="),
+    LE("<="),
+    GE(">="),
     ;
 
     private static final Map<String, GeneralOperator> lookup = new HashMap<>();
@@ -41,5 +40,4 @@ public enum GeneralOperator {
     }
 
     private final String name;
-    private final SqlKeyword sqlKeyword;
 }

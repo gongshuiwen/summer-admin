@@ -1,7 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.enums.SqlKeyword;
-import com.baomidou.mybatisplus.core.enums.SqlLike;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,12 +13,12 @@ import java.util.Map;
 @AllArgsConstructor
 public enum LikeOperator {
 
-    LIKE("like", SqlKeyword.LIKE, SqlLike.DEFAULT),
-    LIKE_LEFT("likeLeft", SqlKeyword.LIKE, SqlLike.LEFT),
-    LIKE_RIGHT("likeRight", SqlKeyword.LIKE, SqlLike.RIGHT),
-    NOT_LIKE("notLike", SqlKeyword.NOT_LIKE, SqlLike.DEFAULT),
-    NOT_LIKE_LEFT("notLikeLeft", SqlKeyword.NOT_LIKE, SqlLike.LEFT),
-    NOT_LIKE_RIGHT("notLikeRight", SqlKeyword.NOT_LIKE, SqlLike.RIGHT)
+    LIKE("like"),
+    LIKE_LEFT("likeLeft"),
+    LIKE_RIGHT("likeRight"),
+    NOT_LIKE("notLike"),
+    NOT_LIKE_LEFT("notLikeLeft"),
+    NOT_LIKE_RIGHT("notLikeRight")
     ;
 
     private static final Map<String, LikeOperator> lookup = new HashMap<>();
@@ -43,6 +41,4 @@ public enum LikeOperator {
     }
 
     private final String name;
-    private final SqlKeyword sqlKeyword;
-    private final SqlLike sqlLike;
 }

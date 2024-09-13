@@ -48,7 +48,7 @@ final class SimpleConditionQueryWrapperAdapter implements ConditionQueryWrapperA
     }
 
     private void applyGeneral(String operator, String field, Object value, QueryWrapper<?> queryWrapper) {
-        SqlKeyword sqlKeyword = GeneralOperator.get(operator).getSqlKeyword();
+        SqlKeyword sqlKeyword = getSqlKeyword(GeneralOperator.get(operator));
         try {
             methodAddCondition.invoke(queryWrapper, true, field, sqlKeyword, value);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -57,13 +57,64 @@ final class SimpleConditionQueryWrapperAdapter implements ConditionQueryWrapperA
         }
     }
 
+    private SqlKeyword getSqlKeyword(GeneralOperator generalOperator) {
+        if (generalOperator == GeneralOperator.EQ) {
+            return SqlKeyword.EQ;
+        } else if (generalOperator == GeneralOperator.LT) {
+            return SqlKeyword.LT;
+        } else if (generalOperator == GeneralOperator.GT) {
+            return SqlKeyword.GT;
+        } else if (generalOperator == GeneralOperator.NE) {
+            return SqlKeyword.NE;
+        } else if (generalOperator == GeneralOperator.LE) {
+            return SqlKeyword.LE;
+        } else if (generalOperator == GeneralOperator.GE) {
+            return SqlKeyword.GE;
+        }
+        throw new IllegalArgumentException("Unsupported operator '" + generalOperator + "' for SimpleCondition.");
+    }
+
     private void applyLike(String operator, String field, Object value, QueryWrapper<?> queryWrapper) {
         LikeOperator likeOperator = LikeOperator.of(operator);
         try {
-            methodLikeValue.invoke(queryWrapper, true, likeOperator.getSqlKeyword(), field, value, likeOperator.getSqlLike());
+            methodLikeValue.invoke(queryWrapper, true, getSqlKeyword(likeOperator), field, value, getSqlLike(likeOperator));
         } catch (InvocationTargetException | IllegalAccessException e) {
             // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
         }
+    }
+
+    private SqlKeyword getSqlKeyword(LikeOperator likeOperator) {
+        if (likeOperator == LikeOperator.LIKE) {
+            return SqlKeyword.LIKE;
+        } else if (likeOperator == LikeOperator.LIKE_LEFT) {
+            return SqlKeyword.LIKE;
+        } else if (likeOperator == LikeOperator.LIKE_RIGHT) {
+            return SqlKeyword.LIKE;
+        } else if (likeOperator == LikeOperator.NOT_LIKE) {
+            return SqlKeyword.NOT_LIKE;
+        } else if (likeOperator == LikeOperator.NOT_LIKE_LEFT) {
+            return SqlKeyword.NOT_LIKE;
+        } else if (likeOperator == LikeOperator.NOT_LIKE_RIGHT) {
+            return SqlKeyword.NOT_LIKE;
+        }
+        throw new IllegalArgumentException("Unsupported operator '" + likeOperator + "' for SimpleCondition.");
+    }
+
+    private SqlLike getSqlLike(LikeOperator likeOperator) {
+        if (likeOperator == LikeOperator.LIKE) {
+            return SqlLike.DEFAULT;
+        } else if (likeOperator == LikeOperator.LIKE_LEFT) {
+            return SqlLike.LEFT;
+        } else if (likeOperator == LikeOperator.LIKE_RIGHT) {
+            return SqlLike.RIGHT;
+        } else if (likeOperator == LikeOperator.NOT_LIKE) {
+            return SqlLike.DEFAULT;
+        } else if (likeOperator == LikeOperator.NOT_LIKE_LEFT) {
+            return SqlLike.LEFT;
+        } else if (likeOperator == LikeOperator.NOT_LIKE_RIGHT) {
+            return SqlLike.RIGHT;
+        }
+        throw new IllegalArgumentException("Unsupported operator '" + likeOperator + "' for SimpleCondition.");
     }
 }
