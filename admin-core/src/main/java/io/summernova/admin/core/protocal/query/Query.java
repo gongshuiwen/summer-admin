@@ -1,9 +1,5 @@
 package io.summernova.admin.core.protocal.query;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.summernova.admin.core.model.BaseModel;
 import lombok.Getter;
 
 /**
@@ -12,24 +8,20 @@ import lombok.Getter;
 @Getter
 public class Query {
 
-    private final Long pageNum;
-    private final Long pageSize;
     private final Condition condition;
     private final OrderBys orderBys;
+    private final Long limit;
+    private final Long offset;
 
     // prevent external instantiation
-    private Query(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
+    private Query(Condition condition, OrderBys orderBys, Long limit, Long offset) {
         this.condition = condition;
         this.orderBys = orderBys;
+        this.limit = limit;
+        this.offset = offset;
     }
 
-    public static Query of(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
-        return new Query(pageNum, pageSize, condition, orderBys);
-    }
-
-    public <T extends BaseModel> IPage<T> getPage() {
-        return new Page<>(pageNum, pageSize);
+    public static Query of(Condition condition, OrderBys orderBys, Long limit, Long offset) {
+        return new Query(condition, orderBys, limit, offset);
     }
 }
