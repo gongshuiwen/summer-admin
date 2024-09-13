@@ -40,7 +40,7 @@ public class OrderBy implements QueryWrapperAdapter {
         }
     }
 
-    private enum OrderByType {
+    public enum OrderByType {
         ASC,
         DESC
     }
