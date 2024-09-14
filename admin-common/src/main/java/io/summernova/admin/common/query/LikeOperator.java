@@ -12,33 +12,30 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public enum LikeOperator {
-
     LIKE("like"),
     LIKE_LEFT("likeLeft"),
     LIKE_RIGHT("likeRight"),
     NOT_LIKE("notLike"),
     NOT_LIKE_LEFT("notLikeLeft"),
-    NOT_LIKE_RIGHT("notLikeRight")
-    ;
+    NOT_LIKE_RIGHT("notLikeRight");
 
-    private static final Map<String, LikeOperator> lookup = new HashMap<>();
+    private static final Map<String, LikeOperator> LOOKUP = new HashMap<>();
+
     static {
-        for (LikeOperator operator : LikeOperator.values()) {
-            lookup.put(operator.name, operator);
-        }
+        for (LikeOperator operator : LikeOperator.values())
+            LOOKUP.put(operator.name, operator);
     }
 
+    private final String name;
+
     public static LikeOperator of(String name) {
-        LikeOperator operator = lookup.get(name);
-        if (operator == null) {
-            throw new IllegalArgumentException("No operator named " + name);
-        }
+        LikeOperator operator = LOOKUP.get(name);
+        if (operator == null)
+            throw new IllegalArgumentException("No LikeOperator with name '" + name + "' found.");
         return operator;
     }
 
     public static boolean contains(String name) {
-        return lookup.containsKey(name);
+        return LOOKUP.containsKey(name);
     }
-
-    private final String name;
 }

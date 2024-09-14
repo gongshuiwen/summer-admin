@@ -17,27 +17,25 @@ public enum GeneralOperator {
     GT(">"),
     NE("!="),
     LE("<="),
-    GE(">="),
-    ;
+    GE(">=");
 
-    private static final Map<String, GeneralOperator> lookup = new HashMap<>();
+    private static final Map<String, GeneralOperator> LOOKUP = new HashMap<>();
+
     static {
-        for (GeneralOperator operator : GeneralOperator.values()) {
-            lookup.put(operator.name, operator);
-        }
+        for (GeneralOperator operator : GeneralOperator.values())
+            LOOKUP.put(operator.name, operator);
     }
 
+    private final String name;
+
     public static GeneralOperator get(String name) {
-        GeneralOperator operator = lookup.get(name);
-        if (operator == null) {
-            throw new IllegalArgumentException("No operator named " + name);
-        }
+        GeneralOperator operator = LOOKUP.get(name);
+        if (operator == null)
+            throw new IllegalArgumentException("No GeneralOperator with name '" + name + "' found.");
         return operator;
     }
 
     public static boolean contains(String name) {
-        return lookup.containsKey(name);
+        return LOOKUP.containsKey(name);
     }
-
-    private final String name;
 }
