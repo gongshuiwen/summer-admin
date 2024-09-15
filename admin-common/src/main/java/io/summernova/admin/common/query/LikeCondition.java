@@ -28,6 +28,10 @@ public final class LikeCondition extends Condition {
         return new LikeCondition(field, likeOperator, value);
     }
 
+    public static LikeCondition of(String field, String likeOperator, String value) {
+        return new LikeCondition(field, LikeOperator.of(likeOperator), value);
+    }
+
     public static LikeCondition like(String field, String value) {
         checkField(field);
         return new LikeCondition(field, LikeOperator.LIKE, value);
@@ -63,6 +67,11 @@ public final class LikeCondition extends Condition {
         // TODO: SQL injection protection
         log.warn("!!! This is an experimental feature, which can lead to SQL injection risks, " +
                 "so please use it with a clear understanding of how to avoid that risk.");
+        return field + " " + operator.toUpperCase() + " '" + value + "'";
+    }
+
+    @Override
+    public String toString() {
         return field + " " + operator.toUpperCase() + " '" + value + "'";
     }
 }

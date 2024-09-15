@@ -28,6 +28,10 @@ public final class GeneralCondition extends Condition {
         return new GeneralCondition(field, generalOperator, value);
     }
 
+    public static GeneralCondition of(String field, String generalOperator, Object value) {
+        return new GeneralCondition(field, GeneralOperator.of(generalOperator), value);
+    }
+
     public static GeneralCondition eq(String field, Object value) {
         checkField(field);
         return new GeneralCondition(field, GeneralOperator.EQ, value);
@@ -66,6 +70,13 @@ public final class GeneralCondition extends Condition {
         if (value instanceof String) {
             return field + " " + operator.toUpperCase() + " '" + value + "'";
         }
+        return field + " " + operator.toUpperCase() + " " + value;
+    }
+
+    @Override
+    public String toString() {
+        if (value instanceof String)
+            return field + " " + operator.toUpperCase() + " '" + value + "'";
         return field + " " + operator.toUpperCase() + " " + value;
     }
 }
