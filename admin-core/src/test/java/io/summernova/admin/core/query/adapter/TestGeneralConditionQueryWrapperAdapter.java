@@ -1,50 +1,50 @@
 package io.summernova.admin.core.query.adapter;
 
-import io.summernova.admin.common.query.GeneralCondition;
+import io.summernova.admin.common.query.CompareCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TestGeneralConditionQueryWrapperAdapter extends QueryWrapperAdapterTestBase<GeneralConditionQueryWrapperAdapter> {
+class TestCompareConditionQueryWrapperAdapter extends QueryWrapperAdapterTestBase<CompareConditionQueryWrapperAdapter> {
 
     @Test
     void testApplyToQueryWrapperEq() {
-        queryWrapperAdapter.applyToQueryWrapper(GeneralCondition.eq("id", 100), mockQueryWrapper);
+        queryWrapperAdapter.applyToQueryWrapper(CompareCondition.eq("id", 100), mockQueryWrapper);
         assertEquals("(id = #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals(100, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }
 
     @Test
     void testApplyToQueryWrapperNe() {
-        queryWrapperAdapter.applyToQueryWrapper(GeneralCondition.ne("id", 100), mockQueryWrapper);
+        queryWrapperAdapter.applyToQueryWrapper(CompareCondition.ne("id", 100), mockQueryWrapper);
         assertEquals("(id <> #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals(100, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }
 
     @Test
     void testApplyToQueryWrapperLt() {
-        queryWrapperAdapter.applyToQueryWrapper(GeneralCondition.lt("id", 100), mockQueryWrapper);
+        queryWrapperAdapter.applyToQueryWrapper(CompareCondition.lt("id", 100), mockQueryWrapper);
         assertEquals("(id < #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals(100, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }
 
     @Test
     void testApplyToQueryWrapperGt() {
-        queryWrapperAdapter.applyToQueryWrapper(GeneralCondition.gt("id", 100), mockQueryWrapper);
+        queryWrapperAdapter.applyToQueryWrapper(CompareCondition.gt("id", 100), mockQueryWrapper);
         assertEquals("(id > #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals(100, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }
 
     @Test
     void testApplyToQueryWrapperLe() {
-        queryWrapperAdapter.applyToQueryWrapper(GeneralCondition.le("id", 100), mockQueryWrapper);
+        queryWrapperAdapter.applyToQueryWrapper(CompareCondition.le("id", 100), mockQueryWrapper);
         assertEquals("(id <= #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals(100, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }
 
     @Test
     void testApplyToQueryWrapperGe() {
-        queryWrapperAdapter.applyToQueryWrapper(GeneralCondition.ge("id", 100), mockQueryWrapper);
+        queryWrapperAdapter.applyToQueryWrapper(CompareCondition.ge("id", 100), mockQueryWrapper);
         assertEquals("(id >= #{ew.paramNameValuePairs.MPGENVAL1})", mockQueryWrapper.getSqlSegment());
         assertEquals(100, mockQueryWrapper.getParamNameValuePairs().get("MPGENVAL1"));
     }

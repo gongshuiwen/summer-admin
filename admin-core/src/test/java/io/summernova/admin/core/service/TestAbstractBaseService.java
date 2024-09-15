@@ -2,7 +2,7 @@ package io.summernova.admin.core.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.summernova.admin.common.query.Condition;
-import io.summernova.admin.common.query.GeneralCondition;
+import io.summernova.admin.common.query.CompareCondition;
 import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.model.Mock;
@@ -90,7 +90,7 @@ public class TestAbstractBaseService {
         assertEquals(1L, results.get(1).getId());
         assertEquals("mock1", results.get(1).getName());
 
-        Condition condition = GeneralCondition.eq("id", 1L);
+        Condition condition = CompareCondition.eq("id", 1L);
 
         pageResult = mockService.page(1L, 20L, condition, OrderBys.of("_id"));
         assertEquals(1, pageResult.getPages());
@@ -122,7 +122,7 @@ public class TestAbstractBaseService {
         Long count = mockService.count((Condition) null);
         assertEquals(2, count);
 
-        Condition condition = GeneralCondition.eq("id", 1L);
+        Condition condition = CompareCondition.eq("id", 1L);
         count = mockService.count(condition);
         assertEquals(1, count);
     }

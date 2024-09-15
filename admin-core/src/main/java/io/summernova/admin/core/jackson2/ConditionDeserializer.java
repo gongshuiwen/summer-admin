@@ -37,10 +37,10 @@ public class ConditionDeserializer extends StdDeserializer<Condition> {
         if (operator == null)
             throw new IllegalArgumentException("Invalid JSON structure for Condition, operator is missing.");
 
-        if (GeneralOperator.contains(operator)) {
+        if (CompareOperator.contains(operator)) {
             String field = node.get(FIELD).asText();
             String value = node.get(VALUE).asText();
-            return GeneralCondition.of(field, operator, value);
+            return CompareCondition.of(field, operator, value);
         } else if (LikeOperator.contains(operator)) {
             String field = node.get(FIELD).asText();
             String value = node.get(VALUE).asText();

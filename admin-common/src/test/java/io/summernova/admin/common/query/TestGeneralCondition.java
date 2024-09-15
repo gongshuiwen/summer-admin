@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TestGeneralCondition {
+class TestCompareCondition {
 
     @Test
     void testOf() {
-        GeneralCondition condition = GeneralCondition.of("name", GeneralOperator.EQ, "abc");
+        CompareCondition condition = CompareCondition.of("name", CompareOperator.EQ, "abc");
         assertEquals("name", condition.getField());
         assertEquals("=", condition.getOperator());
         assertEquals("abc", condition.getValue());
@@ -16,7 +16,7 @@ class TestGeneralCondition {
 
     @Test
     void testEq() {
-        GeneralCondition condition = GeneralCondition.eq("name", "abc");
+        CompareCondition condition = CompareCondition.eq("name", "abc");
         assertEquals("name", condition.getField());
         assertEquals("=", condition.getOperator());
         assertEquals("abc", condition.getValue());
@@ -24,7 +24,7 @@ class TestGeneralCondition {
 
     @Test
     void testNe() {
-        GeneralCondition condition = GeneralCondition.ne("name", "abc");
+        CompareCondition condition = CompareCondition.ne("name", "abc");
         assertEquals("name", condition.getField());
         assertEquals("!=", condition.getOperator());
         assertEquals("abc", condition.getValue());
@@ -32,7 +32,7 @@ class TestGeneralCondition {
 
     @Test
     void testLt() {
-        GeneralCondition condition = GeneralCondition.lt("name", "abc");
+        CompareCondition condition = CompareCondition.lt("name", "abc");
         assertEquals("name", condition.getField());
         assertEquals("<", condition.getOperator());
         assertEquals("abc", condition.getValue());
@@ -40,7 +40,7 @@ class TestGeneralCondition {
 
     @Test
     void testGt() {
-        GeneralCondition condition = GeneralCondition.gt("name", "abc");
+        CompareCondition condition = CompareCondition.gt("name", "abc");
         assertEquals("name", condition.getField());
         assertEquals(">", condition.getOperator());
         assertEquals("abc", condition.getValue());
@@ -48,7 +48,7 @@ class TestGeneralCondition {
 
     @Test
     void testLe() {
-        GeneralCondition condition = GeneralCondition.le("name", "abc");
+        CompareCondition condition = CompareCondition.le("name", "abc");
         assertEquals("name", condition.getField());
         assertEquals("<=", condition.getOperator());
         assertEquals("abc", condition.getValue());
@@ -56,7 +56,7 @@ class TestGeneralCondition {
 
     @Test
     void testGe() {
-        GeneralCondition condition = GeneralCondition.ge("name", "abc");
+        CompareCondition condition = CompareCondition.ge("name", "abc");
         assertEquals("name", condition.getField());
         assertEquals(">=", condition.getOperator());
         assertEquals("abc", condition.getValue());

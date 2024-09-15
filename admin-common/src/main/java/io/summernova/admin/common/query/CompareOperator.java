@@ -11,7 +11,7 @@ import java.util.Map;
  */
 @Getter
 @AllArgsConstructor
-public enum GeneralOperator {
+public enum CompareOperator {
     EQ("="),
     LT("<"),
     GT(">"),
@@ -19,19 +19,19 @@ public enum GeneralOperator {
     LE("<="),
     GE(">=");
 
-    private static final Map<String, GeneralOperator> LOOKUP = new HashMap<>();
+    private static final Map<String, CompareOperator> LOOKUP = new HashMap<>();
 
     static {
-        for (GeneralOperator operator : GeneralOperator.values())
+        for (CompareOperator operator : CompareOperator.values())
             LOOKUP.put(operator.name, operator);
     }
 
     private final String name;
 
-    public static GeneralOperator of(String name) {
-        GeneralOperator operator = LOOKUP.get(name);
+    public static CompareOperator of(String name) {
+        CompareOperator operator = LOOKUP.get(name);
         if (operator == null)
-            throw new IllegalArgumentException("No GeneralOperator with name '" + name + "' found.");
+            throw new IllegalArgumentException("No CompareOperator with name '" + name + "' found.");
         return operator;
     }
 

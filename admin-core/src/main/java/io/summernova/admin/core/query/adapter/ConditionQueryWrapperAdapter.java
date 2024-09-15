@@ -10,7 +10,7 @@ public interface ConditionQueryWrapperAdapter<T extends Condition> extends Query
 
     BetweenConditionQueryWrapperAdapter BETWEEN_CONDITION_QUERY_WRAPPER_ADAPTER = new BetweenConditionQueryWrapperAdapter();
     CompositeConditionQueryWrapperAdapter COMPOSITE_CONDITION_QUERY_WRAPPER_ADAPTER = new CompositeConditionQueryWrapperAdapter();
-    GeneralConditionQueryWrapperAdapter GENERAL_CONDITION_QUERY_WRAPPER_ADAPTER = new GeneralConditionQueryWrapperAdapter();
+    CompareConditionQueryWrapperAdapter GENERAL_CONDITION_QUERY_WRAPPER_ADAPTER = new CompareConditionQueryWrapperAdapter();
     InConditionQueryWrapperAdapter IN_CONDITION_QUERY_WRAPPER_ADAPTER = new InConditionQueryWrapperAdapter();
     LikeConditionQueryWrapperAdapter LIKE_CONDITION_QUERY_WRAPPER_ADAPTER = new LikeConditionQueryWrapperAdapter();
     NullConditionQueryWrapperAdapter NULL_CONDITION_QUERY_WRAPPER_ADAPTER = new NullConditionQueryWrapperAdapter();
@@ -29,8 +29,8 @@ public interface ConditionQueryWrapperAdapter<T extends Condition> extends Query
             BETWEEN_CONDITION_QUERY_WRAPPER_ADAPTER.applyToQueryWrapper(betweenCondition, queryWrapper);
         } else if (condition instanceof CompositeCondition compositeCondition) {
             COMPOSITE_CONDITION_QUERY_WRAPPER_ADAPTER.applyToQueryWrapper(compositeCondition, queryWrapper);
-        } else if (condition instanceof GeneralCondition generalCondition) {
-            GENERAL_CONDITION_QUERY_WRAPPER_ADAPTER.applyToQueryWrapper(generalCondition, queryWrapper);
+        } else if (condition instanceof CompareCondition compareCondition) {
+            GENERAL_CONDITION_QUERY_WRAPPER_ADAPTER.applyToQueryWrapper(compareCondition, queryWrapper);
         } else if (condition instanceof InCondition inCondition) {
             IN_CONDITION_QUERY_WRAPPER_ADAPTER.applyToQueryWrapper(inCondition, queryWrapper);
         } else if (condition instanceof LikeCondition likeCondition) {

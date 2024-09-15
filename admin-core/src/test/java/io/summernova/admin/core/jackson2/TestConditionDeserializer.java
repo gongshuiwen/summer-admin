@@ -26,61 +26,61 @@ class TestConditionDeserializer {
     @Test
     void testEqCondition() throws JsonProcessingException {
         Condition condition = mapper.readValue("{\"field\":\"id\",\"operator\":\"=\",\"value\":\"100\"}", Condition.class);
-        assertInstanceOf(GeneralCondition.class, condition);
-        GeneralCondition generalCondition = (GeneralCondition) condition;
-        assertEquals("id", generalCondition.getField());
-        assertEquals("=", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, condition);
+        CompareCondition compareCondition = (CompareCondition) condition;
+        assertEquals("id", compareCondition.getField());
+        assertEquals("=", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 
     @Test
     void testNeCondition() throws JsonProcessingException {
         Condition condition = mapper.readValue("{\"field\":\"id\",\"operator\":\"!=\",\"value\":\"100\"}", Condition.class);
-        assertInstanceOf(GeneralCondition.class, condition);
-        GeneralCondition generalCondition = (GeneralCondition) condition;
-        assertEquals("id", generalCondition.getField());
-        assertEquals("!=", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, condition);
+        CompareCondition compareCondition = (CompareCondition) condition;
+        assertEquals("id", compareCondition.getField());
+        assertEquals("!=", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 
     @Test
     void testLtCondition() throws JsonProcessingException {
         Condition condition = mapper.readValue("{\"field\":\"id\",\"operator\":\"<\",\"value\":\"100\"}", Condition.class);
-        assertInstanceOf(GeneralCondition.class, condition);
-        GeneralCondition generalCondition = (GeneralCondition) condition;
-        assertEquals("id", generalCondition.getField());
-        assertEquals("<", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, condition);
+        CompareCondition compareCondition = (CompareCondition) condition;
+        assertEquals("id", compareCondition.getField());
+        assertEquals("<", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 
     @Test
     void testGtCondition() throws JsonProcessingException {
         Condition condition = mapper.readValue("{\"field\":\"id\",\"operator\":\">\",\"value\":\"100\"}", Condition.class);
-        assertInstanceOf(GeneralCondition.class, condition);
-        GeneralCondition generalCondition = (GeneralCondition) condition;
-        assertEquals("id", generalCondition.getField());
-        assertEquals(">", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, condition);
+        CompareCondition compareCondition = (CompareCondition) condition;
+        assertEquals("id", compareCondition.getField());
+        assertEquals(">", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 
     @Test
     void testLeCondition() throws JsonProcessingException {
         Condition condition = mapper.readValue("{\"field\":\"id\",\"operator\":\"<=\",\"value\":\"100\"}", Condition.class);
-        assertInstanceOf(GeneralCondition.class, condition);
-        GeneralCondition generalCondition = (GeneralCondition) condition;
-        assertEquals("id", generalCondition.getField());
-        assertEquals("<=", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, condition);
+        CompareCondition compareCondition = (CompareCondition) condition;
+        assertEquals("id", compareCondition.getField());
+        assertEquals("<=", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 
     @Test
     void testGeCondition() throws JsonProcessingException {
         Condition condition = mapper.readValue("{\"field\":\"id\",\"operator\":\">=\",\"value\":\"100\"}", Condition.class);
-        assertInstanceOf(GeneralCondition.class, condition);
-        GeneralCondition generalCondition = (GeneralCondition) condition;
-        assertEquals("id", generalCondition.getField());
-        assertEquals(">=", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, condition);
+        CompareCondition compareCondition = (CompareCondition) condition;
+        assertEquals("id", compareCondition.getField());
+        assertEquals(">=", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 
     @Test
@@ -222,11 +222,11 @@ class TestConditionDeserializer {
         assertEquals("and", compositeCondition.getOperator());
         assertEquals(2, compositeCondition.getConditions().length);
 
-        assertInstanceOf(GeneralCondition.class, compositeCondition.getConditions()[0]);
-        GeneralCondition generalCondition1 = (GeneralCondition) compositeCondition.getConditions()[0];
-        assertEquals("id", generalCondition1.getField());
-        assertEquals("=", generalCondition1.getOperator());
-        assertEquals("100", generalCondition1.getValue());
+        assertInstanceOf(CompareCondition.class, compositeCondition.getConditions()[0]);
+        CompareCondition compareCondition1 = (CompareCondition) compositeCondition.getConditions()[0];
+        assertEquals("id", compareCondition1.getField());
+        assertEquals("=", compareCondition1.getOperator());
+        assertEquals("100", compareCondition1.getValue());
 
         assertInstanceOf(LikeCondition.class, compositeCondition.getConditions()[1]);
         LikeCondition likeCondition = (LikeCondition) compositeCondition.getConditions()[1];
@@ -250,17 +250,17 @@ class TestConditionDeserializer {
         assertEquals("or", compositeCondition.getOperator());
         assertEquals(2, compositeCondition.getConditions().length);
 
-        assertInstanceOf(GeneralCondition.class, compositeCondition.getConditions()[0]);
-        GeneralCondition generalCondition1 = (GeneralCondition) compositeCondition.getConditions()[0];
-        assertEquals("id", generalCondition1.getField());
-        assertEquals("=", generalCondition1.getOperator());
-        assertEquals("100", generalCondition1.getValue());
+        assertInstanceOf(CompareCondition.class, compositeCondition.getConditions()[0]);
+        CompareCondition compareCondition1 = (CompareCondition) compositeCondition.getConditions()[0];
+        assertEquals("id", compareCondition1.getField());
+        assertEquals("=", compareCondition1.getOperator());
+        assertEquals("100", compareCondition1.getValue());
 
-        assertInstanceOf(GeneralCondition.class, compositeCondition.getConditions()[1]);
-        GeneralCondition generalCondition2 = (GeneralCondition) compositeCondition.getConditions()[1];
-        assertEquals("id", generalCondition2.getField());
-        assertEquals("=", generalCondition2.getOperator());
-        assertEquals("101", generalCondition2.getValue());
+        assertInstanceOf(CompareCondition.class, compositeCondition.getConditions()[1]);
+        CompareCondition compareCondition2 = (CompareCondition) compositeCondition.getConditions()[1];
+        assertEquals("id", compareCondition2.getField());
+        assertEquals("=", compareCondition2.getOperator());
+        assertEquals("101", compareCondition2.getValue());
     }
 
     @Test
@@ -276,10 +276,10 @@ class TestConditionDeserializer {
         CompositeCondition compositeCondition = (CompositeCondition) condition;
         assertEquals("not", compositeCondition.getOperator());
 
-        assertInstanceOf(GeneralCondition.class, compositeCondition.getConditions()[0]);
-        GeneralCondition generalCondition = (GeneralCondition) compositeCondition.getConditions()[0];
-        assertEquals("id", generalCondition.getField());
-        assertEquals("=", generalCondition.getOperator());
-        assertEquals("100", generalCondition.getValue());
+        assertInstanceOf(CompareCondition.class, compositeCondition.getConditions()[0]);
+        CompareCondition compareCondition = (CompareCondition) compositeCondition.getConditions()[0];
+        assertEquals("id", compareCondition.getField());
+        assertEquals("=", compareCondition.getOperator());
+        assertEquals("100", compareCondition.getValue());
     }
 }

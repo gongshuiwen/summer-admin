@@ -1,7 +1,7 @@
 package io.summernova.admin.spring.web;
 
 import io.summernova.admin.common.query.Condition;
-import io.summernova.admin.common.query.GeneralCondition;
+import io.summernova.admin.common.query.CompareCondition;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -105,8 +105,8 @@ class TestCommonControllerPage extends CommonControllerTestBase {
 
     @Test
     @WithMockAdmin
-    void testGeneralCondition() throws Exception {
-        Condition condition = GeneralCondition.eq("name", "mock1");
+    void testCompareCondition() throws Exception {
+        Condition condition = CompareCondition.eq("name", "mock1");
         ResultActions resultActions = doPage(1L, 20L, null, condition);
         checkResultActionsSuccess(resultActions);
         resultActions

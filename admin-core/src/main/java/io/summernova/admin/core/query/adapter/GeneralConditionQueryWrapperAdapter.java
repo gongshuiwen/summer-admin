@@ -3,8 +3,8 @@ package io.summernova.admin.core.query.adapter;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlKeyword;
-import io.summernova.admin.common.query.GeneralCondition;
-import io.summernova.admin.common.query.GeneralOperator;
+import io.summernova.admin.common.query.CompareCondition;
+import io.summernova.admin.common.query.CompareOperator;
 import lombok.Getter;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * @author gongshuiwen
  */
 @Getter
-final class GeneralConditionQueryWrapperAdapter implements ConditionQueryWrapperAdapter<GeneralCondition> {
+final class CompareConditionQueryWrapperAdapter implements ConditionQueryWrapperAdapter<CompareCondition> {
 
     // cache method addCondition of AbstractWrapper
     private static final String METHOD_ADD_CONDITION = "addCondition";
@@ -31,31 +31,31 @@ final class GeneralConditionQueryWrapperAdapter implements ConditionQueryWrapper
     }
 
     @Override
-    public <M> void applyToQueryWrapper(GeneralCondition generalCondition, QueryWrapper<M> queryWrapper) {
+    public <M> void applyToQueryWrapper(CompareCondition compareCondition, QueryWrapper<M> queryWrapper) {
         try {
-            METHOD_ADD_CONDITION_.invoke(queryWrapper, true, generalCondition.getField(),
-                    getSqlKeyword(generalCondition.getOperator()), generalCondition.getValue());
+            METHOD_ADD_CONDITION_.invoke(queryWrapper, true, compareCondition.getField(),
+                    getSqlKeyword(compareCondition.getOperator()), compareCondition.getValue());
         } catch (InvocationTargetException | IllegalAccessException e) {
             // TODO: Handle reflection exceptions
             throw new RuntimeException(e);
         }
     }
 
-    private SqlKeyword getSqlKeyword(String generalOperator) {
-        if (generalOperator.equals(GeneralOperator.EQ.getName())) {
+    private SqlKeyword getSqlKeyword(String compareOperator) {
+        if (compareOperator.equals(CompareOperator.EQ.getName())) {
             return SqlKeyword.EQ;
-        } else if (generalOperator.equals(GeneralOperator.NE.getName())) {
+        } else if (compareOperator.equals(CompareOperator.NE.getName())) {
             return SqlKeyword.NE;
-        } else if (generalOperator.equals(GeneralOperator.LT.getName())) {
+        } else if (compareOperator.equals(CompareOperator.LT.getName())) {
             return SqlKeyword.LT;
-        } else if (generalOperator.equals(GeneralOperator.GT.getName())) {
+        } else if (compareOperator.equals(CompareOperator.GT.getName())) {
             return SqlKeyword.GT;
-        } else if (generalOperator.equals(GeneralOperator.LE.getName())) {
+        } else if (compareOperator.equals(CompareOperator.LE.getName())) {
             return SqlKeyword.LE;
-        } else if (generalOperator.equals(GeneralOperator.GE.getName())) {
+        } else if (compareOperator.equals(CompareOperator.GE.getName())) {
             return SqlKeyword.GE;
         } else {
-            throw new IllegalArgumentException("Unsupported general operator: " + generalOperator);
+            throw new IllegalArgumentException("Unsupported general operator: " + compareOperator);
         }
     }
 }
