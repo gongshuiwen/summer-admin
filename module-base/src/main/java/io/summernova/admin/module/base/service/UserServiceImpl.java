@@ -26,14 +26,15 @@ import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ER
 @Service
 public class UserServiceImpl extends AbstractBaseService<User> implements UserService {
 
-    @Autowired
-    RoleService roleService;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    PermissionService permissionService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    public UserServiceImpl(
+            RoleService roleService,
+            PasswordEncoder passwordEncoder) {
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional

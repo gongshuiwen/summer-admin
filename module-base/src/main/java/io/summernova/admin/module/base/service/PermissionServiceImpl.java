@@ -21,8 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class PermissionServiceImpl extends AbstractBaseService<Permission> implements PermissionService {
 
-    @Autowired
-    RolePermissionMapper rolePermissionMapper;
+    private final RolePermissionMapper rolePermissionMapper;
+
+    public PermissionServiceImpl(RolePermissionMapper rolePermissionMapper) {
+        this.rolePermissionMapper = rolePermissionMapper;
+    }
 
     @Override
     @Transactional

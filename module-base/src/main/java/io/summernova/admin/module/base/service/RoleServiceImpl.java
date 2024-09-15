@@ -24,8 +24,11 @@ import static io.summernova.admin.core.security.Constants.CODE_BASE_USER;
 @Service
 public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleService {
 
-    @Autowired
-    UserRoleMapper userRoleMapper;
+    private final UserRoleMapper userRoleMapper;
+
+    public RoleServiceImpl(UserRoleMapper userRoleMapper) {
+        this.userRoleMapper = userRoleMapper;
+    }
 
     @Override
     @Transactional
