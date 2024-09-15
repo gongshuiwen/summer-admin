@@ -1,25 +1,39 @@
 package io.summernova.admin.core.mapper;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import io.summernova.admin.core.model.Mock1;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 
-import static io.summernova.admin.core.mapper.BaseMapperRegistry.buildMapperInterface;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
 class TestBaseMapperRegistry {
 
-    @Autowired
-    SqlSession sqlSession;
+    static final SqlSessionFactory sqlSessionFactory;
+    static final SqlSession sqlSession;
+
+    static {
+        final DataSource dataSource = new HikariDataSource(new HikariConfig("/datasource.properties"));
+        final TransactionFactory transactionFactory = new JdbcTransactionFactory();
+        final Environment environment = new Environment("development", transactionFactory, dataSource);
+        final Configuration configuration = new Configuration(environment);
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+        sqlSession = sqlSessionFactory.openSession();
+    }
 
     @Test
     void testGetBaseMapper() {
@@ -31,7 +45,7 @@ class TestBaseMapperRegistry {
     void testBuildMapperInterface() throws ClassNotFoundException {
         Class<?> modelClass = Mock1.class;
         Class<?> mapperInterface;
-        mapperInterface = buildMapperInterface(modelClass);
+        mapperInterface = BaseMapperRegistry.buildMapperInterface(modelClass);
 
         assertNotNull(mapperInterface);
         assertTrue(Modifier.isPublic(mapperInterface.getModifiers()));
