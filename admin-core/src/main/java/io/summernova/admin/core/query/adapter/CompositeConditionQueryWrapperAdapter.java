@@ -2,6 +2,7 @@ package io.summernova.admin.core.query.adapter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.summernova.admin.common.query.CompositeCondition;
+import io.summernova.admin.common.query.CompositeOperator;
 import io.summernova.admin.common.query.Condition;
 import lombok.Getter;
 
@@ -18,18 +19,21 @@ final class CompositeConditionQueryWrapperAdapter implements ConditionQueryWrapp
     @Override
     public <M> void applyToQueryWrapper(CompositeCondition condition, QueryWrapper<M> queryWrapper) {
         String operator = condition.getOperator();
-        List<Condition> conditions = condition.getConditions();
-        if (OPERATOR_AND.equals(operator)) {
-            conditions.forEach(subCondition -> queryWrapper.and(
-                    queryWrapper1 -> ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(subCondition, queryWrapper1)));
-        } else if (OPERATOR_OR.equals(operator)) {
-            conditions.forEach(subCondition -> queryWrapper.or(
-                    queryWrapper1 -> ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(subCondition, queryWrapper1)));
-        } else if (OPERATOR_NOT.equals(operator)) {
-            conditions.forEach(subCondition -> queryWrapper.not(
-                    queryWrapper1 -> ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(subCondition, queryWrapper1)));
+        Condition[] conditions = condition.getConditions();
+        if (operator.equals(CompositeOperator.AND.getName())) {
+            for (Condition subCondition : conditions)
+                queryWrapper.and(queryWrapper1 ->
+                        ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(subCondition, queryWrapper1));
+        } else if (operator.equals(CompositeOperator.OR.getName())) {
+            for (Condition subCondition : conditions)
+                queryWrapper.or(queryWrapper1 ->
+                        ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(subCondition, queryWrapper1));
+        } else if (operator.equals(CompositeOperator.NOT.getName())) {
+            Condition subCondition = conditions[0];
+            queryWrapper.not(queryWrapper1 ->
+                    ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(subCondition, queryWrapper1));
         } else {
-            throw new IllegalArgumentException("Unsupported operator '" + operator + "' for CompositeCondition.");
+            throw new IllegalArgumentException("Unsupported composite operator: " + operator);
         }
     }
 }

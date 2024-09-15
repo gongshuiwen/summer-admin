@@ -46,16 +46,16 @@ class TestConditionDeserializer {
         assertInstanceOf(CompositeCondition.class, condition);
         CompositeCondition compositeCondition = (CompositeCondition) condition;
         assertEquals("or", compositeCondition.getOperator());
-        assertEquals(2, compositeCondition.getConditions().size());
+        assertEquals(2, compositeCondition.getConditions().length);
 
-        assertInstanceOf(SimpleCondition.class, compositeCondition.getConditions().get(0));
-        SimpleCondition condition1 = (SimpleCondition) compositeCondition.getConditions().get(0);
+        assertInstanceOf(SimpleCondition.class, compositeCondition.getConditions()[0]);
+        SimpleCondition condition1 = (SimpleCondition) compositeCondition.getConditions()[0];
         assertEquals("id", condition1.getField());
         assertEquals("=", condition1.getOperator());
         assertEquals("100", condition1.getValue());
 
-        assertInstanceOf(SimpleCondition.class, compositeCondition.getConditions().get(1));
-        SimpleCondition condition2 = (SimpleCondition) compositeCondition.getConditions().get(1);
+        assertInstanceOf(SimpleCondition.class, compositeCondition.getConditions()[1]);
+        SimpleCondition condition2 = (SimpleCondition) compositeCondition.getConditions()[1];
         assertEquals("id", condition2.getField());
         assertEquals("=", condition2.getOperator());
         assertEquals("101", condition2.getValue());
