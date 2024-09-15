@@ -48,7 +48,7 @@ final class SimpleConditionQueryWrapperAdapter implements ConditionQueryWrapperA
     }
 
     private void applyGeneral(String operator, String field, Object value, QueryWrapper<?> queryWrapper) {
-        SqlKeyword sqlKeyword = getSqlKeyword(GeneralOperator.get(operator));
+        SqlKeyword sqlKeyword = getSqlKeyword(GeneralOperator.of(operator));
         try {
             methodAddCondition.invoke(queryWrapper, true, field, sqlKeyword, value);
         } catch (InvocationTargetException | IllegalAccessException e) {

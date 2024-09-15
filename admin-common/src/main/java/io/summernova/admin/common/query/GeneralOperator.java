@@ -28,7 +28,7 @@ public enum GeneralOperator {
 
     private final String name;
 
-    public static GeneralOperator get(String name) {
+    public static GeneralOperator of(String name) {
         GeneralOperator operator = LOOKUP.get(name);
         if (operator == null)
             throw new IllegalArgumentException("No GeneralOperator with name '" + name + "' found.");
