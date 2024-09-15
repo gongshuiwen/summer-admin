@@ -1,7 +1,7 @@
 package io.summernova.admin.spring.web;
 
 import io.summernova.admin.common.query.Condition;
-import io.summernova.admin.common.query.SimpleCondition;
+import io.summernova.admin.common.query.GeneralCondition;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -39,7 +39,7 @@ class TestCommonControllerCount extends CommonControllerTestBase {
     @Test
     @WithMockAdmin
     void testCondition() throws Exception {
-        Condition condition = SimpleCondition.of("name", "=", "mock1");
+        Condition condition = GeneralCondition.eq("name", "mock1");
         ResultActions resultActions = doCount(condition);
         checkResultActionsSuccess(resultActions, "1");
     }
