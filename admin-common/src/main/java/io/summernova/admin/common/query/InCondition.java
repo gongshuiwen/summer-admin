@@ -43,6 +43,7 @@ public final class InCondition extends Condition {
             throw new IllegalArgumentException("Values cannot be null or empty.");
     }
 
+    @Override
     public String getSql() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
