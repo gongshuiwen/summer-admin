@@ -6,10 +6,6 @@ import io.summernova.admin.common.query.CompositeOperator;
 import io.summernova.admin.common.query.Condition;
 import lombok.Getter;
 
-import java.util.List;
-
-import static io.summernova.admin.common.query.CompositeCondition.*;
-
 /**
  * @author gongshuiwen
  */
