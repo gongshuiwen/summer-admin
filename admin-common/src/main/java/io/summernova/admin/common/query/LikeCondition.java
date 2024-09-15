@@ -20,9 +20,9 @@ public final class LikeCondition extends Condition {
         this.value = value;
     }
 
-    // -------------------------
+    // ------------------------
     // Static factory methods
-    // -------------------------
+    // ------------------------
     public static LikeCondition of(String field, LikeOperator likeOperator, String value) {
         checkField(field);
         return new LikeCondition(field, likeOperator, value);

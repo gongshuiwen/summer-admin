@@ -23,6 +23,9 @@ public final class InCondition extends Condition {
         this.values = values.toArray(new Object[0]);
     }
 
+    // ------------------------
+    // Static factory methods
+    // ------------------------
     public static InCondition in(String field, List<?> values) {
         checkField(field);
         checkValues(values);

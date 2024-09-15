@@ -23,6 +23,9 @@ public final class OrderBys {
         this.orderBys = orderBys;
     }
 
+    // ------------------------
+    // Static factory methods
+    // ------------------------
     public static OrderBys of(OrderBy... orderBys) {
         return new OrderBys(orderBys);
     }

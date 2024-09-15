@@ -18,6 +18,9 @@ public final class NullCondition extends Condition {
         this.field = field;
     }
 
+    // ------------------------
+    // Static factory methods
+    // ------------------------
     public static NullCondition isNull(String field) {
         checkField(field);
         return new NullCondition(OPERATOR_IS_NULL, field);

@@ -20,9 +20,9 @@ public final class CompareCondition extends Condition {
         this.value = value;
     }
 
-    // -------------------------
+    // ------------------------
     // Static factory methods
-    // -------------------------
+    // ------------------------
     public static CompareCondition of(String field, CompareOperator compareOperator, Object value) {
         checkField(field);
         return new CompareCondition(field, compareOperator, value);

@@ -25,6 +25,9 @@ public final class BetweenCondition extends Condition {
         this.value2 = value2;
     }
 
+    // ------------------------
+    // Static factory methods
+    // ------------------------
     public static BetweenCondition between(String field, Object value1, Object value2) {
         checkField(field);
         checkValue(value1, value2);

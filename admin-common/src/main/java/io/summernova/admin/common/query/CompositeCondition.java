@@ -28,9 +28,9 @@ public final class CompositeCondition extends Condition {
         this.conditions = conditions;
     }
 
-    // -------------------------
+    // ------------------------
     // Static factory methods
-    // -------------------------
+    // ------------------------
     public static CompositeCondition of(CompositeOperator compositeOperator, Condition... conditions) {
         if (compositeOperator == CompositeOperator.NOT) {
             if (conditions == null)

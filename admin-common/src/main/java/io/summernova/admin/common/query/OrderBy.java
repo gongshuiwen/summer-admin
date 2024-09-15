@@ -17,6 +17,9 @@ public final class OrderBy {
         this.type = type;
     }
 
+    // ------------------------
+    // Static factory methods
+    // ------------------------
     public static OrderBy asc(String field) {
         FieldNameCheckUtil.checkFieldName(field);
         return new OrderBy(field, OrderByType.ASC);
