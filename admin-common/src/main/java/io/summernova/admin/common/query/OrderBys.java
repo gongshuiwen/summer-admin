@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * @author gongshuiwen
  */
 @Getter
-public class OrderBys {
+public final class OrderBys {
 
     public static final String SEPARATOR = ",";
     public static final String DESC_PREFIX = "_";

@@ -6,7 +6,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public class OrderBy {
+public final class OrderBy {
 
     private final String field;
     private final OrderByType type;
