@@ -1,4 +1,4 @@
-package io.summernova.admin.common.query;
+package io.summernova.admin.common.util;
 
 import java.util.regex.Pattern;
 
@@ -13,7 +13,7 @@ public final class FieldNameCheckUtil {
     private FieldNameCheckUtil() {
     }
 
-    static void checkFieldName(String fieldName) {
+    public static void checkFieldName(String fieldName) {
         if (fieldName == null)
             throw new IllegalArgumentException("The field name must not be null.");
         if (!FIELD_NAME_PATTERN.matcher(fieldName).matches())
