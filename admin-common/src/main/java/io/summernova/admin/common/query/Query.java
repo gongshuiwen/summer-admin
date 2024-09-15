@@ -6,7 +6,7 @@ import lombok.Getter;
  * @author gongshuiwen
  */
 @Getter
-public class Query {
+public final class Query {
 
     private final Condition condition;
     private final OrderBys orderBys;

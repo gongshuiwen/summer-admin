@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author gongshuiwen
  */
-public class QueryBuilder {
+public final class QueryBuilder {
 
     private Long limit;
     private Long offset;
