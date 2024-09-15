@@ -19,13 +19,14 @@ public final class ReflectUtil {
 
     /**
      * Get all declared fields (include inherited) of class
+     *
      * @param clazz the class
      * @return fields array
      */
     public static Field[] getAllDeclaredFields(Class<?> clazz) {
         List<Field> fieldList = new ArrayList<>();
         Class<?> currentClass = clazz;
-        while (currentClass != null){
+        while (currentClass != null) {
             fieldList.addAll(List.of(currentClass.getDeclaredFields()));
             currentClass = currentClass.getSuperclass();
         }
@@ -34,6 +35,7 @@ public final class ReflectUtil {
 
     /**
      * Get all declared fields (include inherited) with given annotation of class
+     *
      * @param clazz the class
      * @return fields array
      */
@@ -51,6 +53,7 @@ public final class ReflectUtil {
 
     /**
      * Get all declared fields (include inherited) with given type of class
+     *
      * @param clazz the class
      * @return fields array
      */
@@ -69,7 +72,7 @@ public final class ReflectUtil {
     /**
      * Get a field by name in the class or its superclasses.
      *
-     * @param clazz the class to search for the field
+     * @param clazz     the class to search for the field
      * @param fieldName the name of the field to find
      * @return the Field object representing the found field, or null if not found
      */
