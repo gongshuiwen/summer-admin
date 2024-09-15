@@ -13,6 +13,7 @@ public final class NullCondition extends Condition {
 
     private final String field;
 
+    // prevent external instantiation
     private NullCondition(String operator, String field) {
         super(operator);
         this.field = field;
