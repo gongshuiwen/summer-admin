@@ -16,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 
 import static io.summernova.admin.core.security.Constants.*;
+import static io.summernova.admin.core.service.TestAbstractBaseServiceOne2Many.MOCK2_AUTHORITY_DELETE;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -23,9 +24,10 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 @Sql(scripts = {
-        "/sql/test/ddl/mock1.sql",
-        "/sql/test/ddl/mock3.sql",
-        "/sql/test/ddl/mock_relation.sql",
+        "/mock1.sql",
+        "/mock2.sql",
+        "/mock3.sql",
+        "/mock_relation.sql",
 })
 class TestAbstractBaseServiceMany2Many {
 
@@ -174,15 +176,16 @@ class TestAbstractBaseServiceMany2Many {
             MOCK1_AUTHORITY_CREATE,
             MOCK1_AUTHORITY_DELETE,
             MOCK2_AUTHORITY_SELECT,
+            MOCK2_AUTHORITY_DELETE,
             MOCK3_AUTHORITY_CREATE,
             MOCK3_AUTHORITY_SELECT
     })
     void testMany2ManyDeleteById() {
-        // create mock3s
+        // create mock3 records
         List<Mock3> mock3List = List.of(new Mock3("mock3-1"), new Mock3("mock3-2"));
         mock3Service.createBatch(mock3List);
 
-        // create mock1 with adding mock3s
+        // create mock1 with adding mock3 records
         Mock1 mock1 = new Mock1("mock1-1");
         List<Command<Mock3>> commands = List.of(Command.add(List.of(1L, 2L)));
         mock1.setMock3s(Many2Many.ofCommands(commands));

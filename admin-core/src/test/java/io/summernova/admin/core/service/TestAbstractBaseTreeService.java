@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author gongshuiwen
  */
 @SpringBootTest
-@Sql(scripts = {"/sql/test/ddl/tree_mock.sql", "/sql/test/data/tree_mock.sql"})
+@Sql(scripts = {"/tree_mock.sql"})
 class TestAbstractBaseTreeService {
 
     @Autowired

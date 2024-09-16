@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 @Sql(scripts = {
-        "/sql/test/ddl/mock1.sql",
-        "/sql/test/ddl/mock2.sql",
+        "/mock1.sql",
+        "/mock2.sql",
 })
 class TestAbstractBaseServiceOne2Many {
 
@@ -187,8 +187,8 @@ class TestAbstractBaseServiceOne2Many {
         mock1Service.deleteById(mock1.getId());
         assertNull(mock1Service.selectById(mock1.getId()));
 
-        LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Mock2::getMock1Id2, mock1.getId());
+        LambdaQueryWrapper<Mock2> wrapper = new LambdaQueryWrapper<Mock2>()
+                .eq(Mock2::getMock1Id2, mock1.getId());
         List<Mock2> mock2s = mock2Service.getBaseMapper().selectList(wrapper);
         assertEquals(0, mock2s.size());
         assertNull(mock2Service.selectById(1L));
