@@ -57,7 +57,7 @@ module summernova.admin.core {
     opens io.summernova.admin.core.config;
     opens io.summernova.admin.core.field to com.fasterxml.jackson.databind;
     opens io.summernova.admin.core.jackson2 to com.fasterxml.jackson.databind;
-    opens io.summernova.admin.core.mapper to com.baomidou.mybatis.plus.core, spring.core;
+    opens io.summernova.admin.core.mapper to org.mybatis, com.baomidou.mybatis.plus.core, spring.core;
     opens io.summernova.admin.core.model;
     opens io.summernova.admin.core.service to spring.core;
 }
