@@ -2,31 +2,41 @@ package io.summernova.admin.core.mapper;
 
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock3;
+import org.apache.ibatis.session.SqlSession;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {
-        "/sql/test/ddl/mock1.sql",
-        "/sql/test/ddl/mock2.sql",
-        "/sql/test/ddl/mock_relation.sql",
-        "/sql/test/data/mock1.sql",
-        "/sql/test/data/mock2.sql",
-        "/sql/test/data/mock_relation.sql",
-})
 class TestRelationMapper {
 
-    @Autowired
-    MockRelationMapper mapper;
+    static final SqlSession sqlSession = SqlSessionUtil.getSqlSession();
+    static final MockRelationMapper mapper;
+
+    static {
+        sqlSession.getConfiguration().addMapper(MockRelationMapper.class);
+        mapper = sqlSession.getMapper(MockRelationMapper.class);
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        Class<?> mapperInterface = MockRelationMapper.class;
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapper.mapperRelationCache.put(mapperInterface, mapperRelation);
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        ScriptRunnerUtil.runScript(sqlSession, "mock1.sql");
+        ScriptRunnerUtil.runScript(sqlSession, "mock3.sql");
+        ScriptRunnerUtil.runScript(sqlSession, "mock_relation.sql");
+    }
 
     @Test
     void testGetTargetIds() {
