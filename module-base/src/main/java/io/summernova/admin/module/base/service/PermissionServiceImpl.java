@@ -1,11 +1,14 @@
 package io.summernova.admin.module.base.service;
 
+import io.summernova.admin.core.mapper.RelationMapper;
+import io.summernova.admin.core.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.service.AbstractBaseService;
-import io.summernova.admin.module.base.mapper.RolePermissionMapper;
 import io.summernova.admin.module.base.model.Permission;
 import io.summernova.admin.module.base.model.Role;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +24,15 @@ import java.util.stream.Collectors;
 @Service
 public class PermissionServiceImpl extends AbstractBaseService<Permission> implements PermissionService {
 
-    private final RolePermissionMapper rolePermissionMapper;
+    private final RelationMapper rolePermissionMapper;
 
-    public PermissionServiceImpl(RolePermissionMapper rolePermissionMapper) {
-        this.rolePermissionMapper = rolePermissionMapper;
+    // TODO: this is a temporary solution, because the sqlSession filed in AbstractBaseService has not been autowired when in constructor,
+    //  so we use @Autowired @Qualifier("sqlSessionTemplate") to inject it
+    public PermissionServiceImpl(
+            @Autowired @Qualifier("sqlSessionTemplate") SqlSession sqlSession
+    ) throws NoSuchFieldException {
+        this.rolePermissionMapper = RelationMapperRegistry.getRelationMapper(
+                sqlSession, Role.class.getDeclaredField("permissions"));
     }
 
     @Override

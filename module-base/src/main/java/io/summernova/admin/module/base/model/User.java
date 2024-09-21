@@ -8,6 +8,7 @@ import io.summernova.admin.common.validation.NullOrNotBlank;
 import io.summernova.admin.core.context.supplier.GrantedAuthoritiesServiceSupplier;
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
+import io.summernova.admin.core.field.annotations.Many2ManyField;
 import io.summernova.admin.core.field.annotations.OnDelete;
 import io.summernova.admin.core.jackson2.AllowedForAdmin;
 import io.summernova.admin.core.model.BaseModel;
@@ -89,6 +90,7 @@ public class User extends BaseModel implements BaseUser {
 
     @Schema(description = "角色")
     @TableField(exist = false)
+    @Many2ManyField(sourceField = "user_id", targetField = "role_id", joinTable = "user_role")
     private Many2Many<Role> roles;
 
     @TableField(exist = false)

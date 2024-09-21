@@ -1,12 +1,15 @@
 package io.summernova.admin.module.base.service;
 
 import io.summernova.admin.common.exception.ValidationException;
+import io.summernova.admin.core.mapper.RelationMapper;
+import io.summernova.admin.core.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.service.AbstractBaseService;
-import io.summernova.admin.module.base.mapper.UserRoleMapper;
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +27,15 @@ import static io.summernova.admin.core.security.Constants.CODE_BASE_USER;
 @Service
 public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleService {
 
-    private final UserRoleMapper userRoleMapper;
+    private final RelationMapper userRoleMapper;
 
-    public RoleServiceImpl(UserRoleMapper userRoleMapper) {
-        this.userRoleMapper = userRoleMapper;
+    // TODO: this is a temporary solution, because the sqlSession filed in AbstractBaseService has not been autowired when in constructor,
+    //  so we use @Autowired @Qualifier("sqlSessionTemplate") to inject it
+    public RoleServiceImpl(
+            @Autowired @Qualifier("sqlSessionTemplate") SqlSession sqlSession
+    ) throws NoSuchFieldException {
+        this.userRoleMapper = RelationMapperRegistry.getRelationMapper(
+                sqlSession, User.class.getDeclaredField("roles"));
     }
 
     @Override

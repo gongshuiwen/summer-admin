@@ -1,7 +1,10 @@
 package io.summernova.admin.module.base.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.NullOrNotBlank;
+import io.summernova.admin.core.field.Many2Many;
+import io.summernova.admin.core.field.annotations.Many2ManyField;
 import io.summernova.admin.core.model.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -39,4 +42,8 @@ public class Role extends BaseModel {
 
     @Schema(description = "状态 1=正常,0=停用")
     private Integer status;
+
+    @TableField(exist = false)
+    @Many2ManyField(sourceField = "role_id", targetField = "perm_id", joinTable = "role_permission")
+    private Many2Many<Permission> permissions;
 }
