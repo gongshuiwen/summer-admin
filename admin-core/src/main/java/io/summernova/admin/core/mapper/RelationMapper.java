@@ -5,18 +5,13 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
  * @author gongshuiwen
  */
 public interface RelationMapper {
-
-    // Cache for RelationMapper's MapperRelation annotation
-    Map<Class<?>, MapperRelation> mapperRelationCache = new ConcurrentHashMap<>();
 
     @Select("SELECT ${targetField} FROM ${table} WHERE ${sourceField} = #{sourceId}")
     List<Long> _getTargetIdsById(String table, String sourceField, String targetField, Long sourceId);
