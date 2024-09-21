@@ -226,7 +226,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
                         if (command.getIds() == null || command.getIds().isEmpty()) {
                             throw new IllegalArgumentException("The ids of Command ADD cannot be null or empty");
                         }
-                        RelationMapper mapper = getRelationMapper(targetClass);
+                        RelationMapper mapper = getRelationMapper(field);
                         mapper.add(getModelClass(), record.getId(), command.getIds());
                     } else {
                         throw new IllegalArgumentException("The Command " + command.getCommandType()
@@ -336,17 +336,17 @@ public abstract class AbstractBaseService<T extends BaseModel>
                     if (command == null) break;
                     switch (command.getCommandType()) {
                         case ADD: {
-                            RelationMapper mapper = getRelationMapper(targetClass);
+                            RelationMapper mapper = getRelationMapper(field);
                             mapper.add(getModelClass(), sourceId, command.getIds());
                             break;
                         }
                         case REMOVE: {
-                            RelationMapper mapper = getRelationMapper(targetClass);
+                            RelationMapper mapper = getRelationMapper(field);
                             mapper.remove(getModelClass(), sourceId, command.getIds());
                             break;
                         }
                         case REPLACE: {
-                            RelationMapper mapper = getRelationMapper(targetClass);
+                            RelationMapper mapper = getRelationMapper(field);
                             mapper.replace(getModelClass(), sourceId, command.getIds());
                             break;
                         }
@@ -449,9 +449,8 @@ public abstract class AbstractBaseService<T extends BaseModel>
 
     private void processMany2manyForDelete(List<Long> ids) {
         for (Field field : RelationFieldUtil.getMany2ManyFields(getModelClass())) {
-            Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
             for (Long sourceId : ids) {
-                RelationMapper mapper = getRelationMapper(targetClass);
+                RelationMapper mapper = getRelationMapper(field);
                 mapper.removeAll(getModelClass(), sourceId);
             }
         }

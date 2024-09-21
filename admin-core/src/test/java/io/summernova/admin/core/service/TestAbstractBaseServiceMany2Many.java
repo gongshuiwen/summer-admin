@@ -3,9 +3,11 @@ package io.summernova.admin.core.service;
 import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.field.Command;
 import io.summernova.admin.core.field.Many2Many;
-import io.summernova.admin.core.mapper.MockRelationMapper;
+import io.summernova.admin.core.mapper.RelationMapper;
+import io.summernova.admin.core.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock3;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +46,20 @@ class TestAbstractBaseServiceMany2Many {
     static final String MOCK3_AUTHORITY_SELECT = AUTHORITY_SELECT_CODE_PREFIX + MOCK3_ENTITY_NAME;
     static final String MOCK3_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK3_ENTITY_NAME;
 
-    @Autowired
-    MockRelationMapper mockRelationMapper;
-
-    @Autowired
+    RelationMapper mockRelationMapper;
     Mock1Service mock1Service;
-
-    @Autowired
     Mock3Service mock3Service;
+
+    TestAbstractBaseServiceMany2Many(
+            @Autowired SqlSession sqlSession,
+            @Autowired Mock1Service mock1Service,
+            @Autowired Mock3Service mock3Service
+    ) throws NoSuchFieldException {
+        mockRelationMapper = RelationMapperRegistry.getRelationMapper(
+                sqlSession, Mock1.class.getDeclaredField("mock3s"));
+        this.mock1Service = mock1Service;
+        this.mock3Service = mock3Service;
+    }
 
     @AfterEach
     void afterEach() {

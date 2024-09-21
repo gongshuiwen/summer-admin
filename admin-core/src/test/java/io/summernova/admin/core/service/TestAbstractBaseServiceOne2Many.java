@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.field.Command;
 import io.summernova.admin.core.field.One2Many;
-import io.summernova.admin.core.mapper.MockRelationMapper;
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock2;
 import org.junit.jupiter.api.AfterEach;
@@ -40,9 +39,6 @@ class TestAbstractBaseServiceOne2Many {
     static final String MOCK2_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK2_ENTITY_NAME;
     static final String MOCK2_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK2_ENTITY_NAME;
     static final String MOCK2_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK2_ENTITY_NAME;
-
-    @Autowired
-    MockRelationMapper mockRelationMapper;
 
     @Autowired
     Mock1Service mock1Service;

@@ -3,7 +3,6 @@ package io.summernova.admin.core.mapper;
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock3;
 import org.apache.ibatis.session.SqlSession;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,18 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestRelationMapper {
 
     static final SqlSession sqlSession = SqlSessionUtil.getSqlSession();
-    static final MockRelationMapper mapper;
+    static final RelationMapper mapper;
 
     static {
-        sqlSession.getConfiguration().addMapper(MockRelationMapper.class);
-        mapper = sqlSession.getMapper(MockRelationMapper.class);
-    }
-
-    @BeforeAll
-    static void beforeAll() {
-        Class<?> mapperInterface = MockRelationMapper.class;
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
-        RelationMapper.mapperRelationCache.put(mapperInterface, mapperRelation);
+        try {
+            mapper = RelationMapperRegistry.getRelationMapper(
+                    sqlSession, Mock1.class.getDeclaredField("mock3s"));
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @BeforeEach

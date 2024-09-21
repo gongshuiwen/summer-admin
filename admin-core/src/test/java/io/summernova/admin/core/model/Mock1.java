@@ -7,6 +7,7 @@ import io.summernova.admin.common.validation.UpdateValidationGroup;
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.One2Many;
 import io.summernova.admin.core.field.annotations.InverseField;
+import io.summernova.admin.core.field.annotations.Many2ManyField;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class Mock1 extends BaseModel {
     private One2Many<Mock2> mock2s3;
 
     @TableField(exist = false)
+    @Many2ManyField(sourceField = "mock1_id", targetField = "mock3_id", joinTable = "mock_relation")
     private Many2Many<Mock3> mock3s;
 
     public Mock1(String name) {

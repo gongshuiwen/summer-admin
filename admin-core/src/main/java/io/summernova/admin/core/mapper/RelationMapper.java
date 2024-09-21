@@ -29,7 +29,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
@@ -49,7 +49,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
@@ -72,7 +72,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
@@ -99,7 +99,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
@@ -121,7 +121,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
@@ -141,7 +141,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
@@ -159,7 +159,7 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperRelationCache.get(mapperInterface);
+        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
 
         // Get the source field and target field info
         FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);

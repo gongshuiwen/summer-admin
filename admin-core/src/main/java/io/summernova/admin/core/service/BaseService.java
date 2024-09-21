@@ -15,6 +15,7 @@ import io.summernova.admin.core.query.adapter.ConditionQueryWrapperAdapter;
 import io.summernova.admin.core.query.adapter.OrderBysQueryWrapperAdapter;
 import org.apache.ibatis.session.SqlSession;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
@@ -144,22 +145,11 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     /**
      * Returns a {@link RelationMapper} instance for the service's model class and the given target class
      *
-     * @param targetClass the target class of the relation
+     * @param field the many2many field
      * @return {@link RelationMapper} instance
      */
-    default RelationMapper getRelationMapper(Class<? extends BaseModel> targetClass) {
-        return RelationMapperRegistry.getMapper(getModelClass(), targetClass);
-    }
-
-    /**
-     * Returns a {@link RelationMapper} instance for the two given classes
-     *
-     * @param class1 the first class
-     * @param class2 the second class
-     * @return {@link RelationMapper} instance
-     */
-    default RelationMapper getRelationMapper(Class<? extends BaseModel> class1, Class<? extends BaseModel> class2) {
-        return RelationMapperRegistry.getMapper(class1, class2);
+    default RelationMapper getRelationMapper(Field field) {
+        return RelationMapperRegistry.getRelationMapper(getSqlSession(), field);
     }
 
     <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass);

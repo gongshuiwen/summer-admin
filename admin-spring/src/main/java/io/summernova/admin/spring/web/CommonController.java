@@ -277,7 +277,7 @@ public class CommonController implements BaseContextContainer {
         Class<T> modelClass = service.getModelClass();
         for (Field field : RelationFieldUtil.getMany2ManyFields(modelClass)) {
             Class<? extends BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(modelClass, field);
-            RelationMapper relationMapper = RelationMapperRegistry.getMapper(modelClass, targetClass);
+            RelationMapper relationMapper = RelationMapperRegistry.getRelationMapper(service.getSqlSession(), field);
 
             // Get all target ids and the map of record id -> target ids
             Set<Long> allTargetIds = new HashSet<>();
