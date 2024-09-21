@@ -5,9 +5,9 @@ import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.UpdateValidationGroup;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.One2Many;
-import io.summernova.admin.core.field.annotations.InverseField;
 import io.summernova.admin.core.field.annotations.Many2OneField;
 import io.summernova.admin.core.field.annotations.OnDeleteType;
+import io.summernova.admin.core.field.annotations.One2ManyField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Null;
 import lombok.Getter;
@@ -30,6 +30,6 @@ public abstract class BaseTreeModel<T extends BaseTreeModel<?>> extends BaseMode
 
     @Schema(description = "子级列表")
     @TableField(exist = false)
-    @InverseField("parentId")
+    @One2ManyField(inverseField = "parentId")
     private One2Many<T> children;
 }

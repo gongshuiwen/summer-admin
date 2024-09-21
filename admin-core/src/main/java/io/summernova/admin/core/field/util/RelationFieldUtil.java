@@ -4,7 +4,7 @@ import io.summernova.admin.common.util.ReflectUtil;
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.One2Many;
-import io.summernova.admin.core.field.annotations.InverseField;
+import io.summernova.admin.core.field.annotations.One2ManyField;
 import io.summernova.admin.core.model.BaseModel;
 
 import java.lang.reflect.Field;
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see Many2One
  * @see One2Many
  * @see Many2Many
- * @see InverseField
+ * @see One2ManyField
  */
 public final class RelationFieldUtil {
 
@@ -164,15 +164,16 @@ public final class RelationFieldUtil {
         Class<? extends BaseModel> modelClass = modelFieldKey.modelClass();
         Field field = modelFieldKey.field();
 
-        InverseField inverseFieldAnnotation = field.getDeclaredAnnotation(InverseField.class);
+        One2ManyField inverseFieldAnnotation = field.getDeclaredAnnotation(One2ManyField.class);
         if (inverseFieldAnnotation == null) {
-            throw new RuntimeException("Cannot get annotation @InverseField for field '" + _formatFieldName(field) + "'.");
+            throw new RuntimeException("Cannot get annotation @One2ManyField for field '" + _formatFieldName(field) + "'.");
         }
 
+        String inverseFieldName = inverseFieldAnnotation.inverseField();
         Class<?> targetClass = RelationFieldUtil.getTargetModelClass(modelClass, field);
-        Field inverseField = ReflectUtil.getField(targetClass, inverseFieldAnnotation.value());
+        Field inverseField = ReflectUtil.getField(targetClass, inverseFieldName);
         if (inverseField == null) {
-            throw new RuntimeException("The inverse field '" + inverseFieldAnnotation.value() + "' of '" + _formatFieldName(field) + "'doesn't exist.");
+            throw new RuntimeException("The inverse field '" + inverseFieldName + "' of '" + _formatFieldName(field) + "'doesn't exist.");
         }
         inverseField.setAccessible(true);
         return inverseField;

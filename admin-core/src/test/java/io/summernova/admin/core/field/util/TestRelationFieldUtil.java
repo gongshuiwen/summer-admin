@@ -4,7 +4,8 @@ import io.summernova.admin.common.util.ReflectUtil;
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.One2Many;
-import io.summernova.admin.core.field.annotations.InverseField;
+import io.summernova.admin.core.field.annotations.Many2OneField;
+import io.summernova.admin.core.field.annotations.One2ManyField;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.model.BaseTreeModel;
 import lombok.Getter;
@@ -73,11 +74,11 @@ class TestRelationFieldUtil {
     @Setter
     static class Mock extends BaseModel {
 
-        @InverseField("field2")
-        private Many2One<Mock> field1;
+        @One2ManyField(inverseField = "field2")
+        private One2Many<Mock> field1;
 
-        @InverseField("field10")
-        private One2Many<Mock> field2;
+        @Many2OneField
+        private Many2One<Mock> field2;
 
         private Many2Many<Mock> field3;
         private Many2One<?> field4;

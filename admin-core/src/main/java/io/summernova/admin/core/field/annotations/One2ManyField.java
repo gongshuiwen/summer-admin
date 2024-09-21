@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface InverseField {
+public @interface One2ManyField {
 
-    String value();
+    String inverseField();
 }
