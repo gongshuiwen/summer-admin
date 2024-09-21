@@ -8,13 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface OnDelete {
+public @interface Many2OneField {
 
-    Type value();
-
-    enum Type {
-        RESTRICT,
-        CASCADE,
-        SET_NULL
-    }
+    OnDeleteType onDelete() default OnDeleteType.RESTRICT;
 }

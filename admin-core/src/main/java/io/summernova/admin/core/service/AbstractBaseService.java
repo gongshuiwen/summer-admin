@@ -12,7 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.summernova.admin.core.field.*;
-import io.summernova.admin.core.field.annotations.OnDelete;
+import io.summernova.admin.core.field.annotations.Many2OneField;
+import io.summernova.admin.core.field.annotations.OnDeleteType;
 import io.summernova.admin.core.field.util.RelationFieldUtil;
 import io.summernova.admin.core.mapper.BaseMapper;
 import io.summernova.admin.core.mapper.BaseMapperRegistry;
@@ -390,9 +391,8 @@ public abstract class AbstractBaseService<T extends BaseModel>
             Class<BaseModel> targetClass = RelationFieldUtil.getTargetModelClass(getModelClass(), field);
             Field inverseField = RelationFieldUtil.getInverseField(getModelClass(), field);
             AbstractBaseService<BaseModel> targetService = getService(targetClass);
-            OnDelete.Type onDeleteType = OnDelete.Type.RESTRICT;
-            OnDelete onDelete = inverseField.getDeclaredAnnotation(OnDelete.class);
-            if (onDelete != null) onDeleteType = onDelete.value();
+            Many2OneField many2OneField = inverseField.getDeclaredAnnotation(Many2OneField.class);
+            OnDeleteType onDeleteType = many2OneField == null ? OnDeleteType.RESTRICT : many2OneField.onDelete();
             switch (onDeleteType) {
                 case RESTRICT: {
                     if (targetService.countByMany2OneIds(inverseField, ids) > 0) {

@@ -9,7 +9,8 @@ import io.summernova.admin.core.context.supplier.GrantedAuthoritiesServiceSuppli
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.annotations.Many2ManyField;
-import io.summernova.admin.core.field.annotations.OnDelete;
+import io.summernova.admin.core.field.annotations.Many2OneField;
+import io.summernova.admin.core.field.annotations.OnDeleteType;
 import io.summernova.admin.core.jackson2.AllowedForAdmin;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.security.account.BaseUser;
@@ -85,7 +86,7 @@ public class User extends BaseModel implements BaseUser {
     private LocalDateTime loginTime;
 
     @Schema(description = "部门")
-    @OnDelete(OnDelete.Type.RESTRICT)
+    @Many2OneField(onDelete = OnDeleteType.RESTRICT)
     private Many2One<Department> departmentId;
 
     @Schema(description = "角色")
