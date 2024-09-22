@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.NullOrNotBlank;
-import io.summernova.admin.core.context.supplier.GrantedAuthoritiesServiceSupplier;
+import io.summernova.admin.core.context.supplier.BaseAuthoritiesServiceSupplier;
 import io.summernova.admin.core.field.Many2Many;
 import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.annotations.Many2ManyField;
@@ -14,12 +14,12 @@ import io.summernova.admin.core.field.annotations.OnDeleteType;
 import io.summernova.admin.core.jackson2.AllowedForAdmin;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.security.account.BaseUser;
-import io.summernova.admin.core.security.authorization.GrantedAuthoritiesService;
+import io.summernova.admin.core.security.authorization.BaseAuthoritiesService;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
@@ -95,15 +95,15 @@ public class User extends BaseModel implements BaseUser {
     private Many2Many<Role> roles;
 
     @TableField(exist = false)
-    private Set<? extends GrantedAuthority> authorities;
+    private Set<? extends BaseAuthority> authorities;
 
     @Override
-    public Set<? extends GrantedAuthority> getAuthorities() {
+    public Set<? extends BaseAuthority> getAuthorities() {
         if (authorities == null) {
-            GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
+            BaseAuthoritiesService baseAuthoritiesService = BaseAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
 
             // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
-            authorities = Collections.unmodifiableSet(grantedAuthoritiesService.loadAuthoritiesByUserId(getId()));
+            authorities = Collections.unmodifiableSet(baseAuthoritiesService.loadAuthoritiesByUserId(getId()));
         }
         return authorities;
     }

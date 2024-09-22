@@ -7,12 +7,12 @@ import java.util.Set;
 /**
  * @author gongshuiwen
  */
-public interface GrantedAuthoritiesService {
+public interface BaseAuthoritiesService {
 
     /**
      * Get the set of {@link GrantedAuthority} by user id.
      * @param userId id of user
      * @return set of {@link GrantedAuthority}
      */
-    Set<? extends GrantedAuthority> loadAuthoritiesByUserId(Long userId);
+    Set<? extends BaseAuthority> loadAuthoritiesByUserId(Long userId);
 }

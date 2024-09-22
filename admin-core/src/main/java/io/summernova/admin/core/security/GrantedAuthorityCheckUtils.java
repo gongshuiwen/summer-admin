@@ -1,7 +1,7 @@
 package io.summernova.admin.core.security;
 
 import io.summernova.admin.core.context.BaseContextHolder;
-import org.springframework.security.core.GrantedAuthority;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 
 import java.util.Collection;
 
@@ -18,21 +18,21 @@ public final class GrantedAuthorityCheckUtils {
         return BaseContextHolder.getContext().isAdmin();
     }
 
-    public static boolean contains(GrantedAuthority authority) {
+    public static boolean contains(BaseAuthority authority) {
         return getUserAuthorities().contains(authority);
     }
 
-    public static boolean containsAny(Collection<? extends GrantedAuthority> authorities) {
-        Collection<? extends GrantedAuthority> userAuthorities = getUserAuthorities();
+    public static boolean containsAny(Collection<? extends BaseAuthority> authorities) {
+        Collection<? extends BaseAuthority> userAuthorities = getUserAuthorities();
         return authorities.stream().anyMatch(userAuthorities::contains);
     }
 
-    public static boolean containsAll(Collection<? extends GrantedAuthority> authorities) {
-        Collection<? extends GrantedAuthority> userAuthorities = getUserAuthorities();
+    public static boolean containsAll(Collection<? extends BaseAuthority> authorities) {
+        Collection<? extends BaseAuthority> userAuthorities = getUserAuthorities();
         return userAuthorities.containsAll(authorities);
     }
 
-    private static Collection<? extends GrantedAuthority> getUserAuthorities() {
+    private static Collection<? extends BaseAuthority> getUserAuthorities() {
         return BaseContextHolder.getContext().getAuthorities();
     }
 }

@@ -8,7 +8,7 @@ import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.security.Constants;
 import io.summernova.admin.core.security.GrantedAuthorityCheckUtils;
-import io.summernova.admin.core.security.authorization.SimpleGrantedAuthority;
+import io.summernova.admin.core.security.authorization.SimpleAuthority;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -44,7 +44,7 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
 
     private boolean checkAllowedForAdmin(AllowedForAdmin allowedForAdminAnnotation) {
         if (allowedForAdminAnnotation != null) {
-            return GrantedAuthorityCheckUtils.contains(SimpleGrantedAuthority.of(Constants.ROLE_SYS_ADMIN));
+            return GrantedAuthorityCheckUtils.contains(SimpleAuthority.of(Constants.ROLE_SYS_ADMIN));
         }
         return true;
     }
@@ -55,7 +55,7 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
                 && allowedForRolesAnnotation.value().length > 0) {
             return GrantedAuthorityCheckUtils.containsAny(
                     Arrays.stream(allowedForRolesAnnotation.value())
-                            .map(role -> SimpleGrantedAuthority.of(Constants.ROLE_PREFIX + role))
+                            .map(role -> SimpleAuthority.of(Constants.ROLE_PREFIX + role))
                             .toList());
         }
         return true;

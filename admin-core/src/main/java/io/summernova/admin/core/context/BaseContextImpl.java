@@ -1,16 +1,16 @@
 package io.summernova.admin.core.context;
 
 import io.summernova.admin.core.context.supplier.BaseUserServiceSupplier;
-import io.summernova.admin.core.context.supplier.GrantedAuthoritiesServiceSupplier;
+import io.summernova.admin.core.context.supplier.BaseAuthoritiesServiceSupplier;
 import io.summernova.admin.core.context.supplier.HttpServletRequestSupplier;
 import io.summernova.admin.core.context.supplier.SqlSessionSupplier;
 import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.account.BaseUserService;
-import io.summernova.admin.core.security.authorization.GrantedAuthoritiesService;
+import io.summernova.admin.core.security.authorization.BaseAuthoritiesService;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class BaseContextImpl implements BaseContext {
 
     // cache fields
     private BaseUser user;
-    private Set<? extends GrantedAuthority> authorities;
+    private Set<? extends BaseAuthority> authorities;
     private Boolean admin;
 
     private Map<String, Object> attributes;
@@ -60,13 +60,13 @@ public class BaseContextImpl implements BaseContext {
     }
 
     @Override
-    public Set<? extends GrantedAuthority> getAuthorities() {
+    public Set<? extends BaseAuthority> getAuthorities() {
         if (authorities == null) {
             user = getUser();
             if (user != null) {
                 user.getAuthorities();
             } else {
-                GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
+                BaseAuthoritiesService grantedAuthoritiesService = BaseAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
                 // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
                 authorities = Collections.unmodifiableSet(grantedAuthoritiesService.loadAuthoritiesByUserId(userId));
             }
@@ -82,7 +82,7 @@ public class BaseContextImpl implements BaseContext {
     @Override
     public boolean isAdmin() {
         if (admin == null) {
-            Set<? extends GrantedAuthority> authorities = getAuthorities();
+            Set<? extends BaseAuthority> authorities = getAuthorities();
             admin = authorities != null && authorities.contains(GRANTED_AUTHORITY_ROLE_SYS_ADMIN);
         }
         return admin;

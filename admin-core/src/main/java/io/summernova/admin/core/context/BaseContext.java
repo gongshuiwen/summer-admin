@@ -1,9 +1,9 @@
 package io.summernova.admin.core.context;
 
 import io.summernova.admin.core.security.account.BaseUser;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +35,7 @@ public interface BaseContext {
      *
      * @return an unmodifiable set of authorities or an empty set if they are not available
      */
-    Set<? extends GrantedAuthority> getAuthorities();
+    Set<? extends BaseAuthority> getAuthorities();
 
     /**
      * Check if the current user is a super admin.

@@ -1,6 +1,6 @@
 package io.summernova.admin.core.security.account;
 
-import org.springframework.security.core.GrantedAuthority;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -16,6 +16,5 @@ public interface BaseUser extends Serializable, UserDetails {
      */
     Long getId();
 
-    @Override
-    Set<? extends GrantedAuthority> getAuthorities();
+    Set<? extends BaseAuthority> getAuthorities();
 }

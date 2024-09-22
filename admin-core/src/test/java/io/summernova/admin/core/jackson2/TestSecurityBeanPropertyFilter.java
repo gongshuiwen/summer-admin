@@ -10,12 +10,12 @@ import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.context.BaseContextImpl;
 import io.summernova.admin.core.model.BaseModel;
 import io.summernova.admin.core.security.account.BaseUser;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -70,15 +70,15 @@ class TestSecurityBeanPropertyFilter {
     static class User extends BaseModel implements BaseUser {
 
         @TableField(exist = false)
-        private Set<? extends GrantedAuthority> authorities;
+        private Set<? extends BaseAuthority> authorities;
 
-        public User(Long id, Set<GrantedAuthority> authorities) {
+        public User(Long id, Set<BaseAuthority> authorities) {
             setId(id);
             setAuthorities(authorities);
         }
 
         @Override
-        public Set<? extends GrantedAuthority> getAuthorities() {
+        public Set<? extends BaseAuthority> getAuthorities() {
             return Objects.requireNonNullElseGet(authorities, Set::of);
         }
 

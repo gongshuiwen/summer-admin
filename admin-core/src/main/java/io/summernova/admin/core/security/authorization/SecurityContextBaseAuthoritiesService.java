@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
  */
 @Component
 @Profile("test")
-public class SecurityContextGrantedAuthoritiesService implements GrantedAuthoritiesService {
+public class SecurityContextBaseAuthoritiesService implements BaseAuthoritiesService {
 
     @Override
-    public Set<? extends GrantedAuthority> loadAuthoritiesByUserId(Long userId) {
+    public Set<? extends BaseAuthority> loadAuthoritiesByUserId(Long userId) {
         // Get authorities from security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() ) {
@@ -26,7 +26,7 @@ public class SecurityContextGrantedAuthoritiesService implements GrantedAuthorit
             if (authorities1 != null && !authorities1.isEmpty()) {
                 return authorities1.stream()
                         .map(GrantedAuthority::getAuthority)
-                        .map(SimpleGrantedAuthority::of)
+                        .map(SimpleAuthority::of)
                         .collect(Collectors.toUnmodifiableSet());
             }
         }
