@@ -103,7 +103,7 @@ public class User extends BaseModel implements BaseUser {
             GrantedAuthoritiesService grantedAuthoritiesService = GrantedAuthoritiesServiceSupplier.getGrantedAuthoritiesService();
 
             // Get authorities by GrantedAuthoritiesService, always wrapped with unmodifiable set
-            authorities = Collections.unmodifiableSet(grantedAuthoritiesService.getAuthoritiesByUserId(getId()));
+            authorities = Collections.unmodifiableSet(grantedAuthoritiesService.loadAuthoritiesByUserId(getId()));
         }
         return authorities;
     }

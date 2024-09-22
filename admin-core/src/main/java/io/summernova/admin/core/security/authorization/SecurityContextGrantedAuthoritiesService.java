@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class SecurityContextGrantedAuthoritiesService implements GrantedAuthoritiesService {
 
     @Override
-    public Set<? extends GrantedAuthority> getAuthoritiesByUserId(Long userId) {
+    public Set<? extends GrantedAuthority> loadAuthoritiesByUserId(Long userId) {
         // Get authorities from security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() ) {

@@ -30,7 +30,7 @@ public class GrantedAuthoritiesServiceImpl implements GrantedAuthoritiesService 
     private final PermissionService permissionService;
 
     @Override
-    public Set<? extends GrantedAuthority> getAuthoritiesByUserId(Long userId) {
+    public Set<? extends GrantedAuthority> loadAuthoritiesByUserId(Long userId) {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
         // Get authorities from roles

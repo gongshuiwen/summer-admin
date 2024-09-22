@@ -14,5 +14,5 @@ public interface GrantedAuthoritiesService {
      * @param userId id of user
      * @return set of {@link GrantedAuthority}
      */
-    Set<? extends GrantedAuthority> getAuthoritiesByUserId(Long userId);
+    Set<? extends GrantedAuthority> loadAuthoritiesByUserId(Long userId);
 }
