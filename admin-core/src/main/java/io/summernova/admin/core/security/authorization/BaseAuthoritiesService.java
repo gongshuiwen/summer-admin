@@ -1,7 +1,5 @@
 package io.summernova.admin.core.security.authorization;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import java.util.Set;
 
 /**
@@ -10,9 +8,9 @@ import java.util.Set;
 public interface BaseAuthoritiesService {
 
     /**
-     * Get the set of {@link GrantedAuthority} by user id.
+     * Get the set of {@link BaseAuthority} by user id.
      * @param userId id of user
-     * @return set of {@link GrantedAuthority}
+     * @return set of {@link BaseAuthority}
      */
     Set<? extends BaseAuthority> loadAuthoritiesByUserId(Long userId);
 }
