@@ -24,7 +24,7 @@ import static io.summernova.admin.core.security.Constants.ROLE_PREFIX;
 @Service
 @RequiredArgsConstructor
 @Profile("!test")
-public class GrantedAuthoritiesServiceImpl implements BaseAuthoritiesService {
+public class BaseAuthoritiesServiceImpl implements BaseAuthoritiesService {
 
     private final RoleService roleService;
     private final PermissionService permissionService;
