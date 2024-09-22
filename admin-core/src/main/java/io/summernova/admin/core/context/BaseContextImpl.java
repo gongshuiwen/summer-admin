@@ -29,13 +29,14 @@ public class BaseContextImpl implements BaseContext {
     @Getter
     private final Long userId;
 
+    // cache fields
     private BaseUser user;
     private Set<? extends GrantedAuthority> authorities;
-    private Boolean superAdmin;
     private Boolean admin;
 
-    private HttpServletRequest request;
     private Map<String, Object> attributes;
+
+    private HttpServletRequest request;
 
     public BaseContextImpl(Long userId) {
         this.userId = userId;
@@ -75,10 +76,7 @@ public class BaseContextImpl implements BaseContext {
 
     @Override
     public boolean isSuperAdmin() {
-        if (superAdmin == null) {
-            superAdmin = getUserId() == 1L;
-        }
-        return superAdmin;
+        return userId == 1L;
     }
 
     @Override
@@ -88,19 +86,6 @@ public class BaseContextImpl implements BaseContext {
             admin = authorities != null && authorities.contains(GRANTED_AUTHORITY_ROLE_SYS_ADMIN);
         }
         return admin;
-    }
-
-    @Override
-    public HttpServletRequest getHttpServletRequest() {
-        if (request == null) {
-            request = HttpServletRequestSupplier.getHttpServletRequest();
-        }
-        return request;
-    }
-
-    @Override
-    public SqlSession getSqlSession() {
-        return SqlSessionSupplier.getSqlSession();
     }
 
     @Override
@@ -133,5 +118,18 @@ public class BaseContextImpl implements BaseContext {
             return null;
         }
         return attributes.remove(key);
+    }
+
+    @Override
+    public SqlSession getSqlSession() {
+        return SqlSessionSupplier.getSqlSession();
+    }
+
+    @Override
+    public HttpServletRequest getHttpServletRequest() {
+        if (request == null) {
+            request = HttpServletRequestSupplier.getHttpServletRequest();
+        }
+        return request;
     }
 }

@@ -52,20 +52,6 @@ public interface BaseContext {
     boolean isAdmin();
 
     /**
-     * Get the {@link HttpServletRequest} instance of the current request.
-     *
-     * @return the {@link HttpServletRequest} instance of the current request
-     */
-    HttpServletRequest getHttpServletRequest();
-
-    /**
-     * Get the {@link SqlSession} of the current request.
-     *
-     * @return the {@link SqlSession} of the current request
-     */
-    SqlSession getSqlSession();
-
-    /**
      * Get the attributes map of the current request.
      *
      * @return the attributes map of the current request
@@ -96,4 +82,18 @@ public interface BaseContext {
      * @return the value mapped to the given key, or null if there was no mapping for the key
      */
     Object removeAttribute(String key);
+
+    /**
+     * Get the {@link SqlSession} of the current request.
+     *
+     * @return the {@link SqlSession} of the current request
+     */
+    SqlSession getSqlSession();
+
+    /**
+     * Get the {@link HttpServletRequest} instance of the current request if in the web environment, else null.
+     *
+     * @return the {@link HttpServletRequest} instance of the current request
+     */
+    HttpServletRequest getHttpServletRequest();
 }
