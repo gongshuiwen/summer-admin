@@ -3,8 +3,8 @@ package io.summernova.admin.core.security.model;
 import io.summernova.admin.core.context.BaseContext;
 import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import io.summernova.admin.core.security.authorization.SimpleAuthority;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
@@ -77,14 +77,14 @@ public final class ModelAccessCheckUtil {
             return;
 
         // Otherwise, check if the user has the required authority
-        GrantedAuthority authorityRequired = getAuthority(modelClass, modelAccessType);
+        BaseAuthority authorityRequired = getAuthority(modelClass, modelAccessType);
         if (baseContext.getAuthorities().contains(authorityRequired))
             return;
 
         throw new ModelAccessException(modelClass, modelAccessType);
     }
 
-    private static GrantedAuthority getAuthority(Class<? extends BaseModel> modelClass, ModelAccessType authority) {
+    private static BaseAuthority getAuthority(Class<? extends BaseModel> modelClass, ModelAccessType authority) {
         return SimpleAuthority.of(authority.getPrefix() + modelClass.getSimpleName());
     }
 }
