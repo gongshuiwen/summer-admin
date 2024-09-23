@@ -1,4 +1,9 @@
 module summernova.admin.core {
+    // uses
+    uses io.summernova.admin.core.context.supplier.BaseContextSupplier;
+    provides io.summernova.admin.core.context.supplier.BaseContextSupplier with
+            io.summernova.admin.core.context.supplier.SpringSecurityBaseContextSupplier;
+
     // summernova
     requires transitive summernova.admin.common;
 
