@@ -1,4 +1,4 @@
-package io.summernova.admin.core.config;
+package io.summernova.admin.spring.config;
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import io.summernova.admin.core.field.Many2One;

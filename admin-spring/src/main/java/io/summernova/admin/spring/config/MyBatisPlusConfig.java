@@ -1,4 +1,4 @@
-package io.summernova.admin.core.config;
+package io.summernova.admin.spring.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
