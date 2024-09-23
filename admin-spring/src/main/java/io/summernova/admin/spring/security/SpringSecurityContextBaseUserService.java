@@ -1,5 +1,7 @@
-package io.summernova.admin.core.security.account;
+package io.summernova.admin.spring.security;
 
+import io.summernova.admin.core.security.account.BaseUser;
+import io.summernova.admin.core.security.account.BaseUserService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("test")
 @Primary
-public class SecurityContextBaseUserService implements BaseUserService {
+public class SpringSecurityContextBaseUserService implements BaseUserService {
 
     @Override
     public BaseUser loadUserByUserId(Long userId) {

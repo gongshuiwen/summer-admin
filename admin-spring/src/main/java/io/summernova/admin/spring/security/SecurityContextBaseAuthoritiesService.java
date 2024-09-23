@@ -1,5 +1,8 @@
-package io.summernova.admin.core.security.authorization;
+package io.summernova.admin.spring.security;
 
+import io.summernova.admin.core.security.authorization.BaseAuthoritiesService;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
+import io.summernova.admin.core.security.authorization.SimpleAuthority;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

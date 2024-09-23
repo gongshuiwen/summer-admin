@@ -35,6 +35,7 @@ module summernova.admin.spring {
     // exports
     exports io.summernova.admin.spring.config to spring.beans, spring.context;
     exports io.summernova.admin.spring.security.web to spring.beans, spring.context;
+    exports io.summernova.admin.spring.security to spring.beans, spring.context;
     exports io.summernova.admin.spring.web to com.fasterxml.jackson.databind, org.mybatis, spring.beans, spring.context, spring.web;
 
     // opens
