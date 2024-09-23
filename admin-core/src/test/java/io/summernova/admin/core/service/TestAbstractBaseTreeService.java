@@ -1,14 +1,14 @@
 package io.summernova.admin.core.service;
 
-import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.annotaion.WithMockAdmin;
+import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.field.Many2One;
+import io.summernova.admin.core.mapper.ScriptRunnerUtil;
+import io.summernova.admin.core.mapper.SqlSessionUtil;
 import io.summernova.admin.core.model.TreeMock;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -17,13 +17,19 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {"/tree_mock.sql"})
 @ExtendWith(BaseContextExtension.class)
 class TestAbstractBaseTreeService {
 
-    @Autowired
-    TreeMockService treeMockService;
+    TreeMockService treeMockService = new TreeMockService();
+
+    TestAbstractBaseTreeService() {
+        BaseServiceRegistry.register(treeMockService);
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "tree_mock.sql");
+    }
 
     @Test
     @WithMockAdmin

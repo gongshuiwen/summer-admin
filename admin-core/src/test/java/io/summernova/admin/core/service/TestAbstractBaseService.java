@@ -6,13 +6,12 @@ import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.annotaion.WithMockUser;
 import io.summernova.admin.core.context.BaseContextExtension;
+import io.summernova.admin.core.mapper.ScriptRunnerUtil;
+import io.summernova.admin.core.mapper.SqlSessionUtil;
 import io.summernova.admin.core.model.Mock;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,9 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Transactional
-@Sql(scripts = {"/mock.sql"})
 @ExtendWith(BaseContextExtension.class)
 public class TestAbstractBaseService {
 
@@ -34,8 +30,12 @@ public class TestAbstractBaseService {
     static final String MOCK_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK_ENTITY_NAME;
     static final String MOCK_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK_ENTITY_NAME;
 
-    @Autowired
-    MockService mockService;
+    MockService mockService = new MockService();
+
+    @BeforeEach
+    void beforeEach() {
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock.sql");
+    }
 
     @Test
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})

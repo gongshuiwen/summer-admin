@@ -2,18 +2,15 @@ package io.summernova.admin.core.service;
 
 import io.summernova.admin.core.annotaion.WithMockUser;
 import io.summernova.admin.core.context.BaseContextExtension;
+import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.field.Command;
 import io.summernova.admin.core.field.Many2Many;
-import io.summernova.admin.core.mapper.RelationMapper;
-import io.summernova.admin.core.mapper.RelationMapperRegistry;
+import io.summernova.admin.core.mapper.*;
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock3;
-import org.apache.ibatis.session.SqlSession;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -24,13 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {
-        "/mock1.sql",
-        "/mock2.sql",
-        "/mock3.sql",
-        "/mock_relation.sql",
-})
 @ExtendWith(BaseContextExtension.class)
 class TestAbstractBaseServiceMany2Many {
 
@@ -48,18 +38,24 @@ class TestAbstractBaseServiceMany2Many {
     static final String MOCK3_AUTHORITY_CREATE = AUTHORITY_CREATE_CODE_PREFIX + MOCK3_ENTITY_NAME;
 
     RelationMapper mockRelationMapper;
-    Mock1Service mock1Service;
-    Mock3Service mock3Service;
+    Mock1Service mock1Service = new Mock1Service();
+    Mock2Service mock2Service = new Mock2Service();
+    Mock3Service mock3Service = new Mock3Service();
 
-    TestAbstractBaseServiceMany2Many(
-            @Autowired SqlSession sqlSession,
-            @Autowired Mock1Service mock1Service,
-            @Autowired Mock3Service mock3Service
-    ) throws NoSuchFieldException {
+    TestAbstractBaseServiceMany2Many() {
+        BaseServiceRegistry.register(mock1Service);
+        BaseServiceRegistry.register(mock2Service);
+        BaseServiceRegistry.register(mock3Service);
+    }
+
+    @BeforeEach
+    void beforeEach() throws NoSuchFieldException {
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock1.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock2.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock3.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock_relation.sql");
         mockRelationMapper = RelationMapperRegistry.getRelationMapper(
-                sqlSession, Mock1.class.getDeclaredField("mock3s"));
-        this.mock1Service = mock1Service;
-        this.mock3Service = mock3Service;
+                BaseContextHolder.getContext().getSqlSession(), Mock1.class.getDeclaredField("mock3s"));
     }
 
     @Test

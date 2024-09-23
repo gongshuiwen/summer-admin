@@ -1,17 +1,17 @@
 package io.summernova.admin.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.annotaion.WithMockUser;
+import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.field.Command;
 import io.summernova.admin.core.field.One2Many;
+import io.summernova.admin.core.mapper.ScriptRunnerUtil;
+import io.summernova.admin.core.mapper.SqlSessionUtil;
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock2;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -21,11 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {
-        "/mock1.sql",
-        "/mock2.sql",
-})
 @ExtendWith(BaseContextExtension.class)
 class TestAbstractBaseServiceOne2Many {
 
@@ -41,11 +36,21 @@ class TestAbstractBaseServiceOne2Many {
     static final String MOCK2_AUTHORITY_UPDATE = AUTHORITY_UPDATE_CODE_PREFIX + MOCK2_ENTITY_NAME;
     static final String MOCK2_AUTHORITY_DELETE = AUTHORITY_DELETE_CODE_PREFIX + MOCK2_ENTITY_NAME;
 
-    @Autowired
-    Mock1Service mock1Service;
+    Mock1Service mock1Service = new Mock1Service();
+    Mock2Service mock2Service = new Mock2Service();
+    Mock3Service mock3Service = new Mock3Service();
 
-    @Autowired
-    Mock2Service mock2Service;
+    TestAbstractBaseServiceOne2Many() {
+        BaseServiceRegistry.register(mock1Service);
+        BaseServiceRegistry.register(mock2Service);
+        BaseServiceRegistry.register(mock3Service);
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock1.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock2.sql");
+    }
 
     @Test
     @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK2_AUTHORITY_CREATE})
