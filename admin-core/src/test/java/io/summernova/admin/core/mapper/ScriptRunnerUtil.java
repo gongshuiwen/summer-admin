@@ -11,12 +11,12 @@ import static org.apache.ibatis.io.Resources.getResourceAsReader;
 /**
  * @author gongshuiwen
  */
-final class ScriptRunnerUtil {
+public final class ScriptRunnerUtil {
 
     private ScriptRunnerUtil() {
     }
 
-    static void runScript(SqlSession sqlSession, String filename) {
+    public static void runScript(SqlSession sqlSession, String filename) {
         Connection connection = sqlSession.getConnection();
         ScriptRunner runner = new ScriptRunner(connection);
         runner.setAutoCommit(true);

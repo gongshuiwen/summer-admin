@@ -4,6 +4,7 @@ import io.summernova.admin.core.security.authorization.BaseAuthority;
 import io.summernova.admin.core.security.authorization.SimpleAuthority;
 import io.summernova.admin.core.annotaion.WithMockAdmin;
 import io.summernova.admin.core.annotaion.WithMockUser;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -42,6 +43,9 @@ public final class BaseContextExtension implements BeforeEachCallback, AfterEach
 
     @Override
     public void afterEach(ExtensionContext context) {
+        SqlSession sqlSession = BaseContextHolder.getContext().getSqlSession();
+        sqlSession.rollback();
+        sqlSession.close();
         BaseContextHolder.clearContext();
     }
 }
