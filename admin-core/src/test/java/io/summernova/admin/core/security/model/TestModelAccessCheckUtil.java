@@ -1,12 +1,13 @@
 package io.summernova.admin.core.security.model;
 
 import io.summernova.admin.core.annotaion.WithMockAdmin;
+import io.summernova.admin.core.annotaion.WithMockUser;
+import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.model.Mock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-public class TestModelAccessCheckUtil {
+@ExtendWith(BaseContextExtension.class)
+class TestModelAccessCheckUtil {
 
     final static String AUTHORITY_SELECT = "S:Mock";
     final static String AUTHORITY_CREATE = "C:Mock";

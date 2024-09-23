@@ -1,16 +1,16 @@
 package io.summernova.admin.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.summernova.admin.core.context.BaseContextHolder;
+import io.summernova.admin.core.context.BaseContextExtension;
+import io.summernova.admin.core.annotaion.WithMockUser;
 import io.summernova.admin.core.field.Command;
 import io.summernova.admin.core.field.One2Many;
 import io.summernova.admin.core.model.Mock1;
 import io.summernova.admin.core.model.Mock2;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
         "/mock1.sql",
         "/mock2.sql",
 })
+@ExtendWith(BaseContextExtension.class)
 class TestAbstractBaseServiceOne2Many {
 
     static final String MOCK1_ENTITY_NAME = "Mock1";
@@ -45,11 +46,6 @@ class TestAbstractBaseServiceOne2Many {
 
     @Autowired
     Mock2Service mock2Service;
-
-    @AfterEach
-    void afterEach() {
-        BaseContextHolder.clearContext();
-    }
 
     @Test
     @WithMockUser(authorities = {MOCK1_AUTHORITY_CREATE, MOCK2_AUTHORITY_CREATE})

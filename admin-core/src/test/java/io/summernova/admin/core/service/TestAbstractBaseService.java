@@ -1,16 +1,16 @@
 package io.summernova.admin.core.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.CompareCondition;
+import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.OrderBys;
-import io.summernova.admin.core.context.BaseContextHolder;
+import io.summernova.admin.core.annotaion.WithMockUser;
+import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.model.Mock;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @Sql(scripts = {"/mock.sql"})
+@ExtendWith(BaseContextExtension.class)
 public class TestAbstractBaseService {
 
     static final String MOCK_ENTITY_NAME = "Mock";
@@ -35,11 +36,6 @@ public class TestAbstractBaseService {
 
     @Autowired
     MockService mockService;
-
-    @AfterEach
-    void afterEach() {
-        BaseContextHolder.clearContext();
-    }
 
     @Test
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})

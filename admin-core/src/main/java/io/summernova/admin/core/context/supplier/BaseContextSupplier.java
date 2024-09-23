@@ -2,6 +2,7 @@ package io.summernova.admin.core.context.supplier;
 
 import io.summernova.admin.core.context.BaseContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ServiceLoader;
 import java.util.function.Supplier;
 
@@ -17,6 +18,19 @@ public interface BaseContextSupplier extends Supplier<BaseContext> {
     }
 
     private static BaseContextSupplier getDefault() {
+        // use CustomBaseContextSupplier priorly when in test environment
+        try {
+            Class<?> baseContextSupplier = BaseContextSupplier.class.getClassLoader()
+                    .loadClass("io.summernova.admin.core.context.CustomBaseContextSupplier");
+            if (baseContextSupplier != null) {
+                return (BaseContextSupplier) baseContextSupplier.getConstructor().newInstance();
+            }
+        } catch (ClassNotFoundException e) {
+            // ignore
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
 
         // use service loader
         ServiceLoader<BaseContextSupplier> serviceLoader = ServiceLoader.load(BaseContextSupplier.class);
