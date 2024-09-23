@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @Profile("test")
-public class SecurityContextBaseAuthoritiesService implements BaseAuthoritiesService {
+public class SpringSecurityContextBaseAuthoritiesService implements BaseAuthoritiesService {
 
     @Override
     public Set<? extends BaseAuthority> loadAuthoritiesByUserId(Long userId) {
