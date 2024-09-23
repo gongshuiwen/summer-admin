@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.field.*;
 import io.summernova.admin.core.field.annotations.Many2OneField;
 import io.summernova.admin.core.field.annotations.OnDeleteType;
@@ -31,8 +32,6 @@ import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
@@ -52,13 +51,6 @@ public abstract class AbstractBaseService<T extends BaseModel>
     private static final int DEFAULT_BATCH_SIZE = 1000;
 
     protected final Log mybatisLog = LogFactory.getLog(getClass());
-
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
-
-    @Autowired
-    @Qualifier("sqlSessionTemplate")
-    private SqlSession sqlSession;
 
     // cache for modelClass
     private volatile Class<T> modelClass;
@@ -162,10 +154,12 @@ public abstract class AbstractBaseService<T extends BaseModel>
     }
 
     @Transactional(rollbackFor = Exception.class)
-    protected boolean saveBatch(Collection<T> entityList) {
-        String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
-        return SqlHelper.executeBatch(sqlSessionFactory, mybatisLog, entityList, DEFAULT_BATCH_SIZE,
-                (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+    protected boolean saveBatch(Collection<T> records) {
+        // TODO: try some other implementation to improve batch insert performance, below is a sample of mybatis-plus.
+          String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
+          SqlSessionFactory sqlSessionFactory = getContext().getSqlSessionFactory();
+          return SqlHelper.executeBatch(sqlSessionFactory, mybatisLog, records, DEFAULT_BATCH_SIZE,
+                  (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
     }
 
     @SneakyThrows(IllegalAccessException.class)
@@ -458,7 +452,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
 
     @Override
     public SqlSession getSqlSession() {
-        return sqlSession;
+        return BaseContextHolder.getContext().getSqlSession();
     }
 
     @Override
@@ -498,7 +492,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
         if (baseMapper == null) {
             synchronized (baseMapperLock) {
                 if (baseMapper == null) {
-                    baseMapper = BaseMapperRegistry.getBaseMapper(sqlSession, getModelClass());
+                    baseMapper = BaseMapperRegistry.getBaseMapper(getSqlSession(), getModelClass());
                 }
             }
         }
@@ -507,7 +501,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
 
     @Override
     public <AT extends BaseModel> BaseMapper<AT> getBaseMapper(Class<AT> modelClass) {
-        return BaseMapperRegistry.getBaseMapper(sqlSession, modelClass);
+        return BaseMapperRegistry.getBaseMapper(getSqlSession(), modelClass);
     }
 
     @Override
