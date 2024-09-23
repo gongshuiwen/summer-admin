@@ -1,11 +1,13 @@
 package io.summernova.admin.core.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.summernova.admin.core.model.Mock1;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +20,14 @@ class TestBaseMapperRegistry {
 
     @Test
     void testGetBaseMapper() {
-        BaseMapper<Mock1> mapper = BaseMapperRegistry.getBaseMapper(sqlSession, Mock1.class);
-        assertNotNull(mapper);
+        ScriptRunnerUtil.runScript(sqlSession, "mock1.sql");
+        BaseMapper<Mock1> baseMapper = BaseMapperRegistry.getBaseMapper(sqlSession, Mock1.class);
+        assertNotNull(baseMapper);
+
+        List<Mock1> mock1s = baseMapper.selectList(new QueryWrapper<>());
+        assertEquals(2, mock1s.size());
+
+        sqlSession.rollback();
     }
 
     @Test
