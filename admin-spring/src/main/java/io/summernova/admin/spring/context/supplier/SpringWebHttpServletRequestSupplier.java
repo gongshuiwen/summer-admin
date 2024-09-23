@@ -1,5 +1,6 @@
-package io.summernova.admin.core.context.supplier;
+package io.summernova.admin.spring.context.supplier;
 
+import io.summernova.admin.core.context.supplier.HttpServletRequestSupplier;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

@@ -9,7 +9,9 @@ import java.util.function.Supplier;
  */
 public interface BaseAuthoritiesServiceSupplier extends Supplier<BaseAuthoritiesService> {
 
+    BaseAuthoritiesServiceSupplier DEFAULT = ServiceLoaderUtil.getProvider(BaseAuthoritiesServiceSupplier.class);
+
     static BaseAuthoritiesService getGrantedAuthoritiesService() {
-        return new SpringContextBaseAuthoritiesServiceSupplier().get();
+        return DEFAULT.get();
     }
 }

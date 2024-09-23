@@ -1,8 +1,11 @@
 module summernova.admin.core {
     // uses
     uses io.summernova.admin.core.context.supplier.BaseContextSupplier;
-    provides io.summernova.admin.core.context.supplier.BaseContextSupplier with
-            io.summernova.admin.core.context.supplier.SpringSecurityBaseContextSupplier;
+    uses io.summernova.admin.core.context.supplier.BaseAuthoritiesServiceSupplier;
+    uses io.summernova.admin.core.context.supplier.BaseUserServiceSupplier;
+    uses io.summernova.admin.core.context.supplier.HttpServletRequestSupplier;
+    uses io.summernova.admin.core.context.supplier.SqlSessionFactorySupplier;
+    uses io.summernova.admin.core.context.supplier.SqlSessionSupplier;
 
     // summernova
     requires transitive summernova.admin.common;

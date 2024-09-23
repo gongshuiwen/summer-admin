@@ -41,4 +41,18 @@ module summernova.admin.spring {
     opens io.summernova.admin.spring.config to spring.core;
     opens io.summernova.admin.spring.security.web to spring.core;
     opens io.summernova.admin.spring.web to spring.core, com.baomidou.mybatis.plus.core, summernova.admin.core;
+
+    // provides
+    provides io.summernova.admin.core.context.supplier.BaseContextSupplier with
+            io.summernova.admin.spring.context.supplier.SpringSecurityBaseContextSupplier;
+    provides io.summernova.admin.core.context.supplier.BaseAuthoritiesServiceSupplier with
+            io.summernova.admin.spring.context.supplier.SpringContextBaseAuthoritiesServiceSupplier;
+    provides io.summernova.admin.core.context.supplier.BaseUserServiceSupplier with
+            io.summernova.admin.spring.context.supplier.SpringContextBaseUserServiceSupplier;
+    provides io.summernova.admin.core.context.supplier.HttpServletRequestSupplier with
+            io.summernova.admin.spring.context.supplier.SpringWebHttpServletRequestSupplier;
+    provides io.summernova.admin.core.context.supplier.SqlSessionSupplier with
+            io.summernova.admin.spring.context.supplier.SpringContextSqlSessionSupplier;
+    provides io.summernova.admin.core.context.supplier.SqlSessionFactorySupplier with
+            io.summernova.admin.spring.context.supplier.SpringContextSqlSessionFactorySupplier;
 }

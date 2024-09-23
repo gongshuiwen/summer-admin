@@ -1,7 +1,8 @@
-package io.summernova.admin.core.context.supplier;
+package io.summernova.admin.spring.context.supplier;
 
 import io.summernova.admin.core.context.BaseContext;
 import io.summernova.admin.core.context.BaseContextImpl;
+import io.summernova.admin.core.context.supplier.BaseContextSupplier;
 import io.summernova.admin.core.security.account.BaseUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,5 +1,6 @@
-package io.summernova.admin.core.context.supplier;
+package io.summernova.admin.spring.context.supplier;
 
+import io.summernova.admin.core.context.supplier.BaseAuthoritiesServiceSupplier;
 import io.summernova.admin.core.security.authorization.BaseAuthoritiesService;
 import io.summernova.admin.core.util.SpringContextUtil;
 

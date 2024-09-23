@@ -9,7 +9,9 @@ import java.util.function.Supplier;
  */
 public interface BaseUserServiceSupplier extends Supplier<BaseUserService> {
 
+    BaseUserServiceSupplier DEFAULT = ServiceLoaderUtil.getProvider(BaseUserServiceSupplier.class);
+
     static BaseUserService getBaseUserService() {
-        return new SpringContextBaseUserServiceSupplier().get();
+        return DEFAULT.get();
     }
 }

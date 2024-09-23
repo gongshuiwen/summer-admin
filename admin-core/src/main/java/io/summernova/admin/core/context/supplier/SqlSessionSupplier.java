@@ -9,7 +9,9 @@ import java.util.function.Supplier;
  */
 public interface SqlSessionSupplier extends Supplier<SqlSession> {
 
+    SqlSessionSupplier DEFAULT = ServiceLoaderUtil.getProvider(SqlSessionSupplier.class);
+
     static SqlSession getSqlSession() {
-        return new SpringContextSqlSessionSupplier().get();
+        return DEFAULT.get();
     }
 }

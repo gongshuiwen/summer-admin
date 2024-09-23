@@ -9,7 +9,9 @@ import java.util.function.Supplier;
  */
 public interface HttpServletRequestSupplier extends Supplier<HttpServletRequest> {
 
+    HttpServletRequestSupplier DEFAULT = ServiceLoaderUtil.getProvider(HttpServletRequestSupplier.class);
+
     static HttpServletRequest getHttpServletRequest() {
-        return new SpringWebHttpServletRequestSupplier().get();
+        return DEFAULT.get();
     }
 }
