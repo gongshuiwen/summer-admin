@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -27,10 +26,7 @@ import io.summernova.admin.core.query.adapter.OrderBysQueryWrapperAdapter;
 import io.summernova.admin.core.security.model.ModelAccessCheckUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +45,6 @@ public abstract class AbstractBaseService<T extends BaseModel>
         implements BaseService<T>, InitializingBean {
 
     private static final int DEFAULT_BATCH_SIZE = 1000;
-
-    protected final Log mybatisLog = LogFactory.getLog(getClass());
 
     // cache for modelClass
     private volatile Class<T> modelClass;
@@ -155,11 +149,14 @@ public abstract class AbstractBaseService<T extends BaseModel>
 
     @Transactional(rollbackFor = Exception.class)
     protected boolean saveBatch(Collection<T> records) {
-        // TODO: try some other implementation to improve batch insert performance, below is a sample of mybatis-plus.
-          String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
-          SqlSessionFactory sqlSessionFactory = getContext().getSqlSessionFactory();
-          return SqlHelper.executeBatch(sqlSessionFactory, mybatisLog, records, DEFAULT_BATCH_SIZE,
-                  (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+        // TODO: try some other implementation to improve batch insert performance, the way deprecated is a sample of mybatis-plus.
+        //  because this only supports spring managed transaction, so the saving is not atomic!!!
+//        String sqlStatement = SqlHelper.getSqlStatement(getBaseMapperClass(), SqlMethod.INSERT_ONE);
+//        SqlSessionFactory sqlSessionFactory = getContext().getSqlSessionFactory();
+//        return SqlHelper.executeBatch(sqlSessionFactory, mybatisLog, records, DEFAULT_BATCH_SIZE,
+//              (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+        for (T record: records) getBaseMapper().insert(record);
+        return true;
     }
 
     @SneakyThrows(IllegalAccessException.class)
