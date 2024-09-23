@@ -1,6 +1,6 @@
 package io.summernova.admin.spring.config;
 
-import io.summernova.admin.core.util.SpringContextUtil;
+import io.summernova.admin.spring.util.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

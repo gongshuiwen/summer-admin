@@ -59,7 +59,6 @@ module summernova.admin.core {
     exports io.summernova.admin.core.security.authorization;
     exports io.summernova.admin.core.security.model;
     exports io.summernova.admin.core.service;
-    exports io.summernova.admin.core.util;
 
     // opens
     opens io.summernova.admin.core.field to com.fasterxml.jackson.databind;

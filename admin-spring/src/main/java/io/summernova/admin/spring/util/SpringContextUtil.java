@@ -1,4 +1,4 @@
-package io.summernova.admin.core.util;
+package io.summernova.admin.spring.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
