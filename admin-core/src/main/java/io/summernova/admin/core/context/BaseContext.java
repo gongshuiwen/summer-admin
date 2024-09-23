@@ -4,6 +4,7 @@ import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.authorization.BaseAuthority;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.Map;
 import java.util.Set;
@@ -82,6 +83,13 @@ public interface BaseContext {
      * @return the value mapped to the given key, or null if there was no mapping for the key
      */
     Object removeAttribute(String key);
+
+    /**
+     * Get the {@link SqlSessionFactory} of the current request.
+     *
+     * @return the {@link SqlSessionFactory} of the current request
+     */
+    SqlSessionFactory getSqlSessionFactory();
 
     /**
      * Get the {@link SqlSession} of the current request.

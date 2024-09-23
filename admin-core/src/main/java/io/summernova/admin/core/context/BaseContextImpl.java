@@ -1,9 +1,6 @@
 package io.summernova.admin.core.context;
 
-import io.summernova.admin.core.context.supplier.BaseUserServiceSupplier;
-import io.summernova.admin.core.context.supplier.BaseAuthoritiesServiceSupplier;
-import io.summernova.admin.core.context.supplier.HttpServletRequestSupplier;
-import io.summernova.admin.core.context.supplier.SqlSessionSupplier;
+import io.summernova.admin.core.context.supplier.*;
 import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.account.BaseUserService;
 import io.summernova.admin.core.security.authorization.BaseAuthoritiesService;
@@ -11,6 +8,7 @@ import io.summernova.admin.core.security.authorization.BaseAuthority;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -118,6 +116,11 @@ public class BaseContextImpl implements BaseContext {
             return null;
         }
         return attributes.remove(key);
+    }
+
+    @Override
+    public SqlSessionFactory getSqlSessionFactory() {
+        return SqlSessionFactorySupplier.getSqlSessionFactory();
     }
 
     @Override
