@@ -17,11 +17,9 @@ module summernova.admin.core {
 
     // mybatis && mybatis-plus
     requires org.mybatis;
-    requires org.mybatis.spring;
     requires com.baomidou.mybatis.plus.annotation;
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.extension;
-    requires com.baomidou.mybatis.plus.spring.boot.autoconfigure;
 
     // spring
     requires spring.aop;
@@ -29,7 +27,6 @@ module summernova.admin.core {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
-    requires spring.web;
 
     // spring security
     requires spring.security.core;
