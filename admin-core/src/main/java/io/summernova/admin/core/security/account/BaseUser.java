@@ -1,7 +1,6 @@
 package io.summernova.admin.core.security.account;
 
 import io.summernova.admin.core.security.authorization.BaseAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -9,7 +8,7 @@ import java.util.Set;
 /**
  * @author gongshuiwen
  */
-public interface BaseUser extends Serializable, UserDetails {
+public interface BaseUser extends Serializable {
 
     /**
      * Get unique user id.
