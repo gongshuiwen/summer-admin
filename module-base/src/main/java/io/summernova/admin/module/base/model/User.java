@@ -1,7 +1,6 @@
 package io.summernova.admin.module.base.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.NullOrNotBlank;
@@ -106,26 +105,6 @@ public class User extends BaseModel implements BaseUser {
             authorities = Collections.unmodifiableSet(baseAuthoritiesService.loadAuthoritiesByUserId(getId()));
         }
         return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @JsonIgnore
-    public boolean isEnabled() {
-        return status == 1;
     }
 
     @Override

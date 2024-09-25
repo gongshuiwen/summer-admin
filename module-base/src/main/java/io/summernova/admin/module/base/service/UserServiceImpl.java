@@ -6,9 +6,8 @@ import io.summernova.admin.core.context.BaseContext;
 import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +23,11 @@ import static io.summernova.admin.common.exception.CoreBusinessExceptionEnums.ER
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends AbstractBaseService<User> implements UserService {
 
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(
-            RoleService roleService,
-            PasswordEncoder passwordEncoder) {
-        this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     @Transactional
@@ -43,15 +36,11 @@ public class UserServiceImpl extends AbstractBaseService<User> implements UserSe
     }
 
     @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) {
         // bypass model access check by using mapper
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getUsername, username);
-        User user = getBaseMapper().selectOne(lambdaQueryWrapper);
-        if (user == null)
-            throw new UsernameNotFoundException("");
-
-        return user;
+        return getBaseMapper().selectOne(lambdaQueryWrapper);
     }
 
     @Override
