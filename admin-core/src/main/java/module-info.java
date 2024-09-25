@@ -24,12 +24,8 @@ module summernova.admin.core {
     // spring
     requires spring.aop;
     requires spring.beans;
-    requires spring.context;
     requires spring.core;
     requires spring.tx;
-
-    // spring security
-    requires spring.security.core;
 
     // other
     requires transitive org.slf4j;
