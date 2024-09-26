@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author gongshuiwen
+ */
 class TestCompareConditionQueryWrapperAdapter extends QueryWrapperAdapterTestBase<CompareConditionQueryWrapperAdapter> {
 
     @Test

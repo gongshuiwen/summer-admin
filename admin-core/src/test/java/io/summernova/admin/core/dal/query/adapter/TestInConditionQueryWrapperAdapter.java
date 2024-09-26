@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author gongshuiwen
+ */
 class TestInConditionQueryWrapperAdapter extends QueryWrapperAdapterTestBase<InConditionQueryWrapperAdapter> {
 
     @Test

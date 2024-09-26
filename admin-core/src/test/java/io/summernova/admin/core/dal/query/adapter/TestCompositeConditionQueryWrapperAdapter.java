@@ -10,6 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author gongshuiwen
+ */
 class TestCompositeConditionQueryWrapperAdapter extends QueryWrapperAdapterTestBase<CompositeConditionQueryWrapperAdapter> {
 
     static final LocalDateTime CREATE_TIME_START = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
