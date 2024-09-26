@@ -12,7 +12,7 @@ import io.summernova.admin.core.dal.mapper.RelationMapper;
 import io.summernova.admin.core.dal.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.dal.query.adapter.ConditionQueryWrapperAdapter;
 import io.summernova.admin.core.dal.query.adapter.OrderBysQueryWrapperAdapter;
-import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.domain.model.BaseModel;
 import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Field;

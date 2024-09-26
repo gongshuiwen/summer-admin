@@ -3,9 +3,9 @@ package io.summernova.admin.core.jackson2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import io.summernova.admin.core.field.Command;
-import io.summernova.admin.core.field.CommandType;
-import io.summernova.admin.core.field.Many2Many;
+import io.summernova.admin.core.domain.field.Command;
+import io.summernova.admin.core.domain.field.CommandType;
+import io.summernova.admin.core.domain.field.Many2Many;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

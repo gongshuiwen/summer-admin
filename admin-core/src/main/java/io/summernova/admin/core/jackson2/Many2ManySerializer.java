@@ -3,7 +3,7 @@ package io.summernova.admin.core.jackson2;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import io.summernova.admin.core.field.Many2Many;
+import io.summernova.admin.core.domain.field.Many2Many;
 
 import java.io.IOException;
 

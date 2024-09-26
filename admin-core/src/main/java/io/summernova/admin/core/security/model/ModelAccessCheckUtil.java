@@ -2,7 +2,7 @@ package io.summernova.admin.core.security.model;
 
 import io.summernova.admin.core.context.BaseContext;
 import io.summernova.admin.core.context.BaseContextHolder;
-import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.domain.model.BaseModel;
 import io.summernova.admin.core.security.authorization.BaseAuthority;
 import io.summernova.admin.core.security.authorization.SimpleAuthority;
 

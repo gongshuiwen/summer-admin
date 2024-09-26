@@ -2,7 +2,7 @@ package io.summernova.admin.module.base.model;
 
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.NullOrNotBlank;
-import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.domain.model.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

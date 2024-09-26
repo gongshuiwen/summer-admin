@@ -1,6 +1,6 @@
 package io.summernova.admin.core.service;
 
-import io.summernova.admin.core.model.BaseTreeModel;
+import io.summernova.admin.core.domain.model.BaseTreeModel;
 
 import java.util.List;
 

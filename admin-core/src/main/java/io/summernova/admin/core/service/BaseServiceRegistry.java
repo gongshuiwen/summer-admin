@@ -1,6 +1,6 @@
 package io.summernova.admin.core.service;
 
-import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.domain.model.BaseModel;
 
 import java.util.Map;
 import java.util.Objects;

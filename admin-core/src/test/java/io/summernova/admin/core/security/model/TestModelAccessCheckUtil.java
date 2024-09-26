@@ -4,7 +4,7 @@ import io.summernova.admin.core.annotaion.WithMockAdmin;
 import io.summernova.admin.core.annotaion.WithMockUser;
 import io.summernova.admin.core.context.BaseContextExtension;
 import io.summernova.admin.core.context.BaseContextHolder;
-import io.summernova.admin.core.model.Mock;
+import io.summernova.admin.core.domain.model.Mock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import io.summernova.admin.core.context.BaseContextHolder;
-import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.domain.model.BaseModel;
 import io.summernova.admin.core.security.Constants;
 import io.summernova.admin.core.security.GrantedAuthorityCheckUtils;
 import io.summernova.admin.core.security.authorization.SimpleAuthority;

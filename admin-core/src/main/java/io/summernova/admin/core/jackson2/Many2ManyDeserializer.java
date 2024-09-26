@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import io.summernova.admin.core.field.Command;
-import io.summernova.admin.core.field.CommandType;
-import io.summernova.admin.core.field.Many2Many;
-import io.summernova.admin.core.model.BaseModel;
+import io.summernova.admin.core.domain.field.Command;
+import io.summernova.admin.core.domain.field.CommandType;
+import io.summernova.admin.core.domain.field.Many2Many;
+import io.summernova.admin.core.domain.model.BaseModel;
 
 import java.io.IOException;
 import java.util.ArrayList;

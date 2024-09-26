@@ -1,7 +1,7 @@
 package io.summernova.admin.core.dal.query.adapter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.Mock;
+import io.summernova.admin.core.domain.model.Mock;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.lang.reflect.ParameterizedType;

@@ -1,9 +1,9 @@
 package io.summernova.admin.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import io.summernova.admin.core.field.Many2One;
-import io.summernova.admin.core.field.One2Many;
-import io.summernova.admin.core.model.BaseTreeModel;
+import io.summernova.admin.core.domain.field.Many2One;
+import io.summernova.admin.core.domain.field.One2Many;
+import io.summernova.admin.core.domain.model.BaseTreeModel;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

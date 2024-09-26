@@ -1,6 +1,6 @@
 package io.summernova.admin.core.mybatis;
 
-import io.summernova.admin.core.field.Many2One;
+import io.summernova.admin.core.domain.field.Many2One;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import io.summernova.admin.core.field.Many2One;
+import io.summernova.admin.core.domain.field.Many2One;
 import io.summernova.admin.core.mybatis.Many2OneTypeHandler;
 import io.summernova.admin.core.mybatis.MyMetaObjectHandler;
 import lombok.Getter;

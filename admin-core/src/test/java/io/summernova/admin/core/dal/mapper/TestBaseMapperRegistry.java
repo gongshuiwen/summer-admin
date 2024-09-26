@@ -1,7 +1,7 @@
 package io.summernova.admin.core.dal.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.summernova.admin.core.model.Mock1;
+import io.summernova.admin.core.domain.model.Mock1;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 
