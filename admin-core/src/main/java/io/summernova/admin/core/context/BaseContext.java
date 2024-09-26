@@ -18,9 +18,16 @@ import java.util.Set;
 public interface BaseContext {
 
     /**
+     * Get the unique ID of the current request.
+     *
+     * @return the unique ID
+     */
+    String getId();
+
+    /**
      * Get the user ID of the current request.
      *
-     * @return the user ID or null if it is not available
+     * @return the user ID
      */
     Long getUserId();
 
@@ -37,6 +44,13 @@ public interface BaseContext {
      * @return an unmodifiable set of authorities or an empty set if they are not available
      */
     Set<? extends BaseAuthority> getAuthorities();
+
+    /**
+     * Check if the current user is anonymous.
+     *
+     * @return true if the user is anonymous, false otherwise.
+     */
+    boolean isAnonymous();
 
     /**
      * Check if the current user is a super admin.

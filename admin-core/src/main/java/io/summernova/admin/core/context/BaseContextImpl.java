@@ -10,10 +10,7 @@ import lombok.Getter;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static io.summernova.admin.core.security.Constants.GRANTED_AUTHORITY_ROLE_SYS_ADMIN;
 
@@ -23,6 +20,9 @@ import static io.summernova.admin.core.security.Constants.GRANTED_AUTHORITY_ROLE
  * @author gongshuiwen
  */
 public class BaseContextImpl implements BaseContext {
+
+    @Getter
+    private final String id;
 
     @Getter
     private final Long userId;
@@ -37,6 +37,7 @@ public class BaseContextImpl implements BaseContext {
     private HttpServletRequest request;
 
     public BaseContextImpl(Long userId) {
+        this.id = UUID.randomUUID().toString();
         this.userId = userId;
     }
 
@@ -70,6 +71,11 @@ public class BaseContextImpl implements BaseContext {
             }
         }
         return authorities;
+    }
+
+    @Override
+    public boolean isAnonymous() {
+        return userId == 0L;
     }
 
     @Override
