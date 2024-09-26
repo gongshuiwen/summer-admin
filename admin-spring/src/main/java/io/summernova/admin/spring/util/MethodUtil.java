@@ -1,4 +1,4 @@
-package io.summernova.admin.core.method.util;
+package io.summernova.admin.spring.util;
 
 import io.summernova.admin.core.method.annotations.Public;
 import io.summernova.admin.core.service.BaseService;

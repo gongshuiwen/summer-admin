@@ -44,7 +44,6 @@ module summernova.admin.core {
     exports io.summernova.admin.core.jackson2;
     exports io.summernova.admin.core.mapper;
     exports io.summernova.admin.core.method.annotations;
-    exports io.summernova.admin.core.method.util;
     exports io.summernova.admin.core.model;
     exports io.summernova.admin.core.mybatis;
     exports io.summernova.admin.core.security;
