@@ -24,12 +24,12 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
-        return _getTargetIdsById(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId);
+        return _getTargetIdsById(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId);
     }
 
     @Select("SELECT ${targetField} FROM ${table} WHERE ${sourceField} IN (${sourceIds})")
@@ -44,13 +44,13 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
         String sourceIdsString = sourceIds.stream().distinct().map(String::valueOf).collect(Collectors.joining(","));
-        return _getTargetIdsByIds(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceIdsString);
+        return _getTargetIdsByIds(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceIdsString);
     }
 
     @Insert("INSERT INTO ${table} (${sourceField}, ${targetField}) VALUES ${values}")
@@ -67,20 +67,20 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
         // Get existing targetIds
-        List<Long> existingTargetIds = _getTargetIdsById(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId);
+        List<Long> existingTargetIds = _getTargetIdsById(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId);
 
         // Filter targetIds
         targetIds = targetIds.stream().filter(roleId -> !existingTargetIds.contains(roleId)).toList();
 
         // Add new rows if targetIds is not empty
         if (!targetIds.isEmpty())
-            _add(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
+            _add(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
     }
 
     @SuppressWarnings("Duplicates")
@@ -94,12 +94,12 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
-        _add(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
+        _add(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
     }
 
     @Delete("DELETE FROM ${table} WHERE ${sourceField} = #{sourceId} and ${targetField} IN (${targetIdsString})")
@@ -116,13 +116,13 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
         String targetIdsString = targetIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-        _remove(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId, targetIdsString);
+        _remove(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), sourceId, targetIdsString);
     }
 
     @Delete("DELETE FROM ${table} WHERE ${sourceField} = #{sourceId}")
@@ -136,12 +136,12 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
-        _removeAll(mapperRelation.table(), fieldInfo.sourceField(), sourceId);
+        _removeAll(relationMapperInfo.table(), fieldInfo.sourceField(), sourceId);
     }
 
     @SuppressWarnings("Duplicates")
@@ -154,28 +154,28 @@ public interface RelationMapper {
         Class<?> mapperInterface = this.getClass().getInterfaces()[0];
 
         // Get the MapperRelation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
 
         // Get the source field and target field info
-        FieldInfo fieldInfo = getFieldInfo(mapperRelation, sourceClass);
+        FieldInfo fieldInfo = getFieldInfo(relationMapperInfo, sourceClass);
 
         // Remove all
-        _removeAll(mapperRelation.table(), fieldInfo.sourceField(), sourceId);
+        _removeAll(relationMapperInfo.table(), fieldInfo.sourceField(), sourceId);
 
         // Add new rows if targetIds is not empty
         if (!targetIds.isEmpty())
-            _add(mapperRelation.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
+            _add(relationMapperInfo.table(), fieldInfo.sourceField(), fieldInfo.targetField(), buildValues(sourceId, targetIds));
     }
 
     private String buildValues(Long sourceId, List<Long> targetIds) {
         return targetIds.stream().distinct().map((t) -> "(" + sourceId + "," + t + ")").collect(Collectors.joining(","));
     }
 
-    private FieldInfo getFieldInfo(MapperRelation mapperRelation, Class<?> sourceClass) {
-        if (sourceClass == mapperRelation.class1()) {
-            return new FieldInfo(mapperRelation.field1(), mapperRelation.field2());
-        } else if (sourceClass == mapperRelation.class2()) {
-            return new FieldInfo(mapperRelation.field2(), mapperRelation.field1());
+    private FieldInfo getFieldInfo(RelationMapperInfo relationMapperInfo, Class<?> sourceClass) {
+        if (sourceClass == relationMapperInfo.class1()) {
+            return new FieldInfo(relationMapperInfo.field1(), relationMapperInfo.field2());
+        } else if (sourceClass == relationMapperInfo.class2()) {
+            return new FieldInfo(relationMapperInfo.field2(), relationMapperInfo.field1());
         } else {
             throw new IllegalArgumentException("The sourceClass '" + sourceClass + "' is invalid!");
         }

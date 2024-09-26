@@ -61,7 +61,7 @@ public final class RelationMapperRegistry {
     static Class<?> buildMapperInterface(Class<?> sourceClass, Class<?> targetClass,
                                          String sourField, String targetField, String joinTable) {
         // Define the annotation
-        AnnotationDescription annotation = AnnotationDescription.Builder.ofType(MapperRelation.class)
+        AnnotationDescription annotation = AnnotationDescription.Builder.ofType(RelationMapperInfo.class)
                 .define("class1", TypeDescription.ForLoadedType.of(sourceClass))
                 .define("class2", TypeDescription.ForLoadedType.of(targetClass))
                 .define("table", joinTable)

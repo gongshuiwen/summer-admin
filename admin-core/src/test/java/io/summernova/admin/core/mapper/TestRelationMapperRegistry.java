@@ -53,14 +53,14 @@ class TestRelationMapperRegistry {
         assertEquals(1, mapperInterface.getInterfaces().length);
         assertEquals(RelationMapper.class, mapperInterface.getInterfaces()[0]);
         assertEquals(1, mapperInterface.getAnnotations().length);
-        assertEquals(MapperRelation.class, mapperInterface.getAnnotations()[0].annotationType());
+        assertEquals(RelationMapperInfo.class, mapperInterface.getAnnotations()[0].annotationType());
 
         // check @MapperRelation annotation
-        MapperRelation mapperRelation = mapperInterface.getAnnotation(MapperRelation.class);
-        assertEquals("mock_relation", mapperRelation.table());
-        assertEquals("mock1_id", mapperRelation.field1());
-        assertEquals(Mock1.class, mapperRelation.class1());
-        assertEquals("mock3_id", mapperRelation.field2());
-        assertEquals(Mock3.class, mapperRelation.class2());
+        RelationMapperInfo relationMapperInfo = mapperInterface.getAnnotation(RelationMapperInfo.class);
+        assertEquals("mock_relation", relationMapperInfo.table());
+        assertEquals("mock1_id", relationMapperInfo.field1());
+        assertEquals(Mock1.class, relationMapperInfo.class1());
+        assertEquals("mock3_id", relationMapperInfo.field2());
+        assertEquals(Mock3.class, relationMapperInfo.class2());
     }
 }
