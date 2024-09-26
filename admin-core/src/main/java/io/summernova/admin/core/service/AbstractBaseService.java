@@ -24,10 +24,10 @@ import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.query.adapter.ConditionQueryWrapperAdapter;
 import io.summernova.admin.core.query.adapter.OrderBysQueryWrapperAdapter;
 import io.summernova.admin.core.security.model.ModelAccessCheckUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
@@ -41,8 +41,7 @@ import java.util.Objects;
  * @author gongshuiwen
  */
 @Slf4j
-public abstract class AbstractBaseService<T extends BaseModel>
-        implements BaseService<T>, InitializingBean {
+public abstract class AbstractBaseService<T extends BaseModel> implements BaseService<T> {
 
     private static final int DEFAULT_BATCH_SIZE = 1000;
 
@@ -518,7 +517,7 @@ public abstract class AbstractBaseService<T extends BaseModel>
         return ChainWrappers.lambdaQueryChain(getBaseMapper(), getModelClass());
     }
 
-    @Override
+    @PostConstruct
     public void afterPropertiesSet() {
         BaseServiceRegistry.register(this);
     }
