@@ -22,9 +22,6 @@ module summernova.admin.core {
     requires com.baomidou.mybatis.plus.extension;
 
     // spring
-    requires spring.aop;
-    requires spring.beans;
-    requires spring.core;
     requires spring.tx;
 
     // other
