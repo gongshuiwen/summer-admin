@@ -34,6 +34,7 @@ public class BaseContextImpl implements BaseContext {
 
     private Map<String, Object> attributes;
 
+    private SqlSession sqlSession;
     private HttpServletRequest request;
 
     public BaseContextImpl(Long userId) {
@@ -131,7 +132,10 @@ public class BaseContextImpl implements BaseContext {
 
     @Override
     public SqlSession getSqlSession() {
-        return SqlSessionSupplier.getSqlSession();
+        if (sqlSession == null) {
+            sqlSession = SqlSessionSupplier.getSqlSession();
+        }
+        return sqlSession;
     }
 
     @Override
