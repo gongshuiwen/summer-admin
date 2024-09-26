@@ -1,5 +1,6 @@
 module summernova.admin.common {
     requires transitive java.sql;
+    requires transitive jakarta.annotation;
     requires transitive jakarta.servlet;
     requires transitive jakarta.validation;
     requires transitive org.slf4j;
