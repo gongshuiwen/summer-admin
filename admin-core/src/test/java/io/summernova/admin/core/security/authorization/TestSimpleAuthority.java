@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 /**
  * @author gongshuiwen
  */
-class TestSimpleGrantedAuthority {
+class TestSimpleAuthority {
 
     @Test
     void testOf() {
