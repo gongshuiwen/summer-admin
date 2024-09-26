@@ -4,61 +4,64 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author gongshuiwen
+ */
 class TestCompareCondition {
 
     @Test
     void testOf() {
-        CompareCondition condition = CompareCondition.of("name", CompareOperator.EQ, "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.of("age", CompareOperator.EQ, 18);
+        assertEquals("age", condition.getField());
         assertEquals("=", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 
     @Test
     void testEq() {
-        CompareCondition condition = CompareCondition.eq("name", "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.eq("age", 18);
+        assertEquals("age", condition.getField());
         assertEquals("=", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 
     @Test
     void testNe() {
-        CompareCondition condition = CompareCondition.ne("name", "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.ne("age", 18);
+        assertEquals("age", condition.getField());
         assertEquals("!=", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 
     @Test
     void testLt() {
-        CompareCondition condition = CompareCondition.lt("name", "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.lt("age", 18);
+        assertEquals("age", condition.getField());
         assertEquals("<", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 
     @Test
     void testGt() {
-        CompareCondition condition = CompareCondition.gt("name", "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.gt("age", 18);
+        assertEquals("age", condition.getField());
         assertEquals(">", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 
     @Test
     void testLe() {
-        CompareCondition condition = CompareCondition.le("name", "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.le("age", 18);
+        assertEquals("age", condition.getField());
         assertEquals("<=", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 
     @Test
     void testGe() {
-        CompareCondition condition = CompareCondition.ge("name", "abc");
-        assertEquals("name", condition.getField());
+        CompareCondition condition = CompareCondition.ge("age", 18);
+        assertEquals("age", condition.getField());
         assertEquals(">=", condition.getOperator());
-        assertEquals("abc", condition.getValue());
+        assertEquals(18, condition.getValue());
     }
 }
