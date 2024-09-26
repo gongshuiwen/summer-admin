@@ -41,13 +41,13 @@ module summernova.admin.core {
     exports io.summernova.admin.core.domain.field.util;
     exports io.summernova.admin.core.domain.model;
     exports io.summernova.admin.core.jackson2;
-    exports io.summernova.admin.core.method.annotations;
     exports io.summernova.admin.core.mybatis;
     exports io.summernova.admin.core.security;
     exports io.summernova.admin.core.security.account;
     exports io.summernova.admin.core.security.authorization;
     exports io.summernova.admin.core.security.model;
     exports io.summernova.admin.core.service;
+    exports io.summernova.admin.core.service.annotations;
 
     // opens
     opens io.summernova.admin.core.dal.mapper to org.mybatis, com.baomidou.mybatis.plus.core, spring.core;

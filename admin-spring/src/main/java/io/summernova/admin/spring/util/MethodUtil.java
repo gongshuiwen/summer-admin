@@ -1,6 +1,6 @@
 package io.summernova.admin.spring.util;
 
-import io.summernova.admin.core.method.annotations.Public;
+import io.summernova.admin.core.service.annotations.Public;
 import io.summernova.admin.core.service.BaseService;
 import org.springframework.aop.framework.AopProxyUtils;
 

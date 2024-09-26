@@ -1,4 +1,4 @@
-package io.summernova.admin.core.method.annotations;
+package io.summernova.admin.core.service.annotations;
 
 import java.lang.annotation.*;
 

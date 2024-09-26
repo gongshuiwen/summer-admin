@@ -1,6 +1,6 @@
 package io.summernova.admin.module.base.service;
 
-import io.summernova.admin.core.method.annotations.Public;
+import io.summernova.admin.core.service.annotations.Public;
 import io.summernova.admin.core.service.AbstractBaseTreeService;
 import io.summernova.admin.module.base.model.Menu;
 import lombok.extern.slf4j.Slf4j;

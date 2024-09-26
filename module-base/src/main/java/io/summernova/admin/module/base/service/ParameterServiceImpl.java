@@ -1,6 +1,6 @@
 package io.summernova.admin.module.base.service;
 
-import io.summernova.admin.core.method.annotations.Public;
+import io.summernova.admin.core.service.annotations.Public;
 import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.model.Parameter;
 import org.springframework.stereotype.Service;
