@@ -1,7 +1,7 @@
 package io.summernova.admin.module.base.service;
 
-import io.summernova.admin.core.mapper.RelationMapper;
-import io.summernova.admin.core.mapper.RelationMapperRegistry;
+import io.summernova.admin.core.dal.mapper.RelationMapper;
+import io.summernova.admin.core.dal.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.model.Permission;
 import io.summernova.admin.module.base.model.Role;

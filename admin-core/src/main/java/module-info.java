@@ -35,11 +35,11 @@ module summernova.admin.core {
     // exports
     exports io.summernova.admin.core.context;
     exports io.summernova.admin.core.context.supplier;
+    exports io.summernova.admin.core.dal.mapper;
     exports io.summernova.admin.core.field;
     exports io.summernova.admin.core.field.annotations;
     exports io.summernova.admin.core.field.util;
     exports io.summernova.admin.core.jackson2;
-    exports io.summernova.admin.core.mapper;
     exports io.summernova.admin.core.method.annotations;
     exports io.summernova.admin.core.model;
     exports io.summernova.admin.core.mybatis;
@@ -50,9 +50,9 @@ module summernova.admin.core {
     exports io.summernova.admin.core.service;
 
     // opens
+    opens io.summernova.admin.core.dal.mapper to org.mybatis, com.baomidou.mybatis.plus.core, spring.core;
     opens io.summernova.admin.core.field to com.fasterxml.jackson.databind;
     opens io.summernova.admin.core.jackson2 to com.fasterxml.jackson.databind;
-    opens io.summernova.admin.core.mapper to org.mybatis, com.baomidou.mybatis.plus.core, spring.core;
     opens io.summernova.admin.core.model;
     opens io.summernova.admin.core.service to spring.core;
 }

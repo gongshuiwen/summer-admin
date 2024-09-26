@@ -2,9 +2,9 @@ package io.summernova.admin.core.service;
 
 import io.summernova.admin.core.annotaion.WithMockAdmin;
 import io.summernova.admin.core.context.BaseContextExtension;
+import io.summernova.admin.core.dal.mapper.ScriptRunnerUtil;
+import io.summernova.admin.core.dal.mapper.SqlSessionUtil;
 import io.summernova.admin.core.field.Many2One;
-import io.summernova.admin.core.mapper.ScriptRunnerUtil;
-import io.summernova.admin.core.mapper.SqlSessionUtil;
 import io.summernova.admin.core.model.TreeMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

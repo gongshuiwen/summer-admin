@@ -1,6 +1,6 @@
 package io.summernova.admin.core.context;
 
-import io.summernova.admin.core.mapper.SqlSessionUtil;
+import io.summernova.admin.core.dal.mapper.SqlSessionUtil;
 import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.authorization.BaseAuthority;
 import lombok.Getter;

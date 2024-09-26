@@ -10,19 +10,19 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import io.summernova.admin.common.query.Condition;
+import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.context.BaseContextHolder;
+import io.summernova.admin.core.dal.mapper.BaseMapper;
+import io.summernova.admin.core.dal.mapper.BaseMapperRegistry;
+import io.summernova.admin.core.dal.mapper.RelationMapper;
+import io.summernova.admin.core.dal.query.adapter.ConditionQueryWrapperAdapter;
+import io.summernova.admin.core.dal.query.adapter.OrderBysQueryWrapperAdapter;
 import io.summernova.admin.core.field.*;
 import io.summernova.admin.core.field.annotations.Many2OneField;
 import io.summernova.admin.core.field.annotations.OnDeleteType;
 import io.summernova.admin.core.field.util.RelationFieldUtil;
-import io.summernova.admin.core.mapper.BaseMapper;
-import io.summernova.admin.core.mapper.BaseMapperRegistry;
-import io.summernova.admin.core.mapper.RelationMapper;
 import io.summernova.admin.core.model.BaseModel;
-import io.summernova.admin.common.query.Condition;
-import io.summernova.admin.common.query.OrderBys;
-import io.summernova.admin.core.query.adapter.ConditionQueryWrapperAdapter;
-import io.summernova.admin.core.query.adapter.OrderBysQueryWrapperAdapter;
 import io.summernova.admin.core.security.model.ModelAccessCheckUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
@@ -43,18 +43,15 @@ import java.util.Objects;
 public abstract class AbstractBaseService<T extends BaseModel> implements BaseService<T> {
 
     private static final int DEFAULT_BATCH_SIZE = 1000;
-
+    private final Object modelClassLock = new Object();
+    private final Object baseMapperClassLock = new Object();
+    private final Object baseMapperLock = new Object();
     // cache for modelClass
     private volatile Class<T> modelClass;
-    private final Object modelClassLock = new Object();
-
     // cache for baseMapperClass
     private volatile Class<BaseMapper<T>> baseMapperClass;
-    private final Object baseMapperClassLock = new Object();
-
     // cache for BaseMapper<T>
     private volatile BaseMapper<T> baseMapper;
-    private final Object baseMapperLock = new Object();
 
     @Override
     public T selectById(Long id) {
@@ -99,7 +96,8 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         ModelAccessCheckUtil.checkSelect(getModelClass());
         Page<T> page = new Page<>(1, 7);
 
-        if (name == null || name.isEmpty() || name.isBlank()) return getBaseMapper().selectList(page, Wrappers.emptyWrapper());
+        if (name == null || name.isEmpty() || name.isBlank())
+            return getBaseMapper().selectList(page, Wrappers.emptyWrapper());
 
         // TODO: optimize performance by cache
         try {
@@ -144,7 +142,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
 //        SqlSessionFactory sqlSessionFactory = getContext().getSqlSessionFactory();
 //        return SqlHelper.executeBatch(sqlSessionFactory, mybatisLog, records, DEFAULT_BATCH_SIZE,
 //              (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
-        for (T record: records) getBaseMapper().insert(record);
+        for (T record : records) getBaseMapper().insert(record);
         return true;
     }
 
