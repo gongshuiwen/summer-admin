@@ -1,10 +1,10 @@
-package io.summernova.admin.core.domain.field.util;
+package io.summernova.admin.core.domain.util;
 
 import io.summernova.admin.common.util.ReflectUtil;
 import io.summernova.admin.core.domain.field.Many2Many;
 import io.summernova.admin.core.domain.field.Many2One;
 import io.summernova.admin.core.domain.field.One2Many;
-import io.summernova.admin.core.domain.field.annotations.One2ManyField;
+import io.summernova.admin.core.domain.annotations.One2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 
 import java.lang.reflect.Field;

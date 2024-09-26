@@ -3,7 +3,7 @@ package io.summernova.admin.core.domain.model;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.NullOrNotBlank;
 import io.summernova.admin.common.validation.UpdateValidationGroup;
-import io.summernova.admin.core.domain.field.annotations.ReadOnly;
+import io.summernova.admin.core.domain.annotations.ReadOnly;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,6 @@
-package io.summernova.admin.core.domain.field.util;
+package io.summernova.admin.core.domain.util;
 
-import io.summernova.admin.core.domain.field.annotations.ReadOnly;
-import io.summernova.admin.core.domain.field.util.ReadOnlyUtil;
+import io.summernova.admin.core.domain.annotations.ReadOnly;
 import io.summernova.admin.core.domain.model.BaseModel;
 import lombok.Getter;
 import lombok.Setter;

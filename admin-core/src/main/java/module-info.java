@@ -36,10 +36,10 @@ module summernova.admin.core {
     exports io.summernova.admin.core.context;
     exports io.summernova.admin.core.context.supplier;
     exports io.summernova.admin.core.dal.mapper;
+    exports io.summernova.admin.core.domain.annotations;
     exports io.summernova.admin.core.domain.field;
-    exports io.summernova.admin.core.domain.field.annotations;
-    exports io.summernova.admin.core.domain.field.util;
     exports io.summernova.admin.core.domain.model;
+    exports io.summernova.admin.core.domain.util;
     exports io.summernova.admin.core.jackson2;
     exports io.summernova.admin.core.mybatis;
     exports io.summernova.admin.core.security;

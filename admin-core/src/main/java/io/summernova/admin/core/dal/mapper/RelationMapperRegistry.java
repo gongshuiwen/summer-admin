@@ -1,6 +1,6 @@
 package io.summernova.admin.core.dal.mapper;
 
-import io.summernova.admin.core.domain.field.annotations.Many2ManyField;
+import io.summernova.admin.core.domain.annotations.Many2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.summernova.admin.core.domain.field.util.RelationFieldUtil.getTargetModelClass;
+import static io.summernova.admin.core.domain.util.RelationFieldUtil.getTargetModelClass;
 
 /**
  * @author gongshuiwen

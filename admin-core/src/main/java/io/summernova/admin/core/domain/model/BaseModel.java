@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.UpdateValidationGroup;
-import io.summernova.admin.core.domain.field.annotations.ReadOnly;
+import io.summernova.admin.core.domain.annotations.ReadOnly;
 import io.summernova.admin.core.jackson2.SecurityBeanPropertyFilter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

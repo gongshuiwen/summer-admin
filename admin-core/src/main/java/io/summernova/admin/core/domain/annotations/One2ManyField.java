@@ -1,4 +1,4 @@
-package io.summernova.admin.core.domain.field.annotations;
+package io.summernova.admin.core.domain.annotations;
 
 import java.lang.annotation.*;
 
@@ -8,5 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ReadOnly {
+public @interface One2ManyField {
+
+    String inverseField();
 }

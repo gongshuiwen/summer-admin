@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.NullOrNotBlank;
 import io.summernova.admin.core.domain.field.Many2Many;
-import io.summernova.admin.core.domain.field.annotations.Many2ManyField;
+import io.summernova.admin.core.domain.annotations.Many2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

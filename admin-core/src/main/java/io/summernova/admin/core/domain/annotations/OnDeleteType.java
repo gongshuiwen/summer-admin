@@ -1,4 +1,4 @@
-package io.summernova.admin.core.domain.field.annotations;
+package io.summernova.admin.core.domain.annotations;
 
 /**
  * @author gongshuiwen

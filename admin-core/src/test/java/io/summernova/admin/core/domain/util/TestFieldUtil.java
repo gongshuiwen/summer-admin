@@ -1,4 +1,4 @@
-package io.summernova.admin.core.domain.field.util;
+package io.summernova.admin.core.domain.util;
 
 import io.summernova.admin.core.domain.model.Mock;
 import org.junit.jupiter.api.Test;
