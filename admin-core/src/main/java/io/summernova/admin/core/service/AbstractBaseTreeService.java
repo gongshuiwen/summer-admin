@@ -5,7 +5,6 @@ import io.summernova.admin.core.field.Many2One;
 import io.summernova.admin.core.field.One2Many;
 import io.summernova.admin.core.model.BaseTreeModel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,7 +44,6 @@ public abstract class AbstractBaseTreeService<T extends BaseTreeModel<T>>
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean createBatch(List<T> records) {
         if (records == null || records.isEmpty())
             return false;
@@ -75,7 +73,6 @@ public abstract class AbstractBaseTreeService<T extends BaseTreeModel<T>>
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateByIds(List<Long> ids, T updateValues) {
         Many2One<T> parentIdField = updateValues.getParentId();
         if (parentIdField != null) {

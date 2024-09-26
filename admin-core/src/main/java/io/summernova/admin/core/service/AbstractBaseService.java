@@ -28,7 +28,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -58,7 +57,6 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     private final Object baseMapperLock = new Object();
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public T selectById(Long id) {
         if (id == null) return null;
 
@@ -67,7 +65,6 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<T> selectByIds(Collection<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
         ModelAccessCheckUtil.checkSelect(getModelClass());
@@ -75,7 +72,6 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
         ModelAccessCheckUtil.checkSelect(getModelClass());
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
@@ -87,21 +83,18 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Long count(QueryWrapper<T> queryWrapper) {
         ModelAccessCheckUtil.checkSelect(getModelClass());
         return SqlHelper.retCount(getBaseMapper().selectCount(queryWrapper));
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<T> selectList(QueryWrapper<T> queryWrapper) {
         ModelAccessCheckUtil.checkSelect(getModelClass());
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public List<T> nameSearch(String name) {
         ModelAccessCheckUtil.checkSelect(getModelClass());
         Page<T> page = new Page<>(1, 7);
@@ -121,14 +114,12 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean createOne(T record) {
         if (record == null) return false;
         return createBatch(List.of(record));
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean createBatch(List<T> records) {
         if (records == null || records.isEmpty()) return false;
 
@@ -146,7 +137,6 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         return res;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     protected boolean saveBatch(Collection<T> records) {
         // TODO: try some other implementation to improve batch insert performance, the way deprecated is a sample of mybatis-plus.
         //  because this only supports spring managed transaction, so the saving is not atomic!!!
@@ -229,14 +219,12 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateById(Long id, T updateValues) {
         if (id == null || updateValues == null) return false;
         return updateByIds(List.of(id), updateValues);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateByIds(List<Long> ids, T updateValues) {
         if (ids == null || ids.isEmpty() || updateValues == null) return false;
         if (updateValues.getId() != null)
@@ -351,14 +339,12 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteById(Long id) {
         if (id == null) return false;
         return deleteByIds(List.of(id));
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean deleteByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return false;
 
