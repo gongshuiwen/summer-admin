@@ -1,6 +1,5 @@
 package io.summernova.admin.core.domain.field;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +22,6 @@ public enum CommandType {
     DELETE(4),
     UPDATE(5);
 
-    @JsonValue
     int code;
 
     /**

@@ -27,6 +27,7 @@ class TestSecurityBeanPropertyFilter {
     ObjectMapper mapper;
     {
         mapper = new ObjectMapper();
+        mapper.registerModule(new CoreJackson2Module());
         mapper.setFilterProvider(new SimpleFilterProvider().addFilter(FILTER_ID, INSTANCE));
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }

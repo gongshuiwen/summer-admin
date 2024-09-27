@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.UpdateValidationGroup;
 import io.summernova.admin.core.domain.annotations.ReadOnly;
-import io.summernova.admin.core.jackson2.SecurityBeanPropertyFilter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -25,8 +22,6 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@JsonFilter(SecurityBeanPropertyFilter.FILTER_ID)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseModel implements Serializable {
 
     @Schema(description = "ID")

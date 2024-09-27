@@ -41,7 +41,8 @@ module summernova.admin.spring {
     // opens
     opens io.summernova.admin.spring.config to spring.core;
     opens io.summernova.admin.spring.security.web to spring.core;
-    opens io.summernova.admin.spring.web to spring.core, com.baomidou.mybatis.plus.core, summernova.admin.core;
+    opens io.summernova.admin.spring.web to spring.core, com.baomidou.mybatis.plus.core, summernova.admin.core,
+            com.fasterxml.jackson.databind;
 
     // provides
     provides io.summernova.admin.core.context.supplier.BaseContextSupplier with

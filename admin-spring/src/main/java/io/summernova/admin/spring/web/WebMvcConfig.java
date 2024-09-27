@@ -63,6 +63,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
                 .simpleDateFormat(DEFAULT_DATE_TIME_FORMAT)
                 .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .modules(new CoreJackson2Module())
                 .serializerByType(BigInteger.class, ToStringSerializer.instance)
                 .serializerByType(Long.class, ToStringSerializer.instance)
                 .serializerByType(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)))
