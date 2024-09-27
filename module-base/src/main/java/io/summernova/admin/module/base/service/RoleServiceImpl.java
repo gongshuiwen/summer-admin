@@ -1,18 +1,14 @@
 package io.summernova.admin.module.base.service;
 
 import io.summernova.admin.common.exception.ValidationException;
-import io.summernova.admin.core.dal.mapper.RelationMapper;
-import io.summernova.admin.core.dal.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.service.AbstractBaseService;
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -27,15 +23,9 @@ import static io.summernova.admin.core.security.Constants.CODE_BASE_USER;
 @Service
 public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleService {
 
-    private final RelationMapper userRoleMapper;
+    private final Field rolesField = User.class.getDeclaredField("roles");
 
-    // TODO: this is a temporary solution, because the sqlSession filed in AbstractBaseService has not been autowired when in constructor,
-    //  so we use @Autowired @Qualifier("sqlSessionTemplate") to inject it
-    public RoleServiceImpl(
-            @Autowired @Qualifier("sqlSessionTemplate") SqlSession sqlSession
-    ) throws NoSuchFieldException {
-        this.userRoleMapper = RelationMapperRegistry.getRelationMapper(
-                sqlSession, User.class.getDeclaredField("roles"));
+    public RoleServiceImpl() throws NoSuchFieldException {
     }
 
     @Override
@@ -43,7 +33,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
     public Set<Role> getRolesByUserId(Long userId) {
         Objects.requireNonNull(userId, "userId must not be null");
 
-        List<Long> roleIds = userRoleMapper.getTargetIds(List.of(userId));
+        List<Long> roleIds = getRelationMapper(rolesField).getTargetIds(List.of(userId));
         if (roleIds == null || roleIds.isEmpty())
             return Set.of();
 
@@ -71,7 +61,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(roleIds, "roleIds must not be null");
         if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
-        userRoleMapper.add(userId, roleIds.stream().toList());
+        getRelationMapper(rolesField).add(userId, roleIds.stream().toList());
     }
 
     @Override
@@ -80,7 +70,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(roleIds, "roleIds must not be null");
         if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
-        userRoleMapper.remove(userId, roleIds.stream().toList());
+        getRelationMapper(rolesField).remove(userId, roleIds.stream().toList());
     }
 
     @Override
@@ -88,6 +78,6 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
     public void replaceUserRoles(Long userId, Set<Long> roleIds) {
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(roleIds, "roleIds must not be null");
-        userRoleMapper.replace(userId, roleIds.stream().toList());
+        getRelationMapper(rolesField).replace(userId, roleIds.stream().toList());
     }
 }
