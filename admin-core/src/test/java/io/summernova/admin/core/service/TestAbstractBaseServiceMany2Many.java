@@ -57,8 +57,7 @@ class TestAbstractBaseServiceMany2Many {
         ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock2.sql");
         ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock3.sql");
         ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "mock_relation.sql");
-        mockRelationMapper = RelationMapperRegistry.getRelationMapper(
-                BaseContextHolder.getContext().getSqlSession(), Mock1.class.getDeclaredField("mock3s"));
+        mockRelationMapper = mock1Service.getRelationMapper(Mock1.class.getDeclaredField("mock3s"));
     }
 
     @Test

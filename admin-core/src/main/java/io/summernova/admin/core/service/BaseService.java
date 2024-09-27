@@ -8,15 +8,19 @@ import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.context.BaseContextContainer;
 import io.summernova.admin.core.dal.mapper.BaseMapper;
 import io.summernova.admin.core.dal.mapper.RelationMapper;
+import io.summernova.admin.core.dal.mapper.RelationMapperInfo;
 import io.summernova.admin.core.dal.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.dal.query.adapter.ConditionQueryWrapperAdapter;
 import io.summernova.admin.core.dal.query.adapter.OrderBysQueryWrapperAdapter;
+import io.summernova.admin.core.domain.annotations.Many2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+
+import static io.summernova.admin.core.domain.util.RelationFieldUtil.getTargetModelClass;
 
 /**
  * @param <T> type extends {@link BaseModel}
@@ -148,7 +152,19 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
      * @return {@link RelationMapper} instance
      */
     default RelationMapper getRelationMapper(Field field) {
-        return RelationMapperRegistry.getRelationMapper(getSqlSession(), field);
+        Many2ManyField many2ManyField = field.getDeclaredAnnotation(Many2ManyField.class);
+        if (many2ManyField == null)
+            throw new RuntimeException("Cannot get annotation @Many2ManyField for field '" +
+                    field.getName() + "' in class '" + field.getDeclaringClass().getName() + "'");
+
+        Class<?> sourceClass = field.getDeclaringClass();
+        @SuppressWarnings("unchecked")
+        Class<?> targetClass = getTargetModelClass((Class<? extends BaseModel>) sourceClass, field);
+
+        RelationMapperInfo relationMapperInfo = new RelationMapperInfo(sourceClass, targetClass,
+                many2ManyField.sourceField(), many2ManyField.targetField(), many2ManyField.joinTable());
+
+        return RelationMapperRegistry.getRelationMapper(getSqlSession(), relationMapperInfo);
     }
 
     <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass);
