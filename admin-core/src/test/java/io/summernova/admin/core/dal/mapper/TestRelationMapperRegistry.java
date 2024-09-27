@@ -28,20 +28,16 @@ class TestRelationMapperRegistry {
 
     @Test
     void testGetRelationMapper() throws NoSuchFieldException {
-        RelationMapper relationMapper = RelationMapperRegistry.getRelationMapper(
-                sqlSession, Mock1.class.getDeclaredField("mock3s"));
+        RelationMapperInfo relationMapperInfo = new RelationMapperInfo(
+                Mock1.class, Mock3.class, "mock1_id", "mock3_id", "mock_relation");
+        RelationMapper relationMapper = RelationMapperRegistry.getRelationMapper(sqlSession, relationMapperInfo);
 
         List<Long> mock3Ids = relationMapper.getTargetIds(1L);
         assertEquals(2, mock3Ids.size());
         assertEquals(1, mock3Ids.get(0));
         assertEquals(2, mock3Ids.get(1));
 
-        RelationMapperInfo relationMapperInfo = relationMapper.getRelationMapperInfo();
-        assertEquals(Mock1.class, relationMapperInfo.sourceClass());
-        assertEquals(Mock3.class, relationMapperInfo.targetClass());
-        assertEquals("mock1_id", relationMapperInfo.sourceField());
-        assertEquals("mock3_id", relationMapperInfo.targetField());
-        assertEquals("mock_relation", relationMapperInfo.joinTable());
+        assertEquals(relationMapperInfo, relationMapper.getRelationMapperInfo());
     }
 
     @Test
