@@ -10,22 +10,21 @@ module summernova.admin.core {
     // summernova
     requires transitive summernova.admin.common;
 
-    // jackson
-    requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
-
     // mybatis && mybatis-plus
     requires org.mybatis;
     requires com.baomidou.mybatis.plus.annotation;
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.extension;
 
+    // jackson
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+
     // spring
     requires spring.tx;
 
     // other
-    requires transitive org.slf4j;
     requires net.bytebuddy;
     requires net.bytebuddy.agent;
 
