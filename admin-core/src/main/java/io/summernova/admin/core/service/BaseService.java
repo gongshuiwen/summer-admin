@@ -3,7 +3,6 @@ package io.summernova.admin.core.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.IService;
 import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.context.BaseContextContainer;
@@ -155,7 +154,7 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass);
 
     /**
-     * copied from mybatis-plus {@link IService#lambdaQuery()}
+     * copied from mybatis-plus IService#lambdaQuery()
      * <p>
      * 链式查询 lambda 式
      * <p>注意：不支持 Kotlin </p>
