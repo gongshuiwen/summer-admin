@@ -78,7 +78,7 @@ class TestAbstractBaseServiceMany2Many {
         mock1Service.createOne(mock1);
 
         // check result
-        List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
+        List<Long> mock3Ids = mockRelationMapper.getTargetIds(List.of(mock1.getId()));
         assertEquals(2, mock3Ids.size());
         assertEquals(1, mock3Ids.get(0));
         assertEquals(2, mock3Ids.get(1));
@@ -106,7 +106,7 @@ class TestAbstractBaseServiceMany2Many {
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         // check result
-        List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
+        List<Long> mock3Ids = mockRelationMapper.getTargetIds(List.of(mock1.getId()));
         assertEquals(2, mock3Ids.size());
         assertEquals(1, mock3Ids.get(0));
         assertEquals(2, mock3Ids.get(1));
@@ -136,7 +136,7 @@ class TestAbstractBaseServiceMany2Many {
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         // check result
-        List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
+        List<Long> mock3Ids = mockRelationMapper.getTargetIds(List.of(mock1.getId()));
         assertEquals(1, mock3Ids.size());
         assertEquals(2, mock3Ids.get(0));
         assertNotNull(mock3Service.selectById(1L));
@@ -167,7 +167,7 @@ class TestAbstractBaseServiceMany2Many {
         mock1Service.updateById(mock1.getId(), mock1Update);
 
         // check result
-        List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
+        List<Long> mock3Ids = mockRelationMapper.getTargetIds(List.of(mock1.getId()));
         assertEquals(1, mock3Ids.size());
         assertEquals(2, mock3Ids.get(0));
         assertNotNull(mock3Service.selectById(1L));
@@ -199,7 +199,7 @@ class TestAbstractBaseServiceMany2Many {
         assertNull(mock1Service.selectById(mock1.getId()));
 
         // check result
-        List<Long> mock3Ids = mockRelationMapper.getTargetIds(mock1.getClass(), List.of(mock1.getId()));
+        List<Long> mock3Ids = mockRelationMapper.getTargetIds(List.of(mock1.getId()));
         assertEquals(0, mock3Ids.size());
         assertNotNull(mock3Service.selectById(1L));
         assertNotNull(mock3Service.selectById(2L));

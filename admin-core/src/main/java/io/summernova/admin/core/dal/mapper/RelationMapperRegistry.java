@@ -3,8 +3,6 @@ package io.summernova.admin.core.dal.mapper;
 import io.summernova.admin.core.domain.annotations.Many2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.annotation.AnnotationDescription;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.apache.ibatis.session.Configuration;
@@ -23,8 +21,8 @@ public final class RelationMapperRegistry {
 
     private static final ByteBuddy byteBuddy = new ByteBuddy();
 
-    // cache mapper interfaces
-    private static final Map<Key, Class<?>> relationMapperInterfaceCache = new ConcurrentHashMap<>();
+    private static final Map<RelationMapperInfo, Class<?>> relationMapperInterfaceCache = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, RelationMapperInfo> relationMapperInfoCache = new ConcurrentHashMap<>();
 
     // prevent external instantiation
     private RelationMapperRegistry() {
@@ -40,11 +38,15 @@ public final class RelationMapperRegistry {
         @SuppressWarnings("unchecked")
         Class<?> targetClass = getTargetModelClass((Class<? extends BaseModel>) sourceClass, field);
 
-        Key key = new Key(sourceClass, targetClass, many2ManyField.sourceField(), many2ManyField.targetField(),
+        RelationMapperInfo key = new RelationMapperInfo(sourceClass, targetClass, many2ManyField.sourceField(), many2ManyField.targetField(),
                 many2ManyField.joinTable());
 
+        return getRelationMapper(sqlSession, key);
+    }
+
+    public static RelationMapper getRelationMapper(SqlSession sqlSession, RelationMapperInfo relationMapperInfo) {
         @SuppressWarnings("unchecked")
-        Class<RelationMapper> mapperInterface = (Class<RelationMapper>) getMapperInterface(key);
+        Class<RelationMapper> mapperInterface = (Class<RelationMapper>) getRelationMapperInterface(relationMapperInfo);
 
         Configuration configuration = sqlSession.getConfiguration();
         if (!configuration.hasMapper(mapperInterface))
@@ -53,32 +55,26 @@ public final class RelationMapperRegistry {
         return sqlSession.getMapper(mapperInterface);
     }
 
-    private static Class<?> getMapperInterface(Key key) {
-        return relationMapperInterfaceCache.computeIfAbsent(key,
-                key1 -> buildMapperInterface(key1.sourceClass, key1.targetClass, key1.sourceField, key1.targetField, key1.joinTable));
+    public static RelationMapperInfo getRelationMapperInfo(Class<?> relationMapperInterface) {
+        return relationMapperInfoCache.get(relationMapperInterface);
     }
 
-    static Class<?> buildMapperInterface(Class<?> sourceClass, Class<?> targetClass,
-                                         String sourField, String targetField, String joinTable) {
-        // Define the annotation
-        AnnotationDescription annotation = AnnotationDescription.Builder.ofType(RelationMapperInfo.class)
-                .define("class1", TypeDescription.ForLoadedType.of(sourceClass))
-                .define("class2", TypeDescription.ForLoadedType.of(targetClass))
-                .define("table", joinTable)
-                .define("field1", sourField)
-                .define("field2", targetField)
-                .build();
+    static Class<?> getRelationMapperInterface(RelationMapperInfo relationMapperInfo) {
+        return relationMapperInterfaceCache.computeIfAbsent(relationMapperInfo,
+                info -> {
+                    Class<?> mapperInterface = buildRelationMapperInterface();
+                    relationMapperInfoCache.put(mapperInterface, info);
+                    return mapperInterface;
+                });
+    }
 
+    static Class<?> buildRelationMapperInterface() {
         // Create the dynamic class
         try (DynamicType.Unloaded<?> unloaded = byteBuddy
                 .makeInterface(RelationMapper.class)
-                .annotateType(annotation)
                 .make()) {
             return unloaded.load(RelationMapperRegistry.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION).
                     getLoaded();
         }
-    }
-
-    record Key(Class<?> sourceClass, Class<?> targetClass, String sourceField, String targetField, String joinTable) {
     }
 }

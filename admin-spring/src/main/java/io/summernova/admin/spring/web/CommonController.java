@@ -283,7 +283,7 @@ public class CommonController implements BaseContextContainer {
             Set<Long> allTargetIds = new HashSet<>();
             Map<Long, List<Long>> recordId2TargetIdsMap = new HashMap<>();
             for (T record : records) {
-                List<Long> targetIds = relationMapper.getTargetIds(modelClass, record.getId());
+                List<Long> targetIds = relationMapper.getTargetIds(record.getId());
                 allTargetIds.addAll(targetIds);
                 recordId2TargetIdsMap.put(record.getId(), targetIds);
             }

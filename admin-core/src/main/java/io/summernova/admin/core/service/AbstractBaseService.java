@@ -206,7 +206,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
                             throw new IllegalArgumentException("The ids of Command ADD cannot be null or empty");
                         }
                         RelationMapper mapper = getRelationMapper(field);
-                        mapper.add(getModelClass(), record.getId(), command.getIds());
+                        mapper.add(record.getId(), command.getIds());
                     } else {
                         throw new IllegalArgumentException("The Command " + command.getCommandType()
                                 + " is not supported for many2many field in create method");
@@ -314,17 +314,17 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
                     switch (command.getCommandType()) {
                         case ADD: {
                             RelationMapper mapper = getRelationMapper(field);
-                            mapper.add(getModelClass(), sourceId, command.getIds());
+                            mapper.add(sourceId, command.getIds());
                             break;
                         }
                         case REMOVE: {
                             RelationMapper mapper = getRelationMapper(field);
-                            mapper.remove(getModelClass(), sourceId, command.getIds());
+                            mapper.remove(sourceId, command.getIds());
                             break;
                         }
                         case REPLACE: {
                             RelationMapper mapper = getRelationMapper(field);
-                            mapper.replace(getModelClass(), sourceId, command.getIds());
+                            mapper.replace(sourceId, command.getIds());
                             break;
                         }
                         default: {
@@ -425,7 +425,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         for (Field field : RelationFieldUtil.getMany2ManyFields(getModelClass())) {
             for (Long sourceId : ids) {
                 RelationMapper mapper = getRelationMapper(field);
-                mapper.removeAll(getModelClass(), sourceId);
+                mapper.removeAll(sourceId);
             }
         }
     }

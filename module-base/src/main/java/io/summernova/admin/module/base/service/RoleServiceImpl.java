@@ -43,7 +43,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
     public Set<Role> getRolesByUserId(Long userId) {
         Objects.requireNonNull(userId, "userId must not be null");
 
-        List<Long> roleIds = userRoleMapper.getTargetIds(User.class, List.of(userId));
+        List<Long> roleIds = userRoleMapper.getTargetIds(List.of(userId));
         if (roleIds == null || roleIds.isEmpty())
             return Set.of();
 
@@ -71,7 +71,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(roleIds, "roleIds must not be null");
         if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
-        userRoleMapper.add(User.class, userId, roleIds.stream().toList());
+        userRoleMapper.add(userId, roleIds.stream().toList());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(roleIds, "roleIds must not be null");
         if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
-        userRoleMapper.remove(User.class, userId, roleIds.stream().toList());
+        userRoleMapper.remove(userId, roleIds.stream().toList());
     }
 
     @Override
@@ -88,6 +88,6 @@ public class RoleServiceImpl extends AbstractBaseService<Role> implements RoleSe
     public void replaceUserRoles(Long userId, Set<Long> roleIds) {
         Objects.requireNonNull(userId, "userId must not be null");
         Objects.requireNonNull(roleIds, "roleIds must not be null");
-        userRoleMapper.replace(User.class, userId, roleIds.stream().toList());
+        userRoleMapper.replace(userId, roleIds.stream().toList());
     }
 }

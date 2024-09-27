@@ -39,7 +39,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission> imple
     @Transactional
     public Set<Permission> getPermissionsByRoleId(Long roleId) {
         Objects.requireNonNull(roleId, "roleId must not be null");
-        List<Long> permIds = rolePermissionMapper.getTargetIds(Role.class, roleId);
+        List<Long> permIds = rolePermissionMapper.getTargetIds(roleId);
         return getBaseMapper().selectBatchIds(permIds).stream().collect(Collectors.toUnmodifiableSet());
     }
 
@@ -49,7 +49,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission> imple
         Objects.requireNonNull(roleIds, "roleIds must not be null");
         if (roleIds.isEmpty()) throw new IllegalArgumentException("roleIds must not be empty");
 
-        List<Long> permIds = rolePermissionMapper.getTargetIds(Role.class, roleIds.stream().toList());
+        List<Long> permIds = rolePermissionMapper.getTargetIds(roleIds.stream().toList());
         if (permIds.isEmpty())
             return Set.of();
 
@@ -62,7 +62,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission> imple
         Objects.requireNonNull(roleId, "roleId must not be null");
         Objects.requireNonNull(permIds, "permIds must not be null");
         if (permIds.isEmpty()) throw new IllegalArgumentException("permIds must not be empty");
-        rolePermissionMapper.add(Role.class, roleId, permIds.stream().toList());
+        rolePermissionMapper.add(roleId, permIds.stream().toList());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission> imple
         Objects.requireNonNull(roleId, "roleId must not be null");
         Objects.requireNonNull(permIds, "permIds must not be null");
         if (permIds.isEmpty()) throw new IllegalArgumentException("permIds must not be empty");
-        rolePermissionMapper.remove(Role.class, roleId, permIds.stream().toList());
+        rolePermissionMapper.remove(roleId, permIds.stream().toList());
     }
 
     @Override
@@ -79,6 +79,6 @@ public class PermissionServiceImpl extends AbstractBaseService<Permission> imple
     public void replaceRolePermissions(Long roleId, Set<Long> permIds) {
         Objects.requireNonNull(roleId, "roleId must not be null");
         Objects.requireNonNull(permIds, "permIds must not be null");
-        rolePermissionMapper.replace(Role.class, roleId, permIds.stream().toList());
+        rolePermissionMapper.replace(roleId, permIds.stream().toList());
     }
 }
