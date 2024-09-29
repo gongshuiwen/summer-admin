@@ -30,22 +30,22 @@ public abstract class BaseModel implements Serializable {
     @NotNull(groups = {UpdateValidationGroup.class})
     private Long id;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "Create Time")
     @TableField(fill = FieldFill.INSERT)
     @ReadOnly
     private LocalDateTime createTime;
 
-    @Schema(description = "更新时间")
+    @Schema(description = "Update Time")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ReadOnly
     private LocalDateTime updateTime;
 
-    @Schema(description = "创建用户")
+    @Schema(description = "Create User")
     @TableField(fill = FieldFill.INSERT)
     @ReadOnly
     private Long createUser;
 
-    @Schema(description = "更新用户")
+    @Schema(description = "Update User")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @ReadOnly
     private Long updateUser;
@@ -58,6 +58,9 @@ public abstract class BaseModel implements Serializable {
         return getName();
     }
 
+    // -----------------------
+    // inherited from Object
+    // -----------------------
     @Override
     public String toString() {
         return getClass().getName() + "@" + getId() + "[" + getDisplayName() + "]";

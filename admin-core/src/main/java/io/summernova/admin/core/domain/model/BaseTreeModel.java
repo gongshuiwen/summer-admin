@@ -18,18 +18,26 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class BaseTreeModel<T extends BaseTreeModel<?>> extends BaseModel {
+public abstract class BaseTreeModel<T extends BaseTreeModel<T>> extends BaseModel {
 
-    @Schema(description = "父级路径")
+    @Schema(description = "Parent Path")
     @Null(groups = {CreateValidationGroup.class, UpdateValidationGroup.class})
     private String parentPath;
 
-    @Schema(description = "父级ID")
+    @Schema(description = "Parent ID")
     @Many2OneField(onDelete = OnDeleteType.CASCADE)
     private Many2One<T> parentId;
 
-    @Schema(description = "子级列表")
+    @Schema(description = "Children List")
     @TableField(exist = false)
     @One2ManyField(inverseField = "parentId")
     private One2Many<T> children;
+
+    // -----------------------
+    // Display name
+    // -----------------------
+    @Override
+    public String getDisplayName() {
+        return getParentPath();
+    }
 }
