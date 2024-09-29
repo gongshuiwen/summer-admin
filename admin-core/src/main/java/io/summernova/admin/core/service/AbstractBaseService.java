@@ -465,7 +465,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         if (baseMapper == null) {
             synchronized (baseMapperLock) {
                 if (baseMapper == null) {
-                    baseMapper = BaseMapperRegistry.getBaseMapper(getSqlSession(), getModelClass());
+                    baseMapper = getContext().getBaseMapper(getModelClass());
                 }
             }
         }
