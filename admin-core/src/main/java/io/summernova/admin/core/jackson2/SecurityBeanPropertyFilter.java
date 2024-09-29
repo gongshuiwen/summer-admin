@@ -4,14 +4,16 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import io.summernova.admin.core.context.BaseContext;
 import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.domain.model.BaseModel;
 import io.summernova.admin.core.security.Constants;
-import io.summernova.admin.core.security.GrantedAuthorityCheckUtils;
+import io.summernova.admin.core.security.authorization.BaseAuthority;
 import io.summernova.admin.core.security.authorization.SimpleAuthority;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author gongshuiwen
@@ -44,7 +46,8 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
 
     private boolean checkAllowedForAdmin(AllowedForAdmin allowedForAdminAnnotation) {
         if (allowedForAdminAnnotation != null) {
-            return GrantedAuthorityCheckUtils.contains(SimpleAuthority.of(Constants.ROLE_SYS_ADMIN));
+            BaseContext baseContext = BaseContextHolder.getContext();
+            return baseContext.isSuperAdmin() || baseContext.isAdmin();
         }
         return true;
     }
@@ -53,10 +56,10 @@ public class SecurityBeanPropertyFilter extends SimpleBeanPropertyFilter {
         if (allowedForRolesAnnotation != null
                 && allowedForRolesAnnotation.value() != null
                 && allowedForRolesAnnotation.value().length > 0) {
-            return GrantedAuthorityCheckUtils.containsAny(
-                    Arrays.stream(allowedForRolesAnnotation.value())
-                            .map(role -> SimpleAuthority.of(Constants.ROLE_PREFIX + role))
-                            .toList());
+            Set<? extends BaseAuthority> baseAuthorities = BaseContextHolder.getContext().getAuthorities();
+            return Arrays.stream(allowedForRolesAnnotation.value())
+                    .map(role -> SimpleAuthority.of(Constants.ROLE_PREFIX + role))
+                    .anyMatch(baseAuthorities::contains);
         }
         return true;
     }
