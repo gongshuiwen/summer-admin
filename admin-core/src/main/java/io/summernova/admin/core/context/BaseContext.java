@@ -1,13 +1,19 @@
 package io.summernova.admin.core.context;
 
+import io.summernova.admin.core.dal.mapper.*;
+import io.summernova.admin.core.domain.annotations.Many2ManyField;
+import io.summernova.admin.core.domain.model.BaseModel;
 import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.authorization.BaseAuthority;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;
+
+import static io.summernova.admin.core.domain.util.RelationFieldUtil.getTargetModelClass;
 
 /**
  * BaseContext stores common data for every request of the application.
@@ -111,6 +117,50 @@ public interface BaseContext {
      * @return the {@link SqlSession} of the current request
      */
     SqlSession getSqlSession();
+
+    /**
+     * Get the instance for the given mapper interface
+     *
+     * @param mapperInterface the mapper interface
+     * @param <M>             the mapper interface type
+     * @return {@link BaseMapper} instance
+     */
+    default <M> M getMapper(Class<M> mapperInterface) {
+        return getSqlSession().getMapper(mapperInterface);
+    }
+
+    /**
+     * Get the {@link BaseMapper} instance for the given model class
+     *
+     * @param modelClass the model class
+     * @param <T>        the model class type
+     * @return {@link BaseMapper} instance
+     */
+    default <T extends BaseModel> BaseMapper<T> getBaseMapper(Class<T> modelClass) {
+        return BaseMapperRegistry.getBaseMapper(getSqlSession(), modelClass);
+    }
+
+    /**
+     * Get the {@link RelationMapper} instance for the given many2many field
+     *
+     * @param field the many2many field
+     * @return {@link RelationMapper} instance
+     */
+    default RelationMapper getRelationMapper(Field field) {
+        Many2ManyField many2ManyField = field.getDeclaredAnnotation(Many2ManyField.class);
+        if (many2ManyField == null)
+            throw new RuntimeException("Cannot get annotation @Many2ManyField for field '" +
+                    field.getName() + "' in class '" + field.getDeclaringClass().getName() + "'");
+
+        Class<?> sourceClass = field.getDeclaringClass();
+        @SuppressWarnings("unchecked")
+        Class<?> targetClass = getTargetModelClass((Class<? extends BaseModel>) sourceClass, field);
+
+        RelationMapperInfo relationMapperInfo = new RelationMapperInfo(sourceClass, targetClass,
+                many2ManyField.sourceField(), many2ManyField.targetField(), many2ManyField.joinTable());
+
+        return RelationMapperRegistry.getRelationMapper(getSqlSession(), relationMapperInfo);
+    }
 
     /**
      * Get the {@link HttpServletRequest} instance of the current request if in the web environment, else null.
