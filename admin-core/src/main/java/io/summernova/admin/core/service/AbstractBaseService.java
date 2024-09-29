@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.OrderBys;
-import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.core.dal.mapper.BaseMapper;
 import io.summernova.admin.core.dal.mapper.BaseMapperRegistry;
 import io.summernova.admin.core.dal.mapper.RelationMapper;
@@ -27,7 +26,6 @@ import io.summernova.admin.core.security.model.ModelAccessCheckUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -431,11 +429,6 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    public SqlSession getSqlSession() {
-        return BaseContextHolder.getContext().getSqlSession();
-    }
-
-    @Override
     public Class<T> getModelClass() {
         // Double-checked locking for thread-safely lazy loading
         if (modelClass == null) {
@@ -477,16 +470,6 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
             }
         }
         return baseMapper;
-    }
-
-    @Override
-    public <AT extends BaseModel> BaseMapper<AT> getBaseMapper(Class<AT> modelClass) {
-        return BaseMapperRegistry.getBaseMapper(getSqlSession(), modelClass);
-    }
-
-    @Override
-    public <M extends BaseMapper<T>> M getMapper(Class<M> mapperInterface) {
-        return getSqlSession().getMapper(mapperInterface);
     }
 
     @Override

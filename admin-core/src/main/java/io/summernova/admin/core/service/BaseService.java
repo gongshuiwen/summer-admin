@@ -8,19 +8,14 @@ import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.context.BaseContextContainer;
 import io.summernova.admin.core.dal.mapper.BaseMapper;
 import io.summernova.admin.core.dal.mapper.RelationMapper;
-import io.summernova.admin.core.dal.mapper.RelationMapperInfo;
-import io.summernova.admin.core.dal.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.dal.query.adapter.ConditionQueryWrapperAdapter;
 import io.summernova.admin.core.dal.query.adapter.OrderBysQueryWrapperAdapter;
-import io.summernova.admin.core.domain.annotations.Many2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 import org.apache.ibatis.session.SqlSession;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
-
-import static io.summernova.admin.core.domain.util.RelationFieldUtil.getTargetModelClass;
 
 /**
  * @param <T> type extends {@link BaseModel}
@@ -133,38 +128,56 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     // ====================
     // Other methods
     // ====================
-    SqlSession getSqlSession();
-
     Class<T> getModelClass();
 
-    Class<BaseMapper<T>> getBaseMapperClass();
-
-    BaseMapper<T> getBaseMapper();
-
-    <AT extends BaseModel> BaseMapper<AT> getBaseMapper(Class<AT> modelClass);
-
-    <M extends BaseMapper<T>> M getMapper(Class<M> mapperInterface);
+    default SqlSession getSqlSession() {
+        return getContext().getSqlSession();
+    }
 
     /**
-     * Returns a {@link RelationMapper} instance for the service's model class and the given target class
+     * Get the {@link BaseMapper} class of this service
+     *
+     * @return {@link BaseMapper} class
+     */
+    Class<BaseMapper<T>> getBaseMapperClass();
+
+    /**
+     * Get the {@link BaseMapper} instance of this service
+     *
+     * @return {@link BaseMapper} instance
+     */
+    BaseMapper<T> getBaseMapper();
+
+    /**
+     * Get the instance for the given mapper interface
+     *
+     * @param mapperInterface the mapper interface
+     * @param <M>             the mapper interface type
+     * @return {@link BaseMapper} instance
+     */
+    default <M extends BaseMapper<T>> M getMapper(Class<M> mapperInterface) {
+        return getContext().getMapper(mapperInterface);
+    }
+
+    /**
+     * Get the {@link BaseMapper} instance for the given model class
+     *
+     * @param modelClass the model class
+     * @param <A>        the model class type
+     * @return {@link BaseMapper} instance
+     */
+    default <A extends BaseModel> BaseMapper<A> getBaseMapper(Class<A> modelClass) {
+        return getContext().getBaseMapper(modelClass);
+    }
+
+    /**
+     * Get the {@link RelationMapper} instance for the given many2many field
      *
      * @param field the many2many field
      * @return {@link RelationMapper} instance
      */
     default RelationMapper getRelationMapper(Field field) {
-        Many2ManyField many2ManyField = field.getDeclaredAnnotation(Many2ManyField.class);
-        if (many2ManyField == null)
-            throw new RuntimeException("Cannot get annotation @Many2ManyField for field '" +
-                    field.getName() + "' in class '" + field.getDeclaringClass().getName() + "'");
-
-        Class<?> sourceClass = field.getDeclaringClass();
-        @SuppressWarnings("unchecked")
-        Class<?> targetClass = getTargetModelClass((Class<? extends BaseModel>) sourceClass, field);
-
-        RelationMapperInfo relationMapperInfo = new RelationMapperInfo(sourceClass, targetClass,
-                many2ManyField.sourceField(), many2ManyField.targetField(), many2ManyField.joinTable());
-
-        return RelationMapperRegistry.getRelationMapper(getSqlSession(), relationMapperInfo);
+        return getContext().getRelationMapper(field);
     }
 
     <S extends BaseService<AT>, AT extends BaseModel> S getService(Class<AT> modelClass);
