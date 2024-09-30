@@ -1,4 +1,4 @@
-package io.summernova.admin.spring.web;
+package io.summernova.admin.spring.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import io.summernova.admin.core.domain.field.Many2One;
 import io.summernova.admin.core.domain.field.One2Many;
 import io.summernova.admin.core.jackson2.*;
 import io.summernova.admin.common.query.Condition;
+import io.summernova.admin.spring.web.BaseInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

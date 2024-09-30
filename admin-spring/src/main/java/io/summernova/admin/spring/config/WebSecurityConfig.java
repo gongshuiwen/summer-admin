@@ -1,6 +1,7 @@
-package io.summernova.admin.spring.security.web;
+package io.summernova.admin.spring.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.summernova.admin.spring.security.web.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
