@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.summernova.admin.common.query.Condition;
 import io.summernova.admin.common.query.OrderBys;
 import io.summernova.admin.core.dal.mapper.BaseMapper;
-import io.summernova.admin.core.dal.mapper.BaseMapperRegistry;
 import io.summernova.admin.core.dal.mapper.RelationMapper;
 import io.summernova.admin.core.dal.query.adapter.ConditionQueryWrapperAdapter;
 import io.summernova.admin.core.dal.query.adapter.OrderBysQueryWrapperAdapter;
@@ -22,17 +21,13 @@ import io.summernova.admin.core.domain.annotations.Many2OneField;
 import io.summernova.admin.core.domain.annotations.OnDeleteType;
 import io.summernova.admin.core.domain.util.RelationFieldUtil;
 import io.summernova.admin.core.domain.model.BaseModel;
-import io.summernova.admin.core.security.model.ModelAccessCheckUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author gongshuiwen
@@ -62,13 +57,13 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     @Override
     public List<T> selectByIds(Collection<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
-        ModelAccessCheckUtil.checkSelect(getModelClass());
+        getContext().checkModelSelect(getModelClass());
         return getBaseMapper().selectBatchIds(ids);
     }
 
     @Override
     public IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
-        ModelAccessCheckUtil.checkSelect(getModelClass());
+        getContext().checkModelSelect(getModelClass());
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (condition != null)
             ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(condition, queryWrapper);
@@ -79,19 +74,19 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
 
     @Override
     public Long count(QueryWrapper<T> queryWrapper) {
-        ModelAccessCheckUtil.checkSelect(getModelClass());
+        getContext().checkModelSelect(getModelClass());
         return SqlHelper.retCount(getBaseMapper().selectCount(queryWrapper));
     }
 
     @Override
     public List<T> selectList(QueryWrapper<T> queryWrapper) {
-        ModelAccessCheckUtil.checkSelect(getModelClass());
+        getContext().checkModelSelect(getModelClass());
         return getBaseMapper().selectList(queryWrapper);
     }
 
     @Override
     public List<T> nameSearch(String name) {
-        ModelAccessCheckUtil.checkSelect(getModelClass());
+        getContext().checkModelSelect(getModelClass());
         Page<T> page = new Page<>(1, 7);
 
         if (name == null || name.isEmpty() || name.isBlank())
@@ -120,7 +115,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         if (records == null || records.isEmpty()) return false;
 
         // check authority for create
-        ModelAccessCheckUtil.checkCreate(getModelClass());
+        getContext().checkModelCreate(getModelClass());
 
         // do create
         boolean res = saveBatch(records);
@@ -227,7 +222,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
             throw new IllegalArgumentException("record's id must be null");
 
         // check authority for update
-        ModelAccessCheckUtil.checkUpdate(getModelClass());
+        getContext().checkModelUpdate(getModelClass());
 
         // construct LambdaUpdateWrapper
         LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<>();
@@ -345,7 +340,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         if (ids == null || ids.isEmpty()) return false;
 
         // check authority for delete
-        ModelAccessCheckUtil.checkDelete(getModelClass());
+        getContext().checkModelDelete(getModelClass());
 
         // do delete
         boolean res = SqlHelper.retBool(getBaseMapper().deleteBatchIds(ids));
@@ -480,7 +475,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
 
     @Override
     public LambdaQueryChainWrapper<T> lambdaQuery() {
-        ModelAccessCheckUtil.checkSelect(getModelClass());
+        getContext().checkModelSelect(getModelClass());
         return ChainWrappers.lambdaQueryChain(getBaseMapper(), getModelClass());
     }
 

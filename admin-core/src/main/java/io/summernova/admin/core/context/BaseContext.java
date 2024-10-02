@@ -5,12 +5,17 @@ import io.summernova.admin.core.domain.annotations.Many2ManyField;
 import io.summernova.admin.core.domain.model.BaseModel;
 import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.authorization.BaseAuthority;
+import io.summernova.admin.core.security.authorization.SimpleAuthority;
+import io.summernova.admin.core.security.model.ModelAccessChecker;
+import io.summernova.admin.core.security.model.ModelAccessException;
+import io.summernova.admin.core.security.model.ModelAccessType;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static io.summernova.admin.core.domain.util.RelationFieldUtil.getTargetModelClass;
@@ -21,7 +26,7 @@ import static io.summernova.admin.core.domain.util.RelationFieldUtil.getTargetMo
  *
  * @author gongshuiwen
  */
-public interface BaseContext {
+public interface BaseContext extends ModelAccessChecker {
 
     /**
      * Get the unique ID of the current request.
@@ -168,4 +173,21 @@ public interface BaseContext {
      * @return the {@link HttpServletRequest} instance of the current request
      */
     HttpServletRequest getHttpServletRequest();
+
+
+    @Override
+    default void checkModelAccess(Class<? extends BaseModel> modelClass, ModelAccessType modelAccessType) {
+        Objects.requireNonNull(modelClass, "modelClass cannot be null");
+
+        // SYS_ADMIN has access to everything
+        if (isAdmin())
+            return;
+
+        // Otherwise, check if the user has the required authority
+        BaseAuthority authorityRequired = SimpleAuthority.of(modelAccessType.getPrefix() + modelClass.getSimpleName());
+        if (getAuthorities().contains(authorityRequired))
+            return;
+
+        throw new ModelAccessException(modelClass, modelAccessType);
+    }
 }
