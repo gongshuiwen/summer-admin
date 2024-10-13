@@ -18,6 +18,10 @@
             <groupId>io.summernova</groupId>
             <artifactId>admin-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.summernova</groupId>
+            <artifactId>admin-core</artifactId>
+        </dependency>
 
         <!--[scope compile]-->
         <dependency>
