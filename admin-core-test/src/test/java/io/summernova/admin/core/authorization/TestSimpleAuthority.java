@@ -1,5 +1,6 @@
-package io.summernova.admin.core.security.authorization;
+package io.summernova.admin.core.authorization;
 
+import io.summernova.admin.core.security.authorization.SimpleAuthority;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;

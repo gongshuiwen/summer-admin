@@ -25,6 +25,7 @@
         <module>module-base</module>
         <module>module-file</module>
         <module>server</module>
+        <module>admin-core-test</module>
     </modules>
 
     <properties>
