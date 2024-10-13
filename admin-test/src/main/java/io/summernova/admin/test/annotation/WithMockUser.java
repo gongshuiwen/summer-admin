@@ -1,4 +1,4 @@
-package io.summernova.admin.core.annotaion;
+package io.summernova.admin.test.annotation;
 
 import java.lang.annotation.*;
 

@@ -20,7 +20,7 @@ public interface BaseContextSupplier extends Supplier<BaseContext> {
         // use CustomBaseContextSupplier priorly when in test environment
         try {
             Class<?> baseContextSupplier = BaseContextSupplier.class.getClassLoader()
-                    .loadClass("io.summernova.admin.core.context.CustomBaseContextSupplier");
+                    .loadClass("io.summernova.admin.test.context.CustomBaseContextSupplier");
             if (baseContextSupplier != null) {
                 return (BaseContextSupplier) baseContextSupplier.getConstructor().newInstance();
             }

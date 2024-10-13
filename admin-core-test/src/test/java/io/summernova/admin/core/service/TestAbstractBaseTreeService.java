@@ -1,11 +1,11 @@
 package io.summernova.admin.core.service;
 
-import io.summernova.admin.core.annotaion.WithMockAdmin;
-import io.summernova.admin.core.context.BaseContextExtension;
-import io.summernova.admin.core.dal.mapper.ScriptRunnerUtil;
-import io.summernova.admin.core.dal.mapper.SqlSessionUtil;
+import io.summernova.admin.test.annotation.WithMockAdmin;
+import io.summernova.admin.test.context.BaseContextExtension;
 import io.summernova.admin.core.domain.field.Many2One;
 import io.summernova.admin.core.domain.model.TreeMock;
+import io.summernova.admin.test.dal.ScriptRunnerUtil;
+import io.summernova.admin.test.dal.SqlSessionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

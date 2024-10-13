@@ -1,9 +1,10 @@
 package io.summernova.admin.core.context;
 
-import io.summernova.admin.core.annotaion.WithMockAdmin;
-import io.summernova.admin.core.annotaion.WithMockUser;
 import io.summernova.admin.core.domain.model.Mock;
 import io.summernova.admin.core.security.model.ModelAccessException;
+import io.summernova.admin.test.annotation.WithMockAdmin;
+import io.summernova.admin.test.annotation.WithMockUser;
+import io.summernova.admin.test.context.BaseContextExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

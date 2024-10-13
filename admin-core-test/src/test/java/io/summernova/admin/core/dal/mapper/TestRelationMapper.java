@@ -2,6 +2,8 @@ package io.summernova.admin.core.dal.mapper;
 
 import io.summernova.admin.core.domain.model.Mock1;
 import io.summernova.admin.core.domain.model.Mock3;
+import io.summernova.admin.test.dal.ScriptRunnerUtil;
+import io.summernova.admin.test.dal.SqlSessionUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

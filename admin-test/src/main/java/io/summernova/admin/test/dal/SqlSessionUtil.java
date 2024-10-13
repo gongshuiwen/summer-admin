@@ -1,4 +1,4 @@
-package io.summernova.admin.core.dal.mapper;
+package io.summernova.admin.test.dal;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;

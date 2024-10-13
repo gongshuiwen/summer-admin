@@ -1,8 +1,9 @@
-package io.summernova.admin.core.context;
+package io.summernova.admin.test.context;
 
-import io.summernova.admin.core.dal.mapper.SqlSessionUtil;
+import io.summernova.admin.core.context.BaseContextImpl;
 import io.summernova.admin.core.security.account.BaseUser;
 import io.summernova.admin.core.security.authorization.BaseAuthority;
+import io.summernova.admin.test.dal.SqlSessionUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.session.SqlSession;

@@ -1,13 +1,12 @@
 package io.summernova.admin.test.annotation;
 
-import org.springframework.security.test.context.support.WithMockUser;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.*;
 
 /**
  * @author gongshuiwen
  */
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@WithMockUser(username = "admin", roles = "SYS_ADMIN")
-public @interface WithMockAdmin {}
+@Documented
+public @interface WithMockAdmin {
+}

@@ -1,4 +1,4 @@
-package io.summernova.admin.core.dal.mapper;
+package io.summernova.admin.test.dal;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
