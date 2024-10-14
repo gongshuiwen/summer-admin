@@ -22,11 +22,7 @@ public final class BaseContextExtension implements BeforeEachCallback, AfterEach
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        if (context.getRequiredTestMethod().isAnnotationPresent(WithMockAdmin.class)) {
-            MockBaseContextImpl baseContext = new MockBaseContextImpl(1L);
-            baseContext.setAuthorities(Set.of(GRANTED_AUTHORITY_ROLE_SYS_ADMIN));
-            CustomBaseContextSupplier.setBaseContext(baseContext);
-        } else if (context.getRequiredTestMethod().isAnnotationPresent(WithMockUser.class)) {
+        if (context.getRequiredTestMethod().isAnnotationPresent(WithMockUser.class)) {
             WithMockUser withMockUser = context.getRequiredTestMethod().getAnnotation(WithMockUser.class);
             MockBaseContextImpl baseContext = new MockBaseContextImpl(withMockUser.userId());
 
@@ -39,6 +35,12 @@ public final class BaseContextExtension implements BeforeEachCallback, AfterEach
             baseContext.setAuthorities(authorities);
 
             CustomBaseContextSupplier.setBaseContext(baseContext);
+        } else if (context.getRequiredTestMethod().isAnnotationPresent(WithMockAdmin.class)) {
+            MockBaseContextImpl baseContext = new MockBaseContextImpl(1L);
+            baseContext.setAuthorities(Set.of(GRANTED_AUTHORITY_ROLE_SYS_ADMIN));
+            CustomBaseContextSupplier.setBaseContext(baseContext);
+        } else {
+            CustomBaseContextSupplier.setBaseContext(new MockBaseContextImpl(0L));
         }
     }
 
