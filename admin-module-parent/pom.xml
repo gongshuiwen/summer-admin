@@ -7,23 +7,24 @@
         <groupId>io.summernova</groupId>
         <artifactId>summer-admin</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>module-base</artifactId>
+    <artifactId>admin-module-parent</artifactId>
+    <packaging>pom</packaging>
 
     <dependencies>
-        <!--[project dependencies]-->
         <dependency>
             <groupId>io.summernova</groupId>
-            <artifactId>admin-module-parent</artifactId>
+            <artifactId>admin-common</artifactId>
         </dependency>
-
-        <!--[scope test]-->
         <dependency>
             <groupId>io.summernova</groupId>
-            <artifactId>admin-test</artifactId>
-            <scope>test</scope>
+            <artifactId>admin-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.summernova</groupId>
+            <artifactId>admin-spring</artifactId>
         </dependency>
     </dependencies>
+
 </project>
