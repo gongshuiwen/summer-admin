@@ -29,16 +29,23 @@ module summernova.admin.spring {
     requires spring.security.core;
     requires spring.security.crypto;
     requires spring.security.web;
-    requires io.swagger.v3.oas.annotations;
+
+    // spring boot
+    requires spring.boot;
     requires spring.boot.autoconfigure;
 
+    // swagger3
+    requires io.swagger.v3.oas.annotations;
+
     // exports
+    exports io.summernova.admin.spring;
     exports io.summernova.admin.spring.config to spring.beans, spring.context;
     exports io.summernova.admin.spring.security.web to spring.beans, spring.context;
     exports io.summernova.admin.spring.security to spring.beans, spring.context;
     exports io.summernova.admin.spring.web to com.fasterxml.jackson.databind, org.mybatis, spring.beans, spring.context, spring.web;
 
     // opens
+    opens io.summernova.admin.spring to spring.core;
     opens io.summernova.admin.spring.config to spring.core;
     opens io.summernova.admin.spring.security.web to spring.core;
     opens io.summernova.admin.spring.web to spring.core, com.baomidou.mybatis.plus.core, summernova.admin.core,
