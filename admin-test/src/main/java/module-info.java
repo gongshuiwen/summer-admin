@@ -1,16 +1,16 @@
 module summernova.admin.test {
+    // summernova
     requires summernova.admin.common;
     requires summernova.admin.core;
 
-    requires spring.boot.autoconfigure;
-    requires spring.security.test;
     requires org.junit.jupiter.api;
-    requires com.zaxxer.hikari;
     requires org.mybatis;
     requires com.baomidou.mybatis.plus.extension;
     requires com.baomidou.mybatis.plus.annotation;
     requires com.baomidou.mybatis.plus.core;
+    requires com.zaxxer.hikari;
 
-    exports io.summernova.admin;
     exports io.summernova.admin.test.annotation;
+    exports io.summernova.admin.test.context;
+    exports io.summernova.admin.test.dal;
 }
