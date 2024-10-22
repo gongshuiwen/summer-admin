@@ -1,16 +1,16 @@
 package io.summernova.admin.module.base.service;
 
-import io.summernova.admin.common.exception.BusinessException;
-import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
 import io.summernova.admin.test.annotation.WithMockAdmin;
-import org.junit.jupiter.api.AfterEach;
+import io.summernova.admin.test.context.BaseContextExtension;
+import io.summernova.admin.test.dal.ScriptRunnerUtil;
+import io.summernova.admin.test.dal.SqlSessionUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,29 +22,24 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {
-        "/io/summernova/admin/module/base/sql/ddl/user.sql",
-        "/io/summernova/admin/module/base/sql/ddl/role.sql",
-        "/io/summernova/admin/module/base/sql/ddl/user_role.sql",
-        "/sql/test/data/user.sql",
-        "/sql/test/data/role.sql",
-        "/sql/test/data/user_role.sql",
-})
+@ExtendWith(BaseContextExtension.class)
 class TestUserService {
 
-    @Autowired
-    UserService userService;
+    RoleService roleService = new RoleServiceImpl();
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    UserService userService = new UserServiceImpl(roleService, passwordEncoder);
 
-    @Autowired
-    RoleService roleService;
+    TestUserService() throws NoSuchFieldException {
+    }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @AfterEach
-    void afterEach() {
-        BaseContextHolder.clearContext();
+    @BeforeEach
+    void beforeEach() {
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/user.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/user_role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/user.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/user_role.sql");
     }
 
     @Test

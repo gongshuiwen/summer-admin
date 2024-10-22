@@ -1,13 +1,12 @@
 package io.summernova.admin.module.base.service;
 
-import io.summernova.admin.core.context.BaseContextHolder;
 import io.summernova.admin.module.base.model.Role;
-import org.junit.jupiter.api.AfterEach;
+import io.summernova.admin.test.context.BaseContextExtension;
+import io.summernova.admin.test.dal.ScriptRunnerUtil;
+import io.summernova.admin.test.dal.SqlSessionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,28 +16,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {
-        "/io/summernova/admin/module/base/sql/ddl/role.sql",
-        "/io/summernova/admin/module/base/sql/ddl/user.sql",
-        "/io/summernova/admin/module/base/sql/ddl/user_role.sql",
-        "/sql/test/data/role.sql",
-        "/sql/test/data/user.sql",
-        "/sql/test/data/user_role.sql",
-})
+@ExtendWith(BaseContextExtension.class)
 class TestRoleService {
 
-    @Autowired
-    RoleService roleService;
+    RoleService roleService = new RoleServiceImpl();
+
+    TestRoleService() throws NoSuchFieldException {
+    }
 
     @BeforeEach
     void beforeEach() {
-        assertEquals(Set.of(1L, 2L), getRoleIdsByUserId(1L));
-    }
-
-    @AfterEach
-    void afterEach() {
-        BaseContextHolder.clearContext();
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/user.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/user_role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/user.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/user_role.sql");
     }
 
     @Test
@@ -73,7 +66,7 @@ class TestRoleService {
         roleService.replaceUserRoles(1L, Set.of());
         assertEquals(Set.of(), getRoleIdsByUserId(1L));
     }
-    
+
     private Set<Long> getRoleIdsByUserId(Long userId) {
         return roleService.getRolesByUserId(userId).stream().map(Role::getId).collect(Collectors.toSet());
     }

@@ -1,10 +1,12 @@
 package io.summernova.admin.module.base.service;
 
 import io.summernova.admin.module.base.model.Permission;
+import io.summernova.admin.test.context.BaseContextExtension;
+import io.summernova.admin.test.dal.ScriptRunnerUtil;
+import io.summernova.admin.test.dal.SqlSessionUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,22 +16,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author gongshuiwen
  */
-@SpringBootTest
-@Sql(scripts = {
-        "/io/summernova/admin/module/base/sql/ddl/role.sql",
-        "/io/summernova/admin/module/base/sql/ddl/permission.sql",
-        "/io/summernova/admin/module/base/sql/ddl/role_permission.sql",
-        "/sql/test/data/role.sql",
-        "/sql/test/data/permission.sql",
-        "/sql/test/data/role_permission.sql",
-})
+@ExtendWith(BaseContextExtension.class)
 class TestPermissionService {
 
-    @Autowired
-    PermissionService permissionService;
+    PermissionService permissionService = new PermissionServiceImpl();
 
-    @Autowired
-    UserService userService;
+    TestPermissionService() throws NoSuchFieldException {
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/permission.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "io/summernova/admin/module/base/sql/ddl/role_permission.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/role.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/permission.sql");
+        ScriptRunnerUtil.runScript(SqlSessionUtil.getSqlSession(), "sql/test/data/role_permission.sql");
+    }
 
     @Test
     void testGetPermissionsByRoleId() {
