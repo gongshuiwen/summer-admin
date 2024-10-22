@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import io.summernova.admin.test.annotation.WithMockUser;
-import io.summernova.admin.test.context.BaseContextExtension;
 import io.summernova.admin.core.domain.model.BaseModel;
+import io.summernova.admin.test.annotation.SummerAdminTest;
+import io.summernova.admin.test.annotation.WithMockUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static io.summernova.admin.core.jackson2.SecurityBeanPropertyFilter.FILTER_ID;
 import static io.summernova.admin.core.jackson2.SecurityBeanPropertyFilter.INSTANCE;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author gongshuiwen
  */
-@ExtendWith(BaseContextExtension.class)
+@SummerAdminTest
 class TestSecurityBeanPropertyFilter {
 
     ObjectMapper mapper;

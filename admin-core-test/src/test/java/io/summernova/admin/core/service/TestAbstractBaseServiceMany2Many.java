@@ -1,17 +1,16 @@
 package io.summernova.admin.core.service;
 
-import io.summernova.admin.test.annotation.WithMockUser;
-import io.summernova.admin.test.context.BaseContextExtension;
 import io.summernova.admin.core.dal.mapper.RelationMapper;
 import io.summernova.admin.core.domain.field.Command;
 import io.summernova.admin.core.domain.field.Many2Many;
 import io.summernova.admin.core.domain.model.Mock1;
 import io.summernova.admin.core.domain.model.Mock3;
+import io.summernova.admin.test.annotation.SummerAdminTest;
+import io.summernova.admin.test.annotation.WithMockUser;
 import io.summernova.admin.test.dal.ScriptRunnerUtil;
 import io.summernova.admin.test.dal.SqlSessionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@ExtendWith(BaseContextExtension.class)
+@SummerAdminTest
 class TestAbstractBaseServiceMany2Many {
 
     static final String MOCK1_ENTITY_NAME = "Mock1";

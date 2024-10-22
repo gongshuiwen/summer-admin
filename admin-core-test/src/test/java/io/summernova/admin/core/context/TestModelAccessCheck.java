@@ -2,11 +2,10 @@ package io.summernova.admin.core.context;
 
 import io.summernova.admin.core.domain.model.Mock;
 import io.summernova.admin.core.security.model.ModelAccessException;
+import io.summernova.admin.test.annotation.SummerAdminTest;
 import io.summernova.admin.test.annotation.WithMockAdmin;
 import io.summernova.admin.test.annotation.WithMockUser;
-import io.summernova.admin.test.context.BaseContextExtension;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author gongshuiwen
  */
-@ExtendWith(BaseContextExtension.class)
+@SummerAdminTest
 class TestModelAccessCheck {
 
     final static String AUTHORITY_SELECT = "S:Mock";

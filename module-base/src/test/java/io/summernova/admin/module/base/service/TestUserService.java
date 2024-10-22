@@ -2,13 +2,12 @@ package io.summernova.admin.module.base.service;
 
 import io.summernova.admin.module.base.model.Role;
 import io.summernova.admin.module.base.model.User;
+import io.summernova.admin.test.annotation.SummerAdminTest;
 import io.summernova.admin.test.annotation.WithMockAdmin;
-import io.summernova.admin.test.context.BaseContextExtension;
 import io.summernova.admin.test.dal.ScriptRunnerUtil;
 import io.summernova.admin.test.dal.SqlSessionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author gongshuiwen
  */
-@ExtendWith(BaseContextExtension.class)
+@SummerAdminTest
 class TestUserService {
 
     RoleService roleService = new RoleServiceImpl();
