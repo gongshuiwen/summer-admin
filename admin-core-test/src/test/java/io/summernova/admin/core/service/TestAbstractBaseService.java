@@ -60,7 +60,7 @@ public class TestAbstractBaseService {
     @Test
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
     void testPage() {
-        IPage<Mock> pageResult = mockService.page(1L, 20L);
+        IPage<Mock> pageResult = mockService.selectPage(1L, 20L);
         assertEquals(1, pageResult.getPages());
         assertEquals(2, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
@@ -73,7 +73,7 @@ public class TestAbstractBaseService {
         assertEquals(2L, results.get(1).getId());
         assertEquals("mock2", results.get(1).getName());
 
-        pageResult = mockService.page(1L, 20L, null, OrderBys.of("_id"));
+        pageResult = mockService.selectPage(1L, 20L, null, OrderBys.of("_id"));
         assertEquals(1, pageResult.getPages());
         assertEquals(2, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
@@ -88,7 +88,7 @@ public class TestAbstractBaseService {
 
         Condition condition = CompareCondition.eq("id", 1L);
 
-        pageResult = mockService.page(1L, 20L, condition, OrderBys.of("_id"));
+        pageResult = mockService.selectPage(1L, 20L, condition, OrderBys.of("_id"));
         assertEquals(1, pageResult.getPages());
         assertEquals(1, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
@@ -99,7 +99,7 @@ public class TestAbstractBaseService {
         assertEquals(1L, results.get(0).getId());
         assertEquals("mock1", results.get(0).getName());
 
-        pageResult = mockService.page(1L, 20L, condition);
+        pageResult = mockService.selectPage(1L, 20L, condition);
         assertEquals(1, pageResult.getPages());
         assertEquals(1, pageResult.getTotal());
         assertEquals(1, pageResult.getCurrent());
@@ -114,11 +114,11 @@ public class TestAbstractBaseService {
     @Test
     @WithMockUser(authorities = {MOCK_AUTHORITY_SELECT})
     void testCount() {
-        Long count = mockService.count((Condition) null);
+        Long count = mockService.selectCount((Condition) null);
         assertEquals(2, count);
 
         Condition condition = CompareCondition.eq("id", 1L);
-        count = mockService.count(condition);
+        count = mockService.selectCount(condition);
         assertEquals(1, count);
     }
 

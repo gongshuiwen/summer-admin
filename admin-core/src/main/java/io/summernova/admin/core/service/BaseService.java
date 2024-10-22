@@ -23,29 +23,31 @@ import java.util.List;
  */
 public interface BaseService<T extends BaseModel> extends BaseContextContainer {
 
+    // ====================
+    // Select methods
+    // ====================
     T selectById(Long id);
 
     List<T> selectByIds(Collection<Long> ids);
 
-    default IPage<T> page(Long pageNum, Long pageSize) {
-        return page(pageNum, pageSize, null, null);
+    default IPage<T> selectPage(Long pageNum, Long pageSize) {
+        return selectPage(pageNum, pageSize, null, null);
     }
 
-    default IPage<T> page(Long pageNum, Long pageSize, Condition condition) {
-        return page(pageNum, pageSize, condition, null);
+    default IPage<T> selectPage(Long pageNum, Long pageSize, Condition condition) {
+        return selectPage(pageNum, pageSize, condition, null);
     }
 
-    IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys);
+    IPage<T> selectPage(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys);
 
-    default Long count(Condition condition) {
-        if (condition == null)
-            return count((QueryWrapper<T>) null);
+    default Long selectCount(Condition condition) {
+        if (condition == null) return selectCount((QueryWrapper<T>) null);
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         ConditionQueryWrapperAdapter.applyConditionToQueryWrapper(condition, queryWrapper);
-        return count(queryWrapper);
+        return selectCount(queryWrapper);
     }
 
-    Long count(QueryWrapper<T> queryWrapper);
+    Long selectCount(QueryWrapper<T> queryWrapper);
 
     default T selectOne(Condition condition) {
         return selectOne(condition, null);
@@ -104,7 +106,6 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     // ====================
     // Create methods
     // ====================
-
     boolean createOne(T record);
 
     boolean createBatch(List<T> records);
@@ -112,7 +113,6 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     // ====================
     // Update methods
     // ====================
-
     boolean updateById(Long id, T record);
 
     boolean updateByIds(List<Long> ids, T record);
@@ -120,7 +120,6 @@ public interface BaseService<T extends BaseModel> extends BaseContextContainer {
     // ====================
     // Delete methods
     // ====================
-
     boolean deleteById(Long id);
 
     boolean deleteByIds(List<Long> ids);

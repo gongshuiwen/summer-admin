@@ -12,7 +12,6 @@ import io.summernova.admin.common.validation.CreateValidationGroup;
 import io.summernova.admin.common.validation.UpdateValidationGroup;
 import io.summernova.admin.core.context.BaseContextContainer;
 import io.summernova.admin.core.dal.mapper.RelationMapper;
-import io.summernova.admin.core.dal.mapper.RelationMapperRegistry;
 import io.summernova.admin.core.domain.field.Many2Many;
 import io.summernova.admin.core.domain.field.Many2One;
 import io.summernova.admin.core.domain.util.ReadOnlyUtil;
@@ -93,7 +92,7 @@ public class CommonController implements BaseContextContainer {
     ) throws IllegalAccessException {
         BaseService<T> service = BaseServiceRegistry.getByModelName(modelName);
         OrderBys orderBys1 = orderBys != null ? OrderBys.of(orderBys) : null;
-        IPage<T> page = service.page(pageNum, pageSize, condition, orderBys1);
+        IPage<T> page = service.selectPage(pageNum, pageSize, condition, orderBys1);
         List<T> records = page.getRecords();
         if (records != null && !records.isEmpty()) {
             fetchMany2One(service, records);
@@ -109,7 +108,7 @@ public class CommonController implements BaseContextContainer {
             @RequestBody(required = false) Condition condition
     ) {
         BaseService<?> service = BaseServiceRegistry.getByModelName(modelName);
-        return Result.success(service.count(condition));
+        return Result.success(service.selectCount(condition));
     }
 
     @Operation(summary = "Name Search")

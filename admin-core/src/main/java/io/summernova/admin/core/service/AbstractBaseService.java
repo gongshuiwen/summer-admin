@@ -62,7 +62,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    public IPage<T> page(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
+    public IPage<T> selectPage(Long pageNum, Long pageSize, Condition condition, OrderBys orderBys) {
         getContext().checkModelSelect(getModelClass());
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (condition != null)
@@ -73,7 +73,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
     }
 
     @Override
-    public Long count(QueryWrapper<T> queryWrapper) {
+    public Long selectCount(QueryWrapper<T> queryWrapper) {
         getContext().checkModelSelect(getModelClass());
         return SqlHelper.retCount(getBaseMapper().selectCount(queryWrapper));
     }
@@ -392,7 +392,7 @@ public abstract class AbstractBaseService<T extends BaseModel> implements BaseSe
         if (ids == null || ids.isEmpty()) return 0;
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         queryWrapper.in(toColumnName(field), ids);
-        return count(queryWrapper);
+        return selectCount(queryWrapper);
     }
 
     protected List<Long> selectIdsByMany2OneIds(Field field, List<Long> ids) {
