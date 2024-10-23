@@ -1,8 +1,5 @@
 package io.summernova.admin.core.domain.annotations;
 
-import io.summernova.admin.core.domain.defaults.DefaultValueProvider;
-import io.summernova.admin.core.domain.model.BaseModel;
-
 import java.lang.annotation.*;
 
 /**
