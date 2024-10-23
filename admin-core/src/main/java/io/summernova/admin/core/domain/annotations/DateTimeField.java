@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Many2ManyField {
+public @interface DateTimeField {
 
     /**
      * the name of the model's field, used for serialization and deserialization
@@ -31,10 +31,4 @@ public @interface Many2ManyField {
     boolean nullable() default true;
 
     boolean defaultNull() default false;
-
-    String sourceField();
-
-    String targetField();
-
-    String joinTable();
 }

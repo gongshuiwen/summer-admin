@@ -1,5 +1,8 @@
 package io.summernova.admin.core.domain.annotations;
 
+import io.summernova.admin.core.domain.defaults.DefaultValueProvider;
+import io.summernova.admin.core.domain.model.BaseModel;
+
 import java.lang.annotation.*;
 
 /**
@@ -8,7 +11,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Many2ManyField {
+public @interface BooleanField {
 
     /**
      * the name of the model's field, used for serialization and deserialization
@@ -32,9 +35,5 @@ public @interface Many2ManyField {
 
     boolean defaultNull() default false;
 
-    String sourceField();
-
-    String targetField();
-
-    String joinTable();
+    boolean defaultValue() default false;
 }

@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Many2ManyField {
+public @interface BigDecimalField {
 
     /**
      * the name of the model's field, used for serialization and deserialization
@@ -32,9 +32,9 @@ public @interface Many2ManyField {
 
     boolean defaultNull() default false;
 
-    String sourceField();
+    String defaultValue() default "0.0";
 
-    String targetField();
+    String minValue() default "";
 
-    String joinTable();
+    String maxValue() default "";
 }

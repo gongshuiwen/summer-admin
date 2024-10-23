@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Many2ManyField {
+public @interface StringField {
 
     /**
      * the name of the model's field, used for serialization and deserialization
@@ -32,9 +32,11 @@ public @interface Many2ManyField {
 
     boolean defaultNull() default false;
 
-    String sourceField();
+    String defaultValue() default "";
 
-    String targetField();
+    boolean trim() default true;
 
-    String joinTable();
+    int minLength() default 0;
+
+    int maxLength() default 65535;
 }
