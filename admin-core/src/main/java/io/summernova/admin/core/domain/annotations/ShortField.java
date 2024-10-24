@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface BigIntegerField {
+public @interface ShortField {
 
     /**
      * the name of the model's field, used for serialization and deserialization
@@ -32,9 +32,9 @@ public @interface BigIntegerField {
 
     boolean defaultNull() default false;
 
-    String defaultValue() default "0";
+    short defaultValue() default 0;
 
-    String minValue() default "";
+    short minValue() default Short.MIN_VALUE;
 
-    String maxValue() default "";
+    short maxValue() default Short.MAX_VALUE;
 }

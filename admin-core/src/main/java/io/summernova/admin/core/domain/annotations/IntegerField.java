@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface BigDecimalField {
+public @interface IntegerField {
 
     /**
      * the name of the model's field, used for serialization and deserialization
@@ -32,9 +32,9 @@ public @interface BigDecimalField {
 
     boolean defaultNull() default false;
 
-    String defaultValue() default "0";
+    int defaultValue() default 0;
 
-    String minValue() default "";
+    int minValue() default Integer.MIN_VALUE;
 
-    String maxValue() default "";
+    int maxValue() default Integer.MAX_VALUE;
 }
